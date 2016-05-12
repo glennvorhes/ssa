@@ -26,6 +26,8 @@ function escapeHtml(string) {
 
 
 
+
+
 class Corridor {
 
     /**
