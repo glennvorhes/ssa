@@ -8,11 +8,9 @@ import LayerEsriMapServer from '../src/layers/LayerEsriMapServer';
 import provide from '../src/util/provide';
 import ol from '../src/ol/ol';
 import Corridor from './Corridor';
-
+import './rp-picker.js';
 
 const nm = provide('ssa');
-
-import {} from './rp-picker.js';
 
 function makeRpPickerContent(idx) {
     "use strict";
