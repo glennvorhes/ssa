@@ -2,9 +2,11 @@
   "name": "ssa",
   "version": "1.0.0",
   "description": "SSA",
-  "main": "bin/main.js",
+  "main": "build/ssa-main.js",
   "files": [
-    "bin"
+    "build",
+    "app",
+    "src"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -1,11 +1,11 @@
-import $ from '../jquery';
-import quickMap from '../olHelpers/quickMap';
-import quickMapMulti from '../olHelpers/quickMapMulti';
-import SortedFeatures from '../olHelpers/SortedFeatures';
-import LayerBaseVectorGeoJson from '../layers/LayerBaseVectorGeoJson';
-import LayerEsriMapServer from '../layers/LayerEsriMapServer';
-import provide from '../util/provide';
-import ol from '../ol/ol';
+import $ from '../src/jquery';
+import quickMap from '../src/olHelpers/quickMap';
+import quickMapMulti from '../src/olHelpers/quickMapMulti';
+import SortedFeatures from '../src/olHelpers/SortedFeatures';
+import LayerBaseVectorGeoJson from '../src/layers/LayerBaseVectorGeoJson';
+import LayerEsriMapServer from '../src/layers/LayerEsriMapServer';
+import provide from '../src/util/provide';
+import ol from '../src/ol/ol';
 const nm = provide('ssa');
 
 /**

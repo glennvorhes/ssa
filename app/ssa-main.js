@@ -2,8 +2,8 @@
  * Created by gavorhes on 3/23/2016.
  */
 
-import Corridor from '../../../../static/js/jquery-plugin/ssaCorridorPicker';
-const $ = require('jquery');
+import '../app/ssa-corridor-picker';
+import $ from '../src/jquery';
 
 
 (function () {
