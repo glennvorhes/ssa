@@ -6,11 +6,12 @@
   "files": [
     "build",
     "app",
-    "src"
+    "src",
+    "css"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "update": "npm update webmapsjs & RMDIR src /S /Q & xcopy /y /s node_modules\\webmapsjs\\src src"
+    "update": "npm update webmapsjs & RMDIR src /S /Q & xcopy /y /s node_modules\\webmapsjs\\src src & xcopy /y /s node_modules\\webmapsjs\\css css-lib"
   },
   "author": "",
   "license": "ISC",

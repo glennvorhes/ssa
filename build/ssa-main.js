@@ -13,13 +13,13 @@ var _LayerBaseVectorGeoJson = require('../src/layers/LayerBaseVectorGeoJson');
 
 var _LayerBaseVectorGeoJson2 = _interopRequireDefault(_LayerBaseVectorGeoJson);
 
-var _provide = require('../src/util/provide');
-
-var _provide2 = _interopRequireDefault(_provide);
-
 var _ol = require('../src/ol/ol');
 
 var _ol2 = _interopRequireDefault(_ol);
+
+var _provide = require('../src/util/provide');
+
+var _provide2 = _interopRequireDefault(_provide);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

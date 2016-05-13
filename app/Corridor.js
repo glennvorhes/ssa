@@ -3,9 +3,8 @@
  */
 
 import LayerBaseVectorGeoJson from '../src/layers/LayerBaseVectorGeoJson';
-import provide from '../src/util/provide';
 import ol from '../src/ol/ol';
-
+import provide from '../src/util/provide';
 const nm = provide('ssa');
 
 
@@ -21,11 +20,6 @@ function escapeHtml(string) {
         }[s];
     });
 }
-
-
-
-
-
 
 
 class Corridor {

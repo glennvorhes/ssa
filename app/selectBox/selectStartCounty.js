@@ -1,0 +1,30 @@
+/**
+ * Created by gavorhes on 5/12/2016.
+ */
+
+import SelectBoxBase from './SelectBoxBase';
+import * as getters from '../ajaxGetters';
+import provide from '../../src/util/provide';
+const nm = provide('ssa.select');
+
+class SelectStartCounty extends SelectBoxBase{
+
+    /**
+     *
+     * @param {jQuery} parent
+     * @param {string} label
+     */
+    constructor(parent, label) {
+        super(parent, label);
+
+        getters.getStartCounties((d) => {
+            for (let c of d) {
+                this.box.append(`<option value="${c['id']}">${c['name']}</option>`)
+            }
+            this.box.trigger('change');
+        })
+    }
+}
+
+nm.SelectStartCounty = SelectStartCounty;
+export default SelectStartCounty;

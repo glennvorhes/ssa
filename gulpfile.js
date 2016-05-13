@@ -13,10 +13,19 @@ function _ssa(production) {
 }
 
 
+
+
 gulp.task('build-tests', function () {
     "use strict";
 
-    return gulpHelpers.bundleEs2015(null, './test/test-bundle.js');
+        let filesArr = [
+        ['./test/ajaxGetter.spec.js', './test.build/ajaxGetter.js'],
+        ['./test/selectBox.spec.js', './test.build/selectBox.js'],
+        ['./test/makeMap.spec.js', './test.build/makeMap.js']
+    ];
+
+    return gulpHelpers.bundleEs2015Multiple(filesArr, false);
+
 });
 
 gulp.task('ssa', () => {
