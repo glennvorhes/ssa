@@ -21,7 +21,8 @@ gulp.task('build-tests', function () {
         let filesArr = [
         ['./test/ajaxGetter.spec.js', './test.build/ajaxGetter.js'],
         ['./test/selectBox.spec.js', './test.build/selectBox.js'],
-        ['./test/makeMap.spec.js', './test.build/makeMap.js']
+        ['./test/makeMap.spec.js', './test.build/makeMap.js'],
+        ['./test/layout.spec.js', './test.build/layout.js']
     ];
 
     return gulpHelpers.bundleEs2015Multiple(filesArr, false);

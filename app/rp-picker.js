@@ -217,11 +217,6 @@ class RpPicker {
                 return;
             }
 
-            //if (this.visible) {
-            //    this.visible = false;
-            //    return;
-            //}
-
             this.visible = true;
 
             // initialize on first show
@@ -321,7 +316,7 @@ class RpPicker {
 
     /**
      *
-     * @returns {Array.<number>} extent array
+     * @returns {ol.Extent} extent array
      */
     get extent() {
         return this._extent;
@@ -329,7 +324,7 @@ class RpPicker {
 
     /**
      *
-     * @param {Array.<number>} newExtent - extent array
+     * @param {ol.Extent} newExtent - extent array
      */
     set extent(newExtent) {
         this._extent = newExtent;

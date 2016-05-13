@@ -3,7 +3,7 @@
  */
 
 import SelectBoxBase from './SelectBoxBase';
-import * as getters from '../ajaxGetters';
+import {getStartCounties} from '../ajaxGetters';
 import provide from '../../src/util/provide';
 const nm = provide('ssa.select');
 
@@ -12,12 +12,11 @@ class SelectStartCounty extends SelectBoxBase{
     /**
      *
      * @param {jQuery} parent
-     * @param {string} label
      */
-    constructor(parent, label) {
-        super(parent, label);
+    constructor(parent) {
+        super(parent, "Start County");
 
-        getters.getStartCounties((d) => {
+        getStartCounties((d) => {
             for (let c of d) {
                 this.box.append(`<option value="${c['id']}">${c['name']}</option>`)
             }

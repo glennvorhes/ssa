@@ -125,7 +125,7 @@ function getSegments(county, highway, callback) {
 
 nm.getSegments = getSegments;
 
-},{"../src/jquery":5,"../src/util/provide":7}],2:[function(require,module,exports){
+},{"../src/jquery":9,"../src/util/provide":11}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -133,8 +133,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by gavorhes on 5/12/2016.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by gavorhes on 5/13/2016.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
+
+/**
+ * Created by gavorhes on 5/13/2016.
+ */
+/**
+ * Created by gavorhes on 5/12/2016.
+ */
 
 
 var _makeGuid = require('../../src/util/makeGuid');
@@ -151,12 +158,197 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var nm = (0, _provide2.default)('ssa.select');
 
+var SegmentPickerBase = function () {
+
+    /**
+     *
+     * @param {jQuery} parent - parent container
+     * @param {string} labelContent
+     */
+
+    function SegmentPickerBase(parent, labelContent) {
+        var _this = this;
+
+        _classCallCheck(this, SegmentPickerBase);
+
+        var guid = (0, _makeGuid2.default)();
+
+        var htmlString = '<div>';
+        htmlString += '<label for="' + guid + '">' + labelContent + '</label>';
+        htmlString += '<div><select id="' + guid + '"></select></div>';
+        htmlString += '<div class="rp-popup-container"></div>';
+        htmlString += '</div>';
+
+        parent.append(htmlString);
+
+        /**
+         *
+         * @type {Array<changeListener>}
+         * @private
+         */
+        this._changeListeners = [];
+
+        this._box = parent.find('#' + guid);
+
+        this._box.change(function () {
+            _this.changed();
+        });
+    }
+
+    /**
+     * 
+     * @returns {jQuery}
+     */
+
+
+    _createClass(SegmentPickerBase, [{
+        key: 'changed',
+        value: function changed() {
+            var v = this._box.val();
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this._changeListeners[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var f = _step.value;
+
+                    f(v);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+
+        /**
+         *
+         * @param {changeListener} func
+         */
+
+    }, {
+        key: 'addChangeListener',
+        value: function addChangeListener(func) {
+            this._changeListeners.push(func);
+        }
+
+        /**
+        * get the picker visibility
+        * @returns {boolean} is visible
+        */
+
+    }, {
+        key: 'box',
+        get: function get() {
+            return this._box;
+        }
+    }, {
+        key: 'visible',
+        get: function get() {
+            return this._visible;
+        }
+
+        /**
+         * set the picker visibility
+         * @param {boolean} vis is visible
+         */
+        ,
+        set: function set(vis) {
+            if (this.visible === vis) {
+                return;
+            }
+            if (vis) {
+                this._$mapContainer.show();
+                this._closeOtherPickers();
+            } else {
+                this._$mapContainer.hide();
+                this._pickerMapPopup.closePopup();
+            }
+            this._visible = vis;
+        }
+    }]);
+
+    return SegmentPickerBase;
+}();
+
+nm.SegmentPickerBase = SegmentPickerBase;
+
+exports.default = SegmentPickerBase;
+
+},{"../../src/util/makeGuid":10,"../../src/util/provide":11}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _SegmentPickerBase2 = require('./SegmentPickerBase');
+
+var _SegmentPickerBase3 = _interopRequireDefault(_SegmentPickerBase2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gavorhes on 5/13/2016.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+var SegmentPickerFrom = function (_SegmentPickerBase) {
+    _inherits(SegmentPickerFrom, _SegmentPickerBase);
+
+    function SegmentPickerFrom(parent) {
+        _classCallCheck(this, SegmentPickerFrom);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(SegmentPickerFrom).call(this, parent, 'Ref. Point #1'));
+    }
+
+    return SegmentPickerFrom;
+}(_SegmentPickerBase3.default);
+
+exports.default = SegmentPickerFrom;
+
+},{"./SegmentPickerBase":2}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by gavorhes on 5/13/2016.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 /**
- * change callback
- *
- * @callback changeListener
- * @param {number|string} val - the new value
+ * Created by gavorhes on 5/12/2016.
  */
+
+
+var _makeGuid = require('../../src/util/makeGuid');
+
+var _makeGuid2 = _interopRequireDefault(_makeGuid);
+
+var _provide = require('../../src/util/provide');
+
+var _provide2 = _interopRequireDefault(_provide);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var nm = (0, _provide2.default)('ssa.select');
 
 var SelectBoxBase = function () {
 
@@ -197,14 +389,38 @@ var SelectBoxBase = function () {
     /**
      * 
      * @returns {jQuery}
-     * @protected
      */
 
 
     _createClass(SelectBoxBase, [{
         key: 'changed',
         value: function changed() {
-            console.log(this._box.val());
+            var v = this._box.val();
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this._changeListeners[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var f = _step.value;
+
+                    f(v);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
         }
 
         /**
@@ -216,7 +432,6 @@ var SelectBoxBase = function () {
         key: 'addChangeListener',
         value: function addChangeListener(func) {
             this._changeListeners.push(func);
-            this._changeListeners[0]();
         }
     }, {
         key: 'box',
@@ -232,7 +447,199 @@ nm.SelectBoxBase = SelectBoxBase;
 
 exports.default = SelectBoxBase;
 
-},{"../../src/util/makeGuid":6,"../../src/util/provide":7}],3:[function(require,module,exports){
+},{"../../src/util/makeGuid":10,"../../src/util/provide":11}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _SelectBoxBase2 = require('./SelectBoxBase');
+
+var _SelectBoxBase3 = _interopRequireDefault(_SelectBoxBase2);
+
+var _ajaxGetters = require('../ajaxGetters');
+
+var _provide = require('../../src/util/provide');
+
+var _provide2 = _interopRequireDefault(_provide);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gavorhes on 5/12/2016.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+var nm = (0, _provide2.default)('ssa.select');
+
+var SelectEndCounty = function (_SelectBoxBase) {
+    _inherits(SelectEndCounty, _SelectBoxBase);
+
+    /**
+     *
+     * @param {jQuery} parent
+     */
+
+    function SelectEndCounty(parent) {
+        _classCallCheck(this, SelectEndCounty);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(SelectEndCounty).call(this, parent, "End County"));
+    }
+
+    /**
+     * set the county
+     * @param {string} hwy
+     */
+
+
+    _createClass(SelectEndCounty, [{
+        key: 'setHighway',
+        value: function setHighway(hwy) {
+            var _this2 = this;
+
+            (0, _ajaxGetters.getEndCounties)(hwy, function (d) {
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = d[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var c = _step.value;
+
+                        _this2.box.append('<option value="' + c['id'] + '">' + c['name'] + '</option>');
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+
+                if (d) {
+                    _this2.box.trigger('change');
+                }
+            });
+        }
+    }]);
+
+    return SelectEndCounty;
+}(_SelectBoxBase3.default);
+
+nm.SelectEndCounty = SelectEndCounty;
+exports.default = SelectEndCounty;
+
+},{"../../src/util/provide":11,"../ajaxGetters":1,"./SelectBoxBase":4}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _SelectBoxBase2 = require('./SelectBoxBase');
+
+var _SelectBoxBase3 = _interopRequireDefault(_SelectBoxBase2);
+
+var _ajaxGetters = require('../ajaxGetters');
+
+var _provide = require('../../src/util/provide');
+
+var _provide2 = _interopRequireDefault(_provide);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by gavorhes on 5/12/2016.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+var nm = (0, _provide2.default)('ssa.select');
+
+var SelectHighway = function (_SelectBoxBase) {
+    _inherits(SelectHighway, _SelectBoxBase);
+
+    /**
+     *
+     * @param {jQuery} parent
+     */
+
+    function SelectHighway(parent) {
+        _classCallCheck(this, SelectHighway);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(SelectHighway).call(this, parent, "Highway"));
+    }
+
+    /**
+     *
+     * @param {number} countyId
+     */
+
+
+    _createClass(SelectHighway, [{
+        key: 'setStartCounty',
+        value: function setStartCounty(countyId) {
+            var _this2 = this;
+
+            (0, _ajaxGetters.getHighways)(countyId, function (d) {
+                "use strict";
+
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = d[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var h = _step.value;
+
+                        _this2.box.append('<option>' + h['name'] + '</option>');
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+
+                if (d) {
+                    _this2.box.trigger('change');
+                }
+            });
+        }
+    }]);
+
+    return SelectHighway;
+}(_SelectBoxBase3.default);
+
+nm.SelectHighway = SelectHighway;
+exports.default = SelectHighway;
+
+},{"../../src/util/provide":11,"../ajaxGetters":1,"./SelectBoxBase":4}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -245,13 +652,9 @@ var _SelectBoxBase3 = _interopRequireDefault(_SelectBoxBase2);
 
 var _ajaxGetters = require('../ajaxGetters');
 
-var getters = _interopRequireWildcard(_ajaxGetters);
-
 var _provide = require('../../src/util/provide');
 
 var _provide2 = _interopRequireDefault(_provide);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -271,15 +674,14 @@ var SelectStartCounty = function (_SelectBoxBase) {
     /**
      *
      * @param {jQuery} parent
-     * @param {string} label
      */
 
-    function SelectStartCounty(parent, label) {
+    function SelectStartCounty(parent) {
         _classCallCheck(this, SelectStartCounty);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SelectStartCounty).call(this, parent, label));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SelectStartCounty).call(this, parent, "Start County"));
 
-        getters.getStartCounties(function (d) {
+        (0, _ajaxGetters.getStartCounties)(function (d) {
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -316,7 +718,7 @@ var SelectStartCounty = function (_SelectBoxBase) {
 nm.SelectStartCounty = SelectStartCounty;
 exports.default = SelectStartCounty;
 
-},{"../../src/util/provide":7,"../ajaxGetters":1,"./SelectBoxBase":2}],4:[function(require,module,exports){
+},{"../../src/util/provide":11,"../ajaxGetters":1,"./SelectBoxBase":4}],8:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.3
  * http://jquery.com/
@@ -10160,7 +10562,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}],5:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -10176,7 +10578,7 @@ exports.default = global.jQuery;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"jquery":4}],6:[function(require,module,exports){
+},{"jquery":8}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10210,7 +10612,7 @@ function makeGuid() {
 nm.makeGuid = makeGuid;
 exports.default = makeGuid;
 
-},{"./provide":7}],7:[function(require,module,exports){
+},{"./provide":11}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10253,16 +10655,24 @@ window.gv.util.provide = provide;
 
 exports.default = provide;
 
-},{}],8:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
-
-var _SelectBoxBase = require('../app/selectBox/SelectBoxBase');
-
-var _SelectBoxBase2 = _interopRequireDefault(_SelectBoxBase);
 
 var _SelectStartCounty = require('../app/selectBox/SelectStartCounty');
 
 var _SelectStartCounty2 = _interopRequireDefault(_SelectStartCounty);
+
+var _SelectHighway = require('../app/selectBox/SelectHighway');
+
+var _SelectHighway2 = _interopRequireDefault(_SelectHighway);
+
+var _SelectEndCounty = require('../app/selectBox/SelectEndCounty');
+
+var _SelectEndCounty2 = _interopRequireDefault(_SelectEndCounty);
+
+var _SegmentPickerFrom = require('../app/segmentPicker/SegmentPickerFrom');
+
+var _SegmentPickerFrom2 = _interopRequireDefault(_SegmentPickerFrom);
 
 var _jquery = require('../src/jquery');
 
@@ -10274,10 +10684,35 @@ var container = (0, _jquery2.default)('#container1'); /**
                                                        * Created by gavorhes on 5/12/2016.
                                                        */
 
-var g = new _SelectBoxBase2.default(container, 'my label');
-var d = new _SelectStartCounty2.default(container, 'start county');
+var selectStartCounty = new _SelectStartCounty2.default(container);
+var selectHighway = new _SelectHighway2.default(container);
+var selectEndCounty = new _SelectEndCounty2.default(container);
+var segmentPickerFrom = new _SegmentPickerFrom2.default(container);
 
-},{"../app/selectBox/SelectBoxBase":2,"../app/selectBox/SelectStartCounty":3,"../src/jquery":5}]},{},[8])
+selectStartCounty.addChangeListener(function (v) {
+    "use strict";
+
+    selectHighway.box.html('');
+    selectEndCounty.box.html('');
+    selectHighway.setStartCounty(parseInt(v));
+});
+
+selectHighway.addChangeListener(function (v) {
+    "use strict";
+
+    selectEndCounty.box.html('');
+    selectEndCounty.setHighway(v);
+});
+
+selectEndCounty.addChangeListener(function (v) {
+    "use strict";
+
+    console.log(v);
+    console.log(selectHighway.box.val());
+    console.log(selectEndCounty.box.val());
+});
+
+},{"../app/segmentPicker/SegmentPickerFrom":3,"../app/selectBox/SelectEndCounty":5,"../app/selectBox/SelectHighway":6,"../app/selectBox/SelectStartCounty":7,"../src/jquery":9}]},{},[12])
 
 
 //# sourceMappingURL=selectBox.js.map
