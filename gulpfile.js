@@ -6,7 +6,8 @@ function _ssa(production) {
     "use strict";
 
     let filesArr = [
-        ['./app/ssa-create.js', './build/ssa-create.js']
+        ['./app/ssa-create.js', './build/ssa-create.js'],
+        ['./app/ssa-view.js', './build/ssa-view.js']
     ];
 
     return gulpHelpers.bundleEs2015Multiple(filesArr, production);

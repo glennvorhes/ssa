@@ -12,6 +12,7 @@ const getHighwaysUrl = home + '/getHighways';
 const getEndCountiesUrl = home + '/getEndCounties';
 const getSegmentsUrl = home + '/getSegments';
 const getCorridorUrl = home + '/getCorridor';
+const getCrashesUrl = home + '/getCrashes';
 
 /**
  * @callback ajaxCallback
@@ -28,7 +29,7 @@ const getCorridorUrl = home + '/getCorridor';
 function ajaxInner(url, params, callback) {
     "use strict";
     $.get(url, params, callback, 'json').fail(() => {
-        alert("error getting: " +  url + JSON.stringify(params));
+        alert("error getting: " + url + JSON.stringify(params));
     });
 }
 
@@ -133,6 +134,17 @@ export function getCorridor(startPdp, endPdp, callback) {
 }
 
 nm.getCorridor = getCorridor;
+
+/**
+ *
+ * @param {ajaxCallback} callback
+ */
+export function getCrashes(callback) {
+    "use strict";
+    let params = {};
+
+    ajaxHelper(getCrashesUrl, callback, params);
+}
 
 
 

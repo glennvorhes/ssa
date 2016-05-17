@@ -9,6 +9,7 @@ exports.getHighways = getHighways;
 exports.getEndCounties = getEndCounties;
 exports.getSegments = getSegments;
 exports.getCorridor = getCorridor;
+exports.getCrashes = getCrashes;
 
 var _jquery = require('../src/jquery');
 
@@ -32,6 +33,7 @@ var getHighwaysUrl = home + '/getHighways';
 var getEndCountiesUrl = home + '/getEndCounties';
 var getSegmentsUrl = home + '/getSegments';
 var getCorridorUrl = home + '/getCorridor';
+var getCrashesUrl = home + '/getCrashes';
 
 /**
  * @callback ajaxCallback
@@ -156,6 +158,18 @@ function getCorridor(startPdp, endPdp, callback) {
 }
 
 nm.getCorridor = getCorridor;
+
+/**
+ *
+ * @param {ajaxCallback} callback
+ */
+function getCrashes(callback) {
+    "use strict";
+
+    var params = {};
+
+    ajaxHelper(getCrashesUrl, callback, params);
+}
 
 },{"../src/jquery":3,"../src/util/provide":4}],2:[function(require,module,exports){
 /*!

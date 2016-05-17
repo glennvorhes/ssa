@@ -2,12 +2,12 @@
  * Created by gavorhes on 5/11/2016.
  */
 
-import LayerBaseVectorGeoJson from '../src/layers/LayerBaseVectorGeoJson';
-import ol from '../src/ol/ol';
-import makeGuid from '../src/util/makeGuid';
-import provide from '../src/util/provide';
-import {layerConfigHelper, randomColor} from './layerStyles';
-import {getCorridor}  from './ajaxGetters';
+import LayerBaseVectorGeoJson from '../../src/layers/LayerBaseVectorGeoJson';
+import ol from '../../src/ol/ol';
+import makeGuid from '../../src/util/makeGuid';
+import provide from '../../src/util/provide';
+import {layerConfigHelper, randomColor} from '../layerStyles';
+import {getCorridor}  from '../ajaxGetters';
 const nm = provide('ssa');
 
 
@@ -45,21 +45,18 @@ class Corridor {
     constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
 
         options = options || {};
-        options.features =  options.features && options.constructor.name == 'Array' ? options.features : undefined;
-        options.loadedCallback = typeof options.loadedCallback == 'function' ? options.loadedCallback : function(c){};
+        options.features = options.features && options.constructor.name == 'Array' ? options.features : undefined;
+        options.loadedCallback = typeof options.loadedCallback == 'function' ? options.loadedCallback : function (c) {
+        };
 
         this.clientId = makeGuid();
-        if (options.color){
+        if (options.color) {
             this._color = options.color;
         } else {
             this._color = randomColor();
         }
 
         this.databaseId = options.databaseId || undefined;
-        
-        this._corridorLayer = new LayerBaseVectorGeoJson('',
-            layerConfigHelper(this.rpFrom + ' - ' + this.rpTo, this._color, true)
-        );
 
         this._valid = false;
         this._error = '';
@@ -71,10 +68,14 @@ class Corridor {
         this.highway = highway;
         this.rpFrom = rpFrom;
         this.rpTo = rpTo;
-        
-        if (options.features){
-            
+
+        this._corridorLayer = new LayerBaseVectorGeoJson('',
+            layerConfigHelper(this.rpFrom + ' - ' + this.rpTo, this._color, true)
+        );
+
+        if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
+            options.loadedCallback(this);
         } else {
             getCorridor(pdpFrom, pdpTo, (d) => {
                 this._corridorLayer.addFeatures(d);
@@ -91,7 +92,7 @@ class Corridor {
 
     /**
      *
-     * @param {Corridor} corridor 
+     * @param {Corridor} corridor
      */
     updateCorridor(corridor) {
 
@@ -103,10 +104,10 @@ class Corridor {
         this.rpFrom = corridor.rpFrom;
         this.rpTo = corridor.rpTo;
 
-        this.layer.name =  this.rpFrom + '-' + this.rpTo;
-        
+        this.layer.name = this.rpFrom + '-' + this.rpTo;
+
         this.layer.clear();
-        for (let f of corridor.features){
+        for (let f of corridor.features) {
             this.layer.source.addFeature(f.clone());
         }
     }
@@ -186,7 +187,7 @@ class Corridor {
     }
 
     /**
-     * 
+     *
      * @returns {ol.layer.Vector|*}
      */
     get olLayer() {

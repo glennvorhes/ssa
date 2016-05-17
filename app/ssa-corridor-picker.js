@@ -7,7 +7,7 @@ import LayerBaseVectorGeoJson from '../src/layers/LayerBaseVectorGeoJson';
 import LayerEsriMapServer from '../src/layers/LayerEsriMapServer';
 import provide from '../src/util/provide';
 import ol from '../src/ol/ol';
-import Corridor from './Corridor';
+import Corridor from './corridor/Corridor';
 import './rp-picker.js';
 
 const nm = provide('ssa');

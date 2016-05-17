@@ -2,6 +2,7 @@
  * Created by gavorhes on 5/16/2016.
  */
 import provide from '../../src/util/provide'
+import * as styles  from '../layerStyles';
 const nm = provide('ssa');
 
 /**
@@ -66,17 +67,10 @@ class CorridorCollection {
         this._coridorLookup[c.clientId] = c;
         this.ssaMap.mainMap.addLayer(c.olLayer);
         c.layer.name = c.rpFrom + '-' + c.rpTo;
+        
 
-        this.ssaMap.mainMapPopup.addVectorPopup(c.layer, (props) => {
-            let returnHtml = '<table class="mm-popup-table">';
-            returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
-            returnHtml += `<tr><td>Hwy</td><td>${props['hwyDir']}</td></tr>`;
-            returnHtml += `<tr><td>DivUnd</td><td>${props['divUnd']}</td></tr>`;
-            returnHtml += `<tr><td>From</td><td>${props['pdpFrom']}</td></tr>`;
-            returnHtml += `<tr><td>To</td><td>${props['pdpTo']}</td></tr>`;
-            returnHtml += '</table>';
-            return returnHtml;
-        });
+
+        this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
 
         this._refreshHtmlCreate();
     }

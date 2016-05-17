@@ -11,17 +11,25 @@ import provide from '../../src/util/provide';
 const nm = provide('ssa');
 
 
-class SsaMapCreate extends SsaMapBase{
+class SsaMapCreate extends SsaMapBase {
 
     /**
      *
      * @param {string} divId
      * @param {string} corridorDataContainer
      */
-    constructor(divId, corridorDataContainer){
-        super(divId, corridorDataContainer);
+    constructor(divId, corridorDataContainer) {
+        super(divId);
         this.$mainContainer.prepend(`<div class="ssa-map-sidebar"></div>`);
         this.mainMap.updateSize();
+
+        let _corridorDataContainer = $(`.${corridorDataContainer}, #${corridorDataContainer}`);
+        if (_corridorDataContainer.length == 0) {
+            throw 'data container not found';
+        }
+
+        this.$corridorDataContainer = $(_corridorDataContainer[0]);
+        this.$corridorDataContainer.addClass('corridor-data-container');
 
         this.$sideBar = this.$mainContainer.find('.ssa-map-sidebar');
 
@@ -31,11 +39,11 @@ class SsaMapCreate extends SsaMapBase{
         this.$sideBar.append(`<div id="${pickerGuid}"></div>`);
         this.pickerCollection = new PickerCollection(pickerGuid, this);
 
-        
+
         let corridorsGuid = makeGuid();
         this.$sideBar.append(`<div id="${corridorsGuid}"></div>`);
         this.corridorCollection = new CorridorCollection(corridorsGuid, this);
-        
+
         this.$createCorridorButton = this.$sideBar.find('.picker-create-corridor');
 
         this.$createCorridorButton.click(() => {

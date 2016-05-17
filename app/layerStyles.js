@@ -21,11 +21,12 @@ export const segmentSelectionOther = new ol.style.Style({
 
 /**
  *
- * @type {Array}
+ * @type {Array<string>}
  */
 let returnedColors = [];
-let colorOptions = ['Aquamarine', 'Chartreuse', 'CornflowerBlue', 'Cyan', 'DarkOrange', 'DeepSkyBlue', 'GreenYellow',
-    'Salmon', 'Magenta', 'Orchid', 'Turquoise ', 'Tomato'];
+let colorOptions = ['#FF00FF', '#7FFF00', '#FA8072',
+    '#FF6347', '#40E0D0', '#ADFF2F', '#6495ED',
+    '#FF8C00', '#7FFFD4', '#DA70D6'];
 
 /**
  * return a random color for styling
@@ -62,3 +63,14 @@ export function layerConfigHelper(name, color, visible) {
         visible: visible
     };
 }
+
+export const mmPopupContent = (props) => {
+    let returnHtml = '<table class="mm-popup-table">';
+    returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
+    returnHtml += `<tr><td>Hwy</td><td>${props['hwyDir']}</td></tr>`;
+    returnHtml += `<tr><td>DivUnd</td><td>${props['divUnd']}</td></tr>`;
+    returnHtml += `<tr><td>From</td><td>${props['pdpFrom']}</td></tr>`;
+    returnHtml += `<tr><td>To</td><td>${props['pdpTo']}</td></tr>`;
+    returnHtml += '</table>';
+    return returnHtml;
+};

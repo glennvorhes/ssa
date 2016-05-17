@@ -11,17 +11,8 @@ const nm = provide('ssa');
 class SsaMapBase {
 
     
-    constructor(divId, corridorDataContainer) {
+    constructor(divId) {
         
-        let _corridorDataContainer = $(`.${corridorDataContainer}, #${corridorDataContainer}`);
-        if (_corridorDataContainer.length == 0){
-            throw 'data container not found';
-        }
-        
-        this.$corridorDataContainer = $(_corridorDataContainer[0]);
-
-        this.$corridorDataContainer.addClass('corridor-data-container');
-
         /**
          * @type {JQuery|*|jQuery|HTMLElement}
          */

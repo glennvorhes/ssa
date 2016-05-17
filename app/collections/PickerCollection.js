@@ -8,7 +8,7 @@ import SelectHighway from '../selectBox/SelectHighway';
 import SelectEndCounty from '../selectBox/SelectEndCounty';
 import SegmentPickerFrom from '../segmentPicker/SegmentPickerFrom';
 import SegmentPickerTo from '../segmentPicker/SegmentPickerTo';
-import Corridor from '../Corridor';
+import Corridor from '../corridor/Corridor';
 import provide from '../../src/util/provide'
 import $ from '../../src/jquery';
 const nm = provide('ssa');
