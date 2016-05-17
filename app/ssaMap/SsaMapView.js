@@ -4,6 +4,8 @@
 
 
 import SsaMapBase from './SsaMapBase';
+import provide from '../../src/util/provide';
+const nm = provide('ssa');
 
 class SsaMapView extends SsaMapBase{
     
@@ -14,4 +16,6 @@ class SsaMapView extends SsaMapBase{
     }
 }
 
+
+nm.SsaMapView = SsaMapView;
 export default SsaMapView;

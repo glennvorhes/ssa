@@ -7,6 +7,9 @@ import SsaMapBase from './SsaMapBase';
 import makeGuid from '../../src/util/makeGuid';
 import PickerCollection from '../collections/PickerCollection';
 import CorridorCollection from '../collections/CorridorCollection';
+import provide from '../../src/util/provide';
+const nm = provide('ssa');
+
 
 class SsaMapCreate extends SsaMapBase{
 
@@ -43,5 +46,6 @@ class SsaMapCreate extends SsaMapBase{
     }
 }
 
+nm.SsaMapCreate = SsaMapCreate;
 export default SsaMapCreate;
 
