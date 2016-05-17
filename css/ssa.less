@@ -139,7 +139,7 @@
 .ssa-map-sidebar {
   width: @sidebarWidth;
   padding: 7px;
-  background-color: green;
+  background-color: lightgray;
 }
 
 
@@ -154,8 +154,15 @@
     width: 100%;
 
     th, td{
-      border: solid black 1px;
       text-align: center;
+    }
+
+    td{
+        border: solid black 1px;
+    }
+
+    th{
+      border-bottom:solid black 1px;
     }
 
     tr{
@@ -194,8 +201,7 @@
 }
 
 .corridor-data-container{
-  background-color: red;
-  min-height: 100px;
+  display: none;
 }
 
 

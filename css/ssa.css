@@ -264,7 +264,7 @@ select:disabled {
 .ssa-map-sidebar {
   width: 270px;
   padding: 7px;
-  background-color: green;
+  background-color: lightgray;
 }
 .selected-segment-info {
   font-weight: bold;
@@ -275,8 +275,13 @@ select:disabled {
 }
 .corridor-collection table th,
 .corridor-collection table td {
-  border: solid black 1px;
   text-align: center;
+}
+.corridor-collection table td {
+  border: solid black 1px;
+}
+.corridor-collection table th {
+  border-bottom: solid black 1px;
 }
 .corridor-collection table tr span {
   cursor: pointer;
@@ -305,6 +310,5 @@ select:disabled {
   background-size: 22px 22px;
 }
 .corridor-data-container {
-  background-color: red;
-  min-height: 100px;
+  display: none;
 }
