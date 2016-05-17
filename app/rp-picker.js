@@ -354,7 +354,7 @@ class RpPicker {
      */
     set referencePointId(newRef) {
 
-        if (newRef == this.referencePointId) {
+        if (newRef || newRef == this.referencePointId) {
             return;
         }
 

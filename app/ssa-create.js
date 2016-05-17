@@ -1,7 +1,8 @@
 /**
- * Created by gavorhes on 5/13/2016.
+ * Created by gavorhes on 3/23/2016.
  */
 
+import 'babel-polyfill/dist/polyfill.min';
 import SsaMapCreate from '../app/ssaMap/SsaMapCreate';
 
 new SsaMapCreate('ssa-map-container', 'data-container');

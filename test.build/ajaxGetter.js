@@ -8,6 +8,7 @@ exports.getStartCounties = getStartCounties;
 exports.getHighways = getHighways;
 exports.getEndCounties = getEndCounties;
 exports.getSegments = getSegments;
+exports.getCorridor = getCorridor;
 
 var _jquery = require('../src/jquery');
 
@@ -30,11 +31,26 @@ var getStartCountiesUrl = home + '/getStartCounties';
 var getHighwaysUrl = home + '/getHighways';
 var getEndCountiesUrl = home + '/getEndCounties';
 var getSegmentsUrl = home + '/getSegments';
+var getCorridorUrl = home + '/getCorridor';
 
 /**
  * @callback ajaxCallback
  * @param {object|Array} d - returned data
  */
+
+/**
+ *
+ * @param {string} url
+ * @param {object} [params={}]
+ * @param {ajaxCallback} callback
+ */
+function ajaxInner(url, params, callback) {
+    "use strict";
+
+    _jquery2.default.get(url, params, callback, 'json').fail(function () {
+        alert("error getting: " + url + JSON.stringify(params));
+    });
+}
 
 /**
  *
@@ -53,9 +69,9 @@ function ajaxHelper(url, callback, params, calbackHelper) {
             d = calbackHelper(d);
             callback(d);
         };
-        _jquery2.default.get(url, params, newCallback, 'json');
+        ajaxInner(url, params, newCallback);
     } else {
-        _jquery2.default.get(url, params, callback, 'json');
+        ajaxInner(url, params, callback);
     }
 }
 
@@ -111,7 +127,7 @@ function getEndCounties(highwayName, callback) {
 nm.getEndCounties = getEndCounties;
 
 /**
- * 
+ *
  * @param {number} county
  * @param {string} highway
  * @param {ajaxCallback} callback
@@ -124,6 +140,22 @@ function getSegments(county, highway, callback) {
 }
 
 nm.getSegments = getSegments;
+
+/**
+ *
+ * @param {number} startPdp
+ * @param {number} endPdp
+ * @param {ajaxCallback} callback
+ */
+function getCorridor(startPdp, endPdp, callback) {
+    "use strict";
+
+    var params = { "from": startPdp, "to": endPdp };
+
+    ajaxHelper(getCorridorUrl, callback, params);
+}
+
+nm.getCorridor = getCorridor;
 
 },{"../src/jquery":3,"../src/util/provide":4}],2:[function(require,module,exports){
 /*!

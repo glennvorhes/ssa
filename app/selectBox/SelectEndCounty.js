@@ -20,14 +20,24 @@ class SelectEndCounty extends SelectBoxBase{
     /**
      * set the county
      * @param {string} hwy
+     * @param {number|undefined} [endCounty=undefined}
      */
-    setHighway(hwy){
+    setHighway(hwy, endCounty){
+        this.box.html('');
+        this.box.addClass('refresh').removeClass('refresh');
+
+        endCounty = typeof endCounty == 'number' ? endCounty : undefined;
+
         getEndCounties(hwy, (d) => {
             for (let c of d){
                 this.box.append(`<option value="${c['id']}">${c['name']}</option>`)
             }
             if (d){
-                this.box.trigger('change');
+                if (typeof endCounty == 'number'){
+                    this.box.val(endCounty.toFixed());
+                } else {
+                    this.box.trigger('change');
+                }
             }
         });
     }

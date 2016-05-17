@@ -20,8 +20,13 @@ class SelectHighway extends SelectBoxBase {
     /**
      *
      * @param {number} countyId
+     * @param {string|undefined} [hwy=undefined]
      */
-    setStartCounty(countyId) {
+    setStartCounty(countyId, hwy) {
+        hwy = typeof hwy == 'string' ? hwy : undefined;
+        this.box.html('');
+        this.box.addClass('refresh').removeClass('refresh');
+        
         getHighways(countyId, (d) => {
             "use strict";
             
@@ -29,7 +34,11 @@ class SelectHighway extends SelectBoxBase {
                 this.box.append(`<option>${h['name']}</option>`);
             }
             if (d) {
-                this.box.trigger('change');
+                if (hwy){
+                    this.box.val(hwy)
+                } else {
+                    this.box.trigger('change');
+                }
             }
         });
     }

@@ -11,11 +11,26 @@ const getStartCountiesUrl = home + '/getStartCounties';
 const getHighwaysUrl = home + '/getHighways';
 const getEndCountiesUrl = home + '/getEndCounties';
 const getSegmentsUrl = home + '/getSegments';
+const getCorridorUrl = home + '/getCorridor';
 
 /**
  * @callback ajaxCallback
  * @param {object|Array} d - returned data
  */
+
+
+/**
+ *
+ * @param {string} url
+ * @param {object} [params={}]
+ * @param {ajaxCallback} callback
+ */
+function ajaxInner(url, params, callback) {
+    "use strict";
+    $.get(url, params, callback, 'json').fail(() => {
+        alert("error getting: " +  url + JSON.stringify(params));
+    });
+}
 
 /**
  *
@@ -33,23 +48,23 @@ function ajaxHelper(url, callback, params, calbackHelper) {
             d = calbackHelper(d);
             callback(d);
         };
-        $.get(url, params, newCallback, 'json');
+        ajaxInner(url, params, newCallback);
     } else {
-        $.get(url, params, callback, 'json');
+        ajaxInner(url, params, callback);
     }
 }
 
-let countySort =  (d) => {
-        d.sort((a, b) => {
-            if (a['name'] == b['name']){
-                return 0;
-            } else {
-                return a['name'] < b['name'] ? -1 : 1;
-            }
-        });
+let countySort = (d) => {
+    d.sort((a, b) => {
+        if (a['name'] == b['name']) {
+            return 0;
+        } else {
+            return a['name'] < b['name'] ? -1 : 1;
+        }
+    });
 
-        return d;
-    };
+    return d;
+};
 
 /**
  *
@@ -91,18 +106,33 @@ nm.getEndCounties = getEndCounties;
 
 
 /**
- * 
+ *
  * @param {number} county
  * @param {string} highway
  * @param {ajaxCallback} callback
  */
-export function getSegments(county, highway, callback){
+export function getSegments(county, highway, callback) {
     "use strict";
     let params = {"highway": highway, "county": county};
     ajaxHelper(getSegmentsUrl, callback, params);
 }
 
 nm.getSegments = getSegments;
+
+/**
+ *
+ * @param {number} startPdp
+ * @param {number} endPdp
+ * @param {ajaxCallback} callback
+ */
+export function getCorridor(startPdp, endPdp, callback) {
+    "use strict";
+    let params = {"from": startPdp, "to": endPdp};
+
+    ajaxHelper(getCorridorUrl, callback, params);
+}
+
+nm.getCorridor = getCorridor;
 
 
 

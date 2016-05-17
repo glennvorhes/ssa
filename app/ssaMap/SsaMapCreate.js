@@ -4,14 +4,44 @@
 
 
 import SsaMapBase from './SsaMapBase';
+import makeGuid from '../../src/util/makeGuid';
+import PickerCollection from '../collections/PickerCollection';
+import CorridorCollection from '../collections/CorridorCollection';
 
 class SsaMapCreate extends SsaMapBase{
-    
-    constructor(divId){
-        super(divId);
-        this.mainContainer.prepend(`<div class="ssa-map-sidebar"></div>`);
-        this.pickerMap.updateSize();
+
+    /**
+     *
+     * @param {string} divId
+     * @param {string} corridorDataContainer
+     */
+    constructor(divId, corridorDataContainer){
+        super(divId, corridorDataContainer);
+        this.$mainContainer.prepend(`<div class="ssa-map-sidebar"></div>`);
+        this.mainMap.updateSize();
+
+        this.$sideBar = this.$mainContainer.find('.ssa-map-sidebar');
+
+        this.$sideBar.append('<div><input type="button" value="Create Corridor" class="btn btn-default picker-create-corridor"></div>');
+
+        let pickerGuid = makeGuid();
+        this.$sideBar.append(`<div id="${pickerGuid}"></div>`);
+        this.pickerCollection = new PickerCollection(pickerGuid, this);
+
+        
+        let corridorsGuid = makeGuid();
+        this.$sideBar.append(`<div id="${corridorsGuid}"></div>`);
+        this.corridorCollection = new CorridorCollection(corridorsGuid, this);
+        
+        this.$createCorridorButton = this.$sideBar.find('.picker-create-corridor');
+
+        this.$createCorridorButton.click(() => {
+            this.pickerCollection.visible = true;
+            this.$createCorridorButton.prop('disabled', true);
+            this.corridorCollection.visible = false;
+        })
     }
 }
 
 export default SsaMapCreate;
+

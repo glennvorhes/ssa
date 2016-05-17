@@ -7,17 +7,28 @@ import quickMapMulti from '../../src/olHelpers/quickMapMulti';
 
 
 class SsaMapBase {
-    constructor(divId) {
+
+    
+    constructor(divId, corridorDataContainer) {
+        
+        let _corridorDataContainer = $(`.${corridorDataContainer}, #${corridorDataContainer}`);
+        if (_corridorDataContainer.length == 0){
+            throw 'data container not found';
+        }
+        
+        this.$corridorDataContainer = $(_corridorDataContainer[0]);
+
+        this.$corridorDataContainer.addClass('corridor-data-container');
 
         /**
          * @type {JQuery|*|jQuery|HTMLElement}
          */
-        this.mainContainer = $('#' + divId);
-        this.mainContainer.addClass('ssa-map-container');
+        this.$mainContainer = $('#' + divId);
+        this.$mainContainer.addClass('ssa-map-container');
         let mapId = makeGuid();
 
 
-        this.mainContainer.append(`<div id="${mapId}" class="ssa-main-map"></div>`);
+        this.$mainContainer.append(`<div id="${mapId}" class="ssa-main-map"></div>`);
 
         let multiMap = quickMapMulti({
             divId: mapId,
@@ -28,9 +39,17 @@ class SsaMapBase {
         /**
          * @type {ol.Map}
          */
-        this.pickerMap = multiMap.map;
-        this.pickerMapMove = multiMap.mapMove;
-        this.pickerMapPopup = multiMap.mapPopup;
+        this.mainMap = multiMap.map;
+        this.mainMapMove = multiMap.mapMove;
+
+        /**
+         * @type {MapPopupCls}
+         */
+        this.mainMapPopup = multiMap.mapPopup;
+    }
+
+    addCorridorByPickers(){
+        
     }
 
 }

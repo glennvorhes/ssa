@@ -98,15 +98,15 @@ class Corridor {
         features = features && features.constructor.name == 'Array' ? features : [];
 
         this.databaseId = databaseId;
-        this.startCounty = startCounty;
-        this.endCounty = endCounty;
+        this.countyStart = startCounty;
+        this.countyEnd = endCounty;
         this.highway = highway;
-        this.fromRp = fromRp;
-        this.toRp = toRp;
+        this.rpFrom = fromRp;
+        this.rpTo = toRp;
         this.clientId = (fromRp + '-' + toRp).replace(/ /g, '_');
         this._color = randomColor();
         this._corridorLayer = new LayerBaseVectorGeoJson('',
-            layerConfigHelper(this.fromRp + ' - ' + this.toRp, this._color, true)
+            layerConfigHelper(this.rpFrom + ' - ' + this.rpTo, this._color, true)
         );
 
         if (features.length > 0) {
@@ -120,11 +120,11 @@ class Corridor {
 
     getTableHtml() {
         let outString = `<tr id="${this.clientId}" class="corridor-tr" style="background-color: ${this._color}">`;
-        outString += `<td>${this.startCounty}</td>`;
-        outString += `<td>${this.endCounty}</td>`;
+        outString += `<td>${this.countyStart}</td>`;
+        outString += `<td>${this.countyEnd}</td>`;
         outString += `<td>${this.highway}</td>`;
-        outString += `<td>${this.fromRp}</td>`;
-        outString += `<td>${this.toRp}</td>`;
+        outString += `<td>${this.rpFrom}</td>`;
+        outString += `<td>${this.rpTo}</td>`;
         outString += '</tr>';
 
         return outString;
@@ -133,11 +133,11 @@ class Corridor {
     getDataHtml(i) {
         let outString = '<div class="corridor-data">';
         outString += `<input type="hidden" class="corridor-data-database-id" name="corridors[${i}].corridorId" value="${this.databaseId}"/>`;
-        outString += `<input type="hidden" class="corridor-data-start-county" name="corridors[${i}].startCounty" value="${this.startCounty}"/>`;
-        outString += `<input type="hidden" class="corridor-data-end-county" name="corridors[${i}].endCounty" value="${this.endCounty}"/>`;
+        outString += `<input type="hidden" class="corridor-data-start-county" name="corridors[${i}].startCounty" value="${this.countyStart}"/>`;
+        outString += `<input type="hidden" class="corridor-data-end-county" name="corridors[${i}].endCounty" value="${this.countyEnd}"/>`;
         outString += `<input type="hidden" class="corridor-data-highway" name="corridors[${i}].highway" value="${this.highway}"/>`;
-        outString += `<input type="hidden" class="corridor-data-from-rp" name="corridors[${i}].fromRp" value="${this.fromRp}"/>`;
-        outString += `<input type="hidden" class="corridor-data-to-rp" name="corridors[${i}].toRp" value="${this.toRp}"/>`;
+        outString += `<input type="hidden" class="corridor-data-from-rp" name="corridors[${i}].fromRp" value="${this.rpFrom}"/>`;
+        outString += `<input type="hidden" class="corridor-data-to-rp" name="corridors[${i}].toRp" value="${this.rpTo}"/>`;
         outString += `</div>`;
 
         return outString;
@@ -329,15 +329,15 @@ class SsaCorridorPicker {
             this._$btnConfirmEditCorridor.removeClass('ssa-hidden');
             this._workingLayer.source.addFeatures(this.__selectedCorridor.layer.source.getFeatures());
             this._setMapToLayerExtent(this._workingLayer);
-            this._$selectStartCounty.val(this.__selectedCorridor.startCounty);
-            this._populateHighwaySelect(this.__selectedCorridor.startCounty, this.__selectedCorridor.highway);
-            this._populateEndCountySelect(this.__selectedCorridor.highway, this.__selectedCorridor.endCounty);
+            this._$selectStartCounty.val(this.__selectedCorridor.countyStart);
+            this._populateHighwaySelect(this.__selectedCorridor.countyStart, this.__selectedCorridor.highway);
+            this._populateEndCountySelect(this.__selectedCorridor.highway, this.__selectedCorridor.countyEnd);
 
             this._rpPicker1.setCountyAndHighway(
-                this.__selectedCorridor.startCounty, this.__selectedCorridor.highway, this.__selectedCorridor.fromRp);
+                this.__selectedCorridor.countyStart, this.__selectedCorridor.highway, this.__selectedCorridor.rpFrom);
 
             this._rpPicker2.setCountyAndHighway(
-                this.__selectedCorridor.endCounty, this.__selectedCorridor.highway, this.__selectedCorridor.toRp);
+                this.__selectedCorridor.countyEnd, this.__selectedCorridor.highway, this.__selectedCorridor.rpTo);
         });
 
         this._$btnDeleteCorridor.click(() => {
@@ -463,11 +463,11 @@ class SsaCorridorPicker {
         });
 
         this._$btnConfirmEditCorridor.click(() => {
-            this.__selectedCorridor.startCounty = this._$selectStartCounty.val();
+            this.__selectedCorridor.countyStart = this._$selectStartCounty.val();
             this.__selectedCorridor.highway = this._$selectHighway.val();
-            this.__selectedCorridor.endCounty = this._$selectEndCounty.val();
-            this.__selectedCorridor.fromRp = this._rpPicker1.referencePointId;
-            this.__selectedCorridor.toRp = this._rpPicker2.referencePointId;
+            this.__selectedCorridor.countyEnd = this._$selectEndCounty.val();
+            this.__selectedCorridor.rpFrom = this._rpPicker1.referencePointId;
+            this.__selectedCorridor.rpTo = this._rpPicker2.referencePointId;
             this.__selectedCorridor.features = this._workingLayer.source.getFeatures();
             this._sidebarOpen = false;
             this._refreshTable();

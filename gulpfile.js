@@ -6,7 +6,7 @@ function _ssa(production) {
     "use strict";
 
     let filesArr = [
-        ['./app/ssa-main.js', './build/ssa-main.js']
+        ['./app/ssa-create.js', './build/ssa-create.js']
     ];
 
     return gulpHelpers.bundleEs2015Multiple(filesArr, production);
@@ -31,6 +31,10 @@ gulp.task('build-tests', function () {
 
 gulp.task('ssa', () => {
     return _ssa(false);
+});
+
+gulp.task('ssa-prod', () => {
+    return _ssa(true);
 });
 //
 // gulp.task('glrtoc', () => {
@@ -70,7 +74,7 @@ gulp.task('ssa', () => {
 //     "use strict";
 //     gulpHelpers.processLessFile('./flaskApp/blueprints/testing/static/css/ssa-corridor.less', './flaskApp/blueprints/testing/static/_build/ssa-corridor.css');
 //
-//     return gulpHelpers.bundleEs2015('./flaskApp/blueprints/testing/static/js/ssa-main.js', './flaskApp/blueprints/testing/static/_build/ssa-main.js', production);
+//     return gulpHelpers.bundleEs2015('./flaskApp/blueprints/testing/static/js/ssa-create.js', './flaskApp/blueprints/testing/static/_build/ssa-create.js', production);
 // }
 //
 // gulp.task('ssa', () => {

@@ -68,9 +68,6 @@ function layerConfigHelper(name, color, visible) {
 
 
 
-
-
-
 class SsaCorridorPicker {
 
     /**
@@ -202,15 +199,15 @@ class SsaCorridorPicker {
             this._$btnConfirmEditCorridor.removeClass('ssa-hidden');
             this._workingLayer.source.addFeatures(this.__selectedCorridor.layer.source.getFeatures());
             this._setMapToLayerExtent(this._workingLayer);
-            this._$selectStartCounty.val(this.__selectedCorridor.startCounty);
-            this._populateHighwaySelect(this.__selectedCorridor.startCounty, this.__selectedCorridor.highway);
-            this._populateEndCountySelect(this.__selectedCorridor.highway, this.__selectedCorridor.endCounty);
+            this._$selectStartCounty.val(this.__selectedCorridor.countyStart);
+            this._populateHighwaySelect(this.__selectedCorridor.countyStart, this.__selectedCorridor.highway);
+            this._populateEndCountySelect(this.__selectedCorridor.highway, this.__selectedCorridor.countyEnd);
 
             this._rpPicker1.setCountyAndHighway(
-                this.__selectedCorridor.startCounty, this.__selectedCorridor.highway, this.__selectedCorridor.fromRp);
+                this.__selectedCorridor.countyStart, this.__selectedCorridor.highway, this.__selectedCorridor.rpFrom);
 
             this._rpPicker2.setCountyAndHighway(
-                this.__selectedCorridor.endCounty, this.__selectedCorridor.highway, this.__selectedCorridor.toRp);
+                this.__selectedCorridor.countyEnd, this.__selectedCorridor.highway, this.__selectedCorridor.rpTo);
         });
 
         this._$btnDeleteCorridor.click(() => {
@@ -336,11 +333,11 @@ class SsaCorridorPicker {
         });
 
         this._$btnConfirmEditCorridor.click(() => {
-            this.__selectedCorridor.startCounty = this._$selectStartCounty.val();
+            this.__selectedCorridor.countyStart = this._$selectStartCounty.val();
             this.__selectedCorridor.highway = this._$selectHighway.val();
-            this.__selectedCorridor.endCounty = this._$selectEndCounty.val();
-            this.__selectedCorridor.fromRp = this._rpPicker1.referencePointId;
-            this.__selectedCorridor.toRp = this._rpPicker2.referencePointId;
+            this.__selectedCorridor.countyEnd = this._$selectEndCounty.val();
+            this.__selectedCorridor.rpFrom = this._rpPicker1.referencePointId;
+            this.__selectedCorridor.rpTo = this._rpPicker2.referencePointId;
             this.__selectedCorridor.features = this._workingLayer.source.getFeatures();
             this._sidebarOpen = false;
             this._refreshTable();
