@@ -591,13 +591,13 @@ var segmentLayer = exports.segmentLayer = new _ol2.default.style.Style({
      */
 
 
-var fromColor = exports.fromColor = 'green';
+var fromColor = exports.fromColor = '#48FD14';
 
 var segmentSelection = exports.segmentSelection = new _ol2.default.style.Style({
     stroke: new _ol2.default.style.Stroke({ color: fromColor, width: 7 })
 });
 
-var toColor = exports.toColor = 'red';
+var toColor = exports.toColor = '#EE0071';
 
 var segmentSelectionOther = exports.segmentSelectionOther = new _ol2.default.style.Style({
     stroke: new _ol2.default.style.Stroke({ color: toColor, width: 7 })
