@@ -288,6 +288,7 @@ select:disabled {
   display: inline-block;
   width: 22px;
   height: 22px;
+  margin: 0 2px;
 }
 .corridor-collection table tr td:first-child,
 .corridor-collection table tr th:first-child {
