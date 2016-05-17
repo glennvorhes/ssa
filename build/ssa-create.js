@@ -2173,12 +2173,6 @@ var _SsaMapCreate2 = _interopRequireDefault(_SsaMapCreate);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Created by gavorhes on 3/23/2016.
- */
-
-new _SsaMapCreate2.default('ssa-map-container', 'data-container');
-
 },{"../app/ssaMap/SsaMapCreate":15,"babel-polyfill/dist/polyfill.min":16}],14:[function(require,module,exports){
 'use strict';
 
