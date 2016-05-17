@@ -4,6 +4,8 @@
 import $ from '../../src/jquery';
 import makeGuid from '../../src/util/makeGuid';
 import quickMapMulti from '../../src/olHelpers/quickMapMulti';
+import provide from '../../src/util/provide';
+const nm = provide('ssa');
 
 
 class SsaMapBase {
@@ -54,4 +56,5 @@ class SsaMapBase {
 
 }
 
+nm.SsaMapBase = SsaMapBase;
 export default SsaMapBase;

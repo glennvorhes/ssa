@@ -167,10 +167,10 @@ class Corridor {
         outString += `<input type="hidden" class="corridor-data-start-county" name="corridors[${i}].startCounty" value="${this.countyStart}"/>`;
         outString += `<input type="hidden" class="corridor-data-end-county" name="corridors[${i}].endCounty" value="${this.countyEnd}"/>`;
         outString += `<input type="hidden" class="corridor-data-highway" name="corridors[${i}].highway" value="${this.highway}"/>`;
-        outString += `<input type="hidden" class="corridor-data-from-rp" name="corridors[${i}].fromRp" value="${this.rpFrom}"/>`;
-        outString += `<input type="hidden" class="corridor-data-to-rp" name="corridors[${i}].toRp" value="${this.rpTo}"/>`;
-        outString += `<input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].fromPdp" value="${this.pdpFrom}"/>`;
-        outString += `<input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].toPdp" value="${this.pdpTo}"/>`;
+        outString += `<input type="hidden" class="corridor-data-from-rp" name="corridors[${i}].startRp" value="${this.rpFrom}"/>`;
+        outString += `<input type="hidden" class="corridor-data-to-rp" name="corridors[${i}].endRp" value="${this.rpTo}"/>`;
+        outString += `<input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].startPdp" value="${this.pdpFrom}"/>`;
+        outString += `<input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].endPdp" value="${this.pdpTo}"/>`;
         outString += `</div>`;
 
         return outString;
