@@ -184,7 +184,7 @@ var Corridor = function () {
             outString += '<input type="hidden" class="corridor-data-from-rp" name="corridors[' + i + '].startRp" value="' + this.rpFrom + '"/>';
             outString += '<input type="hidden" class="corridor-data-to-rp" name="corridors[' + i + '].endRp" value="' + this.rpTo + '"/>';
             outString += '<input type="hidden" class="corridor-data-from-pdp" name="corridors[' + i + '].startPdp" value="' + this.pdpFrom + '"/>';
-            outString += '<input type="hidden" class="corridor-data-from-pdp" name="corridors[' + i + '].endPdp" value="' + this.pdpTo + '"/>';
+            outString += '<input type="hidden" class="corridor-data-to-pdp" name="corridors[' + i + '].endPdp" value="' + this.pdpTo + '"/>';
             outString += '</div>';
 
             return outString;
@@ -2316,7 +2316,7 @@ var SsaMapCreate = function (_SsaMapBase) {
 
                 _this.$sideBar = _this.$mainContainer.find('.ssa-map-sidebar');
 
-                _this.$sideBar.append('<div><input type="button" value="Create Corridor" class="btn btn-default picker-create-corridor"></div>');
+                _this.$sideBar.append('<div><input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor"></div>');
 
                 var pickerGuid = (0, _makeGuid2.default)();
                 _this.$sideBar.append('<div id="' + pickerGuid + '"></div>');

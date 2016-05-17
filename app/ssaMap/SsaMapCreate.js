@@ -25,7 +25,7 @@ class SsaMapCreate extends SsaMapBase{
 
         this.$sideBar = this.$mainContainer.find('.ssa-map-sidebar');
 
-        this.$sideBar.append('<div><input type="button" value="Create Corridor" class="btn btn-default picker-create-corridor"></div>');
+        this.$sideBar.append('<div><input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor"></div>');
 
         let pickerGuid = makeGuid();
         this.$sideBar.append(`<div id="${pickerGuid}"></div>`);
