@@ -518,7 +518,7 @@ function tableContent(rowHtml) {
     var tableContent = "<table>";
     tableContent += "<tr>";
     tableContent += '<th></th>';
-    tableContent += '<th>Corridor</th>';
+    tableContent += '<th>Corridors</th>';
     tableContent += '<th></th>';
     tableContent += "</tr>";
     tableContent += rowHtml;

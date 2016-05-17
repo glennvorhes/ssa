@@ -24,6 +24,7 @@ function tableContent(rowHtml) {
     return tableContent;
 }
 
+
 class CorridorCollection {
 
     /**
