@@ -519,7 +519,7 @@ var CorridorConfig =
 function CorridorConfig(inputElement) {
   _classCallCheck(this, CorridorConfig);
 
-  if (inputElement.constructor.name.toLowerCase().indexOf('html') > -1) {
+  if (!inputElement.val) {
     inputElement = $(inputElement);
   }
 

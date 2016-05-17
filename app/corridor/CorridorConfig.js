@@ -10,10 +10,11 @@ class CorridorConfig {
      * @param {jQuery|HTMLDivElement|*} inputElement
      */
     constructor(inputElement) {
-        
-        if (inputElement.constructor.name.toLowerCase().indexOf('html') > -1) {
+
+        if (!inputElement.val) {
             inputElement = $(inputElement);
         }
+        
 
         /**
          *
