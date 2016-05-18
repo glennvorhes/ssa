@@ -24,6 +24,19 @@ function escapeHtml(string) {
     });
 }
 
+/**
+ *
+ * @param {string} fromRp
+ * @param {string} toRp
+ * @returns {string}
+ */
+function corridorName(fromRp, toRp){
+    "use strict";
+
+    return fromRp.substring(0,7) + ' - ' + toRp.substring(0, 7);
+}
+
+
 
 class Corridor {
 
@@ -71,7 +84,7 @@ class Corridor {
         this.rpTo = rpTo;
 
         this._corridorLayer = new LayerBaseVectorGeoJson('',
-            layerConfigHelper(this.rpFrom.substring(0,7) + '-' + this.rpTo.substring(0,7), this._color, true)
+            layerConfigHelper(corridorName(this.rpFrom  ,this.rpTo), this._color, true)
         );
 
         if (options.features) {
@@ -126,7 +139,7 @@ class Corridor {
         this.rpFrom = corridor.rpFrom;
         this.rpTo = corridor.rpTo;
 
-        this.layer.name = this.rpFrom.substring(0,7) + '-' + this.rpTo.substring(0,7);
+        this.layer.name = corridorName(this.rpFrom  ,this.rpTo);
 
         this.layer.clear();
         this.layer.olLayer.getSource().addFeatures(corridor.features);
@@ -159,7 +172,7 @@ class Corridor {
     get tableHtmlCreate() {
         let outString = `<tr class="corridor-tr">`;
         outString += `<td style="background-color: ${this._color}"></td>`;
-        outString += `<td>${this.rpFrom.substring(0, 7)} - ${this.rpTo.substring(0, 7)}</td>`;
+        outString += `<td>${corridorName(this.rpFrom  ,this.rpTo)}</td>`;
         outString += `<td>`;
         outString += `<span title="Zoom To" class="corridor-zoom" data-corridor="${this.clientId}"></span>`;
         outString += `<span title="Edit Corridor"  class="corridor-edit" data-corridor="${this.clientId}"></span>`;

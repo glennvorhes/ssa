@@ -25,6 +25,18 @@ function tableContent(rowHtml) {
     return tableContent;
 }
 
+/**
+ * 
+ * @param {string} fromRp
+ * @param {string} toRp
+ * @returns {string}
+ */
+function corridorName(fromRp, toRp){
+    "use strict";
+    
+    return fromRp.substring(0,7) + ' - ' + toRp.substring(0, 7);
+}
+
 
 class CorridorCollection {
 
@@ -66,7 +78,7 @@ class CorridorCollection {
         this._corridorArray.push(c);
         this._coridorLookup[c.clientId] = c;
         this.ssaMap.mainMap.addLayer(c.olLayer);
-        c.layer.name = c.rpFrom + '-' + c.rpTo;
+        c.layer.name = corridorName(c.rpFrom, c.rpTo);
         
 
 

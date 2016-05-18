@@ -47,6 +47,13 @@ export function randomColor() {
     }
 }
 
+/**
+ * 
+ * @param name
+ * @param color
+ * @param visible
+ * @returns {{minZoom: number, name: *, transform: {dataProjection: string, featureProjection: string}, style: ol.style.Style, visible: *}}
+ */
 export function layerConfigHelper(name, color, visible) {
     "use strict";
 
