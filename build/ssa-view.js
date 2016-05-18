@@ -591,6 +591,7 @@ var CorridorConfig = function () {
   _createClass(CorridorConfig, [{
     key: 'bootstrapHtml',
     value: function bootstrapHtml(index) {
+      index++;
       var outHtml = '<div class="row ssa-corridor-info-row">';
       outHtml += '<div class="col-xs-1 col-xs-offset-1">';
       outHtml += '<label>Corridor #' + index + '</label>';

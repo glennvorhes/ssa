@@ -76,6 +76,7 @@ class CorridorConfig {
      * @returns {string}
      */
     bootstrapHtml(index){
+        index++;
         let outHtml = '<div class="row ssa-corridor-info-row">';
         outHtml += '<div class="col-xs-1 col-xs-offset-1">';
         outHtml += `<label>Corridor #${index}</label>`;
