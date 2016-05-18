@@ -595,9 +595,9 @@ var CorridorConfig = function () {
       outHtml += '<div class="col-xs-1 col-xs-offset-1">';
       outHtml += '<label>Corridor #' + index + '</label>';
       outHtml += '</div>';
+      outHtml += labelValueHelper('Highway', this.hgwy);
       outHtml += labelValueHelper('Start County', (0, _countyLookup.getCountyById)(this.startCounty));
       outHtml += labelValueHelper('End County', (0, _countyLookup.getCountyById)(this.endCounty));
-      outHtml += labelValueHelper('Highway', this.hgwy);
       outHtml += labelValueHelper('Start RP', this.startRp);
       outHtml += labelValueHelper('End RP', this.endRp);
       outHtml += '</div>';

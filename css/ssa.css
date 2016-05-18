@@ -315,7 +315,6 @@ select:disabled {
   display: none;
 }
 .ssa-corridor-info-row {
-  border: solid black 1px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;

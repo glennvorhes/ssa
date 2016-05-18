@@ -80,9 +80,9 @@ class CorridorConfig {
         outHtml += '<div class="col-xs-1 col-xs-offset-1">';
         outHtml += `<label>Corridor #${index}</label>`;
         outHtml += '</div>';
+        outHtml += labelValueHelper('Highway', this.hgwy);
         outHtml += labelValueHelper('Start County', getCountyById(this.startCounty));
         outHtml += labelValueHelper('End County', getCountyById(this.endCounty));
-        outHtml += labelValueHelper('Highway', this.hgwy);
         outHtml += labelValueHelper('Start RP', this.startRp);
         outHtml += labelValueHelper('End RP', this.endRp);
         outHtml += '</div>';
