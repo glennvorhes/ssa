@@ -220,6 +220,18 @@ function tableContent(rowHtml) {
     return tableContent;
 }
 
+/**
+ * 
+ * @param {string} fromRp
+ * @param {string} toRp
+ * @returns {string}
+ */
+function corridorName(fromRp, toRp) {
+    "use strict";
+
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
+}
+
 var CorridorCollection = function () {
 
     /**
@@ -265,7 +277,7 @@ var CorridorCollection = function () {
             this._corridorArray.push(c);
             this._coridorLookup[c.clientId] = c;
             this.ssaMap.mainMap.addLayer(c.olLayer);
-            c.layer.name = c.rpFrom + '-' + c.rpTo;
+            c.layer.name = corridorName(c.rpFrom, c.rpTo);
 
             this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
 
@@ -728,6 +740,18 @@ function escapeHtml(string) {
     });
 }
 
+/**
+ *
+ * @param {string} fromRp
+ * @param {string} toRp
+ * @returns {string}
+ */
+function corridorName(fromRp, toRp) {
+    "use strict";
+
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
+}
+
 var Corridor = function () {
 
     /**
@@ -775,7 +799,7 @@ var Corridor = function () {
         this.rpFrom = rpFrom;
         this.rpTo = rpTo;
 
-        this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(this.rpFrom.substring(0, 7) + '-' + this.rpTo.substring(0, 7), this._color, true));
+        this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(corridorName(this.rpFrom, this.rpTo), this._color, true));
 
         if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
@@ -840,7 +864,7 @@ var Corridor = function () {
             this.rpFrom = corridor.rpFrom;
             this.rpTo = corridor.rpTo;
 
-            this.layer.name = this.rpFrom.substring(0, 7) + '-' + this.rpTo.substring(0, 7);
+            this.layer.name = corridorName(this.rpFrom, this.rpTo);
 
             this.layer.clear();
             this.layer.olLayer.getSource().addFeatures(corridor.features);
@@ -915,7 +939,7 @@ var Corridor = function () {
         get: function get() {
             var outString = '<tr class="corridor-tr">';
             outString += '<td style="background-color: ' + this._color + '"></td>';
-            outString += '<td>' + this.rpFrom.substring(0, 7) + ' - ' + this.rpTo.substring(0, 7) + '</td>';
+            outString += '<td>' + corridorName(this.rpFrom, this.rpTo) + '</td>';
             outString += '<td>';
             outString += '<span title="Zoom To" class="corridor-zoom" data-corridor="' + this.clientId + '"></span>';
             outString += '<span title="Edit Corridor"  class="corridor-edit" data-corridor="' + this.clientId + '"></span>';
@@ -1058,6 +1082,13 @@ function randomColor() {
     }
 }
 
+/**
+ * 
+ * @param name
+ * @param color
+ * @param visible
+ * @returns {{minZoom: number, name: *, transform: {dataProjection: string, featureProjection: string}, style: ol.style.Style, visible: *}}
+ */
 function layerConfigHelper(name, color, visible) {
     "use strict";
 

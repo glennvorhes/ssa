@@ -37,7 +37,6 @@ function corridorName(fromRp, toRp){
 }
 
 
-
 class Corridor {
 
     /**
