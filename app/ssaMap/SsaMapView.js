@@ -72,7 +72,7 @@ class SsaMapView extends SsaMapBase {
         getCrashes((d) => {
             this.crashLayer.addFeatures(d);
         });
-        console.log(outHtml);
+
         $('#' + infoAnchorId).after(outHtml);
     }
 }

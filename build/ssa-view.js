@@ -519,11 +519,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function labelValueHelper(label, val) {
   "use strict";
 
-  var outHtml = '<div class="col-xs-1 col-xs-offset-1">';
+  var outHtml = '<div class="col-xs-1">';
   outHtml += '<label>' + label + '</label>';
   outHtml += '<input class="form-control" type="text" readonly="" value="' + val + '">';
   outHtml += '</div>';
-  console.log(outHtml);
   return outHtml;
 }
 
@@ -593,7 +592,7 @@ var CorridorConfig = function () {
     key: 'bootstrapHtml',
     value: function bootstrapHtml(index) {
       var outHtml = '<div class="row ssa-corridor-info-row">';
-      outHtml += '<div class="col-xs-1">';
+      outHtml += '<div class="col-xs-1 col-xs-offset-1">';
       outHtml += '<label>Corridor #' + index + '</label>';
       outHtml += '</div>';
       outHtml += labelValueHelper('Start County', (0, _countyLookup.getCountyById)(this.startCounty));
@@ -1017,7 +1016,7 @@ var SsaMapView = function (_SsaMapBase) {
         (0, _ajaxGetters.getCrashes)(function (d) {
             _this.crashLayer.addFeatures(d);
         });
-        console.log(outHtml);
+
         $('#' + infoAnchorId).after(outHtml);
         return _this;
     }
