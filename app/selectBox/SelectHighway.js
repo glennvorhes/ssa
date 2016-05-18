@@ -38,6 +38,7 @@ class SelectHighway extends SelectBoxBase {
                     this.box.val(hwy)
                 } else {
                     this.box.trigger('change');
+                    
                 }
             }
         });

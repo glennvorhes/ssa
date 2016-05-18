@@ -36,7 +36,6 @@ function corridorName(fromRp, toRp){
     return fromRp.substring(0,7) + ' - ' + toRp.substring(0, 7);
 }
 
-
 class Corridor {
 
     /**
