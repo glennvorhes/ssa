@@ -20,11 +20,13 @@ class SsaMapView extends SsaMapBase {
      *
      * @param {string} divId - container for the map
      * @param {string} [dataClass=corridor-data] - class selector for the corridor data elements
+     * @param {string} [infoAnchorId=ssa-corridor-info-anchor] - id of element after which to insert the info rows
      */
-    constructor(divId, dataClass) {
+    constructor(divId, dataClass, infoAnchorId) {
         super(divId);
 
         dataClass = typeof dataClass == 'string' ? dataClass : 'corridor-data';
+        infoAnchorId = typeof infoAnchorId == 'string' ? infoAnchorId : 'ssa-corridor-info-anchor';
         dataClass = '.' + dataClass;
 
         /**
@@ -36,9 +38,12 @@ class SsaMapView extends SsaMapBase {
         $(dataClass).each((n, el) => {
             corridorConfigs.push(new CorridorConfig(el));
         });
+        
+        let outHtml = '';
 
         for (let i = 0; i < corridorConfigs.length; i++) {
             let conf = corridorConfigs[i];
+            outHtml += conf.bootstrapHtml(i);
 
             let corridor = new Corridor(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
                 conf.startCounty, conf.endCounty, conf.hgwy);
@@ -67,6 +72,8 @@ class SsaMapView extends SsaMapBase {
         getCrashes((d) => {
             this.crashLayer.addFeatures(d);
         });
+        
+        $('#' + infoAnchorId).after(outHtml);
     }
 }
 

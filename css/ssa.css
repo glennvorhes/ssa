@@ -314,3 +314,16 @@ select:disabled {
 .corridor-data-container {
   display: none;
 }
+.ssa-corridor-info-row {
+  border: solid black 1px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  margin: 5px 0;
+}
+.ssa-corridor-info-row input[type=text] {
+  margin-bottom: 4px;
+}
+.ssa-corridor-info-row label {
+  margin-top: 4px;
+}
