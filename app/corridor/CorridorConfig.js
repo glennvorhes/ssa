@@ -9,7 +9,7 @@ import {getCountyById} from '../countyLookup';
 
 function labelValueHelper(label, val){
     "use strict";
-    let outHtml = '<div class="col-xs-1">';
+    let outHtml = '<div class="col-xs-1 col-xs-offset-1">';
     outHtml += `<label>${label}</label>`;
     outHtml += `<input class="form-control" type="text" readonly="" value="${val}">`;
     outHtml += `</div>`;
@@ -29,7 +29,7 @@ class CorridorConfig {
         if (!inputElement.val) {
             inputElement = $(inputElement);
         }
-        
+
         /**
          *
          * @type {Number}

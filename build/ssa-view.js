@@ -519,7 +519,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function labelValueHelper(label, val) {
   "use strict";
 
-  var outHtml = '<div class="col-xs-1">';
+  var outHtml = '<div class="col-xs-1 col-xs-offset-1">';
   outHtml += '<label>' + label + '</label>';
   outHtml += '<input class="form-control" type="text" readonly="" value="' + val + '">';
   outHtml += '</div>';
@@ -1017,7 +1017,7 @@ var SsaMapView = function (_SsaMapBase) {
         (0, _ajaxGetters.getCrashes)(function (d) {
             _this.crashLayer.addFeatures(d);
         });
-
+        console.log(outHtml);
         $('#' + infoAnchorId).after(outHtml);
         return _this;
     }
