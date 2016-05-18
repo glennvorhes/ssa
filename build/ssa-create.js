@@ -269,26 +269,7 @@ var CorridorCollection = function () {
 
             this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
 
-            this._refreshHtmlCreate();
-        }
-
-        /**
-         *
-         * @param {string} corId
-         * @param {Corridor} cor
-         */
-
-    }, {
-        key: 'updateCorridor',
-        value: function updateCorridor(corId, cor) {
-            /**
-             *
-             * @type {Corridor}
-             */
-            var theCorridor = this._coridorLookup[corId];
-            theCorridor.updateCorridor(cor);
-
-            this._refreshHtmlCreate();
+            this.refreshHtmlCreate();
         }
 
         /**
@@ -316,11 +297,11 @@ var CorridorCollection = function () {
             this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
             this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
             // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
-            this._refreshHtmlCreate();
+            this.refreshHtmlCreate();
         }
     }, {
-        key: '_refreshHtmlCreate',
-        value: function _refreshHtmlCreate() {
+        key: 'refreshHtmlCreate',
+        value: function refreshHtmlCreate() {
             this.$innerContainer.html('');
 
             var rowContent = '';
@@ -392,31 +373,6 @@ var CorridorCollection = function () {
             }
 
             this._visible = viz;
-
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this._corridorArray[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var l = _step2.value;
-
-                    l.layer.visible = this.visible;
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
 
             if (this.visible) {
                 this.$containerEl.show();
@@ -504,25 +460,18 @@ var PickerCollection = function () {
         this.$innerContainer = this.$containerEl.find('.picker-collection');
         this._visible = false;
 
+        this._dummyCorridor = new _Corridor2.default(1, 1, '', '', 1, 1, 'h', { cancelLoad: true, color: 'yellow' });
+        this._dummyCorridor.layer.zIndex = 10;
+        this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.olLayer);
+
+        this._addModifyEnabled = false;
+
         /**
          *
          * @type {Corridor|undefined}
          * @private
          */
         this._modifyCorridor = undefined;
-
-        /**
-         *
-         * @type {Corridor|undefined}
-         * @private
-         */
-        this._modifyCorridorOriginal = undefined;
-
-        /**
-         *
-         * @type {Corridor|undefined}
-         */
-        this.previewCorridorObject = undefined;
 
         this.$btnPickerPreview = this.$containerEl.find('.picker-preview');
         this.$btnPickerAdd = this.$containerEl.find('.picker-add');
@@ -562,6 +511,7 @@ var PickerCollection = function () {
             _this.segmentPickerFrom.clear();
             _this.segmentPickerTo.clear();
             _this.highwaySelect.setStartCounty(parseInt(v));
+            _this.addModifyEnabled = false;
         });
 
         this.highwaySelect.addChangeListener(function (v) {
@@ -569,6 +519,7 @@ var PickerCollection = function () {
             // this.countyEndSelect.box.html('');
 
             _this.countyEndSelect.setHighway(v);
+            _this.addModifyEnabled = false;
         });
 
         this.countyEndSelect.addChangeListener(function (v) {
@@ -578,6 +529,15 @@ var PickerCollection = function () {
             _this.segmentPickerFrom.setCountyAndHighway(_this.countyStartSelect.selectedValue, hwy);
             _this.segmentPickerTo.setCountyAndHighway(v, hwy);
             _this.$btnPickerAdd.prop('disabled', true);
+            _this.addModifyEnabled = false;
+        });
+
+        this.segmentPickerFrom.addChangeListener(function (v) {
+            _this.addModifyEnabled = false;
+        });
+
+        this.segmentPickerTo.addChangeListener(function (v) {
+            _this.addModifyEnabled = false;
         });
 
         (0, _jquery2.default)(document).click(function (event) {
@@ -599,19 +559,11 @@ var PickerCollection = function () {
             this.$btnPickerModify.prop('disabled', true);
             this.visible = false;
             this._ssaMapCreate.$createCorridorButton.prop('disabled', false);
-
-            if (this.previewCorridorObject) {
-                this._ssaMapCreate.mainMap.removeLayer(this.previewCorridorObject.olLayer);
-                this.previewCorridorObject = undefined;
-            }
-
-            if (this._modifyCorridor) {
-                this._ssaMapCreate.mainMap.removeLayer(this._modifyCorridor.layer.olLayer);
-                this._modifyCorridor = undefined;
-            }
-
             this.countyStartSelect.box.val(1).trigger('change');
             this._ssaMapCreate.corridorCollection.visible = true;
+            this._dummyCorridor.layer.clear();
+            this._modifyCorridor = undefined;
+            this.addModifyEnabled = false;
         }
     }, {
         key: 'previewCorridor',
@@ -620,39 +572,40 @@ var PickerCollection = function () {
 
             if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
                 alert('Select From and To Reference Points');
+                return;
             }
 
-            var cor = new _Corridor2.default(this.segmentPickerFrom.selectedPdpId, this.segmentPickerTo.selectedPdpId, this.segmentPickerFrom.selectedText, this.segmentPickerTo.selectedText, this.countyStartSelect.selectedValue, this.countyEndSelect.selectedValue, this.highwaySelect.selectedText, {
-                loadedCallback: function loadedCallback(c) {
-                    if (c.valid) {
-                        if (_this2._modifyCorridor) {
-                            _this2._modifyCorridor.updateCorridor(c);
-                        } else {
-                            _this2.previewCorridorObject = c;
-                            _this2._ssaMapCreate.mainMap.addLayer(c.olLayer);
-                        }
+            this._dummyCorridor.pdpFrom = this.segmentPickerFrom.selectedPdpId;
+            this._dummyCorridor.pdpTo = this.segmentPickerTo.selectedPdpId;
+            this._dummyCorridor.rpFrom = this.segmentPickerTo.selectedText;
+            this._dummyCorridor.rpTo = this.segmentPickerTo.selectedText;
+            this._dummyCorridor.startCounty = this.countyStartSelect.selectedValue;
+            this._dummyCorridor.endCounty = this.countyEndSelect.selectedValue;
+            this._dummyCorridor.highway = this.highwaySelect.selectedText;
 
-                        _this2._ssaMapCreate.mainMap.getView().fit(c.extent, _this2._ssaMapCreate.mainMap.getSize());
-                        _this2.$btnPickerAdd.prop('disabled', false);
-                        _this2.$btnPickerModify.prop('disabled', false);
-                    } else {
-                        _this2.previewCorridorObject = undefined;
-                        alert(c.error);
-                    }
-                }
+            this._dummyCorridor.load(function (c) {
+                //TODO better implementation for an early break
+                // if (c.valid) {
+                //     this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
+                //     this.addModifyEnabled = true;
+                // } else {
+                //     alert(c.error);
+                // }
+                _this2._ssaMapCreate.mainMap.getView().fit(c.extent, _this2._ssaMapCreate.mainMap.getSize());
+                _this2.addModifyEnabled = true;
             });
         }
     }, {
         key: 'addCorridor',
         value: function addCorridor() {
-
-            this._ssaMapCreate.corridorCollection.addCorridorCreate(this.previewCorridorObject);
+            this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
             this.cancel();
         }
     }, {
         key: 'modifyCorridor',
         value: function modifyCorridor() {
-            this._ssaMapCreate.corridorCollection.updateCorridor(this._modifyCorridorOriginal.clientId, this._modifyCorridor);
+            this._modifyCorridor.updateCorridor(this._dummyCorridor);
+            this._ssaMapCreate.corridorCollection.refreshHtmlCreate();
             this.cancel();
         }
 
@@ -675,12 +628,11 @@ var PickerCollection = function () {
             this.segmentPickerFrom.setCountyAndHighway(cor.countyStart, cor.highway, cor.pdpFrom);
             this.segmentPickerTo.setCountyAndHighway(cor.countyEnd, cor.highway, cor.pdpTo);
 
-            this._modifyCorridorOriginal = cor;
+            this._modifyCorridor = cor;
 
-            this._modifyCorridor = new _Corridor2.default(cor.pdpFrom, cor.pdpTo, cor.rpFrom, cor.rpTo, cor.countyStart, cor.countyEnd, cor.highway, { color: cor.color, features: cor.features });
+            this._dummyCorridor.updateCorridor(cor);
 
-            this._ssaMapCreate.mainMap.addLayer(this._modifyCorridor.layer.olLayer);
-            this._ssaMapCreate.mainMap.getView().fit(cor.extent, this._ssaMapCreate.mainMap.getSize());
+            this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
         }
     }, {
         key: 'visible',
@@ -695,6 +647,28 @@ var PickerCollection = function () {
             } else {
                 this.$containerEl.hide();
             }
+        }
+
+        /**
+         *
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'addModifyEnabled',
+        get: function get() {
+            return this._addModifyEnabled;
+        }
+
+        /**
+         *
+         * @param {boolean} isEnabled
+         */
+        ,
+        set: function set(isEnabled) {
+            this._addModifyEnabled = isEnabled;
+            this.$btnPickerAdd.prop('disabled', !this.addModifyEnabled);
+            this.$btnPickerModify.prop('disabled', !this.addModifyEnabled);
         }
     }]);
 
@@ -770,16 +744,16 @@ var Corridor = function () {
      * @param {number|string|undefined|*} [options.databaseId=undefined]
      * @param {string} [options.color=randomColor()]
      * @param {Array<ol.Feature>|undefined} [options.features=undefined]
+     * @param {boolean} [options.cancelLoad=false]
      */
 
     function Corridor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
-        var _this = this;
-
         _classCallCheck(this, Corridor);
 
         options = options || {};
-        options.features = options.features && options.constructor.name == 'Array' ? options.features : undefined;
-        options.loadedCallback = typeof options.loadedCallback == 'function' ? options.loadedCallback : function (c) {};
+        options.features = options.features ? options.features : undefined;
+
+        options.cancelLoad = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
 
         this.clientId = (0, _makeGuid2.default)();
         if (options.color) {
@@ -801,13 +775,32 @@ var Corridor = function () {
         this.rpFrom = rpFrom;
         this.rpTo = rpTo;
 
-        this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(this.rpFrom + ' - ' + this.rpTo, this._color, true));
+        this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(this.rpFrom.substring(0, 7) + '-' + this.rpTo.substring(0, 7), this._color, true));
 
         if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
-            options.loadedCallback(this);
-        } else {
-            (0, _ajaxGetters.getCorridor)(pdpFrom, pdpTo, function (d) {
+        } else if (!options.cancelLoad) {
+            this.load(options.loadedCallback);
+        }
+    }
+
+    /**
+     *
+     * @param {corridorLoaded} [loadedCallback=function(c){}]
+     */
+
+
+    _createClass(Corridor, [{
+        key: 'load',
+        value: function load(loadedCallback) {
+            var _this = this;
+
+            loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {};
+
+            this._valid = false;
+            this._error = '';
+
+            (0, _ajaxGetters.getCorridor)(this.pdpFrom, this.pdpTo, function (d) {
                 _this._corridorLayer.addFeatures(d);
 
                 if (typeof d['error'] == 'undefined') {
@@ -815,18 +808,27 @@ var Corridor = function () {
                 } else {
                     _this._error = d['error'];
                 }
-                options.loadedCallback(_this);
+                loadedCallback(_this);
             });
         }
-    }
 
-    /**
-     *
-     * @param {Corridor} corridor
-     */
+        /**
+         *
+         * @returns {Corridor}
+         */
 
+    }, {
+        key: 'clone',
+        value: function clone() {
+            return new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, { features: this.features });
+        }
 
-    _createClass(Corridor, [{
+        /**
+         *
+         * @param {Corridor} corridor
+         */
+
+    }, {
         key: 'updateCorridor',
         value: function updateCorridor(corridor) {
 
@@ -838,46 +840,10 @@ var Corridor = function () {
             this.rpFrom = corridor.rpFrom;
             this.rpTo = corridor.rpTo;
 
-            this.layer.name = this.rpFrom + '-' + this.rpTo;
+            this.layer.name = this.rpFrom.substring(0, 7) + '-' + this.rpTo.substring(0, 7);
 
             this.layer.clear();
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = corridor.features[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var f = _step.value;
-
-                    this.layer.source.addFeature(f.clone());
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-        }
-    }, {
-        key: 'getTableHtml',
-        value: function getTableHtml() {
-            var outString = '<tr id="' + this.clientId + '" class="corridor-tr" style="background-color: ' + this._color + '">';
-            outString += '<td>' + this.countyStart + '</td>';
-            outString += '<td>' + this.countyEnd + '</td>';
-            outString += '<td>' + this.highway + '</td>';
-            outString += '<td>' + this.rpFrom + '</td>';
-            outString += '<td>' + this.rpTo + '</td>';
-            outString += '</tr>';
-
-            return outString;
+            this.layer.olLayer.getSource().addFeatures(corridor.features);
         }
     }, {
         key: 'getDataHtml',
@@ -949,7 +915,7 @@ var Corridor = function () {
         get: function get() {
             var outString = '<tr class="corridor-tr">';
             outString += '<td style="background-color: ' + this._color + '"></td>';
-            outString += '<td>' + this.rpFrom + ' - ' + this.rpTo + '</td>';
+            outString += '<td>' + this.rpFrom.substring(0, 7) + ' - ' + this.rpTo.substring(0, 7) + '</td>';
             outString += '<td>';
             outString += '<span title="Zoom To" class="corridor-zoom" data-corridor="' + this.clientId + '"></span>';
             outString += '<span title="Edit Corridor"  class="corridor-edit" data-corridor="' + this.clientId + '"></span>';

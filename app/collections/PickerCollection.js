@@ -31,6 +31,12 @@ class PickerCollection {
         this.$innerContainer = this.$containerEl.find('.picker-collection');
         this._visible = false;
 
+        this._dummyCorridor = new Corridor(1, 1, '', '', 1, 1, 'h', {cancelLoad: true, color: 'yellow'});
+        this._dummyCorridor.layer.zIndex = 10;
+        this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.olLayer);
+
+        this._addModifyEnabled = false;
+
         /**
          *
          * @type {Corridor|undefined}
@@ -38,19 +44,6 @@ class PickerCollection {
          */
         this._modifyCorridor = undefined;
 
-        /**
-         *
-         * @type {Corridor|undefined}
-         * @private
-         */
-        this._modifyCorridorOriginal = undefined;
-
-
-        /**
-         *
-         * @type {Corridor|undefined}
-         */
-        this.previewCorridorObject = undefined;
 
         this.$btnPickerPreview = this.$containerEl.find('.picker-preview');
         this.$btnPickerAdd = this.$containerEl.find('.picker-add');
@@ -82,6 +75,7 @@ class PickerCollection {
             this.modifyCorridor();
         });
 
+
         this.countyStartSelect.addChangeListener((v) => {
             "use strict";
             // this.highwaySelect.box.html('');
@@ -89,6 +83,7 @@ class PickerCollection {
             this.segmentPickerFrom.clear();
             this.segmentPickerTo.clear();
             this.highwaySelect.setStartCounty(parseInt(v));
+            this.addModifyEnabled = false;
 
         });
 
@@ -96,6 +91,7 @@ class PickerCollection {
             "use strict";
             // this.countyEndSelect.box.html('');
             this.countyEndSelect.setHighway(v);
+            this.addModifyEnabled = false;
         });
 
         this.countyEndSelect.addChangeListener((v) => {
@@ -104,7 +100,18 @@ class PickerCollection {
             this.segmentPickerFrom.setCountyAndHighway(this.countyStartSelect.selectedValue, hwy);
             this.segmentPickerTo.setCountyAndHighway(v, hwy);
             this.$btnPickerAdd.prop('disabled', true);
+            this.addModifyEnabled = false;
         });
+
+        this.segmentPickerFrom.addChangeListener((v) => {
+            this.addModifyEnabled = false;
+        });
+
+        this.segmentPickerTo.addChangeListener((v) => {
+            this.addModifyEnabled = false;
+        });
+
+
 
         $(document).click((event) => {
             let containerClass = 'select-picker-map-container';
@@ -123,64 +130,48 @@ class PickerCollection {
         this.$btnPickerModify.prop('disabled', true);
         this.visible = false;
         this._ssaMapCreate.$createCorridorButton.prop('disabled', false);
-
-
-        if (this.previewCorridorObject) {
-            this._ssaMapCreate.mainMap.removeLayer(this.previewCorridorObject.olLayer);
-            this.previewCorridorObject = undefined;
-        }
-
-        if (this._modifyCorridor) {
-            this._ssaMapCreate.mainMap.removeLayer(this._modifyCorridor.layer.olLayer);
-            this._modifyCorridor = undefined;
-        }
-
         this.countyStartSelect.box.val(1).trigger('change');
         this._ssaMapCreate.corridorCollection.visible = true;
+        this._dummyCorridor.layer.clear();
+        this._modifyCorridor = undefined;
+        this.addModifyEnabled = false;
     }
 
     previewCorridor() {
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
+            return;
         }
 
-        let cor = new Corridor(
-            this.segmentPickerFrom.selectedPdpId,
-            this.segmentPickerTo.selectedPdpId,
-            this.segmentPickerFrom.selectedText,
-            this.segmentPickerTo.selectedText,
-            this.countyStartSelect.selectedValue,
-            this.countyEndSelect.selectedValue,
-            this.highwaySelect.selectedText, {
-                loadedCallback: (c) => {
-                    if (c.valid) {
-                        if (this._modifyCorridor) {
-                            this._modifyCorridor.updateCorridor(c);
-                        } else {
-                            this.previewCorridorObject = c;
-                            this._ssaMapCreate.mainMap.addLayer(c.olLayer);
-                        }
+        this._dummyCorridor.pdpFrom = this.segmentPickerFrom.selectedPdpId;
+        this._dummyCorridor.pdpTo = this.segmentPickerTo.selectedPdpId;
+        this._dummyCorridor.rpFrom = this.segmentPickerTo.selectedText;
+        this._dummyCorridor.rpTo = this.segmentPickerTo.selectedText;
+        this._dummyCorridor.startCounty = this.countyStartSelect.selectedValue;
+        this._dummyCorridor.endCounty = this.countyEndSelect.selectedValue;
+        this._dummyCorridor.highway = this.highwaySelect.selectedText;
 
-                        this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
-                        this.$btnPickerAdd.prop('disabled', false);
-                        this.$btnPickerModify.prop('disabled', false);
-                    } else {
-                        this.previewCorridorObject = undefined;
-                        alert(c.error);
-                    }
-                }
-            }
-        );
+        this._dummyCorridor.load((c) => {
+            //TODO better implementation for an early break
+            // if (c.valid) {
+            //     this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
+            //     this.addModifyEnabled = true;
+            // } else {
+            //     alert(c.error);
+            // }
+            this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
+            this.addModifyEnabled = true;
+        });
     }
 
     addCorridor() {
-        
-        this._ssaMapCreate.corridorCollection.addCorridorCreate(this.previewCorridorObject);
+        this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
         this.cancel();
     }
 
     modifyCorridor() {
-        this._ssaMapCreate.corridorCollection.updateCorridor(this._modifyCorridorOriginal.clientId, this._modifyCorridor);
+        this._modifyCorridor.updateCorridor(this._dummyCorridor);
+        this._ssaMapCreate.corridorCollection.refreshHtmlCreate();
         this.cancel();
     }
 
@@ -200,14 +191,11 @@ class PickerCollection {
         this.segmentPickerFrom.setCountyAndHighway(cor.countyStart, cor.highway, cor.pdpFrom);
         this.segmentPickerTo.setCountyAndHighway(cor.countyEnd, cor.highway, cor.pdpTo);
 
-        this._modifyCorridorOriginal = cor;
+        this._modifyCorridor = cor;
 
-        this._modifyCorridor = new Corridor(cor.pdpFrom, cor.pdpTo, cor.rpFrom, cor.rpTo,
-            cor.countyStart, cor.countyEnd, cor.highway, {color: cor.color, features: cor.features}
-        );
+        this._dummyCorridor.updateCorridor(cor);
 
-        this._ssaMapCreate.mainMap.addLayer(this._modifyCorridor.layer.olLayer);
-        this._ssaMapCreate.mainMap.getView().fit(cor.extent, this._ssaMapCreate.mainMap.getSize());
+        this._ssaMapCreate.mainMap.getView().fit( this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
     }
 
     get visible() {
@@ -222,7 +210,24 @@ class PickerCollection {
         } else {
             this.$containerEl.hide();
         }
+    }
 
+    /**
+     *
+     * @returns {boolean}
+     */
+    get addModifyEnabled(){
+        return this._addModifyEnabled;
+    }
+
+    /**
+     *
+     * @param {boolean} isEnabled
+     */
+    set addModifyEnabled(isEnabled){
+        this._addModifyEnabled = isEnabled;
+        this.$btnPickerAdd.prop('disabled', !this.addModifyEnabled);
+        this.$btnPickerModify.prop('disabled', !this.addModifyEnabled);
     }
 }
 

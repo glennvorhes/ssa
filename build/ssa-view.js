@@ -237,16 +237,16 @@ var Corridor = function () {
      * @param {number|string|undefined|*} [options.databaseId=undefined]
      * @param {string} [options.color=randomColor()]
      * @param {Array<ol.Feature>|undefined} [options.features=undefined]
+     * @param {boolean} [options.cancelLoad=false]
      */
 
     function Corridor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
-        var _this = this;
-
         _classCallCheck(this, Corridor);
 
         options = options || {};
-        options.features = options.features && options.constructor.name == 'Array' ? options.features : undefined;
-        options.loadedCallback = typeof options.loadedCallback == 'function' ? options.loadedCallback : function (c) {};
+        options.features = options.features ? options.features : undefined;
+
+        options.cancelLoad = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
 
         this.clientId = (0, _makeGuid2.default)();
         if (options.color) {
@@ -268,13 +268,32 @@ var Corridor = function () {
         this.rpFrom = rpFrom;
         this.rpTo = rpTo;
 
-        this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(this.rpFrom + ' - ' + this.rpTo, this._color, true));
+        this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(this.rpFrom.substring(0, 7) + '-' + this.rpTo.substring(0, 7), this._color, true));
 
         if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
-            options.loadedCallback(this);
-        } else {
-            (0, _ajaxGetters.getCorridor)(pdpFrom, pdpTo, function (d) {
+        } else if (!options.cancelLoad) {
+            this.load(options.loadedCallback);
+        }
+    }
+
+    /**
+     *
+     * @param {corridorLoaded} [loadedCallback=function(c){}]
+     */
+
+
+    _createClass(Corridor, [{
+        key: 'load',
+        value: function load(loadedCallback) {
+            var _this = this;
+
+            loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {};
+
+            this._valid = false;
+            this._error = '';
+
+            (0, _ajaxGetters.getCorridor)(this.pdpFrom, this.pdpTo, function (d) {
                 _this._corridorLayer.addFeatures(d);
 
                 if (typeof d['error'] == 'undefined') {
@@ -282,18 +301,27 @@ var Corridor = function () {
                 } else {
                     _this._error = d['error'];
                 }
-                options.loadedCallback(_this);
+                loadedCallback(_this);
             });
         }
-    }
 
-    /**
-     *
-     * @param {Corridor} corridor
-     */
+        /**
+         *
+         * @returns {Corridor}
+         */
 
+    }, {
+        key: 'clone',
+        value: function clone() {
+            return new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, { features: this.features });
+        }
 
-    _createClass(Corridor, [{
+        /**
+         *
+         * @param {Corridor} corridor
+         */
+
+    }, {
         key: 'updateCorridor',
         value: function updateCorridor(corridor) {
 
@@ -305,46 +333,10 @@ var Corridor = function () {
             this.rpFrom = corridor.rpFrom;
             this.rpTo = corridor.rpTo;
 
-            this.layer.name = this.rpFrom + '-' + this.rpTo;
+            this.layer.name = this.rpFrom.substring(0, 7) + '-' + this.rpTo.substring(0, 7);
 
             this.layer.clear();
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = corridor.features[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var f = _step.value;
-
-                    this.layer.source.addFeature(f.clone());
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-        }
-    }, {
-        key: 'getTableHtml',
-        value: function getTableHtml() {
-            var outString = '<tr id="' + this.clientId + '" class="corridor-tr" style="background-color: ' + this._color + '">';
-            outString += '<td>' + this.countyStart + '</td>';
-            outString += '<td>' + this.countyEnd + '</td>';
-            outString += '<td>' + this.highway + '</td>';
-            outString += '<td>' + this.rpFrom + '</td>';
-            outString += '<td>' + this.rpTo + '</td>';
-            outString += '</tr>';
-
-            return outString;
+            this.layer.olLayer.getSource().addFeatures(corridor.features);
         }
     }, {
         key: 'getDataHtml',
@@ -416,7 +408,7 @@ var Corridor = function () {
         get: function get() {
             var outString = '<tr class="corridor-tr">';
             outString += '<td style="background-color: ' + this._color + '"></td>';
-            outString += '<td>' + this.rpFrom + ' - ' + this.rpTo + '</td>';
+            outString += '<td>' + this.rpFrom.substring(0, 7) + ' - ' + this.rpTo.substring(0, 7) + '</td>';
             outString += '<td>';
             outString += '<span title="Zoom To" class="corridor-zoom" data-corridor="' + this.clientId + '"></span>';
             outString += '<span title="Edit Corridor"  class="corridor-edit" data-corridor="' + this.clientId + '"></span>';

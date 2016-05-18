@@ -276,6 +276,7 @@ select:disabled {
 .corridor-collection table th,
 .corridor-collection table td {
   text-align: center;
+  padding: 2px 0;
 }
 .corridor-collection table td {
   border: solid black 1px;

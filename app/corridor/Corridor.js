@@ -41,13 +41,14 @@ class Corridor {
      * @param {number|string|undefined|*} [options.databaseId=undefined]
      * @param {string} [options.color=randomColor()]
      * @param {Array<ol.Feature>|undefined} [options.features=undefined]
+     * @param {boolean} [options.cancelLoad=false]
      */
     constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
 
         options = options || {};
-        options.features = options.features && options.constructor.name == 'Array' ? options.features : undefined;
-        options.loadedCallback = typeof options.loadedCallback == 'function' ? options.loadedCallback : function (c) {
-        };
+        options.features = options.features  ? options.features : undefined;
+
+        options.cancelLoad  = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
 
         this.clientId = makeGuid();
         if (options.color) {
@@ -70,24 +71,45 @@ class Corridor {
         this.rpTo = rpTo;
 
         this._corridorLayer = new LayerBaseVectorGeoJson('',
-            layerConfigHelper(this.rpFrom + ' - ' + this.rpTo, this._color, true)
+            layerConfigHelper(this.rpFrom.substring(0,7) + '-' + this.rpTo.substring(0,7), this._color, true)
         );
 
         if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
-            options.loadedCallback(this);
-        } else {
-            getCorridor(pdpFrom, pdpTo, (d) => {
-                this._corridorLayer.addFeatures(d);
-
-                if (typeof d['error'] == 'undefined') {
-                    this._valid = true;
-                } else {
-                    this._error = d['error'];
-                }
-                options.loadedCallback(this);
-            });
+        } else if (!options.cancelLoad) {
+            this.load(options.loadedCallback);
         }
+    }
+
+    /**
+     *
+     * @param {corridorLoaded} [loadedCallback=function(c){}]
+     */
+    load(loadedCallback){
+         loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {};
+        
+        this._valid = false;
+        this._error = '';
+
+        getCorridor(this.pdpFrom, this.pdpTo, (d) => {
+            this._corridorLayer.addFeatures(d);
+
+            if (typeof d['error'] == 'undefined') {
+                this._valid = true;
+            } else {
+                this._error = d['error'];
+            }
+            loadedCallback(this);
+        });
+    }
+
+    /**
+     *
+     * @returns {Corridor}
+     */
+    clone(){
+        return new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
+            this.countyStart, this.countyEnd, this.highway, {features: this.features});
     }
 
     /**
@@ -104,12 +126,10 @@ class Corridor {
         this.rpFrom = corridor.rpFrom;
         this.rpTo = corridor.rpTo;
 
-        this.layer.name = this.rpFrom + '-' + this.rpTo;
+        this.layer.name = this.rpFrom.substring(0,7) + '-' + this.rpTo.substring(0,7);
 
         this.layer.clear();
-        for (let f of corridor.features) {
-            this.layer.source.addFeature(f.clone());
-        }
+        this.layer.olLayer.getSource().addFeatures(corridor.features);
     }
 
     get color() {
@@ -139,24 +159,12 @@ class Corridor {
     get tableHtmlCreate() {
         let outString = `<tr class="corridor-tr">`;
         outString += `<td style="background-color: ${this._color}"></td>`;
-        outString += `<td>${this.rpFrom} - ${this.rpTo}</td>`;
+        outString += `<td>${this.rpFrom.substring(0, 7)} - ${this.rpTo.substring(0, 7)}</td>`;
         outString += `<td>`;
         outString += `<span title="Zoom To" class="corridor-zoom" data-corridor="${this.clientId}"></span>`;
         outString += `<span title="Edit Corridor"  class="corridor-edit" data-corridor="${this.clientId}"></span>`;
         outString += `<span title="Remove Corridor"  class="corridor-delete" data-corridor="${this.clientId}"></span>`;
         outString += `</td>`;
-        outString += '</tr>';
-
-        return outString;
-    }
-
-    getTableHtml() {
-        let outString = `<tr id="${this.clientId}" class="corridor-tr" style="background-color: ${this._color}">`;
-        outString += `<td>${this.countyStart}</td>`;
-        outString += `<td>${this.countyEnd}</td>`;
-        outString += `<td>${this.highway}</td>`;
-        outString += `<td>${this.rpFrom}</td>`;
-        outString += `<td>${this.rpTo}</td>`;
         outString += '</tr>';
 
         return outString;

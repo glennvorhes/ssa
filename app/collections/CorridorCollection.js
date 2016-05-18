@@ -72,24 +72,9 @@ class CorridorCollection {
 
         this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
 
-        this._refreshHtmlCreate();
+        this.refreshHtmlCreate();
     }
 
-    /**
-     *
-     * @param {string} corId
-     * @param {Corridor} cor
-     */
-    updateCorridor(corId, cor) {
-        /**
-         *
-         * @type {Corridor}
-         */
-        let theCorridor = this._coridorLookup[corId];
-        theCorridor.updateCorridor(cor);
-
-        this._refreshHtmlCreate();
-    }
 
     /**
      *
@@ -113,10 +98,10 @@ class CorridorCollection {
         this.ssaMap.mainMap.getView().setZoom( this.ssaMap.mainMap.getView().getZoom() - 1);
         this.ssaMap.mainMap.getView().setZoom( this.ssaMap.mainMap.getView().getZoom() + 1);
         // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
-        this._refreshHtmlCreate();
+        this.refreshHtmlCreate();
     }
 
-    _refreshHtmlCreate() {
+    refreshHtmlCreate() {
         this.$innerContainer.html('');
 
         let rowContent = '';
@@ -170,10 +155,6 @@ class CorridorCollection {
         }
 
         this._visible = viz;
-
-        for (let l of this._corridorArray) {
-            l.layer.visible = this.visible;
-        }
 
         if (this.visible) {
             this.$containerEl.show()
