@@ -72,6 +72,7 @@ class CorridorConfig {
         this.endPdp = parseInt(inputElement.find('.corridor-data-to-pdp').val());
     }
 
+    
     /**
      * @returns {string}
      */
@@ -88,7 +89,6 @@ class CorridorConfig {
         outHtml += labelValueHelper('End RP', this.endRp);
         outHtml += '</div>';
         return outHtml;
-
     }
 }
 
