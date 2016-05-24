@@ -2,10 +2,10 @@
  * Created by gavorhes on 5/11/2016.
  */
 
-import LayerBaseVectorGeoJson from '../../src/layers/LayerBaseVectorGeoJson';
-import ol from '../../src/ol/ol';
-import makeGuid from '../../src/util/makeGuid';
-import provide from '../../src/util/provide';
+import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
+import ol from 'webmapsjs/src/ol/ol';
+import makeGuid from 'webmapsjs/src/util/makeGuid';
+import provide from 'webmapsjs/src/util/provide';
 import {layerConfigHelper, randomColor} from '../layerStyles';
 import {getCorridor}  from '../ajaxGetters';
 const nm = provide('ssa');

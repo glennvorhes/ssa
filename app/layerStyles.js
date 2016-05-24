@@ -1,7 +1,7 @@
 /**
  * Created by gavorhes on 5/13/2016.
  */
-import ol from '../src/ol/ol';
+import ol from 'webmapsjs/src/ol/ol';
 
 export const segmentLayer = new ol.style.Style({
     stroke: new ol.style.Stroke({color: 'blue', width: 4})

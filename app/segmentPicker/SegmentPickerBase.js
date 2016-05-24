@@ -2,15 +2,15 @@
  * Created by gavorhes on 5/13/2016.
  */
 
-import provide from '../../src/util/provide';
-import quickMapMulti from '../../src/olHelpers/quickMapMulti';
-import SortedFeatures from '../../src/olHelpers/SortedFeatures';
-import LayerBaseVectorGeoJson from '../../src/layers/LayerBaseVectorGeoJson';
-import LayerEsriMapServer from '../../src/layers/LayerEsriMapServer';
+import provide from 'webmapsjs/src/util/provide';
+import quickMapMulti from 'webmapsjs/src/olHelpers/quickMapMulti';
+import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures';
+import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
+import LayerEsriMapServer from 'webmapsjs/src/layers/LayerEsriMapServer';
 import SelectBoxBase from '../selectBox/SelectBoxBase';
-import ol from '../../src/ol/ol';
+import ol from 'webmapsjs/src/ol/ol';
 import {getSegments} from '../ajaxGetters';
-import $ from '../../src/jquery';
+import $ from 'webmapsjs/src/jquery/jquery';
 import * as layerStyles from '../layerStyles';
 const nm = provide('ssa.select');
 

@@ -1,7 +1,7 @@
 /**
  * Created by gavorhes on 5/17/2016.
  */
-import provide from '../src/util/provide';
+import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 
 export const countyLookup = {

@@ -2,8 +2,8 @@
  * Created by gavorhes on 5/12/2016.
  */
 
-import $ from '../src/jquery';
-import provide from '../src/util/provide';
+import $ from 'webmapsjs/src/jquery/jquery';
+import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 
 const home = '/SSA';

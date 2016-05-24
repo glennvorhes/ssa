@@ -4,10 +4,10 @@
 
 
 import SsaMapBase from './SsaMapBase';
-import makeGuid from '../../src/util/makeGuid';
+import makeGuid from 'webmapsjs/src/util/makeGuid';
 import PickerCollection from '../collections/PickerCollection';
 import CorridorCollection from '../collections/CorridorCollection';
-import provide from '../../src/util/provide';
+import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 
 

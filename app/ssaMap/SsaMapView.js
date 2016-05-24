@@ -4,13 +4,13 @@
 
 
 import SsaMapBase from './SsaMapBase';
-import provide from '../../src/util/provide';
+import provide from 'webmapsjs/src/util/provide';
 import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
 import * as styles  from '../layerStyles';
-import LayerBaseVectorGeoJson from '../../src/layers/LayerBaseVectorGeoJson';
+import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
 import {getCrashes} from '../ajaxGetters';
-import ol from '../../src/ol/ol';
+import ol from 'webmapsjs/src/ol/ol';
 
 const nm = provide('ssa');
 

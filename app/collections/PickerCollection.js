@@ -9,8 +9,8 @@ import SelectEndCounty from '../selectBox/SelectEndCounty';
 import SegmentPickerFrom from '../segmentPicker/SegmentPickerFrom';
 import SegmentPickerTo from '../segmentPicker/SegmentPickerTo';
 import Corridor from '../corridor/Corridor';
-import provide from '../../src/util/provide'
-import $ from '../../src/jquery';
+import provide from 'webmapsjs/src/util/provide'
+import $ from 'webmapsjs/src/jquery/jquery';
 const nm = provide('ssa');
 
 class PickerCollection {

@@ -4,7 +4,7 @@
 
 import SelectBoxBase from './SelectBoxBase';
 import {getHighways} from '../ajaxGetters';
-import provide from '../../src/util/provide';
+import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
 
 class SelectHighway extends SelectBoxBase {

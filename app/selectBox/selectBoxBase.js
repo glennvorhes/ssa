@@ -4,8 +4,8 @@
 /**
  * Created by gavorhes on 5/12/2016.
  */
-import makeGuid from '../../src/util/makeGuid';
-import provide from '../../src/util/provide';
+import makeGuid from 'webmapsjs/src/util/makeGuid';
+import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
 
 

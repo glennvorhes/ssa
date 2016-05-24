@@ -1,10 +1,10 @@
 /**
  * Created by gavorhes on 5/13/2016.
  */
-import $ from '../../src/jquery';
-import makeGuid from '../../src/util/makeGuid';
-import quickMapMulti from '../../src/olHelpers/quickMapMulti';
-import provide from '../../src/util/provide';
+import $ from 'webmapsjs/src/jquery/jquery';
+import makeGuid from 'webmapsjs/src/util/makeGuid';
+import quickMapMulti from 'webmapsjs/src/olHelpers/quickMapMulti';
+import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 
 

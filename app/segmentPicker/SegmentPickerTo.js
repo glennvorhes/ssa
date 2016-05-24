@@ -3,7 +3,6 @@
  */
 
 import SegmentPickerBase from './SegmentPickerBase';
-import {toColor} from '../layerStyles';
 
 class SegmentPickerTo extends SegmentPickerBase {
     constructor(parent) {
