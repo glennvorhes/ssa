@@ -150,6 +150,17 @@
   height: 300px;
   overflow-y: auto;
 }
+.layer-swiper {
+  position: absolute;
+  top: 0;
+  width: 9px;
+  height: 100%;
+  border-left: solid black 1px;
+  border-right: solid black 1px;
+  background-color: lightgray;
+  z-index: 10;
+  cursor: ew-resize;
+}
 select:disabled {
   background-color: gray;
   cursor: not-allowed !important;

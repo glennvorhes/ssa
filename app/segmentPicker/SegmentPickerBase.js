@@ -152,6 +152,7 @@ class SegmentPickerBase extends SelectBoxBase {
             zoom: 6,
             baseSwitcher: false
         });
+        $('.ol-zoom-out').html('&#8211;');
 
         this._pickerMap = multiMap.map;
         this._pickerMapMove = multiMap.mapMove;
