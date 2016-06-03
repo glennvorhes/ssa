@@ -28,6 +28,8 @@ class SsaMapBase {
             minZoom: 6,
             zoom: 6
         });
+        $('.ol-zoom-out').html('&#8211;');
+
 
         /**
          * @type {ol.Map}
