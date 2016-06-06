@@ -9,7 +9,7 @@ import {getCountyById} from '../countyLookup';
 
 function labelValueHelper(label, val){
     "use strict";
-    let outHtml = '<div class="col-xs-1">';
+    let outHtml = '<div class="col-xs-2">';
     outHtml += `<label>${label}</label>`;
     outHtml += `<input class="form-control" type="text" readonly="" value="${val}">`;
     outHtml += `</div>`;
@@ -79,7 +79,7 @@ class CorridorConfig {
     bootstrapHtml(index){
         index++;
         let outHtml = '<div class="row ssa-corridor-info-row">';
-        outHtml += '<div class="col-xs-1 col-xs-offset-1">';
+        outHtml += '<div class="col-xs-1">';
         outHtml += `<label>Corridor #${index}</label>`;
         outHtml += '</div>';
         outHtml += labelValueHelper('Highway', this.hgwy);
