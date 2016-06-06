@@ -11,6 +11,7 @@ import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 
 
+
 class SsaMapCreate extends SsaMapBase {
 
     /**

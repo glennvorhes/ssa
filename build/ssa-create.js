@@ -27,13 +27,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var nm = (0, _provide2.default)('ssa');
 
-var home = '/SSA';
-var getStartCountiesUrl = home + '/getStartCounties';
-var getHighwaysUrl = home + '/getHighways';
-var getEndCountiesUrl = home + '/getEndCounties';
-var getSegmentsUrl = home + '/getSegments';
-var getCorridorUrl = home + '/getCorridor';
-var getCrashesUrl = home + '/getCrashes';
+var home = (0, _jquery2.default)('#site-root').val();
+var getStartCountiesUrl = home + 'getStartCounties';
+var getHighwaysUrl = home + 'getHighways';
+var getEndCountiesUrl = home + 'getEndCounties';
+var getSegmentsUrl = home + 'getSegments';
+var getCorridorUrl = home + 'getCorridor';
+var getCrashesUrl = home + 'getCrashes';
 
 /**
  * @callback ajaxCallback

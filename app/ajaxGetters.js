@@ -6,13 +6,13 @@ import $ from 'webmapsjs/src/jquery/jquery';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 
-const home = '/SSA';
-const getStartCountiesUrl = home + '/getStartCounties';
-const getHighwaysUrl = home + '/getHighways';
-const getEndCountiesUrl = home + '/getEndCounties';
-const getSegmentsUrl = home + '/getSegments';
-const getCorridorUrl = home + '/getCorridor';
-const getCrashesUrl = home + '/getCrashes';
+const home = $('#site-root').val();
+const getStartCountiesUrl = home + 'getStartCounties';
+const getHighwaysUrl = home + 'getHighways';
+const getEndCountiesUrl = home + 'getEndCounties';
+const getSegmentsUrl = home + 'getSegments';
+const getCorridorUrl = home + 'getCorridor';
+const getCrashesUrl = home + 'getCrashes';
 
 /**
  * @callback ajaxCallback
