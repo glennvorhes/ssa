@@ -519,7 +519,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function labelValueHelper(label, val) {
   "use strict";
 
-  var outHtml = '<div class="col-xs-1">';
+  var outHtml = '<div class="col-xs-2">';
   outHtml += '<label>' + label + '</label>';
   outHtml += '<input class="form-control" type="text" readonly="" value="' + val + '">';
   outHtml += '</div>';
@@ -593,7 +593,7 @@ var CorridorConfig = function () {
     value: function bootstrapHtml(index) {
       index++;
       var outHtml = '<div class="row ssa-corridor-info-row">';
-      outHtml += '<div class="col-xs-1 col-xs-offset-1">';
+      outHtml += '<div class="col-xs-1">';
       outHtml += '<label>Corridor #' + index + '</label>';
       outHtml += '</div>';
       outHtml += labelValueHelper('Highway', this.hgwy);
