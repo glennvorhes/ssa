@@ -79,7 +79,7 @@ class CorridorConfig {
     bootstrapHtml(index){
         index++;
         let outHtml = '<div class="row ssa-corridor-info-row">';
-        outHtml += '<div class="col-xs-1">';
+        outHtml += '<div class="col-xs-2">';
         outHtml += `<label>Corridor #${index}</label>`;
         outHtml += '</div>';
         outHtml += labelValueHelper('Highway', this.hgwy);
