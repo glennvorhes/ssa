@@ -26,8 +26,10 @@ class SsaMapBase {
         let multiMap = quickMapMulti({
             divId: mapId,
             minZoom: 6,
-            zoom: 6
+            zoom: 6,
+            fullScreen: true
         });
+        
         $('.ol-zoom-out').html('&#8211;');
 
 

@@ -46,7 +46,7 @@ class SsaMapView extends SsaMapBase {
             outHtml += conf.bootstrapHtml(i);
 
             let corridor = new Corridor(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
-                conf.startCounty, conf.endCounty, conf.hgwy);
+                conf.startCounty, conf.endCounty, conf.hgwy, {color: 'black'});
 
             this.mainMap.addLayer(corridor.olLayer);
 

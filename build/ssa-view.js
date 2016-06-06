@@ -994,7 +994,7 @@ var SsaMapView = function (_SsaMapBase) {
             var conf = corridorConfigs[i];
             outHtml += conf.bootstrapHtml(i);
 
-            var corridor = new _Corridor2.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy);
+            var corridor = new _Corridor2.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, { color: 'black' });
 
             _this.mainMap.addLayer(corridor.olLayer);
 
