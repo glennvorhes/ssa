@@ -270,6 +270,7 @@ select:disabled {
 }
 .ssa-main-map {
   flex: 1;
+  width: 100%;
 }
 .ssa-map-sidebar {
   width: 285px;
