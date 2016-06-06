@@ -33,7 +33,10 @@ class SsaMapCreate extends SsaMapBase {
 
         this.$sideBar = this.$mainContainer.find('.ssa-map-sidebar');
 
-        this.$sideBar.append('<div><input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor"></div>');
+        this.$sideBar.append('<div>' +
+            '<input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor">' +
+            '<input type="button" value="Zoom to Extent" class="btn btn-default picker-zoom-extent">' +
+            '</div>');
 
         let pickerGuid = makeGuid();
         this.$sideBar.append(`<div id="${pickerGuid}"></div>`);
@@ -45,11 +48,18 @@ class SsaMapCreate extends SsaMapBase {
         this.corridorCollection = new CorridorCollection(corridorsGuid, this);
 
         this.$createCorridorButton = this.$sideBar.find('.picker-create-corridor');
+        this.$zoomExtentButton = this.$sideBar.find('.picker-zoom-extent');
 
         this.$createCorridorButton.click(() => {
             this.pickerCollection.visible = true;
             this.$createCorridorButton.prop('disabled', true);
-            this.corridorCollection.visible = false;
+        });
+
+        this.$zoomExtentButton.click(() => {
+            let ext = this.corridorCollection.fullExtent;
+            if (ext){
+                this.mainMap.getView().fit(ext, this.mainMap.getSize());
+            }
         })
     }
 }

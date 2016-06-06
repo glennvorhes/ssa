@@ -187,7 +187,6 @@ class PickerCollection {
      * @param {Corridor} cor
      */
     startEditCorridor(cor) {
-        this._ssaMapCreate.corridorCollection.visible = false;
         this.visible = true;
         this.$btnPickerAdd.hide();
         this.$btnPickerModify.show();

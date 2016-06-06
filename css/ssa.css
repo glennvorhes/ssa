@@ -272,9 +272,10 @@ select:disabled {
   flex: 1;
 }
 .ssa-map-sidebar {
-  width: 270px;
+  width: 285px;
   padding: 7px;
   background-color: lightgray;
+  overflow: auto;
 }
 .selected-segment-info {
   font-weight: bold;

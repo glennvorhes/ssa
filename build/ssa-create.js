@@ -221,7 +221,7 @@ function tableContent(rowHtml) {
 }
 
 /**
- * 
+ *
  * @param {string} fromRp
  * @param {string} toRp
  * @returns {string}
@@ -348,17 +348,20 @@ var CorridorCollection = function () {
             var _this = this;
 
             this.$innerContainer.find('.corridor-zoom').click(function () {
+
                 var corridorId = $(this).attr('data-corridor');
                 var cor = _this._coridorLookup[corridorId];
                 _this.ssaMap.mainMap.getView().fit(cor.extent, _this.ssaMap.mainMap.getSize());
             });
 
             this.$innerContainer.find('.corridor-delete').click(function () {
+
                 var corridorId = $(this).attr('data-corridor');
                 _this.removeCorridor(corridorId);
             });
 
             this.$innerContainer.find('.corridor-edit').click(function () {
+
                 _this.ssaMap.$createCorridorButton.prop('disabled', true);
                 var corridorId = $(this).attr('data-corridor');
                 var cor = _this._coridorLookup[corridorId];
@@ -390,6 +393,54 @@ var CorridorCollection = function () {
                 this.$containerEl.show();
             } else {
                 this.$containerEl.hide();
+            }
+        }
+    }, {
+        key: 'fullExtent',
+        get: function get() {
+            var hasExtent = false;
+
+            var minX = 10E100;
+            var minY = 10E100;
+            var maxX = -10E100;
+            var maxY = -10E100;
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = this._corridorArray[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var c = _step2.value;
+
+                    if (c.olLayer.getSource().getFeatures().length > 0) {
+                        hasExtent = true;
+                        var ext = c.olLayer.getSource().getExtent();
+                        minX = ext[0] < minX ? ext[0] : minX;
+                        minY = ext[1] < minY ? ext[1] : minY;
+                        maxX = ext[2] > maxX ? ext[2] : maxX;
+                        maxY = ext[3] > maxY ? ext[3] : maxY;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+
+            if (hasExtent) {
+                return [minX, minY, maxX, maxY];
+            } else {
+                return undefined;
             }
         }
     }]);
@@ -627,7 +678,6 @@ var PickerCollection = function () {
     }, {
         key: 'startEditCorridor',
         value: function startEditCorridor(cor) {
-            this._ssaMapCreate.corridorCollection.visible = false;
             this.visible = true;
             this.$btnPickerAdd.hide();
             this.$btnPickerModify.show();
@@ -2327,7 +2377,7 @@ var SsaMapCreate = function (_SsaMapBase) {
 
                 _this.$sideBar = _this.$mainContainer.find('.ssa-map-sidebar');
 
-                _this.$sideBar.append('<div><input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor"></div>');
+                _this.$sideBar.append('<div>' + '<input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor">' + '<input type="button" value="Zoom to Extent" class="btn btn-default picker-zoom-extent">' + '</div>');
 
                 var pickerGuid = (0, _makeGuid2.default)();
                 _this.$sideBar.append('<div id="' + pickerGuid + '"></div>');
@@ -2338,11 +2388,18 @@ var SsaMapCreate = function (_SsaMapBase) {
                 _this.corridorCollection = new _CorridorCollection2.default(corridorsGuid, _this);
 
                 _this.$createCorridorButton = _this.$sideBar.find('.picker-create-corridor');
+                _this.$zoomExtentButton = _this.$sideBar.find('.picker-zoom-extent');
 
                 _this.$createCorridorButton.click(function () {
                         _this.pickerCollection.visible = true;
                         _this.$createCorridorButton.prop('disabled', true);
-                        _this.corridorCollection.visible = false;
+                });
+
+                _this.$zoomExtentButton.click(function () {
+                        var ext = _this.corridorCollection.fullExtent;
+                        if (ext) {
+                                _this.mainMap.getView().fit(ext, _this.mainMap.getSize());
+                        }
                 });
                 return _this;
         }

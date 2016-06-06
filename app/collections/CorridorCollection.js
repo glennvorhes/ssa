@@ -26,15 +26,15 @@ function tableContent(rowHtml) {
 }
 
 /**
- * 
+ *
  * @param {string} fromRp
  * @param {string} toRp
  * @returns {string}
  */
-function corridorName(fromRp, toRp){
+function corridorName(fromRp, toRp) {
     "use strict";
-    
-    return fromRp.substring(0,7) + ' - ' + toRp.substring(0, 7);
+
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
 }
 
 
@@ -79,7 +79,6 @@ class CorridorCollection {
         this._coridorLookup[c.clientId] = c;
         this.ssaMap.mainMap.addLayer(c.olLayer);
         c.layer.name = corridorName(c.rpFrom, c.rpTo);
-        
 
 
         this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
@@ -107,8 +106,8 @@ class CorridorCollection {
         this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
         cor.layer.visible = false;
         cor.layer.source.clear();
-        this.ssaMap.mainMap.getView().setZoom( this.ssaMap.mainMap.getView().getZoom() - 1);
-        this.ssaMap.mainMap.getView().setZoom( this.ssaMap.mainMap.getView().getZoom() + 1);
+        this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
+        this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
         // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
         this.refreshHtmlCreate();
     }
@@ -127,17 +126,20 @@ class CorridorCollection {
         let _this = this;
 
         this.$innerContainer.find('.corridor-zoom').click(function () {
+
             let corridorId = $(this).attr('data-corridor');
             let cor = _this._coridorLookup[corridorId];
             _this.ssaMap.mainMap.getView().fit(cor.extent, _this.ssaMap.mainMap.getSize());
         });
 
         this.$innerContainer.find('.corridor-delete').click(function () {
+
             let corridorId = $(this).attr('data-corridor');
             _this.removeCorridor(corridorId);
         });
 
         this.$innerContainer.find('.corridor-edit').click(function () {
+
             _this.ssaMap.$createCorridorButton.prop('disabled', true);
             let corridorId = $(this).attr('data-corridor');
             let cor = _this._coridorLookup[corridorId];
@@ -173,6 +175,33 @@ class CorridorCollection {
         } else {
             this.$containerEl.hide();
         }
+    }
+
+    get fullExtent() {
+        let hasExtent = false;
+
+        let minX = 10E100;
+        let minY = 10E100;
+        let maxX = -10E100;
+        let maxY = -10E100;
+
+        for (let c of this._corridorArray) {
+            if (c.olLayer.getSource().getFeatures().length > 0) {
+                hasExtent = true;
+                let ext = c.olLayer.getSource().getExtent();
+                minX = ext[0] < minX ? ext[0] : minX;
+                minY = ext[1] < minY ? ext[1] : minY;
+                maxX = ext[2] > maxX ? ext[2] : maxX;
+                maxY = ext[3] > maxY ? ext[3] : maxY;
+            }
+        }
+
+        if (hasExtent) {
+            return [minX, minY, maxX, maxY];
+        } else {
+            return undefined;
+        }
+
     }
 
 
