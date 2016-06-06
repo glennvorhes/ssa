@@ -879,8 +879,10 @@ var SsaMapBase = function () {
         var multiMap = (0, _quickMapMulti2.default)({
             divId: mapId,
             minZoom: 6,
-            zoom: 6
+            zoom: 6,
+            fullScreen: true
         });
+
         (0, _jquery2.default)('.ol-zoom-out').html('&#8211;');
 
         /**
