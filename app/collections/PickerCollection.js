@@ -156,6 +156,8 @@ class PickerCollection {
                 color: 'yellow'
             }
         );
+
+
         this._dummyCorridor.layer.olLayer.zIndex = 10;
         this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.layer.olLayer);
         this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.nodeLayer.olLayer);
@@ -170,7 +172,9 @@ class PickerCollection {
             // }
             this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
             this.addModifyEnabled = true;
+            
         });
+
     }
 
     addCorridor() {

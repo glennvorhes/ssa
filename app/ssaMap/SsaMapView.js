@@ -8,19 +8,12 @@ import provide from 'webmapsjs/src/util/provide';
 import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
 import * as styles  from '../layerStyles';
-import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
 import * as ajx from '../ajaxGetters';
 import ol from 'webmapsjs/src/ol/ol';
 import {calculateExtent} from '../collections/CorridorCollection';
+import * as objHelp from 'webmapsjs/src/util/objectHelpers';
 
 const nm = provide('ssa');
-
-
-function* entries(obj) {
-    for (let key of Object.keys(obj)) {
-        yield [key, obj[key]];
-    }
-}
 
 /**
  *
@@ -171,9 +164,9 @@ class SsaMapView extends SsaMapBase {
                             // load the crashes
                             ajx.getCrashes((d) => {
                                 // iterate over the pdp ids
-                                for (let [k, v] of entries(d)) {
+                                for (let itm of objHelp.keyValPairs(d)) {
                                     // convert to an int
-                                    let pdp = parseInt(k);
+                                    let pdp = parseInt(itm.key);
 
                                     // loop over corridors to find which one it is on,
                                     // don't break as there might be multiples
@@ -187,7 +180,9 @@ class SsaMapView extends SsaMapBase {
 
                                         // if found, set the crashes property using a helper function
                                         if (theFeature) {
-                                            theFeature.setProperties({crashInfo: _crashInfoHelper(v)});
+                                            theFeature.setProperties(
+                                                {crashInfo: _crashInfoHelper(/**@type {Array<crashData>} */itm.value)}
+                                            );
                                         }
                                     }
                                 }

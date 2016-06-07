@@ -128,6 +128,11 @@ class SegmentPickerBase extends SelectBoxBase {
             }
         );
 
+        this._segNodeLayer = new LayerBaseVectorGeoJson('', {
+            style: layerStyles.segNodeStyle,
+            minZoom: 11
+        });
+
         this._segmentSelectionLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
             style: this.selectionStyle
@@ -172,6 +177,7 @@ class SegmentPickerBase extends SelectBoxBase {
         this._pickerMap.addLayer(this._segmentLayer.olLayer);
         this._pickerMap.addLayer(this._segmentSelectionLayer);
         this._pickerMap.addLayer(this.otherSelectedSegmentLayer);
+        this._pickerMap.addLayer(this._segNodeLayer.olLayer);
 
         this._setExtent();
 
@@ -231,25 +237,35 @@ class SegmentPickerBase extends SelectBoxBase {
         }
 
         getSegments(county, hwy, (d) => {
-            this._segmentLayer.clear();
-            this.processAjaxResult(d['features']);
-            if (d['features'].length > 0) {
-                this.enabled = true;
-                this._segmentLayer.addFeatures(d);
-                this._sortedFeatures = new SortedFeatures(this._segmentLayer.source.getFeatures(), 'pdpId');
-                this._setExtent();
+                this._segmentLayer.clear();
+                this._segNodeLayer.clear();
+                this.processAjaxResult(d['features']);
+                if (d['features'].length > 0) {
+                    this.enabled = true;
+                    this._segmentLayer.addFeatures(d);
+                    let feats = this._segmentLayer.source.getFeatures();
+                    this._sortedFeatures = new SortedFeatures(feats, 'pdpId');
+                    this._setExtent();
 
-                if (typeof pdpId == 'number') {
-                    // this.box.val(pdpId.toFixed());
-                    this.selectedPdpId = pdpId;
+                    if (typeof pdpId == 'number') {
+                        // this.box.val(pdpId.toFixed());
+                        this.selectedPdpId = pdpId;
+                    } else {
+                        this.box.trigger('change');
+                    }
+
+                    for (let i =0; i < feats.length; i++){
+                        let coords = feats[i].getGeometry()['getCoordinates']();
+                        if (coords.length > 0){
+                        this._segNodeLayer.source.addFeature(new ol.Feature(new ol.geom.Point(coords[0])));
+                        this._segNodeLayer.source.addFeature(new ol.Feature(new ol.geom.Point(coords[coords.length - 1])));
+                        }
+                    }
                 } else {
-                    this.box.trigger('change');
+                    this.enabled = false;
                 }
-
-            } else {
-                this.enabled = false;
             }
-        })
+        )
     }
 
     _setExtent() {

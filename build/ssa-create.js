@@ -334,11 +334,8 @@ var CorridorCollection = function () {
             this._coridorLookup[c.clientId] = c;
             this.ssaMap.mainMap.addLayer(c.olLayer);
             this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
-            console.log(c.nodeLayer.olLayer);
             c.layer.name = corridorName(c.rpFrom, c.rpTo);
-
             this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
-
             this.refreshHtmlCreate();
         }
 
@@ -662,6 +659,7 @@ var PickerCollection = function () {
                 cancelLoad: true,
                 color: 'yellow'
             });
+
             this._dummyCorridor.layer.olLayer.zIndex = 10;
             this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.layer.olLayer);
             this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.nodeLayer.olLayer);
@@ -788,11 +786,15 @@ var _provide2 = _interopRequireDefault(_provide);
 
 var _layerStyles = require('../layerStyles');
 
+var layerStyles = _interopRequireWildcard(_layerStyles);
+
 var _ajaxGetters = require('../ajaxGetters');
 
 var _SortedFeatures = require('webmapsjs/src/olHelpers/SortedFeatures');
 
 var _SortedFeatures2 = _interopRequireDefault(_SortedFeatures);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -881,15 +883,7 @@ var Corridor = function () {
         this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(corridorName(this.rpFrom, this.rpTo), this._color, true));
 
         this.nodeLayer = new _LayerBaseVectorGeoJson2.default('', {
-            style: new _ol2.default.style.Style({
-                image: new _ol2.default.style.Circle({
-                    radius: 6,
-                    fill: new _ol2.default.style.Fill({
-                        color: 'rgba(252, 251, 59, 0.7)'
-                    }),
-                    stroke: new _ol2.default.style.Stroke({ color: 'rgb(252, 251, 59', width: 2 })
-                })
-            }),
+            style: layerStyles.segNodeStyle,
             minZoom: 10,
             zIndex: 12
         });
@@ -935,18 +929,13 @@ var Corridor = function () {
     }, {
         key: 'buildNodes',
         value: function buildNodes() {
+            this.nodeLayer.clear();
             var features = this._corridorLayer.olLayer.getSource().getFeatures();
             for (var i = 0; i < features.length; i++) {
                 var coords = features[i].getGeometry()['getCoordinates']();
                 if (coords && coords.length > 0) {
                     this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[0])));
-
-                    if (i == features.length - 1) {
-                        console.log(coords);
-                        console.log(coords[0]);
-                        console.log(coords[coords.length - 1]);
-                        this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[coords.length - 1])));
-                    }
+                    this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[coords.length - 1])));
                 }
             }
         }
@@ -1149,7 +1138,7 @@ exports.default = Corridor;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.mmPopupContent = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
+exports.segNodeStyle = exports.mmPopupContent = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
 exports.randomColor = randomColor;
 exports.layerConfigHelper = layerConfigHelper;
 
@@ -1160,7 +1149,7 @@ var _ol2 = _interopRequireDefault(_ol);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var segmentLayer = exports.segmentLayer = new _ol2.default.style.Style({
-    stroke: new _ol2.default.style.Stroke({ color: 'blue', width: 4 })
+    stroke: new _ol2.default.style.Stroke({ color: 'darkblue', width: 5 })
 }); /**
      * Created by gavorhes on 5/13/2016.
      */
@@ -1243,6 +1232,16 @@ var mmPopupContent = exports.mmPopupContent = function mmPopupContent(props) {
 
     return returnHtml;
 };
+
+var segNodeStyle = exports.segNodeStyle = new _ol2.default.style.Style({
+    image: new _ol2.default.style.Circle({
+        radius: 6,
+        fill: new _ol2.default.style.Fill({
+            color: 'rgba(252, 251, 59, 0.35)'
+        }),
+        stroke: new _ol2.default.style.Stroke({ color: 'rgb(252, 251, 59', width: 2 })
+    })
+});
 
 },{"webmapsjs/src/ol/ol":36}],6:[function(require,module,exports){
 'use strict';
@@ -1419,6 +1418,11 @@ var SegmentPickerBase = function (_SelectBoxBase) {
             style: layerStyles.segmentLayer
         });
 
+        _this2._segNodeLayer = new _LayerBaseVectorGeoJson2.default('', {
+            style: layerStyles.segNodeStyle,
+            minZoom: 11
+        });
+
         _this2._segmentSelectionLayer = new _ol2.default.layer.Vector({
             source: new _ol2.default.source.Vector(),
             style: _this2.selectionStyle
@@ -1468,6 +1472,7 @@ var SegmentPickerBase = function (_SelectBoxBase) {
             this._pickerMap.addLayer(this._segmentLayer.olLayer);
             this._pickerMap.addLayer(this._segmentSelectionLayer);
             this._pickerMap.addLayer(this.otherSelectedSegmentLayer);
+            this._pickerMap.addLayer(this._segNodeLayer.olLayer);
 
             this._setExtent();
 
@@ -1537,11 +1542,13 @@ var SegmentPickerBase = function (_SelectBoxBase) {
 
             (0, _ajaxGetters.getSegments)(county, hwy, function (d) {
                 _this4._segmentLayer.clear();
+                _this4._segNodeLayer.clear();
                 _this4.processAjaxResult(d['features']);
                 if (d['features'].length > 0) {
                     _this4.enabled = true;
                     _this4._segmentLayer.addFeatures(d);
-                    _this4._sortedFeatures = new _SortedFeatures2.default(_this4._segmentLayer.source.getFeatures(), 'pdpId');
+                    var feats = _this4._segmentLayer.source.getFeatures();
+                    _this4._sortedFeatures = new _SortedFeatures2.default(feats, 'pdpId');
                     _this4._setExtent();
 
                     if (typeof pdpId == 'number') {
@@ -1549,6 +1556,14 @@ var SegmentPickerBase = function (_SelectBoxBase) {
                         _this4.selectedPdpId = pdpId;
                     } else {
                         _this4.box.trigger('change');
+                    }
+
+                    for (var i = 0; i < feats.length; i++) {
+                        var coords = feats[i].getGeometry()['getCoordinates']();
+                        if (coords.length > 0) {
+                            _this4._segNodeLayer.source.addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[0])));
+                            _this4._segNodeLayer.source.addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[coords.length - 1])));
+                        }
                     }
                 } else {
                     _this4.enabled = false;

@@ -115,15 +115,10 @@ class CorridorCollection {
         this._coridorLookup[c.clientId] = c;
         this.ssaMap.mainMap.addLayer(c.olLayer);
         this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
-        console.log(c.nodeLayer.olLayer);
         c.layer.name = corridorName(c.rpFrom, c.rpTo);
-
-
         this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
-
         this.refreshHtmlCreate();
     }
-
 
     /**
      *
