@@ -44,11 +44,6 @@ class SsaMapBase {
          */
         this.mainMapPopup = multiMap.mapPopup;
     }
-
-    addCorridorByPickers(){
-        
-    }
-
 }
 
 nm.SsaMapBase = SsaMapBase;

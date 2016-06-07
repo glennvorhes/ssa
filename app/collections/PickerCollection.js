@@ -131,6 +131,7 @@ class PickerCollection {
         this._ssaMapCreate.corridorCollection.visible = true;
         this._dummyCorridor.layer.clear();
         this._modifyCorridor = undefined;
+        this._dummyCorridor.nodeLayer.olLayer.getSource().clear();
         this.addModifyEnabled = false;
     }
 
@@ -141,6 +142,7 @@ class PickerCollection {
         }
 
         this._ssaMapCreate.mainMap.removeLayer(this._dummyCorridor.layer.olLayer);
+        this._ssaMapCreate.mainMap.removeLayer(this._dummyCorridor.nodeLayer.olLayer);
         this._dummyCorridor = new Corridor(
             this.segmentPickerFrom.selectedPdpId,
             this.segmentPickerTo.selectedPdpId,
@@ -156,6 +158,7 @@ class PickerCollection {
         );
         this._dummyCorridor.layer.olLayer.zIndex = 10;
         this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.layer.olLayer);
+        this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.nodeLayer.olLayer);
 
         this._dummyCorridor.load((c) => {
             //TODO better implementation for an early break
@@ -173,7 +176,6 @@ class PickerCollection {
     addCorridor() {
         this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
         this.cancel();
-        window.corrs =  this._ssaMapCreate.corridorCollection;
     }
 
     modifyCorridor() {

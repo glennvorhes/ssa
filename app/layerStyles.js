@@ -9,13 +9,13 @@ export const segmentLayer = new ol.style.Style({
 
 export const fromColor = '#48FD14';
 
-export const segmentSelection = new ol.style.Style({
+export const segmentSelectionStyleFrom = new ol.style.Style({
     stroke: new ol.style.Stroke({color: fromColor, width: 7})
 });
 
 export const toColor = '#EE0071';
 
-export const segmentSelectionOther = new ol.style.Style({
+export const segmentSelectionStyleTo = new ol.style.Style({
     stroke: new ol.style.Stroke({color: toColor, width: 7})
 });
 

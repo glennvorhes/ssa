@@ -114,6 +114,8 @@ class CorridorCollection {
         this._corridorArray.push(c);
         this._coridorLookup[c.clientId] = c;
         this.ssaMap.mainMap.addLayer(c.olLayer);
+        this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
+        console.log(c.nodeLayer.olLayer);
         c.layer.name = corridorName(c.rpFrom, c.rpTo);
 
 
@@ -137,11 +139,16 @@ class CorridorCollection {
         }
 
         let ix = this._corridorArray.indexOf(cor);
+        this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
+        this.ssaMap.mainMap.removeLayer(cor.olLayer);
+        this.ssaMap.mainMap.removeLayer(cor.nodeLayer.olLayer);
         this._corridorArray.splice(ix, 1);
         delete this._coridorLookup[cor.clientId];
-        this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
-        cor.layer.visible = false;
-        cor.layer.source.clear();
+
+        // cor.layer.visible = false;
+        // cor.layer.source.clear();
+        //
+
         this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
         this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
         // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
@@ -188,7 +195,7 @@ class CorridorCollection {
         for (let i = 0; i < this._corridorArray.length; i++) {
             let cor = this._corridorArray[i];
             cor.getDataHtml(i);
-            cor.getDataHtmlDisp(i);
+            // cor.getDataHtmlDisp(i);
             this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
         }
 
@@ -215,29 +222,6 @@ class CorridorCollection {
 
     get fullExtent() {
         return calculateExtent(this._corridorArray);
-    //     let hasExtent = false;
-    //
-    //     let minX = 10E100;
-    //     let minY = 10E100;
-    //     let maxX = -10E100;
-    //     let maxY = -10E100;
-    //
-    //     for (let c of this._corridorArray) {
-    //         if (c.olLayer.getSource().getFeatures().length > 0) {
-    //             hasExtent = true;
-    //             let ext = c.olLayer.getSource().getExtent();
-    //             minX = ext[0] < minX ? ext[0] : minX;
-    //             minY = ext[1] < minY ? ext[1] : minY;
-    //             maxX = ext[2] > maxX ? ext[2] : maxX;
-    //             maxY = ext[3] > maxY ? ext[3] : maxY;
-    //         }
-    //     }
-    //
-    //     if (hasExtent) {
-    //         return [minX, minY, maxX, maxY];
-    //     } else {
-    //         return undefined;
-    //     }
     }
 
 }

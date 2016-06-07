@@ -285,7 +285,6 @@ select:disabled {
   width: 285px;
   padding: 7px;
   background-color: lightgray;
-  overflow: auto;
 }
 .selected-segment-info {
   font-weight: bold;

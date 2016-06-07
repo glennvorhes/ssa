@@ -183,6 +183,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
+exports.calculateExtent = calculateExtent;
+
 var _provide = require('webmapsjs/src/util/provide');
 
 var _provide2 = _interopRequireDefault(_provide);
@@ -198,6 +200,60 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var nm = (0, _provide2.default)('ssa');
+
+/**
+ *
+ * @param {Array<Corridor>} corArray
+ * @returns {*}
+ * @static
+ */
+function calculateExtent(corArray) {
+    var hasExtent = false;
+
+    var minX = 10E100;
+    var minY = 10E100;
+    var maxX = -10E100;
+    var maxY = -10E100;
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = corArray[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var c = _step.value;
+
+            if (c.olLayer.getSource().getFeatures().length > 0) {
+                hasExtent = true;
+                var ext = c.olLayer.getSource().getExtent();
+                minX = ext[0] < minX ? ext[0] : minX;
+                minY = ext[1] < minY ? ext[1] : minY;
+                maxX = ext[2] > maxX ? ext[2] : maxX;
+                maxY = ext[3] > maxY ? ext[3] : maxY;
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    if (hasExtent) {
+        return [minX, minY, maxX, maxY];
+    } else {
+        return undefined;
+    }
+}
+nm.calculateExtent = calculateExtent;
 
 /**
  *
@@ -277,6 +333,8 @@ var CorridorCollection = function () {
             this._corridorArray.push(c);
             this._coridorLookup[c.clientId] = c;
             this.ssaMap.mainMap.addLayer(c.olLayer);
+            this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
+            console.log(c.nodeLayer.olLayer);
             c.layer.name = corridorName(c.rpFrom, c.rpTo);
 
             this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
@@ -301,11 +359,16 @@ var CorridorCollection = function () {
             }
 
             var ix = this._corridorArray.indexOf(cor);
+            this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
+            this.ssaMap.mainMap.removeLayer(cor.olLayer);
+            this.ssaMap.mainMap.removeLayer(cor.nodeLayer.olLayer);
             this._corridorArray.splice(ix, 1);
             delete this._coridorLookup[cor.clientId];
-            this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
-            cor.layer.visible = false;
-            cor.layer.source.clear();
+
+            // cor.layer.visible = false;
+            // cor.layer.source.clear();
+            //
+
             this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
             this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
             // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
@@ -318,27 +381,27 @@ var CorridorCollection = function () {
 
             var rowContent = '';
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
             try {
-                for (var _iterator = this._corridorArray[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var c = _step.value;
+                for (var _iterator2 = this._corridorArray[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var c = _step2.value;
 
                     rowContent += c.tableHtmlCreate;
                 }
             } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
                     }
                 } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
                     }
                 }
             }
@@ -373,7 +436,7 @@ var CorridorCollection = function () {
             for (var i = 0; i < this._corridorArray.length; i++) {
                 var cor = this._corridorArray[i];
                 cor.getDataHtml(i);
-                cor.getDataHtmlDisp(i);
+                // cor.getDataHtmlDisp(i);
                 this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
             }
         }
@@ -398,50 +461,7 @@ var CorridorCollection = function () {
     }, {
         key: 'fullExtent',
         get: function get() {
-            var hasExtent = false;
-
-            var minX = 10E100;
-            var minY = 10E100;
-            var maxX = -10E100;
-            var maxY = -10E100;
-
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this._corridorArray[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var c = _step2.value;
-
-                    if (c.olLayer.getSource().getFeatures().length > 0) {
-                        hasExtent = true;
-                        var ext = c.olLayer.getSource().getExtent();
-                        minX = ext[0] < minX ? ext[0] : minX;
-                        minY = ext[1] < minY ? ext[1] : minY;
-                        maxX = ext[2] > maxX ? ext[2] : maxX;
-                        maxY = ext[3] > maxY ? ext[3] : maxY;
-                    }
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-
-            if (hasExtent) {
-                return [minX, minY, maxX, maxY];
-            } else {
-                return undefined;
-            }
+            return calculateExtent(this._corridorArray);
         }
     }]);
 
@@ -623,6 +643,7 @@ var PickerCollection = function () {
             this._ssaMapCreate.corridorCollection.visible = true;
             this._dummyCorridor.layer.clear();
             this._modifyCorridor = undefined;
+            this._dummyCorridor.nodeLayer.olLayer.getSource().clear();
             this.addModifyEnabled = false;
         }
     }, {
@@ -636,12 +657,14 @@ var PickerCollection = function () {
             }
 
             this._ssaMapCreate.mainMap.removeLayer(this._dummyCorridor.layer.olLayer);
+            this._ssaMapCreate.mainMap.removeLayer(this._dummyCorridor.nodeLayer.olLayer);
             this._dummyCorridor = new _Corridor2.default(this.segmentPickerFrom.selectedPdpId, this.segmentPickerTo.selectedPdpId, this.segmentPickerFrom.selectedText, this.segmentPickerTo.selectedText, this.countyStartSelect.selectedValue, this.countyEndSelect.selectedValue, this.highwaySelect.selectedText, {
                 cancelLoad: true,
                 color: 'yellow'
             });
             this._dummyCorridor.layer.olLayer.zIndex = 10;
             this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.layer.olLayer);
+            this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.nodeLayer.olLayer);
 
             this._dummyCorridor.load(function (c) {
                 //TODO better implementation for an early break
@@ -660,7 +683,6 @@ var PickerCollection = function () {
         value: function addCorridor() {
             this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
             this.cancel();
-            window.corrs = this._ssaMapCreate.corridorCollection;
         }
     }, {
         key: 'modifyCorridor',
@@ -768,6 +790,10 @@ var _layerStyles = require('../layerStyles');
 
 var _ajaxGetters = require('../ajaxGetters');
 
+var _SortedFeatures = require('webmapsjs/src/olHelpers/SortedFeatures');
+
+var _SortedFeatures2 = _interopRequireDefault(_SortedFeatures);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -837,6 +863,12 @@ var Corridor = function () {
 
         this._valid = false;
         this._error = '';
+        this._loaded = false;
+        /**
+         *
+         * @type {SortedFeatures|null}
+         */
+        this.sortedFeatures = null;
 
         this.pdpFrom = pdpFrom;
         this.pdpTo = pdpTo;
@@ -847,6 +879,20 @@ var Corridor = function () {
         this.rpTo = rpTo;
 
         this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(corridorName(this.rpFrom, this.rpTo), this._color, true));
+
+        this.nodeLayer = new _LayerBaseVectorGeoJson2.default('', {
+            style: new _ol2.default.style.Style({
+                image: new _ol2.default.style.Circle({
+                    radius: 6,
+                    fill: new _ol2.default.style.Fill({
+                        color: 'rgba(252, 251, 59, 0.7)'
+                    }),
+                    stroke: new _ol2.default.style.Stroke({ color: 'rgb(252, 251, 59', width: 2 })
+                })
+            }),
+            minZoom: 10,
+            zIndex: 12
+        });
 
         if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
@@ -879,8 +925,30 @@ var Corridor = function () {
                 } else {
                     _this._error = d['error'];
                 }
+                _this._loaded = true;
+                _this.sortedFeatures = new _SortedFeatures2.default(_this.olLayer.getSource().getFeatures(), 'pdpId');
+
+                _this.buildNodes();
                 loadedCallback(_this);
             });
+        }
+    }, {
+        key: 'buildNodes',
+        value: function buildNodes() {
+            var features = this._corridorLayer.olLayer.getSource().getFeatures();
+            for (var i = 0; i < features.length; i++) {
+                var coords = features[i].getGeometry()['getCoordinates']();
+                if (coords && coords.length > 0) {
+                    this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[0])));
+
+                    if (i == features.length - 1) {
+                        console.log(coords);
+                        console.log(coords[0]);
+                        console.log(coords[coords.length - 1]);
+                        this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[coords.length - 1])));
+                    }
+                }
+            }
         }
 
         /**
@@ -891,7 +959,9 @@ var Corridor = function () {
     }, {
         key: 'clone',
         value: function clone() {
-            return new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, { features: this.features });
+            var c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, { features: this.features });
+            c.buildNodes();
+            return c;
         }
 
         /**
@@ -915,6 +985,7 @@ var Corridor = function () {
 
             this.layer.clear();
             this.layer.olLayer.getSource().addFeatures(corridor.features);
+            this.buildNodes();
         }
     }, {
         key: 'getDataHtml',
@@ -1058,6 +1129,11 @@ var Corridor = function () {
                 return undefined;
             }
         }
+    }, {
+        key: 'loaded',
+        get: function get() {
+            return this._loaded;
+        }
     }]);
 
     return Corridor;
@@ -1067,13 +1143,13 @@ nm.Corridor = Corridor;
 
 exports.default = Corridor;
 
-},{"../ajaxGetters":1,"../layerStyles":5,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":36,"webmapsjs/src/util/makeGuid":38,"webmapsjs/src/util/provide":39}],5:[function(require,module,exports){
+},{"../ajaxGetters":1,"../layerStyles":5,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":36,"webmapsjs/src/olHelpers/SortedFeatures":24,"webmapsjs/src/util/makeGuid":38,"webmapsjs/src/util/provide":39}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.mmPopupContent = exports.segmentSelectionOther = exports.toColor = exports.segmentSelection = exports.fromColor = exports.segmentLayer = undefined;
+exports.mmPopupContent = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
 exports.randomColor = randomColor;
 exports.layerConfigHelper = layerConfigHelper;
 
@@ -1092,13 +1168,13 @@ var segmentLayer = exports.segmentLayer = new _ol2.default.style.Style({
 
 var fromColor = exports.fromColor = '#48FD14';
 
-var segmentSelection = exports.segmentSelection = new _ol2.default.style.Style({
+var segmentSelectionStyleFrom = exports.segmentSelectionStyleFrom = new _ol2.default.style.Style({
     stroke: new _ol2.default.style.Stroke({ color: fromColor, width: 7 })
 });
 
 var toColor = exports.toColor = '#EE0071';
 
-var segmentSelectionOther = exports.segmentSelectionOther = new _ol2.default.style.Style({
+var segmentSelectionStyleTo = exports.segmentSelectionStyleTo = new _ol2.default.style.Style({
     stroke: new _ol2.default.style.Stroke({ color: toColor, width: 7 })
 });
 
@@ -1146,7 +1222,7 @@ function layerConfigHelper(name, color, visible) {
         style: new _ol2.default.style.Style({
             stroke: new _ol2.default.style.Stroke({
                 color: color,
-                width: 5
+                width: 6
             })
         }),
         visible: visible
@@ -1161,6 +1237,10 @@ var mmPopupContent = exports.mmPopupContent = function mmPopupContent(props) {
     returnHtml += '<tr><td>From</td><td>' + props['pdpFrom'] + '</td></tr>';
     returnHtml += '<tr><td>To</td><td>' + props['pdpTo'] + '</td></tr>';
     returnHtml += '</table>';
+    if (props['crashInfo']) {
+        returnHtml += props['crashInfo'];
+    }
+
     return returnHtml;
 };
 
@@ -1341,12 +1421,12 @@ var SegmentPickerBase = function (_SelectBoxBase) {
 
         _this2._segmentSelectionLayer = new _ol2.default.layer.Vector({
             source: new _ol2.default.source.Vector(),
-            style: layerStyles.segmentSelection
+            style: _this2.selectionStyle
         });
 
         _this2.otherSelectedSegmentLayer = new _ol2.default.layer.Vector({
             source: new _ol2.default.source.Vector(),
-            style: layerStyles.segmentSelectionOther
+            style: _this2.selectionStyleOther
         });
 
         _this2._enabled = false;
@@ -1496,6 +1576,12 @@ var SegmentPickerBase = function (_SelectBoxBase) {
             this.selectedPdpId = undefined;
             this.visible = false;
         }
+
+        /**
+         * @abstract
+         * @returns {ol.style.Style}
+         */
+
     }, {
         key: 'enabled',
         get: function get() {
@@ -1599,6 +1685,26 @@ var SegmentPickerBase = function (_SelectBoxBase) {
                 this._$segmentInfo.html('Seg ID: ' + props['pdpId'] + ', Ref. Point ' + props['pdpFrom'] + '-' + props['pdpTo']);
             }
         }
+    }, {
+        key: 'selectionStyle',
+        get: function get() {
+            return new _ol2.default.style.Style({
+                stroke: new _ol2.default.style.Stroke({ color: 'orange', width: 7 })
+            });
+        }
+
+        /**
+         * @abstract
+         * @returns {ol.style.Style}
+         */
+
+    }, {
+        key: 'selectionStyleOther',
+        get: function get() {
+            return new _ol2.default.style.Style({
+                stroke: new _ol2.default.style.Stroke({ color: 'orange', width: 7 })
+            });
+        }
     }]);
 
     return SegmentPickerBase;
@@ -1619,6 +1725,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _SegmentPickerBase2 = require('./SegmentPickerBase');
 
 var _SegmentPickerBase3 = _interopRequireDefault(_SegmentPickerBase2);
+
+var _layerStyles = require('../layerStyles');
+
+var layerStyles = _interopRequireWildcard(_layerStyles);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1679,6 +1791,26 @@ var SegmentPickerFrom = function (_SegmentPickerBase) {
                 }
             }
         }
+
+        /**
+         * @returns {ol.style.Style}
+         */
+
+    }, {
+        key: 'selectionStyle',
+        get: function get() {
+            return layerStyles.segmentSelectionStyleFrom;
+        }
+
+        /**
+         * @returns {ol.style.Style}
+         */
+
+    }, {
+        key: 'selectionStyleOther',
+        get: function get() {
+            return layerStyles.segmentSelectionStyleTo;
+        }
     }]);
 
     return SegmentPickerFrom;
@@ -1686,7 +1818,7 @@ var SegmentPickerFrom = function (_SegmentPickerBase) {
 
 exports.default = SegmentPickerFrom;
 
-},{"./SegmentPickerBase":6}],8:[function(require,module,exports){
+},{"../layerStyles":5,"./SegmentPickerBase":6}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1698,6 +1830,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _SegmentPickerBase2 = require('./SegmentPickerBase');
 
 var _SegmentPickerBase3 = _interopRequireDefault(_SegmentPickerBase2);
+
+var _layerStyles = require('../layerStyles');
+
+var layerStyles = _interopRequireWildcard(_layerStyles);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1758,6 +1896,26 @@ var SegmentPickerTo = function (_SegmentPickerBase) {
                 }
             }
         }
+
+        /**
+         * @returns {ol.style.Style|undefined}
+         */
+
+    }, {
+        key: 'selectionStyle',
+        get: function get() {
+            return layerStyles.segmentSelectionStyleTo;
+        }
+
+        /**
+         * @returns {ol.style.Style}
+         */
+
+    }, {
+        key: 'selectionStyleOther',
+        get: function get() {
+            return layerStyles.segmentSelectionStyleFrom;
+        }
     }]);
 
     return SegmentPickerTo;
@@ -1765,7 +1923,7 @@ var SegmentPickerTo = function (_SegmentPickerBase) {
 
 exports.default = SegmentPickerTo;
 
-},{"./SegmentPickerBase":6}],9:[function(require,module,exports){
+},{"../layerStyles":5,"./SegmentPickerBase":6}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2238,13 +2396,8 @@ require('../app/ssaMap/SsaMapCreate');
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by gavorhes on 5/13/2016.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
 
 var _jquery = require('webmapsjs/src/jquery/jquery');
 
@@ -2264,51 +2417,45 @@ var _provide2 = _interopRequireDefault(_provide);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } /**
+                                                                                                                                                           * Created by gavorhes on 5/13/2016.
+                                                                                                                                                           */
+
 
 var nm = (0, _provide2.default)('ssa');
 
-var SsaMapBase = function () {
-    function SsaMapBase(divId) {
-        _classCallCheck(this, SsaMapBase);
+var SsaMapBase = function SsaMapBase(divId) {
+  _classCallCheck(this, SsaMapBase);
 
-        /**
-         * @type {JQuery|*|jQuery|HTMLElement}
-         */
-        this.$mainContainer = (0, _jquery2.default)('#' + divId);
-        this.$mainContainer.addClass('ssa-map-container');
-        var mapId = (0, _makeGuid2.default)();
+  /**
+   * @type {JQuery|*|jQuery|HTMLElement}
+   */
+  this.$mainContainer = (0, _jquery2.default)('#' + divId);
+  this.$mainContainer.addClass('ssa-map-container');
+  var mapId = (0, _makeGuid2.default)();
 
-        this.$mainContainer.append('<div id="' + mapId + '" class="ssa-main-map"></div>');
+  this.$mainContainer.append('<div id="' + mapId + '" class="ssa-main-map"></div>');
 
-        var multiMap = (0, _quickMapMulti2.default)({
-            divId: mapId,
-            minZoom: 6,
-            zoom: 6,
-            fullScreen: true
-        });
+  var multiMap = (0, _quickMapMulti2.default)({
+    divId: mapId,
+    minZoom: 6,
+    zoom: 6,
+    fullScreen: true
+  });
 
-        (0, _jquery2.default)('.ol-zoom-out').html('&#8211;');
+  (0, _jquery2.default)('.ol-zoom-out').html('&#8211;');
 
-        /**
-         * @type {ol.Map}
-         */
-        this.mainMap = multiMap.map;
-        this.mainMapMove = multiMap.mapMove;
+  /**
+   * @type {ol.Map}
+   */
+  this.mainMap = multiMap.map;
+  this.mainMapMove = multiMap.mapMove;
 
-        /**
-         * @type {MapPopupCls}
-         */
-        this.mainMapPopup = multiMap.mapPopup;
-    }
-
-    _createClass(SsaMapBase, [{
-        key: 'addCorridorByPickers',
-        value: function addCorridorByPickers() {}
-    }]);
-
-    return SsaMapBase;
-}();
+  /**
+   * @type {MapPopupCls}
+   */
+  this.mainMapPopup = multiMap.mapPopup;
+};
 
 nm.SsaMapBase = SsaMapBase;
 exports.default = SsaMapBase;

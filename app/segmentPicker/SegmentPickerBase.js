@@ -130,12 +130,12 @@ class SegmentPickerBase extends SelectBoxBase {
 
         this._segmentSelectionLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
-            style: layerStyles.segmentSelection
+            style: this.selectionStyle
         });
 
         this.otherSelectedSegmentLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
-            style: layerStyles.segmentSelectionOther
+            style: this.selectionStyleOther
         });
 
         this._enabled = false;
@@ -239,7 +239,7 @@ class SegmentPickerBase extends SelectBoxBase {
                 this._sortedFeatures = new SortedFeatures(this._segmentLayer.source.getFeatures(), 'pdpId');
                 this._setExtent();
 
-                if (typeof pdpId == 'number'){
+                if (typeof pdpId == 'number') {
                     // this.box.val(pdpId.toFixed());
                     this.selectedPdpId = pdpId;
                 } else {
@@ -264,7 +264,7 @@ class SegmentPickerBase extends SelectBoxBase {
     /**
      * @returns {boolean}
      */
-    get enabled(){
+    get enabled() {
         return this._enabled;
     }
 
@@ -273,7 +273,7 @@ class SegmentPickerBase extends SelectBoxBase {
      * @param {boolean} isEnabled
      * @private
      */
-    set enabled(isEnabled){
+    set enabled(isEnabled) {
         this._enabled = isEnabled;
         this.box.prop('disabled', !isEnabled);
     }
@@ -301,12 +301,12 @@ class SegmentPickerBase extends SelectBoxBase {
             if (!this._pickerMap) {
                 this._mapInit();
             }
-            if (this.otherPicker){
+            if (this.otherPicker) {
                 this.otherPicker.visible = false;
             }
         } else {
             this._$mapContainer.hide();
-            if (this._pickerMapPopup){
+            if (this._pickerMapPopup) {
                 this._pickerMapPopup.closePopup();
             }
         }
@@ -365,6 +365,29 @@ class SegmentPickerBase extends SelectBoxBase {
         this.selectedPdpId = undefined;
         this.visible = false;
     }
+
+    /**
+     * @abstract
+     * @returns {ol.style.Style}
+     */
+    get selectionStyle() {
+        return new ol.style.Style({
+            stroke: new ol.style.Stroke({color: 'orange', width: 7})
+        });
+    }
+
+
+    /**
+     * @abstract
+     * @returns {ol.style.Style}
+     */
+    get selectionStyleOther() {
+        return new ol.style.Style({
+            stroke: new ol.style.Stroke({color: 'orange', width: 7})
+        });
+    }
+
+
 }
 
 nm.SegmentPickerBase = SegmentPickerBase;

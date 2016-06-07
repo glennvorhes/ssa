@@ -3,6 +3,8 @@
  */
 
 import SegmentPickerBase from './SegmentPickerBase';
+import * as layerStyles from '../layerStyles';
+
 
 class SegmentPickerTo extends SegmentPickerBase {
     constructor(parent) {
@@ -26,6 +28,22 @@ class SegmentPickerTo extends SegmentPickerBase {
             this.box.append(`<option value="${props['pdpId']}">${props['pdpTo']}</option>`);
         }
     }
+
+    /**
+     * @returns {ol.style.Style|undefined}
+     */
+    get selectionStyle() {
+        return layerStyles.segmentSelectionStyleTo;
+    }
+
+    /**
+     * @returns {ol.style.Style}
+     */
+    get selectionStyleOther() {
+        return layerStyles.segmentSelectionStyleFrom;
+    }
+
+
 }
 
 export default SegmentPickerTo;

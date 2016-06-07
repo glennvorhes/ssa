@@ -32,10 +32,10 @@ function escapeHtml(string) {
  * @param {string} toRp
  * @returns {string}
  */
-function corridorName(fromRp, toRp){
+function corridorName(fromRp, toRp) {
     "use strict";
 
-    return fromRp.substring(0,7) + ' - ' + toRp.substring(0, 7);
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
 }
 
 class Corridor {
@@ -59,9 +59,9 @@ class Corridor {
     constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
 
         options = options || {};
-        options.features = options.features  ? options.features : undefined;
+        options.features = options.features ? options.features : undefined;
 
-        options.cancelLoad  = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
+        options.cancelLoad = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
 
         this.clientId = makeGuid();
         if (options.color) {
@@ -76,7 +76,7 @@ class Corridor {
         this._error = '';
         this._loaded = false;
         /**
-         * 
+         *
          * @type {SortedFeatures|null}
          */
         this.sortedFeatures = null;
@@ -90,7 +90,7 @@ class Corridor {
         this.rpTo = rpTo;
 
         this._corridorLayer = new LayerBaseVectorGeoJson('',
-            layerConfigHelper(corridorName(this.rpFrom  ,this.rpTo), this._color, true)
+            layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true)
         );
 
         this.nodeLayer = new LayerBaseVectorGeoJson('', {
@@ -103,7 +103,8 @@ class Corridor {
                     stroke: new ol.style.Stroke({color: 'rgb(252, 251, 59', width: 2})
                 })
             }),
-            minZoom: 10
+            minZoom: 10,
+            zIndex: 12
         });
 
         if (options.features) {
@@ -117,9 +118,10 @@ class Corridor {
      *
      * @param {corridorLoaded} [loadedCallback=function(c){}]
      */
-    load(loadedCallback){
-         loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {};
-        
+    load(loadedCallback) {
+        loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {
+        };
+
         this._valid = false;
         this._error = '';
 
@@ -134,28 +136,37 @@ class Corridor {
             this._loaded = true;
             this.sortedFeatures = new SortedFeatures(this.olLayer.getSource().getFeatures(), 'pdpId');
 
-            let features = this._corridorLayer.olLayer.getSource().getFeatures();
-            for (let i = 0; i < features.length; i++){
-                let coords = features[i].getGeometry()['getCoordinates']();
-                if (coords && coords.length > 0){
-                    this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[0])));
-
-                    if (i == features.length - 1){
-                        this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[coords.length - 1])));
-                    }
-                }
-            }
+            this.buildNodes();
             loadedCallback(this);
         });
+    }
+
+    buildNodes() {
+        let features = this._corridorLayer.olLayer.getSource().getFeatures();
+        for (let i = 0; i < features.length; i++) {
+            let coords = features[i].getGeometry()['getCoordinates']();
+            if (coords && coords.length > 0) {
+                this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[0])));
+
+                if (i == features.length - 1) {
+                    console.log(coords);
+                    console.log(coords[0]);
+                    console.log(coords[coords.length - 1]);
+                    this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[coords.length - 1])));
+                }
+            }
+        }
     }
 
     /**
      *
      * @returns {Corridor}
      */
-    clone(){
-        return new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
+    clone() {
+        let c =  new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
             this.countyStart, this.countyEnd, this.highway, {features: this.features});
+        c.buildNodes();
+        return c;
     }
 
     /**
@@ -172,10 +183,11 @@ class Corridor {
         this.rpFrom = corridor.rpFrom;
         this.rpTo = corridor.rpTo;
 
-        this.layer.name = corridorName(this.rpFrom  ,this.rpTo);
+        this.layer.name = corridorName(this.rpFrom, this.rpTo);
 
         this.layer.clear();
         this.layer.olLayer.getSource().addFeatures(corridor.features);
+        this.buildNodes();
     }
 
     get color() {
@@ -205,7 +217,7 @@ class Corridor {
     get tableHtmlCreate() {
         let outString = `<tr class="corridor-tr">`;
         outString += `<td style="background-color: ${this._color}"></td>`;
-        outString += `<td>${corridorName(this.rpFrom  ,this.rpTo)}</td>`;
+        outString += `<td>${corridorName(this.rpFrom, this.rpTo)}</td>`;
         outString += `<td>`;
         outString += `<span title="Zoom To" class="corridor-zoom" data-corridor="${this.clientId}"></span>`;
         outString += `<span title="Edit Corridor"  class="corridor-edit" data-corridor="${this.clientId}"></span>`;
@@ -293,8 +305,8 @@ class Corridor {
             return undefined;
         }
     }
-    
-    get loaded(){
+
+    get loaded() {
         return this._loaded;
     }
 }
