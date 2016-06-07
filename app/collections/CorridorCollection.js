@@ -3,13 +3,14 @@
  */
 import provide from 'webmapsjs/src/util/provide'
 import * as styles  from '../layerStyles';
+import $ from 'webmapsjs/src/jquery/jquery';
 const nm = provide('ssa');
 
 
 /**
  *
  * @param {Array<Corridor>} corArray
- * @returns {*}
+ * @returns {ol.Extent|Array<number>|*}
  * @static
  */
 export function calculateExtent(corArray) {

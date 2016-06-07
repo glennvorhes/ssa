@@ -2,7 +2,6 @@
  * Created by gavorhes on 5/13/2016.
  */
 
-
 import SsaMapBase from './SsaMapBase';
 import provide from 'webmapsjs/src/util/provide';
 import CorridorConfig from '../corridor/CorridorConfig';
@@ -12,6 +11,7 @@ import * as ajx from '../ajaxGetters';
 import ol from 'webmapsjs/src/ol/ol';
 import {calculateExtent} from '../collections/CorridorCollection';
 import * as objHelp from 'webmapsjs/src/util/objectHelpers';
+import $ from 'webmapsjs/src/jquery/jquery';
 
 const nm = provide('ssa');
 

@@ -5,6 +5,8 @@
 
 
 import {getCountyById} from '../countyLookup';
+import $ from 'webmapsjs/src/jquery/jquery';
+
 
 
 function labelValueHelper(label, val){
