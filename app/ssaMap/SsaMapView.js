@@ -69,7 +69,6 @@ function _crashInfoHelper(crashData) {
         }
     });
 
-
     /**
      * @type {crashData}
      */
@@ -98,7 +97,6 @@ function _crashInfoHelper(crashData) {
     returnHtml += '</ul>';
 
     return returnHtml;
-
 }
 
 class SsaMapView extends SsaMapBase {
