@@ -8,6 +8,8 @@ import makeGuid from 'webmapsjs/src/util/makeGuid';
 import provide from 'webmapsjs/src/util/provide';
 import {layerConfigHelper, randomColor} from '../layerStyles';
 import {getCorridor}  from '../ajaxGetters';
+import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures'
+
 const nm = provide('ssa');
 
 
@@ -72,6 +74,12 @@ class Corridor {
 
         this._valid = false;
         this._error = '';
+        this._loaded = false;
+        /**
+         * 
+         * @type {SortedFeatures|null}
+         */
+        this.sortedFeatures = null;
 
         this.pdpFrom = pdpFrom;
         this.pdpTo = pdpTo;
@@ -84,6 +92,19 @@ class Corridor {
         this._corridorLayer = new LayerBaseVectorGeoJson('',
             layerConfigHelper(corridorName(this.rpFrom  ,this.rpTo), this._color, true)
         );
+
+        this.nodeLayer = new LayerBaseVectorGeoJson('', {
+            style: new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 6,
+                    fill: new ol.style.Fill({
+                        color: 'rgba(252, 251, 59, 0.7)'
+                    }),
+                    stroke: new ol.style.Stroke({color: 'rgb(252, 251, 59', width: 2})
+                })
+            }),
+            minZoom: 10
+        });
 
         if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
@@ -109,6 +130,20 @@ class Corridor {
                 this._valid = true;
             } else {
                 this._error = d['error'];
+            }
+            this._loaded = true;
+            this.sortedFeatures = new SortedFeatures(this.olLayer.getSource().getFeatures(), 'pdpId');
+
+            let features = this._corridorLayer.olLayer.getSource().getFeatures();
+            for (let i = 0; i < features.length; i++){
+                let coords = features[i].getGeometry()['getCoordinates']();
+                if (coords && coords.length > 0){
+                    this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[0])));
+
+                    if (i == features.length - 1){
+                        this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[coords.length - 1])));
+                    }
+                }
             }
             loadedCallback(this);
         });
@@ -257,6 +292,10 @@ class Corridor {
         } else {
             return undefined;
         }
+    }
+    
+    get loaded(){
+        return this._loaded;
     }
 }
 

@@ -64,7 +64,7 @@ export function layerConfigHelper(name, color, visible) {
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: color,
-                width: 5
+                width: 6
             })
         }),
         visible: visible
@@ -79,5 +79,9 @@ export const mmPopupContent = (props) => {
     returnHtml += `<tr><td>From</td><td>${props['pdpFrom']}</td></tr>`;
     returnHtml += `<tr><td>To</td><td>${props['pdpTo']}</td></tr>`;
     returnHtml += '</table>';
+    if (props['crashInfo']){
+        returnHtml += props['crashInfo'];
+    }
+
     return returnHtml;
 };

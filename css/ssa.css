@@ -252,14 +252,23 @@ select:disabled {
   border: solid black 1px;
   cursor: pointer;
 }
+.ol-popup-inner {
+  max-height: 300px;
+  overflow: auto;
+}
 .mm-popup-table {
   border-collapse: collapse;
+  margin: 3px;
 }
 .mm-popup-table td,
 .mm-popup-table th {
   border: solid black 1px;
   padding: 1px 7px;
   text-align: center;
+}
+.crash-list {
+  list-style: none;
+  padding-left: 7px;
 }
 .ssa-map-container {
   display: flex;
@@ -338,4 +347,18 @@ select:disabled {
 }
 .ssa-corridor-info-row label {
   margin-top: 4px;
+}
+.crashes-loaded-msg {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 70px;
+  z-index: 10;
+  background-color: lawngreen;
+  padding: 9px 15px;
+  border: solid black 1px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-weight: bolder;
 }

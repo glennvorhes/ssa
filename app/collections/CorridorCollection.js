@@ -5,6 +5,42 @@ import provide from 'webmapsjs/src/util/provide'
 import * as styles  from '../layerStyles';
 const nm = provide('ssa');
 
+
+/**
+ *
+ * @param {Array<Corridor>} corArray
+ * @returns {*}
+ * @static
+ */
+export function calculateExtent(corArray) {
+    let hasExtent = false;
+
+    let minX = 10E100;
+    let minY = 10E100;
+    let maxX = -10E100;
+    let maxY = -10E100;
+
+    for (let c of corArray) {
+        if (c.olLayer.getSource().getFeatures().length > 0) {
+            hasExtent = true;
+            let ext = c.olLayer.getSource().getExtent();
+            minX = ext[0] < minX ? ext[0] : minX;
+            minY = ext[1] < minY ? ext[1] : minY;
+            maxX = ext[2] > maxX ? ext[2] : maxX;
+            maxY = ext[3] > maxY ? ext[3] : maxY;
+        }
+    }
+
+    if (hasExtent) {
+        return [minX, minY, maxX, maxY];
+    } else {
+        return undefined;
+    }
+}
+nm.calculateExtent = calculateExtent;
+
+
+
 /**
  *
  * @param {string} [rowHtml='']
@@ -178,34 +214,36 @@ class CorridorCollection {
     }
 
     get fullExtent() {
-        let hasExtent = false;
-
-        let minX = 10E100;
-        let minY = 10E100;
-        let maxX = -10E100;
-        let maxY = -10E100;
-
-        for (let c of this._corridorArray) {
-            if (c.olLayer.getSource().getFeatures().length > 0) {
-                hasExtent = true;
-                let ext = c.olLayer.getSource().getExtent();
-                minX = ext[0] < minX ? ext[0] : minX;
-                minY = ext[1] < minY ? ext[1] : minY;
-                maxX = ext[2] > maxX ? ext[2] : maxX;
-                maxY = ext[3] > maxY ? ext[3] : maxY;
-            }
-        }
-
-        if (hasExtent) {
-            return [minX, minY, maxX, maxY];
-        } else {
-            return undefined;
-        }
-
+        return calculateExtent(this._corridorArray);
+    //     let hasExtent = false;
+    //
+    //     let minX = 10E100;
+    //     let minY = 10E100;
+    //     let maxX = -10E100;
+    //     let maxY = -10E100;
+    //
+    //     for (let c of this._corridorArray) {
+    //         if (c.olLayer.getSource().getFeatures().length > 0) {
+    //             hasExtent = true;
+    //             let ext = c.olLayer.getSource().getExtent();
+    //             minX = ext[0] < minX ? ext[0] : minX;
+    //             minY = ext[1] < minY ? ext[1] : minY;
+    //             maxX = ext[2] > maxX ? ext[2] : maxX;
+    //             maxY = ext[3] > maxY ? ext[3] : maxY;
+    //         }
+    //     }
+    //
+    //     if (hasExtent) {
+    //         return [minX, minY, maxX, maxY];
+    //     } else {
+    //         return undefined;
+    //     }
     }
-
 
 }
 
 nm.CorridorCollection = CorridorCollection;
 export default CorridorCollection;
+
+
+   
