@@ -172,6 +172,9 @@ select:disabled {
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+.new {
+  padding: 0;
+}
 .picker-collection-container {
   display: none;
 }

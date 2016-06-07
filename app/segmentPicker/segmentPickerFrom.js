@@ -3,12 +3,14 @@
  */
 
 import SegmentPickerBase from './SegmentPickerBase';
+import * as layerStyles from '../layerStyles';
 
-class SegmentPickerFrom extends SegmentPickerBase{
-    constructor(parent){
+
+class SegmentPickerFrom extends SegmentPickerBase {
+    constructor(parent) {
         super(parent, 'Ref. Point #1');
     }
-    
+
     processAjaxResult(arr) {
 
         arr.sort((a, b) => {
@@ -25,6 +27,20 @@ class SegmentPickerFrom extends SegmentPickerBase{
             let props = feat['properties'];
             this.box.append(`<option value="${props['pdpId']}">${props['pdpFrom']}</option>`);
         }
+    }
+
+    /**
+     * @returns {ol.style.Style}
+     */
+    get selectionStyle() {
+        return layerStyles.segmentSelectionStyleFrom;
+    }
+
+    /**
+     * @returns {ol.style.Style}
+     */
+    get selectionStyleOther() {
+        return layerStyles.segmentSelectionStyleTo;
     }
 }
 

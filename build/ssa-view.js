@@ -333,6 +333,8 @@ var CorridorCollection = function () {
             this._corridorArray.push(c);
             this._coridorLookup[c.clientId] = c;
             this.ssaMap.mainMap.addLayer(c.olLayer);
+            this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
+            console.log(c.nodeLayer.olLayer);
             c.layer.name = corridorName(c.rpFrom, c.rpTo);
 
             this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
@@ -357,11 +359,16 @@ var CorridorCollection = function () {
             }
 
             var ix = this._corridorArray.indexOf(cor);
+            this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
+            this.ssaMap.mainMap.removeLayer(cor.olLayer);
+            this.ssaMap.mainMap.removeLayer(cor.nodeLayer.olLayer);
             this._corridorArray.splice(ix, 1);
             delete this._coridorLookup[cor.clientId];
-            this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
-            cor.layer.visible = false;
-            cor.layer.source.clear();
+
+            // cor.layer.visible = false;
+            // cor.layer.source.clear();
+            //
+
             this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
             this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
             // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
@@ -429,7 +436,7 @@ var CorridorCollection = function () {
             for (var i = 0; i < this._corridorArray.length; i++) {
                 var cor = this._corridorArray[i];
                 cor.getDataHtml(i);
-                cor.getDataHtmlDisp(i);
+                // cor.getDataHtmlDisp(i);
                 this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
             }
         }
@@ -455,29 +462,6 @@ var CorridorCollection = function () {
         key: 'fullExtent',
         get: function get() {
             return calculateExtent(this._corridorArray);
-            //     let hasExtent = false;
-            //
-            //     let minX = 10E100;
-            //     let minY = 10E100;
-            //     let maxX = -10E100;
-            //     let maxY = -10E100;
-            //
-            //     for (let c of this._corridorArray) {
-            //         if (c.olLayer.getSource().getFeatures().length > 0) {
-            //             hasExtent = true;
-            //             let ext = c.olLayer.getSource().getExtent();
-            //             minX = ext[0] < minX ? ext[0] : minX;
-            //             minY = ext[1] < minY ? ext[1] : minY;
-            //             maxX = ext[2] > maxX ? ext[2] : maxX;
-            //             maxY = ext[3] > maxY ? ext[3] : maxY;
-            //         }
-            //     }
-            //
-            //     if (hasExtent) {
-            //         return [minX, minY, maxX, maxY];
-            //     } else {
-            //         return undefined;
-            //     }
         }
     }]);
 
@@ -593,7 +577,7 @@ var Corridor = function () {
         this._error = '';
         this._loaded = false;
         /**
-         * 
+         *
          * @type {SortedFeatures|null}
          */
         this.sortedFeatures = null;
@@ -618,7 +602,8 @@ var Corridor = function () {
                     stroke: new _ol2.default.style.Stroke({ color: 'rgb(252, 251, 59', width: 2 })
                 })
             }),
-            minZoom: 10
+            minZoom: 10,
+            zIndex: 12
         });
 
         if (options.features) {
@@ -655,19 +640,27 @@ var Corridor = function () {
                 _this._loaded = true;
                 _this.sortedFeatures = new _SortedFeatures2.default(_this.olLayer.getSource().getFeatures(), 'pdpId');
 
-                var features = _this._corridorLayer.olLayer.getSource().getFeatures();
-                for (var i = 0; i < features.length; i++) {
-                    var coords = features[i].getGeometry()['getCoordinates']();
-                    if (coords && coords.length > 0) {
-                        _this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[0])));
-
-                        if (i == features.length - 1) {
-                            _this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[coords.length - 1])));
-                        }
-                    }
-                }
+                _this.buildNodes();
                 loadedCallback(_this);
             });
+        }
+    }, {
+        key: 'buildNodes',
+        value: function buildNodes() {
+            var features = this._corridorLayer.olLayer.getSource().getFeatures();
+            for (var i = 0; i < features.length; i++) {
+                var coords = features[i].getGeometry()['getCoordinates']();
+                if (coords && coords.length > 0) {
+                    this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[0])));
+
+                    if (i == features.length - 1) {
+                        console.log(coords);
+                        console.log(coords[0]);
+                        console.log(coords[coords.length - 1]);
+                        this.nodeLayer.olLayer.getSource().addFeature(new _ol2.default.Feature(new _ol2.default.geom.Point(coords[coords.length - 1])));
+                    }
+                }
+            }
         }
 
         /**
@@ -678,7 +671,9 @@ var Corridor = function () {
     }, {
         key: 'clone',
         value: function clone() {
-            return new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, { features: this.features });
+            var c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, { features: this.features });
+            c.buildNodes();
+            return c;
         }
 
         /**
@@ -702,6 +697,7 @@ var Corridor = function () {
 
             this.layer.clear();
             this.layer.olLayer.getSource().addFeatures(corridor.features);
+            this.buildNodes();
         }
     }, {
         key: 'getDataHtml',
@@ -1089,7 +1085,7 @@ nm.getCountyById = getCountyById;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.mmPopupContent = exports.segmentSelectionOther = exports.toColor = exports.segmentSelection = exports.fromColor = exports.segmentLayer = undefined;
+exports.mmPopupContent = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
 exports.randomColor = randomColor;
 exports.layerConfigHelper = layerConfigHelper;
 
@@ -1108,13 +1104,13 @@ var segmentLayer = exports.segmentLayer = new _ol2.default.style.Style({
 
 var fromColor = exports.fromColor = '#48FD14';
 
-var segmentSelection = exports.segmentSelection = new _ol2.default.style.Style({
+var segmentSelectionStyleFrom = exports.segmentSelectionStyleFrom = new _ol2.default.style.Style({
     stroke: new _ol2.default.style.Stroke({ color: fromColor, width: 7 })
 });
 
 var toColor = exports.toColor = '#EE0071';
 
-var segmentSelectionOther = exports.segmentSelectionOther = new _ol2.default.style.Style({
+var segmentSelectionStyleTo = exports.segmentSelectionStyleTo = new _ol2.default.style.Style({
     stroke: new _ol2.default.style.Stroke({ color: toColor, width: 7 })
 });
 
