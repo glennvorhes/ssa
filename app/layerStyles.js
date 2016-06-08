@@ -19,6 +19,8 @@ export const segmentSelectionStyleTo = new ol.style.Style({
     stroke: new ol.style.Stroke({color: toColor, width: 7})
 });
 
+export const corridorPreviewColor = 'black';
+
 /**
  *
  * @type {Array<string>}

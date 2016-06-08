@@ -11,6 +11,7 @@ import SegmentPickerTo from '../segmentPicker/SegmentPickerTo';
 import Corridor from '../corridor/Corridor';
 import provide from 'webmapsjs/src/util/provide'
 import $ from 'webmapsjs/src/jquery/jquery';
+import * as lyrStyles from '../layerStyles';
 const nm = provide('ssa');
 
 class PickerCollection {
@@ -23,7 +24,7 @@ class PickerCollection {
     constructor(divId, ssaMapCreate) {
         this._ssaMapCreate = ssaMapCreate;
         this.$containerEl = $('#' + divId).addClass('picker-collection-container');
-        this.$containerEl.append('<div class="picker-collection"></div>');
+        this.$containerEl.append('<div class="picker-collection"><span class="corridor-picker-help" title="Show Help"></span></div>');
         this.$containerEl.append('<input type="button" value="Preview" class="btn btn-default picker-preview">');
         this.$containerEl.append('<input type="button" value="Add" class="btn btn-default picker-add" disabled="disabled">');
         this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" disabled="disabled" style="display: none;">');
@@ -31,11 +32,15 @@ class PickerCollection {
         this.$innerContainer = this.$containerEl.find('.picker-collection');
         this._visible = false;
 
-        this._dummyCorridor = new Corridor(1, 1, '', '', 1, 1, 'h', {cancelLoad: true, color: 'yellow'});
+        this._dummyCorridor = new Corridor(1, 1, '', '', 1, 1, 'h', {
+            cancelLoad: true,
+            color: lyrStyles.corridorPreviewColor
+        });
         this._dummyCorridor.layer.zIndex = 10;
         this._ssaMapCreate.mainMap.addLayer(this._dummyCorridor.olLayer);
 
         this._addModifyEnabled = false;
+
 
         /**
          *
@@ -49,6 +54,7 @@ class PickerCollection {
         this.$btnPickerAdd = this.$containerEl.find('.picker-add');
         this.$btnPickerModify = this.$containerEl.find('.picker-modify');
         this.$btnPickerCancel = this.$containerEl.find('.picker-cancel');
+
 
         this.countyStartSelect = new SelectStartCounty(this.$innerContainer);
         this.highwaySelect = new SelectHighway(this.$innerContainer);
@@ -109,7 +115,6 @@ class PickerCollection {
         });
 
 
-
         $(document).click((event) => {
             let containerClass = 'select-picker-map-container';
             let evtTarget = $(event.target);
@@ -118,6 +123,38 @@ class PickerCollection {
                 this.segmentPickerFrom.visible = false;
                 this.segmentPickerTo.visible = false;
             }
+        });
+
+        let helpInfo = 'Corridors are defined by selecting in sequence the start county, highway, and end county';
+        helpInfo += "The reference points are then populated and can be selected either by using the combo box or";
+        helpInfo += "by clicking a segment in the map and clicking select in the resulting popup";
+        helpInfo += "Corridors are defined visually in the pickers as the start segment (green) and end segment (red)";
+        helpInfo += "inclusive of the corridor extents";
+
+        $('body').append(`<div class="corridor-picker-help-dialog" title="Corridor Selection Help">` +
+            `<p style="text-align: justify">${helpInfo}</p></div>`);
+
+
+        this.helpDialog = $(".corridor-picker-help-dialog");
+
+        this.helpDialog.dialog({
+            modal: true,
+            autoOpen: false,
+            height: 400,
+            width: 400,
+            buttons: [
+                {
+                    text: "OK",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        });
+
+        this.$containerEl.find('.corridor-picker-help').click(() => {
+            this.helpDialog.dialog('open');
+
         });
     }
 
@@ -146,14 +183,14 @@ class PickerCollection {
         this._dummyCorridor = new Corridor(
             this.segmentPickerFrom.selectedPdpId,
             this.segmentPickerTo.selectedPdpId,
-             this.segmentPickerFrom.selectedText,
+            this.segmentPickerFrom.selectedText,
             this.segmentPickerTo.selectedText,
             this.countyStartSelect.selectedValue,
             this.countyEndSelect.selectedValue,
             this.highwaySelect.selectedText,
             {
                 cancelLoad: true,
-                color: 'yellow'
+                color: lyrStyles.corridorPreviewColor
             }
         );
 
@@ -172,7 +209,7 @@ class PickerCollection {
             // }
             this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
             this.addModifyEnabled = true;
-            
+
         });
 
     }
@@ -206,7 +243,7 @@ class PickerCollection {
 
         this._dummyCorridor.updateCorridor(cor);
 
-        this._ssaMapCreate.mainMap.getView().fit( this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
+        this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
     }
 
     get visible() {
@@ -227,7 +264,7 @@ class PickerCollection {
      *
      * @returns {boolean}
      */
-    get addModifyEnabled(){
+    get addModifyEnabled() {
         return this._addModifyEnabled;
     }
 
@@ -235,7 +272,7 @@ class PickerCollection {
      *
      * @param {boolean} isEnabled
      */
-    set addModifyEnabled(isEnabled){
+    set addModifyEnabled(isEnabled) {
         this._addModifyEnabled = isEnabled;
         this.$btnPickerAdd.prop('disabled', !this.addModifyEnabled);
         this.$btnPickerModify.prop('disabled', !this.addModifyEnabled);

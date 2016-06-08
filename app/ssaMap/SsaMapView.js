@@ -47,6 +47,20 @@ function _timeStrip(tm) {
     return tm;
 }
 
+function injColor(inj) {
+    "use strict";
+
+    let color = {
+        'K': 'red',
+        'A': 'orange',
+        'B': 'yellow',
+        'C': 'lightgreen',
+        'P': 'lightblue'
+    }[inj];
+
+    return color || 'rgba(255,255,255,0)';
+}
+
 /**
  *
  * @param {Array<crashData>} crashData
@@ -54,26 +68,32 @@ function _timeStrip(tm) {
  */
 function _crashInfoHelper(crashData) {
     "use strict";
-
-    let returnHtml = '';
-    returnHtml += '<ul class="crash-list">';
-
     crashData.sort(function (a, b) {
-       let dteA = (new Date(a['dte'] + ' ' + a['time'])).getTime();
-       let dteB = (new Date(b['dte'] + ' ' + b['time'])).getTime();
+        let dteA = (new Date(a['dte'] + ' ' + a['time'])).getTime();
+        let dteB = (new Date(b['dte'] + ' ' + b['time'])).getTime();
 
-        if (dteA == dteB){
+        if (dteA == dteB) {
             return 0;
         } else {
             return dteA > dteB ? -1 : 1;
         }
     });
 
-    /**
-     * @type {crashData}
-     */
+    let returnHtml = '';
+    returnHtml += '<ul class="crash-list">';
+
+    let crashSummary = {};
+
     for (let /**@type {crashData} */ c of crashData) {
-        returnHtml += '<li>';
+
+        if (typeof crashSummary[c.injSvr] == 'undefined') {
+            crashSummary[c.injSvr] = 1;
+        } else {
+            crashSummary[c.injSvr]++;
+        }
+
+
+        returnHtml += `<li style="background-color: ${injColor(c.injSvr)};">`;
         returnHtml += _dteStrip(c.dte);
         if (c.time) {
             returnHtml += ', ' + _timeStrip(c.time);
@@ -87,14 +107,33 @@ function _crashInfoHelper(crashData) {
             returnHtml += ', ' + c.injSvr;
         }
 
-        if (c.deer) {
-            returnHtml += ', Deer';
-        }
-
         returnHtml += '</li>';
     }
-
     returnHtml += '</ul>';
+
+    let crshType = {
+        'K': 'Fatal',
+        'A': 'Incapacitating',
+        'B': 'Non-incapacitating',
+        'C': 'Possible Injury',
+        'P': 'Property Damage'
+    };
+
+    let tableContent = '';
+
+    if (crashData.length > 0) {
+        tableContent += `<tr><th colspan="2">Crash Summary</th></tr>`;
+        tableContent += `<tr><td>Total</td><td>${crashData.length}</td></tr>`;
+        for (let k of ['K', 'A', 'B', 'C', 'P']) {
+            if (typeof crashSummary[k] != 'undefined') {
+                tableContent += `<tr><td>${crshType[k]}</td><td>${crashSummary[k]}</td></tr>`
+            }
+        }
+    }
+
+    if (tableContent != ''){
+        returnHtml = `<table class="crash-summary-table">${tableContent}</table>` + returnHtml;
+    }
 
     return returnHtml;
 }

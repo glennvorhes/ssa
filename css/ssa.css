@@ -185,11 +185,12 @@ select:disabled {
   border-radius: 5px;
   background-color: lightblue;
   margin: 15px 0;
-  padding: 7px;
+  padding: 7px 7px 14px 7px;
 }
 .picker-collection {
   height: 200px;
   display: table;
+  position: relative;
 }
 .picker-collection > div {
   display: table-row;
@@ -213,6 +214,15 @@ select:disabled {
 .picker-collection > div > div:first-of-type > select {
   width: calc(120px);
   cursor: default;
+}
+.corridor-picker-help {
+  position: absolute;
+  height: 27px;
+  width: 27px;
+  bottom: 1px;
+  left: 12px;
+  background: url("help.png");
+  background-size: 27px 27px;
 }
 .seg-popup-container {
   position: absolute;
@@ -259,15 +269,24 @@ select:disabled {
   max-height: 300px;
   overflow: auto;
 }
-.mm-popup-table {
+.mm-popup-table,
+.crash-summary-table {
   border-collapse: collapse;
-  margin: 3px;
+  width: 170px;
 }
 .mm-popup-table td,
-.mm-popup-table th {
+.crash-summary-table td,
+.mm-popup-table th,
+.crash-summary-table th {
   border: solid black 1px;
   padding: 1px 7px;
   text-align: center;
+}
+.mm-popup-table {
+  margin: 3px 7px;
+}
+.crash-summary-table {
+  margin: 8px 7px 3px 7px;
 }
 .crash-list {
   list-style: none;

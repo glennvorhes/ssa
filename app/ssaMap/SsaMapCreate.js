@@ -8,6 +8,7 @@ import makeGuid from 'webmapsjs/src/util/makeGuid';
 import PickerCollection from '../collections/PickerCollection';
 import CorridorCollection from '../collections/CorridorCollection';
 import $ from 'webmapsjs/src/jquery/jquery';
+import 'webmapsjs/src/jquery/jquery-ui';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 

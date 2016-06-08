@@ -1083,7 +1083,7 @@ nm.getCountyById = getCountyById;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.segNodeStyle = exports.mmPopupContent = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
+exports.segNodeStyle = exports.mmPopupContent = exports.corridorPreviewColor = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
 exports.randomColor = randomColor;
 exports.layerConfigHelper = layerConfigHelper;
 
@@ -1111,6 +1111,8 @@ var toColor = exports.toColor = '#EE0071';
 var segmentSelectionStyleTo = exports.segmentSelectionStyleTo = new _ol2.default.style.Style({
     stroke: new _ol2.default.style.Stroke({ color: toColor, width: 7 })
 });
+
+var corridorPreviewColor = exports.corridorPreviewColor = 'black';
 
 /**
  *
@@ -1356,6 +1358,20 @@ function _timeStrip(tm) {
     return tm;
 }
 
+function injColor(inj) {
+    "use strict";
+
+    var color = {
+        'K': 'red',
+        'A': 'orange',
+        'B': 'yellow',
+        'C': 'lightgreen',
+        'P': 'lightblue'
+    }[inj];
+
+    return color || 'rgba(255,255,255,0)';
+}
+
 /**
  *
  * @param {Array<crashData>} crashData
@@ -1363,9 +1379,6 @@ function _timeStrip(tm) {
  */
 function _crashInfoHelper(crashData) {
     "use strict";
-
-    var returnHtml = '';
-    returnHtml += '<ul class="crash-list">';
 
     crashData.sort(function (a, b) {
         var dteA = new Date(a['dte'] + ' ' + a['time']).getTime();
@@ -1378,9 +1391,11 @@ function _crashInfoHelper(crashData) {
         }
     });
 
-    /**
-     * @type {crashData}
-     */
+    var returnHtml = '';
+    returnHtml += '<ul class="crash-list">';
+
+    var crashSummary = {};
+
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -1389,7 +1404,14 @@ function _crashInfoHelper(crashData) {
         for (var _iterator = crashData[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var c = _step.value;
 
-            returnHtml += '<li>';
+
+            if (typeof crashSummary[c.injSvr] == 'undefined') {
+                crashSummary[c.injSvr] = 1;
+            } else {
+                crashSummary[c.injSvr]++;
+            }
+
+            returnHtml += '<li style="background-color: ' + injColor(c.injSvr) + ';">';
             returnHtml += _dteStrip(c.dte);
             if (c.time) {
                 returnHtml += ', ' + _timeStrip(c.time);
@@ -1401,10 +1423,6 @@ function _crashInfoHelper(crashData) {
 
             if (c.injSvr) {
                 returnHtml += ', ' + c.injSvr;
-            }
-
-            if (c.deer) {
-                returnHtml += ', Deer';
             }
 
             returnHtml += '</li>';
@@ -1425,6 +1443,32 @@ function _crashInfoHelper(crashData) {
     }
 
     returnHtml += '</ul>';
+
+    var crshType = {
+        'K': 'Fatal',
+        'A': 'Incapacitating',
+        'B': 'Non-incapacitating',
+        'C': 'Possible Injury',
+        'P': 'Property Damage'
+    };
+
+    var tableContent = '';
+
+    if (crashData.length > 0) {
+        tableContent += '<tr><th colspan="2">Crash Summary</th></tr>';
+        tableContent += '<tr><td>Total</td><td>' + crashData.length + '</td></tr>';
+        var _arr = ['K', 'A', 'B', 'C', 'P'];
+        for (var _i = 0; _i < _arr.length; _i++) {
+            var k = _arr[_i];
+            if (typeof crashSummary[k] != 'undefined') {
+                tableContent += '<tr><td>' + crshType[k] + '</td><td>' + crashSummary[k] + '</td></tr>';
+            }
+        }
+    }
+
+    if (tableContent != '') {
+        returnHtml = '<table class="crash-summary-table">' + tableContent + '</table>' + returnHtml;
+    }
 
     return returnHtml;
 }
