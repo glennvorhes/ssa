@@ -223,6 +223,7 @@ select:disabled {
   left: 12px;
   background: url("help.png");
   background-size: 27px 27px;
+  z-index: 3;
 }
 .seg-popup-container {
   position: absolute;

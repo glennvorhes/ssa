@@ -119,21 +119,20 @@ function _crashInfoHelper(crashData) {
         'P': 'Property Damage'
     };
 
-    let tableContent = '';
+    let tableContent = '<table class="crash-summary-table">';
+    tableContent += `<tr><th colspan="2">Crash Summary</th></tr>`;
+    tableContent += `<tr><td>Total</td><td>${crashData.length}</td></tr>`;
 
     if (crashData.length > 0) {
-        tableContent += `<tr><th colspan="2">Crash Summary</th></tr>`;
-        tableContent += `<tr><td>Total</td><td>${crashData.length}</td></tr>`;
         for (let k of ['K', 'A', 'B', 'C', 'P']) {
             if (typeof crashSummary[k] != 'undefined') {
                 tableContent += `<tr><td>${crshType[k]}</td><td>${crashSummary[k]}</td></tr>`
             }
         }
     }
-
-    if (tableContent != ''){
-        returnHtml = `<table class="crash-summary-table">${tableContent}</table>` + returnHtml;
-    }
+    
+    tableContent += '</table>';
+    returnHtml = tableContent + returnHtml;
 
     return returnHtml;
 }

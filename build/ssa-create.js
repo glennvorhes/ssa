@@ -640,10 +640,10 @@ var PickerCollection = function () {
             }
         });
 
-        var helpInfo = 'Corridors are defined by selecting in sequence the start county, highway, and end county';
-        helpInfo += "The reference points are then populated and can be selected either by using the combo box or";
-        helpInfo += "by clicking a segment in the map and clicking select in the resulting popup";
-        helpInfo += "Corridors are defined visually in the pickers as the start segment (green) and end segment (red)";
+        var helpInfo = 'Corridors are defined by selecting in sequence the start county, highway, and end county ';
+        helpInfo += "The reference points are then populated and can be selected either by using the combo box or ";
+        helpInfo += "by clicking a segment in the map and clicking select in the resulting popup ";
+        helpInfo += "Corridors are defined visually in the pickers as the start segment (green) and end segment (red) ";
         helpInfo += "inclusive of the corridor extents";
 
         (0, _jquery2.default)('body').append('<div class="corridor-picker-help-dialog" title="Corridor Selection Help">' + ('<p style="text-align: justify">' + helpInfo + '</p></div>'));
@@ -653,8 +653,8 @@ var PickerCollection = function () {
         this.helpDialog.dialog({
             modal: true,
             autoOpen: false,
-            height: 400,
-            width: 400,
+            height: 450,
+            width: 650,
             buttons: [{
                 text: "OK",
                 click: function click() {
