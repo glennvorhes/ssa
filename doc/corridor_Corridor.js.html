@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: corridor/Corridor.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: corridor/Corridor.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Created by gavorhes on 5/11/2016.
+ */
+
+import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
+import ol from 'webmapsjs/src/ol/ol';
+import makeGuid from 'webmapsjs/src/util/makeGuid';
+import provide from 'webmapsjs/src/util/provide';
+import {layerConfigHelper, randomColor} from '../layerStyles';
+import {getCorridor}  from '../ajaxGetters';
+import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures'
+import * as layerStyles from '../layerStyles';
+
+const nm = provide('ssa');
+
+
+function escapeHtml(string) {
+    return String(string).replace(/[&amp;&lt;>"'\/]/g, function (s) {
+        return {
+            "&amp;": "&amp;amp;",
+            "&lt;": "&amp;lt;",
+            ">": "&amp;gt;",
+            '"': '&amp;quot;',
+            "'": '&amp;#39;',
+            "/": '&amp;#x2F;'
+        }[s];
+    });
+}
+
+/**
+ *
+ * @param {string} fromRp
+ * @param {string} toRp
+ * @returns {string}
+ */
+function corridorName(fromRp, toRp) {
+    "use strict";
+
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
+}
+
+class Corridor {
+
+    /**
+     *
+     * @param {number} pdpFrom from reference point
+     * @param {number} pdpTo from reference point
+     * @param {string} rpFrom from reference point
+     * @param {string} rpTo to reference point
+     * @param {number} countyStart start county
+     * @param {number} countyEnd end county
+     * @param {string} highway route
+     * @param {object} [options={}]
+     * @param {corridorLoaded} [options.loadedCallback=function(c){}]
+     * @param {number|string|undefined|*} [options.databaseId=undefined]
+     * @param {string} [options.color=randomColor()]
+     * @param {Array&lt;ol.Feature>|undefined} [options.features=undefined]
+     * @param {boolean} [options.cancelLoad=false]
+     */
+    constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
+
+        options = options || {};
+        options.features = options.features ? options.features : undefined;
+
+        options.cancelLoad = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
+
+        this.clientId = makeGuid();
+        if (options.color) {
+            this._color = options.color;
+        } else {
+            this._color = randomColor();
+        }
+
+        this.databaseId = options.databaseId || undefined;
+
+        this._valid = false;
+        this._error = '';
+        this._loaded = false;
+        /**
+         *
+         * @type {SortedFeatures|null}
+         */
+        this.sortedFeatures = null;
+
+        this.pdpFrom = pdpFrom;
+        this.pdpTo = pdpTo;
+        this.countyStart = countyStart;
+        this.countyEnd = countyEnd;
+        this.highway = highway;
+        this.rpFrom = rpFrom;
+        this.rpTo = rpTo;
+
+        this._corridorLayer = new LayerBaseVectorGeoJson('',
+            layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true)
+        );
+
+        this.nodeLayer = new LayerBaseVectorGeoJson('', {
+            style: layerStyles.segNodeStyle,
+            minZoom: 11,
+            zIndex: 12
+        });
+
+        if (options.features) {
+            this._corridorLayer.source.addFeatures(options.features);
+        } else if (!options.cancelLoad) {
+            this.load(options.loadedCallback);
+        }
+    }
+
+    /**
+     *
+     * @param {corridorLoaded} [loadedCallback=function(c){}]
+     */
+    load(loadedCallback) {
+        loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {
+        };
+
+        this._valid = false;
+        this._error = '';
+
+        getCorridor(this.pdpFrom, this.pdpTo, (d) => {
+            this._corridorLayer.addFeatures(d);
+
+            if (typeof d['error'] == 'undefined') {
+                this._valid = true;
+            } else {
+                this._error = d['error'];
+            }
+            this._loaded = true;
+            this.sortedFeatures = new SortedFeatures(this.olLayer.getSource().getFeatures(), 'pdpId');
+
+            this.buildNodes();
+            loadedCallback(this);
+        });
+    }
+
+    buildNodes() {
+        this.nodeLayer.clear();
+        let features = this._corridorLayer.olLayer.getSource().getFeatures();
+        for (let i = 0; i &lt; features.length; i++) {
+            let coords = features[i].getGeometry()['getCoordinates']();
+            if (coords &amp;&amp; coords.length > 0) {
+                this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[0])));
+                this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(new ol.geom.Point(coords[coords.length - 1])));
+            }
+        }
+    }
+
+    /**
+     *
+     * @returns {Corridor}
+     */
+    clone() {
+        let c =  new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
+            this.countyStart, this.countyEnd, this.highway, {features: this.features});
+        c.buildNodes();
+        return c;
+    }
+
+    /**
+     *
+     * @param {Corridor} corridor
+     */
+    updateCorridor(corridor) {
+
+        this.pdpFrom = corridor.pdpFrom;
+        this.pdpTo = corridor.pdpTo;
+        this.countyStart = corridor.countyStart;
+        this.countyEnd = corridor.countyEnd;
+        this.highway = corridor.highway;
+        this.rpFrom = corridor.rpFrom;
+        this.rpTo = corridor.rpTo;
+
+        this.layer.name = corridorName(this.rpFrom, this.rpTo);
+
+        this.layer.clear();
+        this.layer.olLayer.getSource().addFeatures(corridor.features);
+        this.buildNodes();
+    }
+
+    get color() {
+        return this._color;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    get valid() {
+        return this._valid;
+    }
+
+    /**
+     *
+     * @returns {string|*}
+     */
+    get error() {
+        return this._error;
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    get tableHtmlCreate() {
+        let outString = `&lt;tr class="corridor-tr">`;
+        outString += `&lt;td style="background-color: ${this._color}">&lt;/td>`;
+        outString += `&lt;td>${corridorName(this.rpFrom, this.rpTo)}&lt;/td>`;
+        outString += `&lt;td>`;
+        outString += `&lt;span title="Zoom To" class="corridor-zoom" data-corridor="${this.clientId}">&lt;/span>`;
+        outString += `&lt;span title="Edit Corridor"  class="corridor-edit" data-corridor="${this.clientId}">&lt;/span>`;
+        outString += `&lt;span title="Remove Corridor"  class="corridor-delete" data-corridor="${this.clientId}">&lt;/span>`;
+        outString += `&lt;/td>`;
+        outString += '&lt;/tr>';
+
+        return outString;
+    }
+
+    getDataHtml(i) {
+        let outString = '&lt;div class="corridor-data">';
+        // outString += `&lt;input type="hidden" class="corridor-data-database-id" name="corridors[${i}].corridorId" value="${this.databaseId}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-start-county" name="corridors[${i}].startCounty" value="${this.countyStart}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-end-county" name="corridors[${i}].endCounty" value="${this.countyEnd}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-highway" name="corridors[${i}].highway" value="${this.highway}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-from-rp" name="corridors[${i}].startRp" value="${this.rpFrom}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-to-rp" name="corridors[${i}].endRp" value="${this.rpTo}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].startPdp" value="${this.pdpFrom}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-to-pdp" name="corridors[${i}].endPdp" value="${this.pdpTo}"/>`;
+        outString += `&lt;/div>`;
+
+        return outString;
+    }
+
+    getDataHtmlDisp(i) {
+        let returnString = this.getDataHtml(i);
+        returnString = escapeHtml(returnString);
+        returnString = returnString.replace(/&amp;quot;&amp;#x2F;&amp;gt;/g, '&amp;quot;&amp;#x2F;&amp;gt;&lt;br>');
+        returnString = returnString.replace(/corridor-data&amp;quot;&amp;gt;/g, 'corridor-data&amp;quot;&amp;gt;&lt;br>');
+
+        return returnString + '&lt;br>';
+    }
+
+    /**
+     *
+     * @returns {ol.layer.Vector|*}
+     */
+    get olLayer() {
+        return this._corridorLayer.olLayer;
+
+    }
+
+    /**
+     *
+     * @returns {LayerBaseVectorGeoJson}
+     */
+    get layer() {
+        return this._corridorLayer;
+    }
+
+
+    /**
+     *
+     * @returns {boolean} if corridor layer is visible
+     */
+    get visible() {
+        return this._corridorLayer.visible;
+    }
+
+    /**
+     *
+     * @param {boolean} vis if corridor layer is visible
+     */
+    set visible(vis) {
+        this._corridorLayer.visible = vis;
+    }
+
+    /**
+     *
+     * @returns {Array.&lt;ol.Feature>} an array of ol features
+     */
+    get features() {
+        return this._corridorLayer.features;
+    }
+
+    /**
+     *
+     * @returns {ol.Extent|undefined}
+     */
+    get extent() {
+        if (this._corridorLayer.source.getFeatures().length > 0) {
+            return this._corridorLayer.source.getExtent();
+        } else {
+            return undefined;
+        }
+    }
+
+    get loaded() {
+        return this._loaded;
+    }
+}
+
+nm.Corridor = Corridor;
+
+export default Corridor;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#corridorName">corridorName</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 13:18:01 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: collections/CorridorCollection.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: collections/CorridorCollection.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Created by gavorhes on 5/16/2016.
+ */
+import provide from 'webmapsjs/src/util/provide'
+import * as styles  from '../layerStyles';
+import $ from 'webmapsjs/src/jquery/jquery';
+const nm = provide('ssa');
+
+
+/**
+ *
+ * @param {Array&lt;Corridor>} corArray
+ * @returns {ol.Extent|Array&lt;number>|*}
+ * @static
+ */
+export function calculateExtent(corArray) {
+    let hasExtent = false;
+
+    let minX = 10E100;
+    let minY = 10E100;
+    let maxX = -10E100;
+    let maxY = -10E100;
+
+    for (let c of corArray) {
+        if (c.olLayer.getSource().getFeatures().length > 0) {
+            hasExtent = true;
+            let ext = c.olLayer.getSource().getExtent();
+            minX = ext[0] &lt; minX ? ext[0] : minX;
+            minY = ext[1] &lt; minY ? ext[1] : minY;
+            maxX = ext[2] > maxX ? ext[2] : maxX;
+            maxY = ext[3] > maxY ? ext[3] : maxY;
+        }
+    }
+
+    if (hasExtent) {
+        return [minX, minY, maxX, maxY];
+    } else {
+        return undefined;
+    }
+}
+nm.calculateExtent = calculateExtent;
+
+
+
+/**
+ *
+ * @param {string} [rowHtml='']
+ * @returns {string}
+ */
+function tableContent(rowHtml) {
+    "use strict";
+    rowHtml = typeof  rowHtml == 'string' ? rowHtml : '';
+
+    let tableContent = "&lt;table>";
+    tableContent += "&lt;tr>";
+    tableContent += '&lt;th>&lt;/th>';
+    tableContent += '&lt;th>Corridors&lt;/th>';
+    tableContent += '&lt;th>&lt;/th>';
+    tableContent += "&lt;/tr>";
+    tableContent += rowHtml;
+    tableContent += "&lt;/table>";
+    return tableContent;
+}
+
+/**
+ *
+ * @param {string} fromRp
+ * @param {string} toRp
+ * @returns {string}
+ */
+function corridorName(fromRp, toRp) {
+    "use strict";
+
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
+}
+
+
+class CorridorCollection {
+
+    /**
+     * @param {string} divId
+     * @param {SsaMapCreate|SsaMapBase} ssaMap
+     */
+    constructor(divId, ssaMap) {
+
+        this.ssaMap = ssaMap;
+        this.$containerEl = $('#' + divId).addClass('corridor-collection-container');
+        let innerHtml = '&lt;div class="corridor-collection">';
+        innerHtml += tableContent();
+        innerHtml += '&lt;/div>';
+        this.$containerEl.append(innerHtml);
+        this.$innerContainer = this.$containerEl.find('.corridor-collection');
+        this._visible = true;
+        this._createModifyOperation = false;
+
+
+        /**
+         *
+         * @type {Array&lt;Corridor>}
+         */
+        this._corridorArray = [];
+
+        /**
+         *
+         * @type {{}}
+         * @private
+         */
+        this._coridorLookup = {};
+    }
+
+    /**
+     *
+     * @param {Corridor} c
+     */
+    addCorridorCreate(c) {
+        this._corridorArray.push(c);
+        this._coridorLookup[c.clientId] = c;
+        this.ssaMap.mainMap.addLayer(c.olLayer);
+        this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
+        c.layer.name = corridorName(c.rpFrom, c.rpTo);
+        this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
+        this.refreshHtmlCreate();
+    }
+
+    /**
+     *
+     * @param {string|Corridor} cor
+     */
+    removeCorridor(cor) {
+        if (!confirm('Confirm Delete Corridor?')) {
+            return;
+        }
+
+        if (typeof cor == 'string') {
+            cor = this._coridorLookup[cor];
+        }
+
+        let ix = this._corridorArray.indexOf(cor);
+        this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
+        this.ssaMap.mainMap.removeLayer(cor.olLayer);
+        this.ssaMap.mainMap.removeLayer(cor.nodeLayer.olLayer);
+        this._corridorArray.splice(ix, 1);
+        delete this._coridorLookup[cor.clientId];
+
+        // cor.layer.visible = false;
+        // cor.layer.source.clear();
+        //
+
+        this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
+        this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
+        // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
+        this.refreshHtmlCreate();
+    }
+
+    refreshHtmlCreate() {
+        this.$innerContainer.html('');
+
+        let rowContent = '';
+
+        for (let c of this._corridorArray) {
+            rowContent += c.tableHtmlCreate;
+        }
+
+        this.$innerContainer.append(tableContent(rowContent));
+
+        let _this = this;
+
+        this.$innerContainer.find('.corridor-zoom').click(function () {
+
+            let corridorId = $(this).attr('data-corridor');
+            let cor = _this._coridorLookup[corridorId];
+            _this.ssaMap.mainMap.getView().fit(cor.extent, _this.ssaMap.mainMap.getSize());
+        });
+
+        this.$innerContainer.find('.corridor-delete').click(function () {
+
+            let corridorId = $(this).attr('data-corridor');
+            _this.removeCorridor(corridorId);
+        });
+
+        this.$innerContainer.find('.corridor-edit').click(function () {
+            _this.ssaMap.$createCorridorButton.prop('disabled', true);
+            let corridorId = $(this).attr('data-corridor');
+            let cor = _this._coridorLookup[corridorId];
+            _this.ssaMap.pickerCollection.startEditCorridor(cor);
+            $(this).closest('.corridor-tr').addClass('corridor-tr-selected');
+        });
+
+        this.ssaMap.$corridorDataContainer.html('');
+
+
+        for (let i = 0; i &lt; this._corridorArray.length; i++) {
+            let cor = this._corridorArray[i];
+            cor.getDataHtml(i);
+            // cor.getDataHtmlDisp(i);
+            this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
+        }
+
+
+    }
+
+    get visible() {
+        return this._visible;
+    }
+
+    set visible(viz) {
+        if (viz == this.visible) {
+            return;
+        }
+
+        this._visible = viz;
+
+        if (this.visible) {
+            this.$containerEl.show()
+        } else {
+            this.$containerEl.hide();
+        }
+    }
+
+    get fullExtent() {
+        return calculateExtent(this._corridorArray);
+    }
+
+    get createModifyOperation(){
+        return this._createModifyOperation;
+    }
+
+    set createModifyOperation(c){
+        this._createModifyOperation = c;
+
+        if (this._createModifyOperation){
+            this.$innerContainer.addClass('corridor-collection-create-modify');
+        } else {
+            this.$innerContainer.removeClass('corridor-collection-create-modify');
+        }
+    }
+}
+
+nm.CorridorCollection = CorridorCollection;
+export default CorridorCollection;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#corridorName">corridorName</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 13:18:01 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
