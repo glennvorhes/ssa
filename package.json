@@ -6,11 +6,13 @@
   "files": [
     "build",
     "app",
-    "css"
+    "css",
+    "doc"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "update": "npm update webmapsjs"
+    "update": "npm update webmapsjs",
+    "jsdoc": "RD /S /Q doc & MD doc & jsdoc -r -d doc app"
   },
   "author": "",
   "license": "ISC",
