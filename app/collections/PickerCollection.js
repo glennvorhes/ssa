@@ -41,7 +41,6 @@ class PickerCollection {
 
         this._addModifyEnabled = false;
 
-
         /**
          *
          * @type {Corridor|undefined}
@@ -57,8 +56,9 @@ class PickerCollection {
 
 
         this.countyStartSelect = new SelectStartCounty(this.$innerContainer);
-        this.highwaySelect = new SelectHighway(this.$innerContainer);
         this.countyEndSelect = new SelectEndCounty(this.$innerContainer);
+        this.highwaySelect = new SelectHighway(this.$innerContainer);
+
         this.segmentPickerFrom = new SegmentPickerFrom(this.$innerContainer);
         this.segmentPickerTo = new SegmentPickerTo(this.$innerContainer);
 
@@ -84,28 +84,24 @@ class PickerCollection {
 
         this.countyStartSelect.addChangeListener((v) => {
             "use strict";
-            this.segmentPickerFrom.clear();
-            this.segmentPickerTo.clear();
-            this.highwaySelect.setStartCounty(parseInt(v));
-            this.addModifyEnabled = false;
 
-        });
-
-        this.highwaySelect.addChangeListener((v) => {
-            "use strict";
-            // this.countyEndSelect.box.html('');
-            this.countyEndSelect.setHighway(v);
+            this.highwaySelect.setStartEndCounty(v, this.countyEndSelect.selectedValue);
             this.addModifyEnabled = false;
         });
 
         this.countyEndSelect.addChangeListener((v) => {
             "use strict";
-            let hwy = this.highwaySelect.selectedValue;
-            this.segmentPickerFrom.setCountyAndHighway(this.countyStartSelect.selectedValue, hwy);
-            this.segmentPickerTo.setCountyAndHighway(v, hwy);
+            this.highwaySelect.setStartEndCounty(this.countyStartSelect.selectedValue, v);
             this.addModifyEnabled = false;
         });
 
+        this.highwaySelect.addChangeListener((hwy) => {
+            "use strict";
+            this.segmentPickerFrom.setCountyAndHighway(this.countyStartSelect.selectedValue, hwy);
+            this.segmentPickerTo.setCountyAndHighway(this.countyEndSelect.selectedValue, hwy);
+            this.addModifyEnabled = false;
+        });
+        
         this.segmentPickerFrom.addChangeListener((v) => {
             this.addModifyEnabled = false;
         });
@@ -113,7 +109,6 @@ class PickerCollection {
         this.segmentPickerTo.addChangeListener((v) => {
             this.addModifyEnabled = false;
         });
-
 
         $(document).click((event) => {
             let containerClass = 'select-picker-map-container';
@@ -163,12 +158,14 @@ class PickerCollection {
         this.$btnPickerModify.prop('disabled', true);
         this.visible = false;
         this._ssaMapCreate.$createCorridorButton.prop('disabled', false);
-        this.countyStartSelect.box.val(1).trigger('change');
+        // this.countyStartSelect.box.val(1).trigger('change');
         this._ssaMapCreate.corridorCollection.visible = true;
         this._dummyCorridor.layer.clear();
         this._modifyCorridor = undefined;
         this._dummyCorridor.nodeLayer.olLayer.getSource().clear();
         this.addModifyEnabled = false;
+        this._ssaMapCreate.corridorCollection.createModifyOperation = false;
+        $('.corridor-tr-selected').removeClass('corridor-tr-selected');
     }
 
     previewCorridor() {
@@ -233,8 +230,10 @@ class PickerCollection {
         this.$btnPickerAdd.hide();
         this.$btnPickerModify.show();
         this.countyStartSelect.box.val(cor.countyStart);
-        this.highwaySelect.setStartCounty(cor.countyStart, cor.highway);
-        this.countyEndSelect.setHighway(cor.highway, cor.countyEnd);
+        this.countyEndSelect.box.val(cor.countyEnd);
+        // this.highwaySelect.setStartCounty(cor.countyStart, cor.highway);
+        this.highwaySelect.setStartEndCounty(cor.countyStart, cor.countyEnd, cor.highway);
+        
         this.segmentPickerFrom.setCountyAndHighway(cor.countyStart, cor.highway, cor.pdpFrom);
         this.segmentPickerTo.setCountyAndHighway(cor.countyEnd, cor.highway, cor.pdpTo);
 
@@ -243,6 +242,7 @@ class PickerCollection {
         this._dummyCorridor.updateCorridor(cor);
 
         this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
+        this._ssaMapCreate.corridorCollection.createModifyOperation = true;
     }
 
     get visible() {

@@ -5,12 +5,25 @@
 import SegmentPickerBase from './SegmentPickerBase';
 import * as layerStyles from '../layerStyles';
 
-
+/**
+ * The to segment/rp picker
+ * @extends SegmentPickerBase
+ */
 class SegmentPickerTo extends SegmentPickerBase {
+
+    /**
+     * 
+     * @param {jQuery} parent
+     */
     constructor(parent) {
+        
         super(parent, 'Ref. Point #2');
     }
 
+    /**
+     * 
+     * @param arr
+     */
     processAjaxResult(arr) {
 
         arr.sort((a, b) => {

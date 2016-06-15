@@ -10,6 +10,8 @@ exports.getEndCounties = getEndCounties;
 exports.getSegments = getSegments;
 exports.getCorridor = getCorridor;
 exports.getCrashes = getCrashes;
+exports.getAllCounties = getAllCounties;
+exports.getHwyByStartEndCounty = getHwyByStartEndCounty;
 
 var _jquery = require('webmapsjs/src/jquery/jquery');
 
@@ -34,6 +36,8 @@ var getEndCountiesUrl = home + 'getEndCounties';
 var getSegmentsUrl = home + 'getSegments';
 var getCorridorUrl = home + 'getCorridor';
 var getCrashesUrl = home + 'getCrashes';
+var getAllCountiesUrl = home + 'getAllCounties';
+var getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
 
 /**
  * @callback ajaxCallback
@@ -171,6 +175,35 @@ function getCrashes(callback) {
     ajaxHelper(getCrashesUrl, callback, params);
 }
 
+/**
+ *
+ * @param {ajaxCallback} callback
+ */
+function getAllCounties(callback) {
+    "use strict";
+
+    var params = {};
+
+    ajaxHelper(getAllCountiesUrl, callback, params);
+}
+
+/**
+ *
+ * @param {number} startCountyId
+ * @param {number} endCountyId
+ * @param {ajaxCallback} callback
+ */
+function getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
+    "use strict";
+
+    var params = {
+        'startCountyId': startCountyId,
+        'endCountyId': endCountyId
+    };
+
+    ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
+}
+
 },{"webmapsjs/src/jquery/jquery":13,"webmapsjs/src/util/provide":31}],2:[function(require,module,exports){
 'use strict';
 
@@ -207,9 +240,8 @@ var nm = (0, _provide2.default)('ssa');
 
 /**
  *
- * @param {Array<Corridor>} corArray
- * @returns {ol.Extent|Array<number>|*}
- * @static
+ * @param {Array<Corridor>} corArray - array of corridors
+ * @returns {ol.Extent|Array<number>|*} - collective extent
  */
 function calculateExtent(corArray) {
     var hasExtent = false;
@@ -261,8 +293,8 @@ nm.calculateExtent = calculateExtent;
 
 /**
  *
- * @param {string} [rowHtml='']
- * @returns {string}
+ * @param {string} [rowHtml=''] data row html
+ * @returns {string} full table html
  */
 function tableContent(rowHtml) {
     "use strict";
@@ -277,14 +309,16 @@ function tableContent(rowHtml) {
     tableContent += "</tr>";
     tableContent += rowHtml;
     tableContent += "</table>";
+
     return tableContent;
 }
 
 /**
  *
- * @param {string} fromRp
- * @param {string} toRp
- * @returns {string}
+ * @param {string} fromRp - from reference point
+ * @param {string} toRp - to reference point
+ * @returns {string} string with abbreviated reference point identifiers separated by a hyphen
+ * @private
  */
 function corridorName(fromRp, toRp) {
     "use strict";
@@ -295,8 +329,8 @@ function corridorName(fromRp, toRp) {
 var CorridorCollection = function () {
 
     /**
-     * @param {string} divId
-     * @param {SsaMapCreate|SsaMapBase} ssaMap
+     * @param {string} divId - div id inside which to make the collection
+     * @param {SsaMapCreate|SsaMapBase} ssaMap - the SSA map object
      */
 
     function CorridorCollection(divId, ssaMap) {
@@ -310,6 +344,7 @@ var CorridorCollection = function () {
         this.$containerEl.append(innerHtml);
         this.$innerContainer = this.$containerEl.find('.corridor-collection');
         this._visible = true;
+        this._createModifyOperation = false;
 
         /**
          *
@@ -327,7 +362,7 @@ var CorridorCollection = function () {
 
     /**
      *
-     * @param {Corridor} c
+     * @param {Corridor} c - the corridor to be added
      */
 
 
@@ -345,7 +380,7 @@ var CorridorCollection = function () {
 
         /**
          *
-         * @param {string|Corridor} cor
+         * @param {string|Corridor} cor - the corridor to be removed
          */
 
     }, {
@@ -425,11 +460,11 @@ var CorridorCollection = function () {
             });
 
             this.$innerContainer.find('.corridor-edit').click(function () {
-
                 _this.ssaMap.$createCorridorButton.prop('disabled', true);
                 var corridorId = (0, _jquery2.default)(this).attr('data-corridor');
                 var cor = _this._coridorLookup[corridorId];
                 _this.ssaMap.pickerCollection.startEditCorridor(cor);
+                (0, _jquery2.default)(this).closest('.corridor-tr').addClass('corridor-tr-selected');
             });
 
             this.ssaMap.$corridorDataContainer.html('');
@@ -463,6 +498,20 @@ var CorridorCollection = function () {
         key: 'fullExtent',
         get: function get() {
             return calculateExtent(this._corridorArray);
+        }
+    }, {
+        key: 'createModifyOperation',
+        get: function get() {
+            return this._createModifyOperation;
+        },
+        set: function set(c) {
+            this._createModifyOperation = c;
+
+            if (this._createModifyOperation) {
+                this.$innerContainer.addClass('corridor-collection-create-modify');
+            } else {
+                this.$innerContainer.removeClass('corridor-collection-create-modify');
+            }
         }
     }]);
 
@@ -532,9 +581,10 @@ function escapeHtml(string) {
 
 /**
  *
- * @param {string} fromRp
- * @param {string} toRp
- * @returns {string}
+ * @param {string} fromRp - from reference point
+ * @param {string} toRp - to reference point
+ * @returns {string} string with abbreviated reference point identifiers separated by a hyphen
+ * @private
  */
 function corridorName(fromRp, toRp) {
     "use strict";
@@ -546,8 +596,8 @@ var Corridor = function () {
 
     /**
      *
-     * @param {number} pdpFrom from reference point
-     * @param {number} pdpTo from reference point
+     * @param {number} pdpFrom from segment id
+     * @param {number} pdpTo to segment id
      * @param {string} rpFrom from reference point
      * @param {string} rpTo to reference point
      * @param {number} countyStart start county
@@ -599,7 +649,7 @@ var Corridor = function () {
 
         this.nodeLayer = new _LayerBaseVectorGeoJson2.default('', {
             style: layerStyles.segNodeStyle,
-            minZoom: 10,
+            minZoom: 11,
             zIndex: 12
         });
 
@@ -720,7 +770,7 @@ var Corridor = function () {
 
         /**
          *
-         * @returns {ol.layer.Vector|*}
+         * @returns {ol.layer.Vector} - the OL Vector Layer
          */
 
     }, {
@@ -752,7 +802,7 @@ var Corridor = function () {
         }
 
         /**
-         *
+         * get the html string to build the corridor table row with zoom, edit, and delete buttons
          * @returns {string}
          */
 
@@ -789,7 +839,7 @@ var Corridor = function () {
         }
 
         /**
-         *
+         * Getter
          * @returns {boolean} if corridor layer is visible
          */
 
@@ -800,8 +850,9 @@ var Corridor = function () {
         }
 
         /**
-         *
+         * Setter
          * @param {boolean} vis if corridor layer is visible
+         *
          */
         ,
         set: function set(vis) {
@@ -1166,12 +1217,15 @@ function layerConfigHelper(name, color, visible) {
 }
 
 var mmPopupContent = exports.mmPopupContent = function mmPopupContent(props) {
+    var hwy = props['hwyDir'];
+    hwy = hwy.slice(0, 3).replace(/^0*/, '') + ' ' + hwy.slice(3) + 'B';
+
     var returnHtml = '<table class="mm-popup-table">';
     returnHtml += '<tr><td>PdpId</td><td>' + props['pdpId'] + '</td></tr>';
-    returnHtml += '<tr><td>Hwy</td><td>' + props['hwyDir'] + '</td></tr>';
-    returnHtml += '<tr><td>DivUnd</td><td>' + props['divUnd'] + '</td></tr>';
-    returnHtml += '<tr><td>From</td><td>' + props['pdpFrom'] + '</td></tr>';
-    returnHtml += '<tr><td>To</td><td>' + props['pdpTo'] + '</td></tr>';
+    returnHtml += '<tr><td>Highway</td><td>' + hwy + '</td></tr>';
+    returnHtml += '<tr><td>Divided</td><td>' + (props['divUnd'] == 'D' ? 'Yes' : 'No') + '</td></tr>';
+    returnHtml += '<tr><td>From RP</td><td>' + props['pdpFrom'] + '</td></tr>';
+    returnHtml += '<tr><td>To RP</td><td>' + props['pdpTo'] + '</td></tr>';
     returnHtml += '</table>';
     if (props['crashInfo']) {
         returnHtml += props['crashInfo'];
@@ -1452,12 +1506,13 @@ function _crashInfoHelper(crashData) {
         'P': 'Property Damage'
     };
 
-    var tableContent = '';
+    var tableContent = '<table class="crash-summary-table">';
+    tableContent += '<tr><th colspan="2">Crash Summary</th></tr>';
+    tableContent += '<tr><td>Total</td><td>' + crashData.length + '</td></tr>';
 
     if (crashData.length > 0) {
-        tableContent += '<tr><th colspan="2">Crash Summary</th></tr>';
-        tableContent += '<tr><td>Total</td><td>' + crashData.length + '</td></tr>';
         var _arr = ['K', 'A', 'B', 'C', 'P'];
+
         for (var _i = 0; _i < _arr.length; _i++) {
             var k = _arr[_i];
             if (typeof crashSummary[k] != 'undefined') {
@@ -1466,9 +1521,8 @@ function _crashInfoHelper(crashData) {
         }
     }
 
-    if (tableContent != '') {
-        returnHtml = '<table class="crash-summary-table">' + tableContent + '</table>' + returnHtml;
-    }
+    tableContent += '</table>';
+    returnHtml = tableContent + returnHtml;
 
     return returnHtml;
 }
@@ -11486,6 +11540,31 @@ return jQuery;
 // shim for using process in browser
 
 var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+(function () {
+  try {
+    cachedSetTimeout = setTimeout;
+  } catch (e) {
+    cachedSetTimeout = function () {
+      throw new Error('setTimeout is not defined');
+    }
+  }
+  try {
+    cachedClearTimeout = clearTimeout;
+  } catch (e) {
+    cachedClearTimeout = function () {
+      throw new Error('clearTimeout is not defined');
+    }
+  }
+} ())
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -11510,7 +11589,7 @@ function drainQueue() {
     if (draining) {
         return;
     }
-    var timeout = setTimeout(cleanUpNextTick);
+    var timeout = cachedSetTimeout(cleanUpNextTick);
     draining = true;
 
     var len = queue.length;
@@ -11527,7 +11606,7 @@ function drainQueue() {
     }
     currentQueue = null;
     draining = false;
-    clearTimeout(timeout);
+    cachedClearTimeout(timeout);
 }
 
 process.nextTick = function (fun) {
@@ -11539,7 +11618,7 @@ process.nextTick = function (fun) {
     }
     queue.push(new Item(fun, args));
     if (queue.length === 1 && !draining) {
-        setTimeout(drainQueue, 0);
+        cachedSetTimeout(drainQueue, 0);
     }
 };
 

@@ -57,9 +57,10 @@ function escapeHtml(string) {
 
 /**
  *
- * @param {string} fromRp
- * @param {string} toRp
- * @returns {string}
+ * @param {string} fromRp - from reference point
+ * @param {string} toRp - to reference point
+ * @returns {string} string with abbreviated reference point identifiers separated by a hyphen
+ * @private
  */
 function corridorName(fromRp, toRp) {
     "use strict";
@@ -71,8 +72,8 @@ class Corridor {
 
     /**
      *
-     * @param {number} pdpFrom from reference point
-     * @param {number} pdpTo from reference point
+     * @param {number} pdpFrom from segment id
+     * @param {number} pdpTo to segment id
      * @param {string} rpFrom from reference point
      * @param {string} rpTo to reference point
      * @param {number} countyStart start county
@@ -179,7 +180,7 @@ class Corridor {
      * @returns {Corridor}
      */
     clone() {
-        let c =  new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
+        let c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
             this.countyStart, this.countyEnd, this.highway, {features: this.features});
         c.buildNodes();
         return c;
@@ -227,7 +228,7 @@ class Corridor {
     }
 
     /**
-     *
+     * get the html string to build the corridor table row with zoom, edit, and delete buttons
      * @returns {string}
      */
     get tableHtmlCreate() {
@@ -270,12 +271,12 @@ class Corridor {
 
     /**
      *
-     * @returns {ol.layer.Vector|*}
+     * @returns {ol.layer.Vector} - the OL Vector Layer
      */
     get olLayer() {
         return this._corridorLayer.olLayer;
-
     }
+
 
     /**
      *
@@ -287,7 +288,7 @@ class Corridor {
 
 
     /**
-     *
+     * Getter
      * @returns {boolean} if corridor layer is visible
      */
     get visible() {
@@ -295,8 +296,9 @@ class Corridor {
     }
 
     /**
-     *
+     * Setter
      * @param {boolean} vis if corridor layer is visible
+     *
      */
     set visible(vis) {
         this._corridorLayer.visible = vis;
@@ -339,13 +341,13 @@ export default Corridor;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#corridorName">corridorName</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 13:18:01 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 16:06:27 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

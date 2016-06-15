@@ -273,7 +273,7 @@ select:disabled {
 .mm-popup-table,
 .crash-summary-table {
   border-collapse: collapse;
-  width: 170px;
+  width: 185px;
 }
 .mm-popup-table td,
 .crash-summary-table td,
@@ -341,6 +341,12 @@ select:disabled {
 .corridor-collection table tr td:last-child,
 .corridor-collection table tr th:last-child {
   min-width: 80px;
+}
+.corridor-collection-create-modify .corridor-tr span {
+  visibility: hidden;
+}
+.corridor-tr-selected {
+  background-color: yellow;
 }
 .corridor-edit {
   background: url("edit.png");

@@ -74,12 +74,15 @@ export function layerConfigHelper(name, color, visible) {
 }
 
 export const mmPopupContent = (props) => {
+    let hwy = props['hwyDir'];
+    hwy = hwy.slice(0, 3).replace(/^0*/, '') + ' ' + hwy.slice(3) + 'B';
+
     let returnHtml = '<table class="mm-popup-table">';
     returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
-    returnHtml += `<tr><td>Hwy</td><td>${props['hwyDir']}</td></tr>`;
-    returnHtml += `<tr><td>DivUnd</td><td>${props['divUnd']}</td></tr>`;
-    returnHtml += `<tr><td>From</td><td>${props['pdpFrom']}</td></tr>`;
-    returnHtml += `<tr><td>To</td><td>${props['pdpTo']}</td></tr>`;
+    returnHtml += `<tr><td>Highway</td><td>${hwy}</td></tr>`;
+    returnHtml += `<tr><td>Divided</td><td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}</td></tr>`;
+    returnHtml += `<tr><td>From RP</td><td>${props['pdpFrom']}</td></tr>`;
+    returnHtml += `<tr><td>To RP</td><td>${props['pdpTo']}</td></tr>`;
     returnHtml += '</table>';
     if (props['crashInfo']){
         returnHtml += props['crashInfo'];

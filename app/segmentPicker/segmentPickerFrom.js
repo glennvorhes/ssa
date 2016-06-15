@@ -5,12 +5,24 @@
 import SegmentPickerBase from './SegmentPickerBase';
 import * as layerStyles from '../layerStyles';
 
-
+/**
+ * The from segment/rp picker
+ * @extends SegmentPickerBase
+ */
 class SegmentPickerFrom extends SegmentPickerBase {
+
+    /**
+     *
+     * @param {jQuery} parent - parent element as jquery
+     */
     constructor(parent) {
         super(parent, 'Ref. Point #1');
     }
 
+    /**
+     * @private
+     * @param {Array<object>} arr - array of returned objects
+     */
     processAjaxResult(arr) {
 
         arr.sort((a, b) => {
@@ -20,6 +32,7 @@ class SegmentPickerFrom extends SegmentPickerBase {
             if (c == d) {
                 return 0;
             }
+            
             return c < d ? -1 : 1;
         });
 
@@ -30,14 +43,15 @@ class SegmentPickerFrom extends SegmentPickerBase {
     }
 
     /**
-     * @returns {ol.style.Style}
+     *
+     * @returns {ol.style.Style} ol selection style
      */
     get selectionStyle() {
         return layerStyles.segmentSelectionStyleFrom;
     }
 
     /**
-     * @returns {ol.style.Style}
+     * @returns {ol.style.Style} ol style for "other" feature
      */
     get selectionStyleOther() {
         return layerStyles.segmentSelectionStyleTo;

@@ -13,6 +13,8 @@ const getEndCountiesUrl = home + 'getEndCounties';
 const getSegmentsUrl = home + 'getSegments';
 const getCorridorUrl = home + 'getCorridor';
 const getCrashesUrl = home + 'getCrashes';
+const getAllCountiesUrl = home + 'getAllCounties';
+const getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
 
 /**
  * @callback ajaxCallback
@@ -146,6 +148,31 @@ export function getCrashes(callback) {
     ajaxHelper(getCrashesUrl, callback, params);
 }
 
+/**
+ *
+ * @param {ajaxCallback} callback
+ */
+export function getAllCounties(callback) {
+    "use strict";
+    let params = {};
+
+    ajaxHelper(getAllCountiesUrl, callback, params);
+}
 
 
+/**
+ *
+ * @param {number} startCountyId
+ * @param {number} endCountyId
+ * @param {ajaxCallback} callback
+ */
+export function getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
+    "use strict";
 
+    let params = {
+        'startCountyId': startCountyId,
+        'endCountyId': endCountyId
+    };
+
+    ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
+}

@@ -20,7 +20,7 @@ class SegmentPickerBase extends SelectBoxBase {
     /**
      *
      * @param {jQuery} parent - parent container
-     * @param {string} labelContent
+     * @param {string} labelContent - label associated with the select box
      */
     constructor(parent, labelContent) {
         let mapId = undefined;
@@ -38,6 +38,7 @@ class SegmentPickerBase extends SelectBoxBase {
             outString += `    <div id="${mapId}" class="rp-picker-map"></div>`;
             outString += '  </div>';
             outString += `</div>`;
+
             return outString;
         }
 
@@ -57,7 +58,7 @@ class SegmentPickerBase extends SelectBoxBase {
             evt.stopPropagation();
         });
 
-        this._$container.find('.container-head-close').click((evt) => {
+        this._$container.find('.container-head-close').click(() => {
                 this.visible = false;
             }
         );
@@ -135,12 +136,14 @@ class SegmentPickerBase extends SelectBoxBase {
 
         this._segmentSelectionLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
-            style: this.selectionStyle
+            style: this.selectionStyle,
+            zIndex: 50
         });
 
         this.otherSelectedSegmentLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
-            style: this.selectionStyleOther
+            style: this.selectionStyleOther,
+            zIndex: 49
         });
 
         this._enabled = false;
@@ -193,6 +196,7 @@ class SegmentPickerBase extends SelectBoxBase {
             returnHtml += `<tr><td>From</td><td>${props['pdpFrom']}</td></tr>`;
             returnHtml += `<tr><td>To</td><td>${props['pdpTo']}</td></tr>`;
             returnHtml += '</table>';
+
             return returnHtml;
         });
 
@@ -210,16 +214,16 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      * @abstract
-     * @param {Array<object>} arr
+     * @param {Array<object>} arr - array of returned objects, implementation defined in derived classes
      */
     processAjaxResult(arr) {
     }
 
     /**
      *
-     * @param {string|number} county
-     * @param {string} hwy
-     * @param {number|undefined} [pdpId=undefined]
+     * @param {string|number} county - county id as string or number
+     * @param {string} hwy - hwy as string
+     * @param {number|undefined} [pdpId=undefined] - the pdp id to be set on load
      */
     setCountyAndHighway(county, hwy, pdpId) {
         pdpId = typeof pdpId == 'number' ? pdpId : undefined;
@@ -234,6 +238,12 @@ class SegmentPickerBase extends SelectBoxBase {
 
         if (typeof county == 'string') {
             county = parseInt(county);
+        }
+
+        if (hwy == null){
+            this.enabled = false;
+
+            return;
         }
 
         getSegments(county, hwy, (d) => {
@@ -265,7 +275,7 @@ class SegmentPickerBase extends SelectBoxBase {
                     this.enabled = false;
                 }
             }
-        )
+        );
     }
 
     _setExtent() {
@@ -278,7 +288,7 @@ class SegmentPickerBase extends SelectBoxBase {
     }
 
     /**
-     * @returns {boolean}
+     * @returns {boolean} if enabled
      */
     get enabled() {
         return this._enabled;
@@ -286,7 +296,7 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      *
-     * @param {boolean} isEnabled
+     * @param {boolean} isEnabled - is enabled
      * @private
      */
     set enabled(isEnabled) {
@@ -384,7 +394,7 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      * @abstract
-     * @returns {ol.style.Style}
+     * @returns {ol.style.Style} selection style
      */
     get selectionStyle() {
         return new ol.style.Style({
@@ -395,15 +405,13 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      * @abstract
-     * @returns {ol.style.Style}
+     * @returns {ol.style.Style} other selection style
      */
     get selectionStyleOther() {
         return new ol.style.Style({
             stroke: new ol.style.Stroke({color: 'orange', width: 7})
         });
     }
-
-
 }
 
 nm.SegmentPickerBase = SegmentPickerBase;

@@ -9,9 +9,8 @@ const nm = provide('ssa');
 
 /**
  *
- * @param {Array<Corridor>} corArray
- * @returns {ol.Extent|Array<number>|*}
- * @static
+ * @param {Array<Corridor>} corArray - array of corridors
+ * @returns {ol.Extent|Array<number>|*} - collective extent
  */
 export function calculateExtent(corArray) {
     let hasExtent = false;
@@ -44,8 +43,8 @@ nm.calculateExtent = calculateExtent;
 
 /**
  *
- * @param {string} [rowHtml='']
- * @returns {string}
+ * @param {string} [rowHtml=''] data row html
+ * @returns {string} full table html
  */
 function tableContent(rowHtml) {
     "use strict";
@@ -59,14 +58,16 @@ function tableContent(rowHtml) {
     tableContent += "</tr>";
     tableContent += rowHtml;
     tableContent += "</table>";
+
     return tableContent;
 }
 
 /**
  *
- * @param {string} fromRp
- * @param {string} toRp
- * @returns {string}
+ * @param {string} fromRp - from reference point
+ * @param {string} toRp - to reference point
+ * @returns {string} string with abbreviated reference point identifiers separated by a hyphen
+ * @private
  */
 function corridorName(fromRp, toRp) {
     "use strict";
@@ -78,8 +79,8 @@ function corridorName(fromRp, toRp) {
 class CorridorCollection {
 
     /**
-     * @param {string} divId
-     * @param {SsaMapCreate|SsaMapBase} ssaMap
+     * @param {string} divId - div id inside which to make the collection
+     * @param {SsaMapCreate|SsaMapBase} ssaMap - the SSA map object
      */
     constructor(divId, ssaMap) {
 
@@ -91,6 +92,7 @@ class CorridorCollection {
         this.$containerEl.append(innerHtml);
         this.$innerContainer = this.$containerEl.find('.corridor-collection');
         this._visible = true;
+        this._createModifyOperation = false;
 
 
         /**
@@ -109,7 +111,7 @@ class CorridorCollection {
 
     /**
      *
-     * @param {Corridor} c
+     * @param {Corridor} c - the corridor to be added
      */
     addCorridorCreate(c) {
         this._corridorArray.push(c);
@@ -123,7 +125,7 @@ class CorridorCollection {
 
     /**
      *
-     * @param {string|Corridor} cor
+     * @param {string|Corridor} cor - the corridor to be removed
      */
     removeCorridor(cor) {
         if (!confirm('Confirm Delete Corridor?')) {
@@ -178,11 +180,11 @@ class CorridorCollection {
         });
 
         this.$innerContainer.find('.corridor-edit').click(function () {
-
             _this.ssaMap.$createCorridorButton.prop('disabled', true);
             let corridorId = $(this).attr('data-corridor');
             let cor = _this._coridorLookup[corridorId];
             _this.ssaMap.pickerCollection.startEditCorridor(cor);
+            $(this).closest('.corridor-tr').addClass('corridor-tr-selected');
         });
 
         this.ssaMap.$corridorDataContainer.html('');
@@ -210,7 +212,7 @@ class CorridorCollection {
         this._visible = viz;
 
         if (this.visible) {
-            this.$containerEl.show()
+            this.$containerEl.show();
         } else {
             this.$containerEl.hide();
         }
@@ -220,10 +222,21 @@ class CorridorCollection {
         return calculateExtent(this._corridorArray);
     }
 
+
+    get createModifyOperation(){
+        return this._createModifyOperation;
+    }
+
+    set createModifyOperation(c){
+        this._createModifyOperation = c;
+
+        if (this._createModifyOperation){
+            this.$innerContainer.addClass('corridor-collection-create-modify');
+        } else {
+            this.$innerContainer.removeClass('corridor-collection-create-modify');
+        }
+    }
 }
 
 nm.CorridorCollection = CorridorCollection;
 export default CorridorCollection;
-
-
-   

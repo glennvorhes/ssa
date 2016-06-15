@@ -29,9 +29,10 @@ function escapeHtml(string) {
 
 /**
  *
- * @param {string} fromRp
- * @param {string} toRp
- * @returns {string}
+ * @param {string} fromRp - from reference point
+ * @param {string} toRp - to reference point
+ * @returns {string} string with abbreviated reference point identifiers separated by a hyphen
+ * @private
  */
 function corridorName(fromRp, toRp) {
     "use strict";
@@ -43,8 +44,8 @@ class Corridor {
 
     /**
      *
-     * @param {number} pdpFrom from reference point
-     * @param {number} pdpTo from reference point
+     * @param {number} pdpFrom from segment id
+     * @param {number} pdpTo to segment id
      * @param {string} rpFrom from reference point
      * @param {string} rpTo to reference point
      * @param {number} countyStart start county
@@ -96,7 +97,7 @@ class Corridor {
 
         this.nodeLayer = new LayerBaseVectorGeoJson('', {
             style: layerStyles.segNodeStyle,
-            minZoom: 10,
+            minZoom: 11,
             zIndex: 12
         });
 
@@ -151,7 +152,7 @@ class Corridor {
      * @returns {Corridor}
      */
     clone() {
-        let c =  new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
+        let c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
             this.countyStart, this.countyEnd, this.highway, {features: this.features});
         c.buildNodes();
         return c;
@@ -199,7 +200,7 @@ class Corridor {
     }
 
     /**
-     *
+     * get the html string to build the corridor table row with zoom, edit, and delete buttons
      * @returns {string}
      */
     get tableHtmlCreate() {
@@ -242,12 +243,12 @@ class Corridor {
 
     /**
      *
-     * @returns {ol.layer.Vector|*}
+     * @returns {ol.layer.Vector} - the OL Vector Layer
      */
     get olLayer() {
         return this._corridorLayer.olLayer;
-
     }
+
 
     /**
      *
@@ -259,7 +260,7 @@ class Corridor {
 
 
     /**
-     *
+     * Getter
      * @returns {boolean} if corridor layer is visible
      */
     get visible() {
@@ -267,8 +268,9 @@ class Corridor {
     }
 
     /**
-     *
+     * Setter
      * @param {boolean} vis if corridor layer is visible
+     *
      */
     set visible(vis) {
         this._corridorLayer.visible = vis;

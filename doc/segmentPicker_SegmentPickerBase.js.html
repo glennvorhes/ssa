@@ -48,7 +48,7 @@ class SegmentPickerBase extends SelectBoxBase {
     /**
      *
      * @param {jQuery} parent - parent container
-     * @param {string} labelContent
+     * @param {string} labelContent - label associated with the select box
      */
     constructor(parent, labelContent) {
         let mapId = undefined;
@@ -66,6 +66,7 @@ class SegmentPickerBase extends SelectBoxBase {
             outString += `    &lt;div id="${mapId}" class="rp-picker-map">&lt;/div>`;
             outString += '  &lt;/div>';
             outString += `&lt;/div>`;
+
             return outString;
         }
 
@@ -85,7 +86,7 @@ class SegmentPickerBase extends SelectBoxBase {
             evt.stopPropagation();
         });
 
-        this._$container.find('.container-head-close').click((evt) => {
+        this._$container.find('.container-head-close').click(() => {
                 this.visible = false;
             }
         );
@@ -163,12 +164,14 @@ class SegmentPickerBase extends SelectBoxBase {
 
         this._segmentSelectionLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
-            style: this.selectionStyle
+            style: this.selectionStyle,
+            zIndex: 50
         });
 
         this.otherSelectedSegmentLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
-            style: this.selectionStyleOther
+            style: this.selectionStyleOther,
+            zIndex: 49
         });
 
         this._enabled = false;
@@ -221,6 +224,7 @@ class SegmentPickerBase extends SelectBoxBase {
             returnHtml += `&lt;tr>&lt;td>From&lt;/td>&lt;td>${props['pdpFrom']}&lt;/td>&lt;/tr>`;
             returnHtml += `&lt;tr>&lt;td>To&lt;/td>&lt;td>${props['pdpTo']}&lt;/td>&lt;/tr>`;
             returnHtml += '&lt;/table>';
+
             return returnHtml;
         });
 
@@ -238,16 +242,16 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      * @abstract
-     * @param {Array&lt;object>} arr
+     * @param {Array&lt;object>} arr - array of returned objects, implementation defined in derived classes
      */
     processAjaxResult(arr) {
     }
 
     /**
      *
-     * @param {string|number} county
-     * @param {string} hwy
-     * @param {number|undefined} [pdpId=undefined]
+     * @param {string|number} county - county id as string or number
+     * @param {string} hwy - hwy as string
+     * @param {number|undefined} [pdpId=undefined] - the pdp id to be set on load
      */
     setCountyAndHighway(county, hwy, pdpId) {
         pdpId = typeof pdpId == 'number' ? pdpId : undefined;
@@ -266,6 +270,7 @@ class SegmentPickerBase extends SelectBoxBase {
 
         if (hwy == null){
             this.enabled = false;
+
             return;
         }
 
@@ -298,7 +303,7 @@ class SegmentPickerBase extends SelectBoxBase {
                     this.enabled = false;
                 }
             }
-        )
+        );
     }
 
     _setExtent() {
@@ -311,7 +316,7 @@ class SegmentPickerBase extends SelectBoxBase {
     }
 
     /**
-     * @returns {boolean}
+     * @returns {boolean} if enabled
      */
     get enabled() {
         return this._enabled;
@@ -319,7 +324,7 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      *
-     * @param {boolean} isEnabled
+     * @param {boolean} isEnabled - is enabled
      * @private
      */
     set enabled(isEnabled) {
@@ -417,7 +422,7 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      * @abstract
-     * @returns {ol.style.Style}
+     * @returns {ol.style.Style} selection style
      */
     get selectionStyle() {
         return new ol.style.Style({
@@ -428,15 +433,13 @@ class SegmentPickerBase extends SelectBoxBase {
 
     /**
      * @abstract
-     * @returns {ol.style.Style}
+     * @returns {ol.style.Style} other selection style
      */
     get selectionStyleOther() {
         return new ol.style.Style({
             stroke: new ol.style.Stroke({color: 'orange', width: 7})
         });
     }
-
-
 }
 
 nm.SegmentPickerBase = SegmentPickerBase;
@@ -451,13 +454,13 @@ export default SegmentPickerBase;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#corridorName">corridorName</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 13:18:01 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 16:06:27 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

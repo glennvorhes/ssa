@@ -55,6 +55,7 @@ class SsaMapCreate extends SsaMapBase {
 
         this.$createCorridorButton.click(() => {
             this.pickerCollection.visible = true;
+            this.corridorCollection.createModifyOperation = true;
             this.$createCorridorButton.prop('disabled', true);
         });
 

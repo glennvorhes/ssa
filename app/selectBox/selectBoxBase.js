@@ -91,7 +91,9 @@ class SelectBoxBase{
     get selectedValue(){
         let theVal = this.box.val();
 
-        if (isNaN(theVal)){
+        if (theVal == null || typeof theVal == 'undefined'){
+            return null;
+        } else if (isNaN(theVal)){
             return theVal
         } else {
             if (theVal.indexOf('.') > -1){
@@ -100,6 +102,15 @@ class SelectBoxBase{
                 return parseInt(theVal);
             }
         }
+    }
+
+    /**
+     *
+     * @param {string|number} v
+     * @protected
+     */
+    set selectedValue(v){
+        this.box.val(v);
     }
     
     get selectedText(){

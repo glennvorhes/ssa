@@ -2,12 +2,12 @@
  * Created by gavorhes on 5/12/2016.
  */
 
-import SelectBoxBase from './SelectBoxBase';
-import {getStartCounties} from '../ajaxGetters';
+import SelectCounty from './SelectCounty';
+import {getStartCounties, getAllCounties} from '../ajaxGetters';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
 
-class SelectStartCounty extends SelectBoxBase{
+class SelectStartCounty extends SelectCounty{
 
     /**
      *
@@ -15,13 +15,13 @@ class SelectStartCounty extends SelectBoxBase{
      */
     constructor(parent) {
         super(parent, "Start County");
-
-        getStartCounties((d) => {
-            for (let c of d) {
-                this.box.append(`<option value="${c['id']}">${c['name']}</option>`)
-            }
-            this.box.trigger('change');
-        })
+        //
+        // getAllCounties((d) => {
+        //     for (let c of d) {
+        //         this.box.append(`<option value="${c['id']}" ${c['primary'] ? 'selected' : ''}>${c['name']}</option>`)
+        //     }
+        //     this.box.trigger('change');
+        // });
     }
 }
 
