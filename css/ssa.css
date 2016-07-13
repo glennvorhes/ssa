@@ -273,7 +273,7 @@ select:disabled {
 .mm-popup-table,
 .crash-summary-table {
   border-collapse: collapse;
-  width: 185px;
+  width: 275px;
 }
 .mm-popup-table td,
 .crash-summary-table td,

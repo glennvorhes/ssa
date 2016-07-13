@@ -8,7 +8,7 @@ import makeGuid from 'webmapsjs/src/util/makeGuid';
 import provide from 'webmapsjs/src/util/provide';
 import {layerConfigHelper, randomColor} from '../layerStyles';
 import {getCorridor}  from '../ajaxGetters';
-import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures'
+import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures';
 import * as layerStyles from '../layerStyles';
 
 const nm = provide('ssa');
@@ -44,21 +44,22 @@ class Corridor {
 
     /**
      *
-     * @param {number} pdpFrom from segment id
-     * @param {number} pdpTo to segment id
-     * @param {string} rpFrom from reference point
-     * @param {string} rpTo to reference point
-     * @param {number} countyStart start county
-     * @param {number} countyEnd end county
-     * @param {string} highway route
-     * @param {object} [options={}]
-     * @param {corridorLoaded} [options.loadedCallback=function(c){}]
-     * @param {number|string|undefined|*} [options.databaseId=undefined]
-     * @param {string} [options.color=randomColor()]
-     * @param {Array<ol.Feature>|undefined} [options.features=undefined]
-     * @param {boolean} [options.cancelLoad=false]
+     * @param {number} pdpFrom - from segment id
+     * @param {number} pdpTo - to segment id
+     * @param {string} rpFrom - from reference point
+     * @param {string} rpTo - to reference point
+     * @param {number} countyStart - start county
+     * @param {number} countyEnd - end county
+     * @param {string} highway - highway text
+     * @param {number} routeId - route Id
+     * @param {object} [options={}] options
+     * @param {corridorLoaded} [options.loadedCallback=function(c){}] function to call on load
+     * @param {number|string|undefined|*} [options.databaseId=undefined] - id in the database
+     * @param {string} [options.color=randomColor()] - color for this corridor
+     * @param {Array<ol.Feature>|undefined} [options.features=undefined] - pre existing features
+     * @param {boolean} [options.cancelLoad=false] - don't load in init
      */
-    constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
+    constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, routeId, options) {
 
         options = options || {};
         options.features = options.features ? options.features : undefined;
@@ -90,6 +91,10 @@ class Corridor {
         this.highway = highway;
         this.rpFrom = rpFrom;
         this.rpTo = rpTo;
+        if (typeof  routeId != 'number'){
+            throw 'route id is not number';
+        }
+        this.routeId  = routeId;
 
         this._corridorLayer = new LayerBaseVectorGeoJson('',
             layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true)
@@ -110,7 +115,7 @@ class Corridor {
 
     /**
      *
-     * @param {corridorLoaded} [loadedCallback=function(c){}]
+     * @param {corridorLoaded} [loadedCallback=function(c){}] - function to call on load
      */
     load(loadedCallback) {
         loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {
@@ -149,18 +154,19 @@ class Corridor {
 
     /**
      *
-     * @returns {Corridor}
+     * @returns {Corridor} a copy of the corridor
      */
     clone() {
         let c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
-            this.countyStart, this.countyEnd, this.highway, {features: this.features});
+            this.countyStart, this.countyEnd, this.highway, this.routeId, {features: this.features});
         c.buildNodes();
+
         return c;
     }
 
     /**
      *
-     * @param {Corridor} corridor
+     * @param {Corridor} corridor -  the corridor used for updating
      */
     updateCorridor(corridor) {
 
@@ -171,6 +177,7 @@ class Corridor {
         this.highway = corridor.highway;
         this.rpFrom = corridor.rpFrom;
         this.rpTo = corridor.rpTo;
+        this.routeId = corridor.routeId;
 
         this.layer.name = corridorName(this.rpFrom, this.rpTo);
 
@@ -185,7 +192,7 @@ class Corridor {
 
     /**
      *
-     * @returns {boolean}
+     * @returns {boolean} if the corridor is loaded, no error on ajax
      */
     get valid() {
         return this._valid;
@@ -193,7 +200,7 @@ class Corridor {
 
     /**
      *
-     * @returns {string|*}
+     * @returns {string|*} - error message
      */
     get error() {
         return this._error;
@@ -201,7 +208,7 @@ class Corridor {
 
     /**
      * get the html string to build the corridor table row with zoom, edit, and delete buttons
-     * @returns {string}
+     * @returns {string} - html for the corridor zoom, edit, and delete buttons
      */
     get tableHtmlCreate() {
         let outString = `<tr class="corridor-tr">`;
@@ -227,6 +234,7 @@ class Corridor {
         outString += `<input type="hidden" class="corridor-data-to-rp" name="corridors[${i}].endRp" value="${this.rpTo}"/>`;
         outString += `<input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].startPdp" value="${this.pdpFrom}"/>`;
         outString += `<input type="hidden" class="corridor-data-to-pdp" name="corridors[${i}].endPdp" value="${this.pdpTo}"/>`;
+        outString += `<input type="hidden" class="corridor-data-route-id" name="corridors[${i}].routeId" value="${this.routeId}"/>`;
         outString += `</div>`;
 
         return outString;
@@ -252,7 +260,7 @@ class Corridor {
 
     /**
      *
-     * @returns {LayerBaseVectorGeoJson}
+     * @returns {LayerBaseVectorGeoJson} geojson layer
      */
     get layer() {
         return this._corridorLayer;
@@ -286,7 +294,7 @@ class Corridor {
 
     /**
      *
-     * @returns {ol.Extent|undefined}
+     * @returns {ol.Extent|undefined} layer extent
      */
     get extent() {
         if (this._corridorLayer.source.getFeatures().length > 0) {

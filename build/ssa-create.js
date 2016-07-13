@@ -135,13 +135,17 @@ nm.getEndCounties = getEndCounties;
 /**
  *
  * @param {number} county
- * @param {string} highway
+ * @param {number} routeId
  * @param {ajaxCallback} callback
  */
-function getSegments(county, highway, callback) {
+function getSegments(county, routeId, callback) {
     "use strict";
 
-    var params = { "highway": highway, "county": county };
+    if (typeof routeId == 'string') {
+        routeId = parseInt(routeId);
+    }
+
+    var params = { "routeid": routeId, "county": county };
     ajaxHelper(getSegmentsUrl, callback, params);
 }
 
@@ -599,7 +603,7 @@ var PickerCollection = function () {
         this.$innerContainer = this.$containerEl.find('.picker-collection');
         this._visible = false;
 
-        this._dummyCorridor = new _Corridor2.default(1, 1, '', '', 1, 1, 'h', {
+        this._dummyCorridor = new _Corridor2.default(1, 1, '', '', 1, 1, 'h', -1, {
             cancelLoad: true,
             color: lyrStyles.corridorPreviewColor
         });
@@ -663,8 +667,8 @@ var PickerCollection = function () {
         this.highwaySelect.addChangeListener(function (hwy) {
             "use strict";
 
-            _this.segmentPickerFrom.setCountyAndHighway(_this.countyStartSelect.selectedValue, hwy);
-            _this.segmentPickerTo.setCountyAndHighway(_this.countyEndSelect.selectedValue, hwy);
+            _this.segmentPickerFrom.setCountyAndRoute(_this.countyStartSelect.selectedValue, hwy);
+            _this.segmentPickerTo.setCountyAndRoute(_this.countyEndSelect.selectedValue, hwy);
             _this.addModifyEnabled = false;
         });
 
@@ -738,12 +742,13 @@ var PickerCollection = function () {
 
             if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
                 alert('Select From and To Reference Points');
+
                 return;
             }
 
             this._ssaMapCreate.mainMap.removeLayer(this._dummyCorridor.layer.olLayer);
             this._ssaMapCreate.mainMap.removeLayer(this._dummyCorridor.nodeLayer.olLayer);
-            this._dummyCorridor = new _Corridor2.default(this.segmentPickerFrom.selectedPdpId, this.segmentPickerTo.selectedPdpId, this.segmentPickerFrom.selectedText, this.segmentPickerTo.selectedText, this.countyStartSelect.selectedValue, this.countyEndSelect.selectedValue, this.highwaySelect.selectedText, {
+            this._dummyCorridor = new _Corridor2.default(this.segmentPickerFrom.selectedPdpId, this.segmentPickerTo.selectedPdpId, this.segmentPickerFrom.selectedText, this.segmentPickerTo.selectedText, this.countyStartSelect.selectedValue, this.countyEndSelect.selectedValue, this.highwaySelect.selectedText, this.highwaySelect.selectedValue, {
                 cancelLoad: true,
                 color: lyrStyles.corridorPreviewColor
             });
@@ -791,11 +796,10 @@ var PickerCollection = function () {
             this.$btnPickerModify.show();
             this.countyStartSelect.box.val(cor.countyStart);
             this.countyEndSelect.box.val(cor.countyEnd);
-            // this.highwaySelect.setStartCounty(cor.countyStart, cor.highway);
-            this.highwaySelect.setStartEndCounty(cor.countyStart, cor.countyEnd, cor.highway);
+            this.highwaySelect.setStartEndCounty(cor.countyStart, cor.countyEnd, cor.routeId);
 
-            this.segmentPickerFrom.setCountyAndHighway(cor.countyStart, cor.highway, cor.pdpFrom);
-            this.segmentPickerTo.setCountyAndHighway(cor.countyEnd, cor.highway, cor.pdpTo);
+            this.segmentPickerFrom.setCountyAndRoute(cor.countyStart, cor.routeId, cor.pdpFrom);
+            this.segmentPickerTo.setCountyAndRoute(cor.countyEnd, cor.routeId, cor.pdpTo);
 
             this._modifyCorridor = cor;
 
@@ -923,22 +927,23 @@ var Corridor = function () {
 
     /**
      *
-     * @param {number} pdpFrom from segment id
-     * @param {number} pdpTo to segment id
-     * @param {string} rpFrom from reference point
-     * @param {string} rpTo to reference point
-     * @param {number} countyStart start county
-     * @param {number} countyEnd end county
-     * @param {string} highway route
-     * @param {object} [options={}]
-     * @param {corridorLoaded} [options.loadedCallback=function(c){}]
-     * @param {number|string|undefined|*} [options.databaseId=undefined]
-     * @param {string} [options.color=randomColor()]
-     * @param {Array<ol.Feature>|undefined} [options.features=undefined]
-     * @param {boolean} [options.cancelLoad=false]
+     * @param {number} pdpFrom - from segment id
+     * @param {number} pdpTo - to segment id
+     * @param {string} rpFrom - from reference point
+     * @param {string} rpTo - to reference point
+     * @param {number} countyStart - start county
+     * @param {number} countyEnd - end county
+     * @param {string} highway - highway text
+     * @param {number} routeId - route Id
+     * @param {object} [options={}] options
+     * @param {corridorLoaded} [options.loadedCallback=function(c){}] function to call on load
+     * @param {number|string|undefined|*} [options.databaseId=undefined] - id in the database
+     * @param {string} [options.color=randomColor()] - color for this corridor
+     * @param {Array<ol.Feature>|undefined} [options.features=undefined] - pre existing features
+     * @param {boolean} [options.cancelLoad=false] - don't load in init
      */
 
-    function Corridor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
+    function Corridor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, routeId, options) {
         _classCallCheck(this, Corridor);
 
         options = options || {};
@@ -971,6 +976,10 @@ var Corridor = function () {
         this.highway = highway;
         this.rpFrom = rpFrom;
         this.rpTo = rpTo;
+        if (typeof routeId != 'number') {
+            throw 'route id is not number';
+        }
+        this.routeId = routeId;
 
         this._corridorLayer = new _LayerBaseVectorGeoJson2.default('', (0, _layerStyles.layerConfigHelper)(corridorName(this.rpFrom, this.rpTo), this._color, true));
 
@@ -989,7 +998,7 @@ var Corridor = function () {
 
     /**
      *
-     * @param {corridorLoaded} [loadedCallback=function(c){}]
+     * @param {corridorLoaded} [loadedCallback=function(c){}] - function to call on load
      */
 
 
@@ -1034,20 +1043,21 @@ var Corridor = function () {
 
         /**
          *
-         * @returns {Corridor}
+         * @returns {Corridor} a copy of the corridor
          */
 
     }, {
         key: 'clone',
         value: function clone() {
-            var c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, { features: this.features });
+            var c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, this.routeId, { features: this.features });
             c.buildNodes();
+
             return c;
         }
 
         /**
          *
-         * @param {Corridor} corridor
+         * @param {Corridor} corridor -  the corridor used for updating
          */
 
     }, {
@@ -1061,6 +1071,7 @@ var Corridor = function () {
             this.highway = corridor.highway;
             this.rpFrom = corridor.rpFrom;
             this.rpTo = corridor.rpTo;
+            this.routeId = corridor.routeId;
 
             this.layer.name = corridorName(this.rpFrom, this.rpTo);
 
@@ -1080,6 +1091,7 @@ var Corridor = function () {
             outString += '<input type="hidden" class="corridor-data-to-rp" name="corridors[' + i + '].endRp" value="' + this.rpTo + '"/>';
             outString += '<input type="hidden" class="corridor-data-from-pdp" name="corridors[' + i + '].startPdp" value="' + this.pdpFrom + '"/>';
             outString += '<input type="hidden" class="corridor-data-to-pdp" name="corridors[' + i + '].endPdp" value="' + this.pdpTo + '"/>';
+            outString += '<input type="hidden" class="corridor-data-route-id" name="corridors[' + i + '].routeId" value="' + this.routeId + '"/>';
             outString += '</div>';
 
             return outString;
@@ -1108,7 +1120,7 @@ var Corridor = function () {
 
         /**
          *
-         * @returns {boolean}
+         * @returns {boolean} if the corridor is loaded, no error on ajax
          */
 
     }, {
@@ -1119,7 +1131,7 @@ var Corridor = function () {
 
         /**
          *
-         * @returns {string|*}
+         * @returns {string|*} - error message
          */
 
     }, {
@@ -1130,7 +1142,7 @@ var Corridor = function () {
 
         /**
          * get the html string to build the corridor table row with zoom, edit, and delete buttons
-         * @returns {string}
+         * @returns {string} - html for the corridor zoom, edit, and delete buttons
          */
 
     }, {
@@ -1156,7 +1168,7 @@ var Corridor = function () {
 
         /**
          *
-         * @returns {LayerBaseVectorGeoJson}
+         * @returns {LayerBaseVectorGeoJson} geojson layer
          */
 
     }, {
@@ -1199,7 +1211,7 @@ var Corridor = function () {
 
         /**
          *
-         * @returns {ol.Extent|undefined}
+         * @returns {ol.Extent|undefined} layer extent
          */
 
     }, {
@@ -1314,12 +1326,11 @@ function layerConfigHelper(name, color, visible) {
 }
 
 var mmPopupContent = exports.mmPopupContent = function mmPopupContent(props) {
-    var hwy = props['hwyDir'];
-    hwy = hwy.slice(0, 3).replace(/^0*/, '') + ' ' + hwy.slice(3) + 'B';
 
     var returnHtml = '<table class="mm-popup-table">';
     returnHtml += '<tr><td>PdpId</td><td>' + props['pdpId'] + '</td></tr>';
-    returnHtml += '<tr><td>Highway</td><td>' + hwy + '</td></tr>';
+    returnHtml += '<tr><td>Highway</td><td>' + props['hwyDir'] + '</td></tr>';
+    returnHtml += '<tr><td>Description</td><td>' + (props['descrip'] ? props['descrip'] : '-') + '</td></tr>';
     returnHtml += '<tr><td>Divided</td><td>' + (props['divUnd'] == 'D' ? 'Yes' : 'No') + '</td></tr>';
     returnHtml += '<tr><td>From RP</td><td>' + props['pdpFrom'] + '</td></tr>';
     returnHtml += '<tr><td>To RP</td><td>' + props['pdpTo'] + '</td></tr>';
@@ -1619,13 +1630,13 @@ var SegmentPickerBase = function (_SelectBoxBase) {
         /**
          *
          * @param {string|number} county - county id as string or number
-         * @param {string} hwy - hwy as string
+         * @param {string|number|null} rteId - routeId
          * @param {number|undefined} [pdpId=undefined] - the pdp id to be set on load
          */
 
     }, {
-        key: 'setCountyAndHighway',
-        value: function setCountyAndHighway(county, hwy, pdpId) {
+        key: 'setCountyAndRoute',
+        value: function setCountyAndRoute(county, rteId, pdpId) {
             var _this4 = this;
 
             pdpId = typeof pdpId == 'number' ? pdpId : undefined;
@@ -1642,13 +1653,17 @@ var SegmentPickerBase = function (_SelectBoxBase) {
                 county = parseInt(county);
             }
 
-            if (hwy == null) {
+            if (rteId == null) {
                 this.enabled = false;
 
                 return;
             }
 
-            (0, _ajaxGetters.getSegments)(county, hwy, function (d) {
+            if (typeof rteId == 'string') {
+                rteId = parseInt(rteId);
+            }
+
+            (0, _ajaxGetters.getSegments)(county, rteId, function (d) {
                 _this4._segmentLayer.clear();
                 _this4._segNodeLayer.clear();
                 _this4.processAjaxResult(d['features']);
@@ -2559,16 +2574,20 @@ var SelectHighway = function (_SelectBoxBase) {
          *
          * @param {number|string|null} startId
          * @param {number|string|null} endId
-         * @param {string|undefined} hwy
+         * @param {number|string|null} [routeId=undefined]
          */
 
     }, {
         key: 'setStartEndCounty',
-        value: function setStartEndCounty(startId, endId, hwy) {
+        value: function setStartEndCounty(startId, endId, routeId) {
             var _this3 = this;
 
-            if (startId == null || startId == undefined || endId == null || endId == undefined) {
+            if (startId == null || startId == undefined || endId == null) {
                 return;
+            }
+
+            if (typeof routeId == 'number') {
+                routeId = routeId.toFixed();
             }
 
             this.box.html('');
@@ -2582,6 +2601,10 @@ var SelectHighway = function (_SelectBoxBase) {
                 endId = parseInt(endId);
             }
 
+            if (typeof routeId == 'string') {
+                routeId = parseInt(routeId);
+            }
+
             (0, _ajaxGetters.getHwyByStartEndCounty)(startId, endId, function (d) {
                 if (d.length > 0) {
 
@@ -2590,10 +2613,8 @@ var SelectHighway = function (_SelectBoxBase) {
                         var bName = b['name'];
 
                         if (aName == bName) {
-
                             return 0;
                         } else {
-
                             return aName > bName ? 1 : -1;
                         }
                     });
@@ -2606,8 +2627,7 @@ var SelectHighway = function (_SelectBoxBase) {
                         for (var _iterator2 = d[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                             var c = _step2.value;
 
-                            // this.box.append(`<option value="${c['id']}" ${c['primary'] ? 'selected' : ''}>${c['name']}</option>`);
-                            _this3.box.append('<option value="' + c['name'] + '" ' + (c['primary'] ? 'selected' : '') + '>' + c['name'] + '</option>');
+                            _this3.box.append('<option value="' + c['id'] + '" ' + (c['primary'] ? 'selected' : '') + '>' + c['name'] + '</option>');
                         }
                     } catch (err) {
                         _didIteratorError2 = true;
@@ -2624,8 +2644,8 @@ var SelectHighway = function (_SelectBoxBase) {
                         }
                     }
 
-                    if (hwy) {
-                        _this3.box.val(hwy);
+                    if (routeId) {
+                        _this3.box.val(routeId.toFixed());
                     } else {
                         _this3.box.trigger('change');
                     }

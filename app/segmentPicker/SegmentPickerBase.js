@@ -222,10 +222,10 @@ class SegmentPickerBase extends SelectBoxBase {
     /**
      *
      * @param {string|number} county - county id as string or number
-     * @param {string} hwy - hwy as string
+     * @param {string|number|null} rteId - routeId
      * @param {number|undefined} [pdpId=undefined] - the pdp id to be set on load
      */
-    setCountyAndHighway(county, hwy, pdpId) {
+    setCountyAndRoute(county, rteId, pdpId) {
         pdpId = typeof pdpId == 'number' ? pdpId : undefined;
 
         this.selectedPdpId = undefined;
@@ -240,13 +240,17 @@ class SegmentPickerBase extends SelectBoxBase {
             county = parseInt(county);
         }
 
-        if (hwy == null){
+        if (rteId == null){
             this.enabled = false;
 
             return;
         }
 
-        getSegments(county, hwy, (d) => {
+        if (typeof rteId == 'string') {
+            rteId = parseInt(rteId);
+        }
+
+        getSegments(county, rteId, (d) => {
                 this._segmentLayer.clear();
                 this._segNodeLayer.clear();
                 this.processAjaxResult(d['features']);

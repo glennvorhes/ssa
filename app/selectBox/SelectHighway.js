@@ -35,7 +35,7 @@ class SelectHighway extends SelectBoxBase {
             }
             if (d) {
                 if (hwy) {
-                    this.box.val(hwy)
+                    this.box.val(hwy);
                 } else {
                     this.box.trigger('change');
 
@@ -48,13 +48,18 @@ class SelectHighway extends SelectBoxBase {
      *
      * @param {number|string|null} startId
      * @param {number|string|null} endId
-     * @param {string|undefined} hwy
+     * @param {number|string|null} [routeId=undefined]
      */
-    setStartEndCounty(startId, endId, hwy) {
-        if (startId == null || startId == undefined || endId == null || endId == undefined) {
+    setStartEndCounty(startId, endId, routeId) {
+
+        if (startId == null || startId == undefined || endId == null) {
             return;
         }
 
+        if (typeof routeId == 'number'){
+            routeId = routeId.toFixed();
+        }
+        
         this.box.html('');
         this.box.addClass('refresh').removeClass('refresh');
 
@@ -66,6 +71,10 @@ class SelectHighway extends SelectBoxBase {
             endId = parseInt(endId);
         }
 
+        if (typeof routeId == 'string') {
+            routeId = parseInt(routeId);
+        }
+
         getHwyByStartEndCounty(startId, endId, (d) => {
             if (d.length > 0) {
 
@@ -74,21 +83,18 @@ class SelectHighway extends SelectBoxBase {
                     let bName = b['name'];
 
                     if (aName == bName) {
-
                         return 0;
                     } else {
-
                         return aName > bName ? 1 : -1;
                     }
                 });
                 
                 for (let c of d) {
-                    // this.box.append(`<option value="${c['id']}" ${c['primary'] ? 'selected' : ''}>${c['name']}</option>`);
-                    this.box.append(`<option value="${c['name']}" ${c['primary'] ? 'selected' : ''}>${c['name']}</option>`);
+                    this.box.append(`<option value="${c['id']}" ${c['primary'] ? 'selected' : ''}>${c['name']}</option>`);
                 }
 
-                if (hwy) {
-                    this.box.val(hwy)
+                if (routeId) {
+                    this.box.val(routeId.toFixed());
                 } else {
                     this.box.trigger('change');
                 }
@@ -96,8 +102,6 @@ class SelectHighway extends SelectBoxBase {
             } else {
                 this.box.prop('disabled', d.length == 0);
             }
-
-
         });
     }
 }

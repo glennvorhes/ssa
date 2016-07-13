@@ -9,7 +9,7 @@ import SelectEndCounty from '../selectBox/SelectEndCounty';
 import SegmentPickerFrom from '../segmentPicker/SegmentPickerFrom';
 import SegmentPickerTo from '../segmentPicker/SegmentPickerTo';
 import Corridor from '../corridor/Corridor';
-import provide from 'webmapsjs/src/util/provide'
+import provide from 'webmapsjs/src/util/provide';
 import $ from 'webmapsjs/src/jquery/jquery';
 import * as lyrStyles from '../layerStyles';
 const nm = provide('ssa');
@@ -32,7 +32,7 @@ class PickerCollection {
         this.$innerContainer = this.$containerEl.find('.picker-collection');
         this._visible = false;
 
-        this._dummyCorridor = new Corridor(1, 1, '', '', 1, 1, 'h', {
+        this._dummyCorridor = new Corridor(1, 1, '', '', 1, 1, 'h', -1, {
             cancelLoad: true,
             color: lyrStyles.corridorPreviewColor
         });
@@ -97,8 +97,8 @@ class PickerCollection {
 
         this.highwaySelect.addChangeListener((hwy) => {
             "use strict";
-            this.segmentPickerFrom.setCountyAndHighway(this.countyStartSelect.selectedValue, hwy);
-            this.segmentPickerTo.setCountyAndHighway(this.countyEndSelect.selectedValue, hwy);
+            this.segmentPickerFrom.setCountyAndRoute(this.countyStartSelect.selectedValue, hwy);
+            this.segmentPickerTo.setCountyAndRoute(this.countyEndSelect.selectedValue, hwy);
             this.addModifyEnabled = false;
         });
         
@@ -171,6 +171,7 @@ class PickerCollection {
     previewCorridor() {
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
+            
             return;
         }
 
@@ -184,6 +185,7 @@ class PickerCollection {
             this.countyStartSelect.selectedValue,
             this.countyEndSelect.selectedValue,
             this.highwaySelect.selectedText,
+            this.highwaySelect.selectedValue,
             {
                 cancelLoad: true,
                 color: lyrStyles.corridorPreviewColor
@@ -231,11 +233,10 @@ class PickerCollection {
         this.$btnPickerModify.show();
         this.countyStartSelect.box.val(cor.countyStart);
         this.countyEndSelect.box.val(cor.countyEnd);
-        // this.highwaySelect.setStartCounty(cor.countyStart, cor.highway);
-        this.highwaySelect.setStartEndCounty(cor.countyStart, cor.countyEnd, cor.highway);
+        this.highwaySelect.setStartEndCounty(cor.countyStart, cor.countyEnd, cor.routeId);
         
-        this.segmentPickerFrom.setCountyAndHighway(cor.countyStart, cor.highway, cor.pdpFrom);
-        this.segmentPickerTo.setCountyAndHighway(cor.countyEnd, cor.highway, cor.pdpTo);
+        this.segmentPickerFrom.setCountyAndRoute(cor.countyStart, cor.routeId, cor.pdpFrom);
+        this.segmentPickerTo.setCountyAndRoute(cor.countyEnd, cor.routeId, cor.pdpTo);
 
         this._modifyCorridor = cor;
 

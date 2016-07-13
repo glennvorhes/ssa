@@ -253,7 +253,7 @@ class SegmentPickerBase extends SelectBoxBase {
      * @param {string} hwy - hwy as string
      * @param {number|undefined} [pdpId=undefined] - the pdp id to be set on load
      */
-    setCountyAndHighway(county, hwy, pdpId) {
+    setCountyAndRoute(county, hwy, pdpId) {
         pdpId = typeof pdpId == 'number' ? pdpId : undefined;
 
         this.selectedPdpId = undefined;

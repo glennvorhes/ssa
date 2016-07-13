@@ -111,12 +111,16 @@ nm.getEndCounties = getEndCounties;
 /**
  *
  * @param {number} county
- * @param {string} highway
+ * @param {number} routeId
  * @param {ajaxCallback} callback
  */
-export function getSegments(county, highway, callback) {
+export function getSegments(county, routeId, callback) {
     "use strict";
-    let params = {"highway": highway, "county": county};
+    if (typeof routeId == 'string'){
+        routeId = parseInt(routeId);
+    }
+
+    let params = {"routeid": routeId, "county": county};
     ajaxHelper(getSegmentsUrl, callback, params);
 }
 

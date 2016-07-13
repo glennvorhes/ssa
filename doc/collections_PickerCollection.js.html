@@ -125,8 +125,8 @@ class PickerCollection {
 
         this.highwaySelect.addChangeListener((hwy) => {
             "use strict";
-            this.segmentPickerFrom.setCountyAndHighway(this.countyStartSelect.selectedValue, hwy);
-            this.segmentPickerTo.setCountyAndHighway(this.countyEndSelect.selectedValue, hwy);
+            this.segmentPickerFrom.setCountyAndRoute(this.countyStartSelect.selectedValue, hwy);
+            this.segmentPickerTo.setCountyAndRoute(this.countyEndSelect.selectedValue, hwy);
             this.addModifyEnabled = false;
         });
         
@@ -262,8 +262,8 @@ class PickerCollection {
         // this.highwaySelect.setStartCounty(cor.countyStart, cor.highway);
         this.highwaySelect.setStartEndCounty(cor.countyStart, cor.countyEnd, cor.highway);
         
-        this.segmentPickerFrom.setCountyAndHighway(cor.countyStart, cor.highway, cor.pdpFrom);
-        this.segmentPickerTo.setCountyAndHighway(cor.countyEnd, cor.highway, cor.pdpTo);
+        this.segmentPickerFrom.setCountyAndRoute(cor.countyStart, cor.highway, cor.pdpFrom);
+        this.segmentPickerTo.setCountyAndRoute(cor.countyEnd, cor.highway, cor.pdpTo);
 
         this._modifyCorridor = cor;
 

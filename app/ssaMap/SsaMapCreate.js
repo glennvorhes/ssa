@@ -64,7 +64,7 @@ class SsaMapCreate extends SsaMapBase {
             if (ext){
                 this.mainMap.getView().fit(ext, this.mainMap.getSize());
             }
-        })
+        });
     }
 }
 

@@ -33,13 +33,13 @@ class CorridorConfig {
 
         /**
          *
-         * @type {Number}
+         * @type {number}
          */
         this.startCounty = parseInt(inputElement.find('.corridor-data-start-county').val());
 
         /**
          *
-         * @type {Number}
+         * @type {number}
          */
         this.endCounty = parseInt(inputElement.find('.corridor-data-end-county').val());
 
@@ -63,15 +63,23 @@ class CorridorConfig {
 
         /**
          *
-         * @type {Number}
+         * @type {number}
          */
         this.startPdp = parseInt(inputElement.find('.corridor-data-from-pdp').val());
 
         /**
          *
-         * @type {Number}
+         * @type {number}
          */
         this.endPdp = parseInt(inputElement.find('.corridor-data-to-pdp').val());
+
+
+        /**
+         * 
+         * @type {number}
+         */
+        this.routeId +=  parseInt(inputElement.find('.corridor-data-route-id').val());
+
     }
 
     
