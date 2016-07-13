@@ -185,7 +185,7 @@ class SsaMapView extends SsaMapBase {
 
             let corridor = new Corridor(
                 conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
-                conf.startCounty, conf.endCounty, conf.hgwy,
+                conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
                 {
                     color: 'black',
                     loadedCallback: () => {

@@ -95,7 +95,7 @@ var countySort = function countySort(d) {
 
 /**
  *
- * @param {ajaxCallback} callback
+ * @param {ajaxCallback} callback - callback function
  */
 function getStartCounties(callback) {
     "use strict";

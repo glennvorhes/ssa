@@ -71,7 +71,7 @@ let countySort = (d) => {
 
 /**
  *
- * @param {ajaxCallback} callback
+ * @param {ajaxCallback} callback - callback function
  */
 export function getStartCounties(callback) {
     "use strict";
