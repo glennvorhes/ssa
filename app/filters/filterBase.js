@@ -76,6 +76,7 @@ class FilterBase {
      *
      * @param {string} val - the value to check
      * @returns {boolean} - if the property is on
+     * @protected
      */
     valIsOn(val){
         return this._onValues.indexOf(val) > -1;

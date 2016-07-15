@@ -15,6 +15,7 @@ import {calculateExtent} from '../collections/CorridorCollection';
 import $ from 'webmapsjs/src/jquery/jquery';
 import crashData from '../collections/crashData';
 import mmFlags from '../collections/mmFlags';
+import controllingCriteria from '../collections/controllingCriteria';
 
 const nm = provide('ssa');
 
