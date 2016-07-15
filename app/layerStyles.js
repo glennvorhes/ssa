@@ -83,9 +83,6 @@ export const mmPopupContent = (props) => {
     returnHtml += `<tr><td>From RP</td><td>${props['pdpFrom']}</td></tr>`;
     returnHtml += `<tr><td>To RP</td><td>${props['pdpTo']}</td></tr>`;
     returnHtml += '</table>';
-    if (props['crashInfo']){
-        returnHtml += props['crashInfo'];
-    }
 
     return returnHtml;
 };
@@ -94,8 +91,8 @@ export const segNodeStyle = new ol.style.Style({
                 image: new ol.style.Circle({
                     radius: 6,
                     fill: new ol.style.Fill({
-                        color: 'rgba(252, 251, 59, 0.35)'
+                        color: 'rgb(0, 0, 0)'
                     }),
-                    stroke: new ol.style.Stroke({color: 'rgb(252, 251, 59', width: 2})
+                    stroke: new ol.style.Stroke({color: 'rgb(0, 0, 0', width: 2})
                 })
             });

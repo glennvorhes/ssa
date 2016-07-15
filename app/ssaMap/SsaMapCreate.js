@@ -4,6 +4,7 @@
 
 
 import SsaMapBase from './SsaMapBase';
+import quickMapMulti from 'webmapsjs/src/olHelpers/quickMapMulti';
 import makeGuid from 'webmapsjs/src/util/makeGuid';
 import PickerCollection from '../collections/PickerCollection';
 import CorridorCollection from '../collections/CorridorCollection';
@@ -23,6 +24,30 @@ class SsaMapCreate extends SsaMapBase {
      */
     constructor(divId, corridorDataContainer) {
         super(divId);
+        
+        let multiMap = quickMapMulti({
+            divId: this.mapId,
+            minZoom: 6,
+            zoom: 6,
+            fullScreen: true
+        });
+
+
+        /**
+         * @type {ol.Map}
+         */
+        this.mainMap = multiMap.map;
+        
+        /**
+         * @type {MapMoveCls}
+         */
+        this.mainMapMove = multiMap.mapMove;
+
+        /**
+         * @type {MapPopupCls}
+         */
+        this.mainMapPopup = multiMap.mapPopup;
+        
         this.$mainContainer.prepend(`<div class="ssa-map-sidebar"></div>`);
         this.mainMap.updateSize();
 

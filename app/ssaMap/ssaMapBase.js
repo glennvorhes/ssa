@@ -3,46 +3,49 @@
  */
 import $ from 'webmapsjs/src/jquery/jquery';
 import makeGuid from 'webmapsjs/src/util/makeGuid';
-import quickMapMulti from 'webmapsjs/src/olHelpers/quickMapMulti';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
 
 
 class SsaMapBase {
 
-    
+
     constructor(divId) {
-        
+
         /**
          * @type {JQuery|*|jQuery|HTMLElement}
          */
         this.$mainContainer = $('#' + divId);
         this.$mainContainer.addClass('ssa-map-container');
-        let mapId = makeGuid();
 
-
-        this.$mainContainer.append(`<div id="${mapId}" class="ssa-main-map"></div>`);
-
-        let multiMap = quickMapMulti({
-            divId: mapId,
-            minZoom: 6,
-            zoom: 6,
-            fullScreen: true
-        });
+        /**
+         * 
+         * @type {string}
+         * @protected
+         */
+        this._mapId = makeGuid();
+        
+        this.$mainContainer.append(`<div id="${this._mapId}" class="ssa-main-map"></div>`);
         
         $('.ol-zoom-out').html('&#8211;');
 
+        /**
+         * 
+         * @type {MapPopupCls|undefined}
+         */
+        this.mainMapMove = undefined;
 
         /**
-         * @type {ol.Map}
+         * 
+         * @type {MapPopupCls|undefined}
          */
-        this.mainMap = multiMap.map;
-        this.mainMapMove = multiMap.mapMove;
+        this.mainMapPopup = undefined;
 
-        /**
-         * @type {MapPopupCls}
-         */
-        this.mainMapPopup = multiMap.mapPopup;
+        
+    }
+    
+    get mapId(){
+        return this._mapId;
     }
 }
 

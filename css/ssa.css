@@ -390,3 +390,13 @@ select:disabled {
   border-radius: 5px;
   font-weight: bolder;
 }
+.map-filters input[type=checkbox] {
+  padding-right: 5px;
+  cursor: pointer;
+}
+.map-filters label {
+  cursor: pointer;
+}
+#dummy {
+  background-color: grey;
+}

@@ -3,139 +3,47 @@
  */
 
 import SsaMapBase from './SsaMapBase';
+import quickMap from 'webmapsjs/src/olHelpers/quickMap';
+import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
+import mapMove from 'webmapsjs/src/olHelpers/mapMove';
 import provide from 'webmapsjs/src/util/provide';
 import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
 import * as styles  from '../layerStyles';
-import * as ajx from '../ajaxGetters';
 import ol from 'webmapsjs/src/ol/ol';
 import {calculateExtent} from '../collections/CorridorCollection';
-import * as objHelp from 'webmapsjs/src/util/objectHelpers';
 import $ from 'webmapsjs/src/jquery/jquery';
+import crashData from '../crashData';
 
 const nm = provide('ssa');
 
-/**
- *
- * @param {string} inDate
- */
-function _dteStrip(inDate) {
-    "use strict";
-    let parts = inDate.split('/');
-    let m = parts[0];
-    let d = parts[1];
-    let y = parts[2];
 
-    if (m[0] == '0') {
-        m = m.slice(1);
+export const mmPopupContent = (props) => {
+
+    let returnHtml = '<table class="mm-popup-table">';
+    returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
+    returnHtml += `<tr><td>Highway</td><td>${props['hwyDir']}</td></tr>`;
+    returnHtml += `<tr><td>Description</td><td>${props['descrip'] ? props['descrip']: '-'}</td></tr>`;
+    returnHtml += `<tr><td>Divided</td><td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}</td></tr>`;
+    returnHtml += `<tr><td>From RP</td><td>${props['pdpFrom']}</td></tr>`;
+    returnHtml += `<tr><td>To RP</td><td>${props['pdpTo']}</td></tr>`;
+    returnHtml += '</table>';
+    if (props['crashInfo']){
+        returnHtml += props['crashInfo'];
     }
-
-    if (d[0] == '0') {
-        d = d.slice(1);
-    }
-    y = y.slice(2);
-
-    return [m, d, y].join('/');
-}
-
-function _timeStrip(tm) {
-    "use strict";
-    tm = tm.replace(/:\d{2} /, '');
-    if (tm[0] == '0') {
-        tm = tm.slice(1);
-    }
-    return tm;
-}
-
-function injColor(inj) {
-    "use strict";
-
-    let color = {
-        'K': 'red',
-        'A': 'orange',
-        'B': 'yellow',
-        'C': 'lightgreen',
-        'P': 'lightblue'
-    }[inj];
-
-    return color || 'rgba(255,255,255,0)';
-}
-
-/**
- *
- * @param {Array<crashData>} crashData
- * @private
- */
-function _crashInfoHelper(crashData) {
-    "use strict";
-    crashData.sort(function (a, b) {
-        let dteA = (new Date(a['dte'] + ' ' + a['time'])).getTime();
-        let dteB = (new Date(b['dte'] + ' ' + b['time'])).getTime();
-
-        if (dteA == dteB) {
-            return 0;
-        } else {
-            return dteA > dteB ? -1 : 1;
-        }
-    });
-
-    let returnHtml = '';
-    returnHtml += '<ul class="crash-list">';
-
-    let crashSummary = {};
-
-    for (let /**@type {crashData} */ c of crashData) {
-
-        if (typeof crashSummary[c.injSvr] == 'undefined') {
-            crashSummary[c.injSvr] = 1;
-        } else {
-            crashSummary[c.injSvr]++;
-        }
-
-
-        returnHtml += `<li style="background-color: ${injColor(c.injSvr)};">`;
-        returnHtml += _dteStrip(c.dte);
-        if (c.time) {
-            returnHtml += ', ' + _timeStrip(c.time);
-        }
-
-        if (c.mnrColl) {
-            returnHtml += ', ' + c.mnrColl;
-        }
-
-        if (c.injSvr) {
-            returnHtml += ', ' + c.injSvr;
-        }
-
-        returnHtml += '</li>';
-    }
-    returnHtml += '</ul>';
-
-    let crshType = {
-        'K': 'Fatal',
-        'A': 'Incapacitating',
-        'B': 'Non-incapacitating',
-        'C': 'Possible Injury',
-        'P': 'Property Damage'
-    };
-
-    let tableContent = '<table class="crash-summary-table">';
-    tableContent += `<tr><th colspan="2">Crash Summary</th></tr>`;
-    tableContent += `<tr><td>Total</td><td>${crashData.length}</td></tr>`;
-
-    if (crashData.length > 0) {
-        for (let k of ['K', 'A', 'B', 'C', 'P']) {
-            if (typeof crashSummary[k] != 'undefined') {
-                tableContent += `<tr><td>${crshType[k]}</td><td>${crashSummary[k]}</td></tr>`
-            }
-        }
-    }
-    
-    tableContent += '</table>';
-    returnHtml = tableContent + returnHtml;
 
     return returnHtml;
-}
+};
+
+const mmPopupContentWithCrash = (props) => {
+    "use strict";
+    let returnHtml = styles.mmPopupContent(props);
+
+    returnHtml += crashData.getCrashSummary(props['pdpId']);
+    
+    return returnHtml;
+};
+
 
 class SsaMapView extends SsaMapBase {
 
@@ -147,6 +55,27 @@ class SsaMapView extends SsaMapBase {
      */
     constructor(divId, dataClass, infoAnchorId) {
         super(divId);
+
+        /**
+         * @type {ol.Map}
+         */
+        this.mainMap = quickMap({
+            divId: this.mapId,
+            minZoom: 6,
+            zoom: 6,
+            fullScreen: true
+        });
+
+
+        /**
+         * @type {MapMoveCls}
+         */
+        this.mainMapMove = mapMove;
+
+        /**
+         * @type {MapPopupCls}
+         */
+        this.mainMapPopup = mapPopup;
 
         dataClass = typeof dataClass == 'string' ? dataClass : 'corridor-data';
         infoAnchorId = typeof infoAnchorId == 'string' ? infoAnchorId : 'ssa-corridor-info-anchor';
@@ -196,42 +125,6 @@ class SsaMapView extends SsaMapBase {
                             if (ext) {
                                 this.mainMap.getView().fit(ext, this.mainMap.getSize());
                             }
-
-                            // load the crashes
-                            ajx.getCrashes((d) => {
-                                // iterate over the pdp ids
-                                for (let itm of objHelp.keyValPairs(d)) {
-                                    // convert to an int
-                                    let pdp = parseInt(itm.key);
-
-                                    // loop over corridors to find which one it is on,
-                                    // don't break as there might be multiples
-                                    for (let corr of this._corridorArray) {
-
-                                        /**
-                                         * try to find the feature by exact match
-                                         * @type {ol.Feature|undefined}
-                                         */
-                                        let theFeature = corr.sortedFeatures.getFeature(pdp, true);
-
-                                        // if found, set the crashes property using a helper function
-                                        if (theFeature) {
-                                            theFeature.setProperties(
-                                                {crashInfo: _crashInfoHelper(/**@type {Array<crashData>} */itm.value)}
-                                            );
-                                        }
-                                    }
-                                }
-
-                                // flash a crashes loaded message
-                                let $crashesLoadMsg = $('.crashes-loaded-msg');
-
-                                $crashesLoadMsg.fadeIn();
-
-                                setTimeout(()=> {
-                                    $crashesLoadMsg.fadeOut();
-                                }, 4000);
-                            });
                         }
                     }
                 }
@@ -242,10 +135,14 @@ class SsaMapView extends SsaMapBase {
             this.mainMap.addLayer(corridor.olLayer);
             this.mainMap.addLayer(corridor.nodeLayer.olLayer);
 
-            this.mainMapPopup.addVectorPopup(corridor.layer, styles.mmPopupContent);
+            this.mainMapPopup.addVectorPopup(corridor.layer, mmPopupContentWithCrash);
         }
 
         $('#' + infoAnchorId).after(outHtml);
+
+        crashData.init();
+
+        this.mainMap.addLayer(crashData.pointCrashes.olLayer);
     }
 }
 

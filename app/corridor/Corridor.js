@@ -103,7 +103,7 @@ class Corridor {
         this.nodeLayer = new LayerBaseVectorGeoJson('', {
             style: layerStyles.segNodeStyle,
             minZoom: 11,
-            zIndex: 12
+            zIndex: 3
         });
 
         if (options.features) {
