@@ -251,7 +251,7 @@ class Corridor {
 
     /**
      *
-     * @returns {ol.layer.Vector} - the OL Vector Layer
+     * @returns {ol.layer.Vector|ol.layer.Base} - the OL Vector Layer
      */
     get olLayer() {
         return this._corridorLayer.olLayer;

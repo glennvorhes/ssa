@@ -50,7 +50,7 @@ export function randomColor() {
 }
 
 /**
- * 
+ *
  * @param name
  * @param color
  * @param visible
@@ -78,7 +78,7 @@ export const mmPopupContent = (props) => {
     let returnHtml = '<table class="mm-popup-table">';
     returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
     returnHtml += `<tr><td>Highway</td><td>${props['hwyDir']}</td></tr>`;
-    returnHtml += `<tr><td>Description</td><td>${props['descrip'] ? props['descrip']: '-'}</td></tr>`;
+    returnHtml += `<tr><td>Description</td><td>${props['descrip'] ? props['descrip'] : '-'}</td></tr>`;
     returnHtml += `<tr><td>Divided</td><td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}</td></tr>`;
     returnHtml += `<tr><td>From RP</td><td>${props['pdpFrom']}</td></tr>`;
     returnHtml += `<tr><td>To RP</td><td>${props['pdpTo']}</td></tr>`;
@@ -88,11 +88,18 @@ export const mmPopupContent = (props) => {
 };
 
 export const segNodeStyle = new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 6,
-                    fill: new ol.style.Fill({
-                        color: 'rgb(0, 0, 0)'
-                    }),
-                    stroke: new ol.style.Stroke({color: 'rgb(0, 0, 0', width: 2})
-                })
-            });
+    image: new ol.style.Circle({
+        radius: 5,
+        fill: new ol.style.Fill({
+            color: 'rgb(0, 0, 0)'
+        }),
+        stroke: new ol.style.Stroke({color: 'rgb(0, 0, 0', width: 2})
+    })
+});
+
+export const mmFlagStyle = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+        color: '#b81900',
+        width: 6
+    })
+});

@@ -1109,7 +1109,7 @@ var Corridor = function () {
 
         /**
          *
-         * @returns {ol.layer.Vector} - the OL Vector Layer
+         * @returns {ol.layer.Vector|ol.layer.Base} - the OL Vector Layer
          */
 
     }, {
@@ -1243,7 +1243,7 @@ exports.default = Corridor;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.segNodeStyle = exports.mmPopupContent = exports.corridorPreviewColor = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
+exports.mmFlagStyle = exports.segNodeStyle = exports.mmPopupContent = exports.corridorPreviewColor = exports.segmentSelectionStyleTo = exports.toColor = exports.segmentSelectionStyleFrom = exports.fromColor = exports.segmentLayer = undefined;
 exports.randomColor = randomColor;
 exports.layerConfigHelper = layerConfigHelper;
 
@@ -1302,7 +1302,7 @@ function randomColor() {
 }
 
 /**
- * 
+ *
  * @param name
  * @param color
  * @param visible
@@ -1341,11 +1341,18 @@ var mmPopupContent = exports.mmPopupContent = function mmPopupContent(props) {
 
 var segNodeStyle = exports.segNodeStyle = new _ol2.default.style.Style({
     image: new _ol2.default.style.Circle({
-        radius: 6,
+        radius: 5,
         fill: new _ol2.default.style.Fill({
             color: 'rgb(0, 0, 0)'
         }),
         stroke: new _ol2.default.style.Stroke({ color: 'rgb(0, 0, 0', width: 2 })
+    })
+});
+
+var mmFlagStyle = exports.mmFlagStyle = new _ol2.default.style.Style({
+    stroke: new _ol2.default.style.Stroke({
+        color: '#b81900',
+        width: 6
     })
 });
 

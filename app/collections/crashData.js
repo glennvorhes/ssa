@@ -3,15 +3,14 @@
  */
 
 
-import {getCrashes}  from './ajaxGetters';
-import exampleCrashData from './exampleCrashData';
+// import exampleCrashData from '../exampleCrashData';
+
+import {getCrashes}  from '../ajaxGetters';
 import $ from 'webmapsjs/src/jquery/jquery';
 import * as objHelp from 'webmapsjs/src/util/objectHelpers';
 import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
 import ol from 'webmapsjs/src/ol/ol';
-import filterCrash from './filters/filterCrash';
-import filterControllingCriteria from './filters/filterContollingCriteria';
-import filterMmFlag from './filters/filterMmFlag';
+import filterCrash from '../filters/filterCrash';
 import * as colorUtil from 'webmapsjs/src/util/colors';
 import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
 
@@ -175,15 +174,11 @@ class CrashData {
 
         this._crashHtmlLookup = {};
         this._crashArrayLookup = {};
-        this.pointCrashes = new LayerBaseVectorGeoJson('', {name: "Crash Points", zIndex: 4, style: crashPointStyle});
-
-
+        this.pointCrashes = new LayerBaseVectorGeoJson('', {name: "Crash Points", zIndex: 7, style: crashPointStyle, minZoom: 10});
     }
 
     init() {
         mapPopup.addVectorPopup(this.pointCrashes, (props) => {
-            console.log(props);
-
             return 'Inj Sev' + props['injSvr'];
         });
 
@@ -191,12 +186,14 @@ class CrashData {
            this.pointCrashes.refresh();
         });
 
-        this._processCrashData(exampleCrashData);
-        // // load the crashes
-        // getCrashes((d) => {
-        //     this._processCrashData(d);
-
-        // });
+        if (typeof exampleCrashData === 'undefined') {
+            // load the crashes
+            getCrashes((d) => {
+                this._processCrashData(d);
+            });
+        } else {
+            this._processCrashData(exampleCrashData);
+        }
     }
 
     _processCrashData(d) {

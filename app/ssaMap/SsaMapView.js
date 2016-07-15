@@ -13,7 +13,8 @@ import * as styles  from '../layerStyles';
 import ol from 'webmapsjs/src/ol/ol';
 import {calculateExtent} from '../collections/CorridorCollection';
 import $ from 'webmapsjs/src/jquery/jquery';
-import crashData from '../crashData';
+import crashData from '../collections/crashData';
+import mmFlags from '../collections/mmFlags';
 
 const nm = provide('ssa');
 
@@ -88,8 +89,7 @@ class SsaMapView extends SsaMapBase {
          * @type {Array<CorridorConfig>}
          */
         let corridorConfigs = [];
-
-
+        
         /**
          *
          * @type {Array<Corridor>}
@@ -117,7 +117,7 @@ class SsaMapView extends SsaMapBase {
                 conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
                 {
                     color: 'black',
-                    loadedCallback: () => {
+                    loadedCallback: (c) => {
                         this.loadedCorridors++;
                         //something special when all the corridors have been loaded
                         if (this.loadedCorridors == this.createdCorridors) {
@@ -126,9 +126,11 @@ class SsaMapView extends SsaMapBase {
                                 this.mainMap.getView().fit(ext, this.mainMap.getSize());
                             }
                         }
+                        mmFlags.addCorridor(c);
                     }
                 }
             );
+
 
             this._corridorArray.push(corridor);
 
@@ -141,6 +143,7 @@ class SsaMapView extends SsaMapBase {
         $('#' + infoAnchorId).after(outHtml);
 
         crashData.init();
+        mmFlags.init(this.mainMap);
 
         this.mainMap.addLayer(crashData.pointCrashes.olLayer);
     }
