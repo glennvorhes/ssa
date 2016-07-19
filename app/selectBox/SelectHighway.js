@@ -98,10 +98,13 @@ class SelectHighway extends SelectBoxBase {
                 } else {
                     this.box.trigger('change');
                 }
-
+                this.box.prop('disabled', false);
             } else {
-                this.box.prop('disabled', d.length == 0);
+                this.box.prop('disabled', true);
+                this.box.trigger('change');
+                console.log(this.box.val());
             }
+
         });
     }
 }

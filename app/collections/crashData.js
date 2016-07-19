@@ -2,8 +2,9 @@
  * Created by gavorhes on 7/13/2016.
  */
 
-
+// uncomment this to use the example crash data
 // import exampleCrashData from '../exampleCrashData';
+let exampleCrashData = undefined;
 
 import {getCrashes}  from '../ajaxGetters';
 import $ from 'webmapsjs/src/jquery/jquery';
@@ -16,7 +17,8 @@ import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
 
 /**
  *
- * @param {string} inDate
+ * @param {string} inDate - input date to format
+ * @returns {string} formatted date
  */
 function _dteStrip(inDate) {
     "use strict";
@@ -64,7 +66,7 @@ function injColor(inj) {
 
 /**
  *
- * @param {Array<crashData>} crashData
+ * @param {Array<crashData>} crashData - array of crash data
  * @private
  */
 function _crashInfoHelper(crashData) {
@@ -112,7 +114,7 @@ function _crashInfoHelper(crashData) {
     }
     returnHtml += '</ul>';
 
-    let crshType = {
+    let crashType = {
         'K': 'Fatal',
         'A': 'Incapacitating',
         'B': 'Non-incapacitating',
@@ -127,7 +129,7 @@ function _crashInfoHelper(crashData) {
     if (crashData.length > 0) {
         for (let k of ['K', 'A', 'B', 'C', 'P']) {
             if (typeof crashSummary[k] != 'undefined') {
-                tableContent += `<tr><td>${crshType[k]}</td><td>${crashSummary[k]}</td></tr>`;
+                tableContent += `<tr><td>${crashType[k]}</td><td>${crashSummary[k]}</td></tr>`;
             }
         }
     }
@@ -141,10 +143,9 @@ function _crashInfoHelper(crashData) {
 /**
  *
  * @param {ol.Feature} feature
- * @param {number} res
- * @returns {*[]}
+ * @returns {Array<ol.style.Style>|null}
  */
-const crashPointStyle = (feature, res) => {
+const crashPointStyle = (feature) => {
     "use strict";
 
     let props = feature.getProperties();
@@ -179,7 +180,15 @@ class CrashData {
 
     init() {
         mapPopup.addVectorPopup(this.pointCrashes, (props) => {
-            return 'Inj Sev' + props['injSvr'];
+            let returnHtml = '<table class="crash-popup-table">';
+            returnHtml += `<tr><td>Date</td><td>${props['dte'] + ' ' + props['time']}</td></tr>`;
+            returnHtml += `<tr><td>Cuml. Ml.</td><td>${props['cumulMile']}</td></tr>`;
+            returnHtml += `<tr><td>Severity</td><td>${props['injSvr']}</td></tr>`;
+            returnHtml += `<tr><td>Lat</td><td>${props['lat']}</td></tr>`;
+            returnHtml += `<tr><td>Lon</td><td>${props['lon']}</td></tr>`;
+            returnHtml += '</table>';
+
+            return returnHtml;
         });
 
         filterCrash.addChangeCallback(() => {

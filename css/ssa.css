@@ -227,11 +227,11 @@ select:disabled {
 }
 .seg-popup-container {
   position: absolute;
-  height: 300px;
-  width: 400px;
+  height: 380px;
+  width: 600px;
   z-index: 999;
-  left: 132px;
-  top: 10px;
+  left: 143px;
+  top: -21px;
   background-color: white;
   border: solid black 1px;
   cursor: default;
@@ -253,7 +253,7 @@ select:disabled {
   display: block;
 }
 .seg-popup-container > div:last-of-type {
-  height: calc(259px);
+  height: calc(339px);
 }
 .container-head-close {
   color: blue;
@@ -288,6 +288,15 @@ select:disabled {
 }
 .crash-summary-table {
   margin: 8px 7px 3px 7px;
+}
+.crash-popup-table {
+  border-collapse: collapse;
+}
+.crash-popup-table th,
+.crash-popup-table td {
+  border: solid black 1px;
+  padding: 1px 4px;
+  text-align: center;
 }
 .crash-list {
   list-style: none;

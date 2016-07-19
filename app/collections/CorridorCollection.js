@@ -1,45 +1,12 @@
 /**
  * Created by gavorhes on 5/16/2016.
  */
-import provide from 'webmapsjs/src/util/provide'
+import provide from 'webmapsjs/src/util/provide';
 import * as styles  from '../layerStyles';
 import $ from 'webmapsjs/src/jquery/jquery';
+import * as calcExtent from 'webmapsjs/src/olHelpers/extentUtil';
+
 const nm = provide('ssa');
-
-
-/**
- *
- * @param {Array<Corridor>} corArray - array of corridors
- * @returns {ol.Extent|Array<number>|*} - collective extent
- */
-export function calculateExtent(corArray) {
-    let hasExtent = false;
-
-    let minX = 10E100;
-    let minY = 10E100;
-    let maxX = -10E100;
-    let maxY = -10E100;
-
-    for (let c of corArray) {
-        if (c.olLayer.getSource().getFeatures().length > 0) {
-            hasExtent = true;
-            let ext = c.olLayer.getSource().getExtent();
-            minX = ext[0] < minX ? ext[0] : minX;
-            minY = ext[1] < minY ? ext[1] : minY;
-            maxX = ext[2] > maxX ? ext[2] : maxX;
-            maxY = ext[3] > maxY ? ext[3] : maxY;
-        }
-    }
-
-    if (hasExtent) {
-        return [minX, minY, maxX, maxY];
-    } else {
-        return undefined;
-    }
-}
-nm.calculateExtent = calculateExtent;
-
-
 
 /**
  *
@@ -110,7 +77,7 @@ class CorridorCollection {
     }
 
     /**
-     *
+     * add a corridor
      * @param {Corridor} c - the corridor to be added
      */
     addCorridorCreate(c) {
@@ -124,7 +91,7 @@ class CorridorCollection {
     }
 
     /**
-     *
+     * delete/remove a corridor
      * @param {string|Corridor} cor - the corridor to be removed
      */
     removeCorridor(cor) {
@@ -143,16 +110,15 @@ class CorridorCollection {
         this._corridorArray.splice(ix, 1);
         delete this._coridorLookup[cor.clientId];
 
-        // cor.layer.visible = false;
-        // cor.layer.source.clear();
-        //
-
         this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
         this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
-        // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
+
         this.refreshHtmlCreate();
     }
 
+    /**
+     * refresh the contents of the corridor table and hidden corridor data input elements
+     */
     refreshHtmlCreate() {
         this.$innerContainer.html('');
 
@@ -193,13 +159,11 @@ class CorridorCollection {
         for (let i = 0; i < this._corridorArray.length; i++) {
             let cor = this._corridorArray[i];
             cor.getDataHtml(i);
-            // cor.getDataHtmlDisp(i);
             this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
         }
-
-
     }
-
+    
+    
     get visible() {
         return this._visible;
     }
@@ -219,14 +183,21 @@ class CorridorCollection {
     }
 
     get fullExtent() {
-        return calculateExtent(this._corridorArray);
+        return calcExtent.calculateExtent(this._corridorArray);
     }
 
-
+    /**
+     * if currently in a create or modify operation
+     * @returns {boolean} is creating or modifying
+     */
     get createModifyOperation(){
         return this._createModifyOperation;
     }
 
+    /**
+     * if currently in a create or modify operation
+     * @param {boolean} c - is creating or modifying
+     */
     set createModifyOperation(c){
         this._createModifyOperation = c;
 

@@ -87,18 +87,18 @@
   z-index: 3;
 }
 
-@containerHeight: 300px;
+@containerHeight: 380px;
 @topBarHeight: 31px;
 @topBarPadding: 5px;
-@mapHeight: calc(@containerHeight - 2 * @topBarPadding - @topBarHeight);
+@mapHeight: calc(@containerHeight - 2px * @topBarPadding - @topBarHeight);
 
 .seg-popup-container {
   position: absolute;
-  height: 300px;
-  width: 400px;
+  height: @containerHeight;
+  width: 600px;
   z-index: 999;
-  left: 132px;
-  top: 10px;
+  left: 143px;
+  top: -21px;
   background-color: white;
   border: solid black 1px;
   cursor: default;
@@ -154,6 +154,16 @@
 
 .crash-summary-table{
     margin: 8px 7px 3px 7px;
+}
+
+.crash-popup-table{
+  border-collapse: collapse;
+
+  th, td {
+    border: solid black 1px;
+    padding: 1px 4px;
+    text-align: center;
+  }
 }
 
 

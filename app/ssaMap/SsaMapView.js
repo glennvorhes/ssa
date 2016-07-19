@@ -11,7 +11,7 @@ import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
 import * as styles  from '../layerStyles';
 import ol from 'webmapsjs/src/ol/ol';
-import {calculateExtent} from '../collections/CorridorCollection';
+import * as calcExtent from 'webmapsjs/src/olHelpers/extentUtil';
 import $ from 'webmapsjs/src/jquery/jquery';
 import crashData from '../collections/crashData';
 import mmFlags from '../collections/mmFlags';
@@ -122,10 +122,7 @@ class SsaMapView extends SsaMapBase {
                         this.loadedCorridors++;
                         //something special when all the corridors have been loaded
                         if (this.loadedCorridors == this.createdCorridors) {
-                            let ext = calculateExtent(this._corridorArray);
-                            if (ext) {
-                                this.mainMap.getView().fit(ext, this.mainMap.getSize());
-                            }
+                            calcExtent.fitToMap(this._corridorArray, this.mainMap);
                         }
                         mmFlags.addCorridor(c);
                     }
