@@ -31,139 +31,49 @@
  */
 
 import SsaMapBase from './SsaMapBase';
+import quickMap from 'webmapsjs/src/olHelpers/quickMap';
+import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
+import mapMove from 'webmapsjs/src/olHelpers/mapMove';
 import provide from 'webmapsjs/src/util/provide';
 import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
 import * as styles  from '../layerStyles';
-import * as ajx from '../ajaxGetters';
 import ol from 'webmapsjs/src/ol/ol';
-import {calculateExtent} from '../collections/CorridorCollection';
-import * as objHelp from 'webmapsjs/src/util/objectHelpers';
+import * as calcExtent from 'webmapsjs/src/olHelpers/extentUtil';
 import $ from 'webmapsjs/src/jquery/jquery';
+import crashData from '../collections/crashData';
+import mmFlags from '../collections/mmFlags';
+import controllingCriteria from '../collections/controllingCriteria';
 
 const nm = provide('ssa');
 
-/**
- *
- * @param {string} inDate
- */
-function _dteStrip(inDate) {
-    "use strict";
-    let parts = inDate.split('/');
-    let m = parts[0];
-    let d = parts[1];
-    let y = parts[2];
 
-    if (m[0] == '0') {
-        m = m.slice(1);
+export const mmPopupContent = (props) => {
+
+    let returnHtml = '&lt;table class="mm-popup-table">';
+    returnHtml += `&lt;tr>&lt;td>PdpId&lt;/td>&lt;td>${props['pdpId']}&lt;/td>&lt;/tr>`;
+    returnHtml += `&lt;tr>&lt;td>Highway&lt;/td>&lt;td>${props['hwyDir']}&lt;/td>&lt;/tr>`;
+    returnHtml += `&lt;tr>&lt;td>Description&lt;/td>&lt;td>${props['descrip'] ? props['descrip']: '-'}&lt;/td>&lt;/tr>`;
+    returnHtml += `&lt;tr>&lt;td>Divided&lt;/td>&lt;td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}&lt;/td>&lt;/tr>`;
+    returnHtml += `&lt;tr>&lt;td>From RP&lt;/td>&lt;td>${props['pdpFrom']}&lt;/td>&lt;/tr>`;
+    returnHtml += `&lt;tr>&lt;td>To RP&lt;/td>&lt;td>${props['pdpTo']}&lt;/td>&lt;/tr>`;
+    returnHtml += '&lt;/table>';
+    if (props['crashInfo']){
+        returnHtml += props['crashInfo'];
     }
-
-    if (d[0] == '0') {
-        d = d.slice(1);
-    }
-    y = y.slice(2);
-
-    return [m, d, y].join('/');
-}
-
-function _timeStrip(tm) {
-    "use strict";
-    tm = tm.replace(/:\d{2} /, '');
-    if (tm[0] == '0') {
-        tm = tm.slice(1);
-    }
-    return tm;
-}
-
-function injColor(inj) {
-    "use strict";
-
-    let color = {
-        'K': 'red',
-        'A': 'orange',
-        'B': 'yellow',
-        'C': 'lightgreen',
-        'P': 'lightblue'
-    }[inj];
-
-    return color || 'rgba(255,255,255,0)';
-}
-
-/**
- *
- * @param {Array&lt;crashData>} crashData
- * @private
- */
-function _crashInfoHelper(crashData) {
-    "use strict";
-    crashData.sort(function (a, b) {
-        let dteA = (new Date(a['dte'] + ' ' + a['time'])).getTime();
-        let dteB = (new Date(b['dte'] + ' ' + b['time'])).getTime();
-
-        if (dteA == dteB) {
-            return 0;
-        } else {
-            return dteA > dteB ? -1 : 1;
-        }
-    });
-
-    let returnHtml = '';
-    returnHtml += '&lt;ul class="crash-list">';
-
-    let crashSummary = {};
-
-    for (let /**@type {crashData} */ c of crashData) {
-
-        if (typeof crashSummary[c.injSvr] == 'undefined') {
-            crashSummary[c.injSvr] = 1;
-        } else {
-            crashSummary[c.injSvr]++;
-        }
-
-
-        returnHtml += `&lt;li style="background-color: ${injColor(c.injSvr)};">`;
-        returnHtml += _dteStrip(c.dte);
-        if (c.time) {
-            returnHtml += ', ' + _timeStrip(c.time);
-        }
-
-        if (c.mnrColl) {
-            returnHtml += ', ' + c.mnrColl;
-        }
-
-        if (c.injSvr) {
-            returnHtml += ', ' + c.injSvr;
-        }
-
-        returnHtml += '&lt;/li>';
-    }
-    returnHtml += '&lt;/ul>';
-
-    let crshType = {
-        'K': 'Fatal',
-        'A': 'Incapacitating',
-        'B': 'Non-incapacitating',
-        'C': 'Possible Injury',
-        'P': 'Property Damage'
-    };
-
-    let tableContent = '&lt;table class="crash-summary-table">';
-    tableContent += `&lt;tr>&lt;th colspan="2">Crash Summary&lt;/th>&lt;/tr>`;
-    tableContent += `&lt;tr>&lt;td>Total&lt;/td>&lt;td>${crashData.length}&lt;/td>&lt;/tr>`;
-
-    if (crashData.length > 0) {
-        for (let k of ['K', 'A', 'B', 'C', 'P']) {
-            if (typeof crashSummary[k] != 'undefined') {
-                tableContent += `&lt;tr>&lt;td>${crshType[k]}&lt;/td>&lt;td>${crashSummary[k]}&lt;/td>&lt;/tr>`
-            }
-        }
-    }
-    
-    tableContent += '&lt;/table>';
-    returnHtml = tableContent + returnHtml;
 
     return returnHtml;
-}
+};
+
+const mmPopupContentWithCrash = (props) => {
+    "use strict";
+    let returnHtml = styles.mmPopupContent(props);
+
+    returnHtml += crashData.getCrashSummary(props['pdpId']);
+    
+    return returnHtml;
+};
+
 
 class SsaMapView extends SsaMapBase {
 
@@ -176,6 +86,27 @@ class SsaMapView extends SsaMapBase {
     constructor(divId, dataClass, infoAnchorId) {
         super(divId);
 
+        /**
+         * @type {ol.Map}
+         */
+        this.mainMap = quickMap({
+            divId: this.mapId,
+            minZoom: 6,
+            zoom: 6,
+            fullScreen: true
+        });
+
+
+        /**
+         * @type {MapMoveCls}
+         */
+        this.mainMapMove = mapMove;
+
+        /**
+         * @type {MapPopupCls}
+         */
+        this.mainMapPopup = mapPopup;
+
         dataClass = typeof dataClass == 'string' ? dataClass : 'corridor-data';
         infoAnchorId = typeof infoAnchorId == 'string' ? infoAnchorId : 'ssa-corridor-info-anchor';
         dataClass = '.' + dataClass;
@@ -187,8 +118,7 @@ class SsaMapView extends SsaMapBase {
          * @type {Array&lt;CorridorConfig>}
          */
         let corridorConfigs = [];
-
-
+        
         /**
          *
          * @type {Array&lt;Corridor>}
@@ -213,67 +143,35 @@ class SsaMapView extends SsaMapBase {
 
             let corridor = new Corridor(
                 conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
-                conf.startCounty, conf.endCounty, conf.hgwy,
+                conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
                 {
                     color: 'black',
-                    loadedCallback: () => {
+                    loadedCallback: (c) => {
                         this.loadedCorridors++;
                         //something special when all the corridors have been loaded
                         if (this.loadedCorridors == this.createdCorridors) {
-                            let ext = calculateExtent(this._corridorArray);
-                            if (ext) {
-                                this.mainMap.getView().fit(ext, this.mainMap.getSize());
-                            }
-
-                            // load the crashes
-                            ajx.getCrashes((d) => {
-                                // iterate over the pdp ids
-                                for (let itm of objHelp.keyValPairs(d)) {
-                                    // convert to an int
-                                    let pdp = parseInt(itm.key);
-
-                                    // loop over corridors to find which one it is on,
-                                    // don't break as there might be multiples
-                                    for (let corr of this._corridorArray) {
-
-                                        /**
-                                         * try to find the feature by exact match
-                                         * @type {ol.Feature|undefined}
-                                         */
-                                        let theFeature = corr.sortedFeatures.getFeature(pdp, true);
-
-                                        // if found, set the crashes property using a helper function
-                                        if (theFeature) {
-                                            theFeature.setProperties(
-                                                {crashInfo: _crashInfoHelper(/**@type {Array&lt;crashData>} */itm.value)}
-                                            );
-                                        }
-                                    }
-                                }
-
-                                // flash a crashes loaded message
-                                let $crashesLoadMsg = $('.crashes-loaded-msg');
-
-                                $crashesLoadMsg.fadeIn();
-
-                                setTimeout(()=> {
-                                    $crashesLoadMsg.fadeOut();
-                                }, 4000);
-                            });
+                            calcExtent.fitToMap(this._corridorArray, this.mainMap);
                         }
+                        mmFlags.addCorridor(c);
                     }
                 }
             );
+
 
             this._corridorArray.push(corridor);
 
             this.mainMap.addLayer(corridor.olLayer);
             this.mainMap.addLayer(corridor.nodeLayer.olLayer);
 
-            this.mainMapPopup.addVectorPopup(corridor.layer, styles.mmPopupContent);
+            this.mainMapPopup.addVectorPopup(corridor.layer, mmPopupContentWithCrash);
         }
 
         $('#' + infoAnchorId).after(outHtml);
+
+        crashData.init();
+        mmFlags.init(this.mainMap);
+
+        this.mainMap.addLayer(crashData.pointCrashes.olLayer);
     }
 }
 
@@ -289,13 +187,13 @@ export default SsaMapView;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 16:06:27 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Jul 22 2016 14:00:42 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

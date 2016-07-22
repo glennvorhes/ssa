@@ -3,7 +3,7 @@
  */
 
 import SelectBoxBase from './SelectBoxBase';
-import {getHighways, getHwyByStartEndCounty} from '../ajaxGetters';
+import Ajx from '../AjaxGetters';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
 
@@ -11,7 +11,7 @@ class SelectHighway extends SelectBoxBase {
 
     /**
      *
-     * @param {jQuery} parent
+     * @param {jQuery} parent - parent element
      */
     constructor(parent) {
         super(parent, "Highway");
@@ -19,15 +19,15 @@ class SelectHighway extends SelectBoxBase {
 
     /**
      *
-     * @param {number} countyId
-     * @param {string|undefined} [hwy=undefined]
+     * @param {number} countyId - county id
+     * @param {string|undefined} [hwy=undefined] - route id for initial selection
      */
     setStartCounty(countyId, hwy) {
         hwy = typeof hwy == 'string' ? hwy : undefined;
         this.box.html('');
         this.box.addClass('refresh').removeClass('refresh');
 
-        getHighways(countyId, (d) => {
+        Ajx.getHighways(countyId, (d) => {
             "use strict";
 
             for (let h of d) {
@@ -46,9 +46,9 @@ class SelectHighway extends SelectBoxBase {
 
     /**
      *
-     * @param {number|string|null} startId
-     * @param {number|string|null} endId
-     * @param {number|string|null} [routeId=undefined]
+     * @param {number|string|null} startId - start county id
+     * @param {number|string|null} endId - end county id
+     * @param {number|string|null} [routeId=undefined] - route id for selection
      */
     setStartEndCounty(startId, endId, routeId) {
 
@@ -75,7 +75,7 @@ class SelectHighway extends SelectBoxBase {
             routeId = parseInt(routeId);
         }
 
-        getHwyByStartEndCounty(startId, endId, (d) => {
+        Ajx.getHwyByStartEndCounty(startId, endId, (d) => {
             if (d.length > 0) {
 
                 d.sort((a, b) => {

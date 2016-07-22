@@ -224,8 +224,8 @@ class PickerCollection {
     }
 
     /**
-     *
-     * @param {Corridor} cor
+     * Populate the selections based on values from an existing corridor
+     * @param {Corridor} cor - existing corridor
      */
     startEditCorridor(cor) {
         this.visible = true;
@@ -246,10 +246,18 @@ class PickerCollection {
         this._ssaMapCreate.corridorCollection.createModifyOperation = true;
     }
 
+    /**
+     * Getter for if the collection is visible {boolean}
+     * @returns {boolean} - if visible
+     */
     get visible() {
         return this._visible;
     }
 
+    /**
+     * Setter for if the collection is visible {boolean}
+     * @param {boolean} viz - if visible
+     */
     set visible(viz) {
         this._visible = viz;
 
@@ -261,16 +269,16 @@ class PickerCollection {
     }
 
     /**
-     *
-     * @returns {boolean}
+     * Getter for if an add modify operation is happening {boolean}
+     * @returns {boolean} - if the add or modify operation is happening
      */
     get addModifyEnabled() {
         return this._addModifyEnabled;
     }
 
     /**
-     *
-     * @param {boolean} isEnabled
+     * Setter for if an add modify operation is happening {boolean}
+     * @param {boolean} isEnabled - if enabled
      */
     set addModifyEnabled(isEnabled) {
         this._addModifyEnabled = isEnabled;

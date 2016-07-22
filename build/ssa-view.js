@@ -4,14 +4,10 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getStartCounties = getStartCounties;
-exports.getHighways = getHighways;
-exports.getEndCounties = getEndCounties;
-exports.getSegments = getSegments;
-exports.getCorridor = getCorridor;
-exports.getCrashes = getCrashes;
-exports.getAllCounties = getAllCounties;
-exports.getHwyByStartEndCounty = getHwyByStartEndCounty;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by gavorhes on 5/12/2016.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 var _jquery = require('webmapsjs/src/jquery/jquery');
 
@@ -23,9 +19,7 @@ var _provide2 = _interopRequireDefault(_provide);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Created by gavorhes on 5/12/2016.
- */
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var nm = (0, _provide2.default)('ssa');
 
@@ -40,17 +34,12 @@ var getAllCountiesUrl = home + 'getAllCounties';
 var getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
 
 /**
- * @callback ajaxCallback
- * @param {object|Array} d - returned data
+ * inner function to help ajax
+ * @param {string} url - resource url
+ * @param {object} [params={}] - get params
+ * @param {ajaxCallback} callback - callback function
  */
-
-/**
- *
- * @param {string} url
- * @param {object} [params={}]
- * @param {ajaxCallback} callback
- */
-function ajaxInner(url, params, callback) {
+function _ajaxInner(url, params, callback) {
     "use strict";
 
     _jquery2.default.get(url, params, callback, 'json').fail(function () {
@@ -59,13 +48,13 @@ function ajaxInner(url, params, callback) {
 }
 
 /**
- *
- * @param {string} url
- * @param {ajaxCallback} callback
- * @param {object} [params={}]
- * @param {ajaxCallback} [calbackHelper=undefined]
+ * outer function to help ajax
+ * @param {string} url - resource url
+ * @param {ajaxCallback} callback - callback function
+ * @param {object} [params={}] get params
+ * @param {ajaxCallback} [calbackHelper=undefined] - callback helper
  */
-function ajaxHelper(url, callback, params, calbackHelper) {
+function _ajaxHelper(url, callback, params, calbackHelper) {
     "use strict";
 
     params = params || {};
@@ -75,13 +64,18 @@ function ajaxHelper(url, callback, params, calbackHelper) {
             d = calbackHelper(d);
             callback(d);
         };
-        ajaxInner(url, params, newCallback);
+        _ajaxInner(url, params, newCallback);
     } else {
-        ajaxInner(url, params, callback);
+        _ajaxInner(url, params, callback);
     }
 }
 
-var countySort = function countySort(d) {
+/**
+ * sort function for counties
+ * @param {Array<object>} d - county object
+ * @returns {Array<object>} sorted array of county key val pair objects
+ */
+var _countySort = function _countySort(d) {
     d.sort(function (a, b) {
         if (a['name'] == b['name']) {
             return 0;
@@ -94,119 +88,162 @@ var countySort = function countySort(d) {
 };
 
 /**
- *
- * @param {ajaxCallback} callback - callback function
+ * static methods to make ajax requests
  */
-function getStartCounties(callback) {
-    "use strict";
 
-    ajaxHelper(getStartCountiesUrl, callback, {}, countySort);
-}
-nm.getStartCounties = getStartCounties;
+var AjaxGetters = function () {
 
-/**
- * Get the highways based on the start county
- * @param {number} startCountyId
- * @param {ajaxCallback} callback
- */
-function getHighways(startCountyId, callback) {
-    "use strict";
+    /**
+     * Do not instantiate this class - only static methods
+     */
 
-    var params = { "startCountyId": startCountyId };
+    function AjaxGetters() {
+        _classCallCheck(this, AjaxGetters);
 
-    ajaxHelper(getHighwaysUrl, callback, params);
-}
-nm.getHighways = getHighways;
-
-/**
- * Get the highways based on the start county
- * @param {string} highwayName
- * @param {ajaxCallback} callback
- */
-function getEndCounties(highwayName, callback) {
-    "use strict";
-
-    var params = { "highwayName": highwayName };
-
-    ajaxHelper(getEndCountiesUrl, callback, params, countySort);
-}
-nm.getEndCounties = getEndCounties;
-
-/**
- *
- * @param {number} county
- * @param {number} routeId
- * @param {ajaxCallback} callback
- */
-function getSegments(county, routeId, callback) {
-    "use strict";
-
-    if (typeof routeId == 'string') {
-        routeId = parseInt(routeId);
+        throw 'this class should not be instantiated';
     }
 
-    var params = { "routeid": routeId, "county": county };
-    ajaxHelper(getSegmentsUrl, callback, params);
-}
+    /**
+     * @static
+     * @param {ajaxCallback} callback - callback function
+     */
 
-nm.getSegments = getSegments;
 
-/**
- *
- * @param {number} startPdp
- * @param {number} endPdp
- * @param {ajaxCallback} callback
- */
-function getCorridor(startPdp, endPdp, callback) {
-    "use strict";
+    _createClass(AjaxGetters, null, [{
+        key: 'getStartCounties',
+        value: function getStartCounties(callback) {
+            "use strict";
 
-    var params = { "from": startPdp, "to": endPdp };
+            _ajaxHelper(getStartCountiesUrl, callback, {}, _countySort);
+        }
 
-    ajaxHelper(getCorridorUrl, callback, params);
-}
+        /**
+         * Get the highways based on the start county
+         * @param {number} startCountyId - start county id
+         * @param {ajaxCallback} callback - callback function
+         */
 
-nm.getCorridor = getCorridor;
+    }, {
+        key: 'getHighways',
+        value: function getHighways(startCountyId, callback) {
+            "use strict";
 
-/**
- *
- * @param {ajaxCallback} callback
- */
-function getCrashes(callback) {
-    "use strict";
+            var params = { "startCountyId": startCountyId };
 
-    var params = {};
+            _ajaxHelper(getHighwaysUrl, callback, params);
+        }
 
-    ajaxHelper(getCrashesUrl, callback, params);
-}
+        /**
+         * Get the highways based on the start county
+         * @param {string} highwayName - highway name
+         * @param {ajaxCallback} callback - callback function
+         */
 
-/**
- *
- * @param {ajaxCallback} callback
- */
-function getAllCounties(callback) {
-    "use strict";
+    }, {
+        key: 'getEndCounties',
+        value: function getEndCounties(highwayName, callback) {
+            "use strict";
 
-    var params = {};
+            var params = { "highwayName": highwayName };
 
-    ajaxHelper(getAllCountiesUrl, callback, params);
-}
+            _ajaxHelper(getEndCountiesUrl, callback, params, _countySort);
+        }
 
-/**
- *
- * @param {number} startCountyId
- * @param {number} endCountyId
- * @param {ajaxCallback} callback
- */
-function getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
-    "use strict";
+        /**
+         * get the segments based on county and route id
+         * @param {number} county - county id
+         * @param {number} routeId - route id
+         * @param {ajaxCallback} callback - callback function
+         */
 
-    var params = {
-        'startCountyId': startCountyId,
-        'endCountyId': endCountyId
-    };
+    }, {
+        key: 'getSegments',
+        value: function getSegments(county, routeId, callback) {
+            "use strict";
 
-    ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
-}
+            if (typeof routeId == 'string') {
+                routeId = parseInt(routeId);
+            }
+
+            var params = { "routeid": routeId, "county": county };
+            _ajaxHelper(getSegmentsUrl, callback, params);
+        }
+
+        /**
+         * get corridor based on start and end pdp id
+         * @param {number} startPdp - start pdp id
+         * @param {number} endPdp - end pdp id
+         * @param {ajaxCallback} callback - callback function
+         */
+
+    }, {
+        key: 'getCorridor',
+        value: function getCorridor(startPdp, endPdp, callback) {
+            "use strict";
+
+            var params = { "from": startPdp, "to": endPdp };
+
+            _ajaxHelper(getCorridorUrl, callback, params);
+        }
+
+        /**
+         * Get the crash data
+         * @param {ajaxCallback} callback - callback function
+         */
+
+    }, {
+        key: 'getCrashes',
+        value: function getCrashes(callback) {
+            "use strict";
+
+            var params = {};
+
+            _ajaxHelper(getCrashesUrl, callback, params);
+        }
+
+        /**
+         * Get all counties as an array
+         * @param {ajaxCallback} callback - callback function
+         */
+
+    }, {
+        key: 'getAllCounties',
+        value: function getAllCounties(callback) {
+            "use strict";
+
+            var params = {};
+
+            _ajaxHelper(getAllCountiesUrl, callback, params);
+        }
+
+        /**
+         * Get highways based on start and end counties
+         * @param {number} startCountyId - start county id
+         * @param {number} endCountyId - end county id
+         * @param {ajaxCallback} callback - callback function
+         *
+         */
+
+    }, {
+        key: 'getHwyByStartEndCounty',
+        value: function getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
+            "use strict";
+
+            var params = {
+                'startCountyId': startCountyId,
+                'endCountyId': endCountyId
+            };
+
+            _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
+        }
+    }]);
+
+    return AjaxGetters;
+}();
+
+exports.default = AjaxGetters;
+
+nm.AjaxGetters = AjaxGetters;
 
 },{"webmapsjs/src/jquery/jquery":19,"webmapsjs/src/util/provide":40}],2:[function(require,module,exports){
 'use strict';
@@ -252,7 +289,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ajaxGetters = require('../ajaxGetters');
+var _AjaxGetters = require('../AjaxGetters');
+
+var _AjaxGetters2 = _interopRequireDefault(_AjaxGetters);
 
 var _jquery = require('webmapsjs/src/jquery/jquery');
 
@@ -349,6 +388,7 @@ function injColor(inj) {
 /**
  *
  * @param {Array<crashData>} crashData - array of crash data
+ * @returns {string} crash summary table html
  * @private
  */
 function _crashInfoHelper(crashData) {
@@ -449,8 +489,8 @@ function _crashInfoHelper(crashData) {
 
 /**
  *
- * @param {ol.Feature} feature
- * @returns {Array<ol.style.Style>|null}
+ * @param {ol.Feature} feature - the input feature
+ * @returns {Array<ol.style.Style>|null} - return style or null
  */
 var crashPointStyle = function crashPointStyle(feature) {
     "use strict";
@@ -507,7 +547,7 @@ var CrashData = function () {
 
             if (typeof exampleCrashData === 'undefined') {
                 // load the crashes
-                (0, _ajaxGetters.getCrashes)(function (d) {
+                _AjaxGetters2.default.getCrashes(function (d) {
                     _this._processCrashData(d);
                 });
             } else {
@@ -637,7 +677,7 @@ var CrashData = function () {
 
 exports.default = new CrashData();
 
-},{"../ajaxGetters":1,"../filters/filterCrash":10,"webmapsjs/src/jquery/jquery":19,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":35,"webmapsjs/src/olHelpers/mapPopup":28,"webmapsjs/src/util/colors":37,"webmapsjs/src/util/objectHelpers":39}],4:[function(require,module,exports){
+},{"../AjaxGetters":1,"../filters/filterCrash":10,"webmapsjs/src/jquery/jquery":19,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":35,"webmapsjs/src/olHelpers/mapPopup":28,"webmapsjs/src/util/colors":37,"webmapsjs/src/util/objectHelpers":39}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -790,7 +830,9 @@ var _layerStyles = require('../layerStyles');
 
 var layerStyles = _interopRequireWildcard(_layerStyles);
 
-var _ajaxGetters = require('../ajaxGetters');
+var _AjaxGetters = require('../AjaxGetters');
+
+var _AjaxGetters2 = _interopRequireDefault(_AjaxGetters);
 
 var _SortedFeatures = require('webmapsjs/src/olHelpers/SortedFeatures');
 
@@ -919,7 +961,7 @@ var Corridor = function () {
             this._valid = false;
             this._error = '';
 
-            (0, _ajaxGetters.getCorridor)(this.pdpFrom, this.pdpTo, function (d) {
+            _AjaxGetters2.default.getCorridor(this.pdpFrom, this.pdpTo, function (d) {
                 _this._corridorLayer.addFeatures(d);
 
                 if (typeof d['error'] == 'undefined') {
@@ -1144,7 +1186,7 @@ nm.Corridor = Corridor;
 
 exports.default = Corridor;
 
-},{"../ajaxGetters":1,"../layerStyles":12,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":35,"webmapsjs/src/olHelpers/SortedFeatures":23,"webmapsjs/src/util/makeGuid":38,"webmapsjs/src/util/provide":40}],6:[function(require,module,exports){
+},{"../AjaxGetters":1,"../layerStyles":12,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":35,"webmapsjs/src/olHelpers/SortedFeatures":23,"webmapsjs/src/util/makeGuid":38,"webmapsjs/src/util/provide":40}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

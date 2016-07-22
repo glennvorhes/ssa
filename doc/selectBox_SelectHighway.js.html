@@ -31,7 +31,7 @@
  */
 
 import SelectBoxBase from './SelectBoxBase';
-import {getHighways, getHwyByStartEndCounty} from '../ajaxGetters';
+import Ajx from '../AjaxGetters';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
 
@@ -39,7 +39,7 @@ class SelectHighway extends SelectBoxBase {
 
     /**
      *
-     * @param {jQuery} parent
+     * @param {jQuery} parent - parent element
      */
     constructor(parent) {
         super(parent, "Highway");
@@ -47,15 +47,15 @@ class SelectHighway extends SelectBoxBase {
 
     /**
      *
-     * @param {number} countyId
-     * @param {string|undefined} [hwy=undefined]
+     * @param {number} countyId - county id
+     * @param {string|undefined} [hwy=undefined] - route id for initial selection
      */
     setStartCounty(countyId, hwy) {
         hwy = typeof hwy == 'string' ? hwy : undefined;
         this.box.html('');
         this.box.addClass('refresh').removeClass('refresh');
 
-        getHighways(countyId, (d) => {
+        Ajx.getHighways(countyId, (d) => {
             "use strict";
 
             for (let h of d) {
@@ -63,7 +63,7 @@ class SelectHighway extends SelectBoxBase {
             }
             if (d) {
                 if (hwy) {
-                    this.box.val(hwy)
+                    this.box.val(hwy);
                 } else {
                     this.box.trigger('change');
 
@@ -74,15 +74,20 @@ class SelectHighway extends SelectBoxBase {
 
     /**
      *
-     * @param {number|string|null} startId
-     * @param {number|string|null} endId
-     * @param {string|undefined} hwy
+     * @param {number|string|null} startId - start county id
+     * @param {number|string|null} endId - end county id
+     * @param {number|string|null} [routeId=undefined] - route id for selection
      */
-    setStartEndCounty(startId, endId, hwy) {
-        if (startId == null || startId == undefined || endId == null || endId == undefined) {
+    setStartEndCounty(startId, endId, routeId) {
+
+        if (startId == null || startId == undefined || endId == null) {
             return;
         }
 
+        if (typeof routeId == 'number'){
+            routeId = routeId.toFixed();
+        }
+        
         this.box.html('');
         this.box.addClass('refresh').removeClass('refresh');
 
@@ -94,7 +99,11 @@ class SelectHighway extends SelectBoxBase {
             endId = parseInt(endId);
         }
 
-        getHwyByStartEndCounty(startId, endId, (d) => {
+        if (typeof routeId == 'string') {
+            routeId = parseInt(routeId);
+        }
+
+        Ajx.getHwyByStartEndCounty(startId, endId, (d) => {
             if (d.length > 0) {
 
                 d.sort((a, b) => {
@@ -102,36 +111,35 @@ class SelectHighway extends SelectBoxBase {
                     let bName = b['name'];
 
                     if (aName == bName) {
-
                         return 0;
                     } else {
-
                         return aName > bName ? 1 : -1;
                     }
                 });
                 
                 for (let c of d) {
-                    // this.box.append(`&lt;option value="${c['id']}" ${c['primary'] ? 'selected' : ''}>${c['name']}&lt;/option>`);
-                    this.box.append(`&lt;option value="${c['name']}" ${c['primary'] ? 'selected' : ''}>${c['name']}&lt;/option>`);
+                    this.box.append(`&lt;option value="${c['id']}" ${c['primary'] ? 'selected' : ''}>${c['name']}&lt;/option>`);
                 }
 
-                if (hwy) {
-                    this.box.val(hwy)
+                if (routeId) {
+                    this.box.val(routeId.toFixed());
                 } else {
                     this.box.trigger('change');
                 }
-
+                this.box.prop('disabled', false);
             } else {
-                this.box.prop('disabled', d.length == 0);
+                this.box.prop('disabled', true);
+                this.box.trigger('change');
+                console.log(this.box.val());
             }
-
 
         });
     }
 }
 
 nm.SelectHighway = SelectHighway;
-export default SelectHighway;</code></pre>
+export default SelectHighway;
+</code></pre>
         </article>
     </section>
 
@@ -141,13 +149,13 @@ export default SelectHighway;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 16:06:27 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Jul 22 2016 14:00:42 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -4,7 +4,7 @@
 
 
 import SelectBoxBase from './SelectBoxBase';
-import {getStartCounties, getAllCounties} from '../ajaxGetters';
+import Ajx from '../AjaxGetters';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
 
@@ -18,7 +18,7 @@ class SelectCounty extends SelectBoxBase{
     constructor(parent, labelContent) {
         super(parent, labelContent);
 
-        getAllCounties((d) => {
+        Ajx.getAllCounties((d) => {
             for (let c of d) {
                 this.box.append(`<option value="${c['id']}" ${c['primary'] ? 'selected' : ''}>${c['name']}</option>`)
             }

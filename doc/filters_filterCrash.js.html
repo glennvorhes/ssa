@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: segmentPicker/SegmentPickerTo.js</title>
+    <title>JSDoc: Source: filters/filterCrash.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: segmentPicker/SegmentPickerTo.js</h1>
+    <h1 class="page-title">Source: filters/filterCrash.js</h1>
 
     
 
@@ -27,67 +27,43 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Created by gavorhes on 5/13/2016.
+ * Created by gavorhes on 7/14/2016.
  */
+import FilterBase from './FilterBase';
 
-import SegmentPickerBase from './SegmentPickerBase';
-import * as layerStyles from '../layerStyles';
+class FilterCrash extends FilterBase {
 
-/**
- * The to segment/rp picker
- * @extends SegmentPickerBase
- */
-class SegmentPickerTo extends SegmentPickerBase {
-
-    /**
-     * 
-     * @param {jQuery} parent
-     */
-    constructor(parent) {
-        
-        super(parent, 'Ref. Point #2');
+    constructor() {
+        super('filter-crash', 'filter-crash-sub', true);
     }
 
     /**
-     * 
-     * @param arr
+     *
+     * @param {string} val - the lookup value
+     * @returns {string|null} crash color or null if the crash type should be suppressed
      */
-    processAjaxResult(arr) {
+    getCrashColor(val) {
+        let isActive = super.valIsOn(val);
 
-        arr.sort((a, b) => {
-            let c = a['properties']['pdpTo'];
-            let d = b['properties']['pdpTo'];
-
-            if (c == d) {
-                return 0;
-            }
-            return c &lt; d ? -1 : 1;
-        });
-
-        for (let feat of arr) {
-            let props = feat['properties'];
-            this.box.append(`&lt;option value="${props['pdpId']}">${props['pdpTo']}&lt;/option>`);
+        if (!isActive) {
+            return null;
         }
+
+        let color = {
+            'K': 'rgb(255,0,0)',
+            'A': 'rgb(255,165,0)',
+            'B': 'rgb(255,255,0)',
+            'C': 'rgb(153,255,153)',
+            'P': 'rgb(0,0,255)'
+        }[val];
+
+        return color || 'rgb(128,128,128)';
     }
-
-    /**
-     * @returns {ol.style.Style|undefined}
-     */
-    get selectionStyle() {
-        return layerStyles.segmentSelectionStyleTo;
-    }
-
-    /**
-     * @returns {ol.style.Style}
-     */
-    get selectionStyleOther() {
-        return layerStyles.segmentSelectionStyleFrom;
-    }
-
-
 }
 
-export default SegmentPickerTo;</code></pre>
+export default new FilterCrash();
+
+</code></pre>
         </article>
     </section>
 

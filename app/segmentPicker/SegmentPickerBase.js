@@ -9,7 +9,7 @@ import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson'
 import LayerEsriMapServer from 'webmapsjs/src/layers/LayerEsriMapServer';
 import SelectBoxBase from '../selectBox/SelectBoxBase';
 import ol from 'webmapsjs/src/ol/ol';
-import {getSegments} from '../ajaxGetters';
+import Ajx from '../AjaxGetters';
 import $ from 'webmapsjs/src/jquery/jquery';
 import * as layerStyles from '../layerStyles';
 const nm = provide('ssa.select');
@@ -250,7 +250,7 @@ class SegmentPickerBase extends SelectBoxBase {
             rteId = parseInt(rteId);
         }
 
-        getSegments(county, rteId, (d) => {
+        Ajx.getSegments(county, rteId, (d) => {
                 this._segmentLayer.clear();
                 this._segNodeLayer.clear();
                 this.processAjaxResult(d['features']);

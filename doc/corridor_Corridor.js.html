@@ -35,8 +35,8 @@ import ol from 'webmapsjs/src/ol/ol';
 import makeGuid from 'webmapsjs/src/util/makeGuid';
 import provide from 'webmapsjs/src/util/provide';
 import {layerConfigHelper, randomColor} from '../layerStyles';
-import {getCorridor}  from '../ajaxGetters';
-import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures'
+import Ajx  from '../AjaxGetters';
+import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures';
 import * as layerStyles from '../layerStyles';
 
 const nm = provide('ssa');
@@ -72,21 +72,22 @@ class Corridor {
 
     /**
      *
-     * @param {number} pdpFrom from segment id
-     * @param {number} pdpTo to segment id
-     * @param {string} rpFrom from reference point
-     * @param {string} rpTo to reference point
-     * @param {number} countyStart start county
-     * @param {number} countyEnd end county
-     * @param {string} highway route
-     * @param {object} [options={}]
-     * @param {corridorLoaded} [options.loadedCallback=function(c){}]
-     * @param {number|string|undefined|*} [options.databaseId=undefined]
-     * @param {string} [options.color=randomColor()]
-     * @param {Array&lt;ol.Feature>|undefined} [options.features=undefined]
-     * @param {boolean} [options.cancelLoad=false]
+     * @param {number} pdpFrom - from segment id
+     * @param {number} pdpTo - to segment id
+     * @param {string} rpFrom - from reference point
+     * @param {string} rpTo - to reference point
+     * @param {number} countyStart - start county
+     * @param {number} countyEnd - end county
+     * @param {string} highway - highway text
+     * @param {number} routeId - route Id
+     * @param {object} [options={}] options
+     * @param {corridorLoaded} [options.loadedCallback=function(c){}] function to call on load
+     * @param {number|string|undefined|*} [options.databaseId=undefined] - id in the database
+     * @param {string} [options.color=randomColor()] - color for this corridor
+     * @param {Array&lt;ol.Feature>|undefined} [options.features=undefined] - pre existing features
+     * @param {boolean} [options.cancelLoad=false] - don't load in init
      */
-    constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, options) {
+    constructor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, routeId, options) {
 
         options = options || {};
         options.features = options.features ? options.features : undefined;
@@ -118,6 +119,10 @@ class Corridor {
         this.highway = highway;
         this.rpFrom = rpFrom;
         this.rpTo = rpTo;
+        if (typeof  routeId != 'number'){
+            throw 'route id is not number';
+        }
+        this.routeId  = routeId;
 
         this._corridorLayer = new LayerBaseVectorGeoJson('',
             layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true)
@@ -126,7 +131,7 @@ class Corridor {
         this.nodeLayer = new LayerBaseVectorGeoJson('', {
             style: layerStyles.segNodeStyle,
             minZoom: 11,
-            zIndex: 12
+            zIndex: 3
         });
 
         if (options.features) {
@@ -138,7 +143,7 @@ class Corridor {
 
     /**
      *
-     * @param {corridorLoaded} [loadedCallback=function(c){}]
+     * @param {corridorLoaded} [loadedCallback=function(c){}] - function to call on load
      */
     load(loadedCallback) {
         loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function (c) {
@@ -147,7 +152,7 @@ class Corridor {
         this._valid = false;
         this._error = '';
 
-        getCorridor(this.pdpFrom, this.pdpTo, (d) => {
+        Ajx.getCorridor(this.pdpFrom, this.pdpTo, (d) => {
             this._corridorLayer.addFeatures(d);
 
             if (typeof d['error'] == 'undefined') {
@@ -177,18 +182,19 @@ class Corridor {
 
     /**
      *
-     * @returns {Corridor}
+     * @returns {Corridor} a copy of the corridor
      */
     clone() {
         let c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo,
-            this.countyStart, this.countyEnd, this.highway, {features: this.features});
+            this.countyStart, this.countyEnd, this.highway, this.routeId, {features: this.features});
         c.buildNodes();
+
         return c;
     }
 
     /**
      *
-     * @param {Corridor} corridor
+     * @param {Corridor} corridor -  the corridor used for updating
      */
     updateCorridor(corridor) {
 
@@ -199,6 +205,7 @@ class Corridor {
         this.highway = corridor.highway;
         this.rpFrom = corridor.rpFrom;
         this.rpTo = corridor.rpTo;
+        this.routeId = corridor.routeId;
 
         this.layer.name = corridorName(this.rpFrom, this.rpTo);
 
@@ -213,7 +220,7 @@ class Corridor {
 
     /**
      *
-     * @returns {boolean}
+     * @returns {boolean} if the corridor is loaded, no error on ajax
      */
     get valid() {
         return this._valid;
@@ -221,7 +228,7 @@ class Corridor {
 
     /**
      *
-     * @returns {string|*}
+     * @returns {string|*} - error message
      */
     get error() {
         return this._error;
@@ -229,7 +236,7 @@ class Corridor {
 
     /**
      * get the html string to build the corridor table row with zoom, edit, and delete buttons
-     * @returns {string}
+     * @returns {string} - html for the corridor zoom, edit, and delete buttons
      */
     get tableHtmlCreate() {
         let outString = `&lt;tr class="corridor-tr">`;
@@ -255,6 +262,7 @@ class Corridor {
         outString += `&lt;input type="hidden" class="corridor-data-to-rp" name="corridors[${i}].endRp" value="${this.rpTo}"/>`;
         outString += `&lt;input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].startPdp" value="${this.pdpFrom}"/>`;
         outString += `&lt;input type="hidden" class="corridor-data-to-pdp" name="corridors[${i}].endPdp" value="${this.pdpTo}"/>`;
+        outString += `&lt;input type="hidden" class="corridor-data-route-id" name="corridors[${i}].routeId" value="${this.routeId}"/>`;
         outString += `&lt;/div>`;
 
         return outString;
@@ -271,7 +279,7 @@ class Corridor {
 
     /**
      *
-     * @returns {ol.layer.Vector} - the OL Vector Layer
+     * @returns {ol.layer.Vector|ol.layer.Base} - the OL Vector Layer
      */
     get olLayer() {
         return this._corridorLayer.olLayer;
@@ -280,7 +288,7 @@ class Corridor {
 
     /**
      *
-     * @returns {LayerBaseVectorGeoJson}
+     * @returns {LayerBaseVectorGeoJson} geojson layer
      */
     get layer() {
         return this._corridorLayer;
@@ -314,7 +322,7 @@ class Corridor {
 
     /**
      *
-     * @returns {ol.Extent|undefined}
+     * @returns {ol.Extent|undefined} layer extent
      */
     get extent() {
         if (this._corridorLayer.source.getFeatures().length > 0) {
@@ -331,7 +339,8 @@ class Corridor {
 
 nm.Corridor = Corridor;
 
-export default Corridor;</code></pre>
+export default Corridor;
+</code></pre>
         </article>
     </section>
 
@@ -341,13 +350,13 @@ export default Corridor;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 16:06:27 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Jul 22 2016 14:00:42 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

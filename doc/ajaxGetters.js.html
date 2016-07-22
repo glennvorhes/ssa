@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ajaxGetters.js</title>
+    <title>JSDoc: Source: AjaxGetters.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ajaxGetters.js</h1>
+    <h1 class="page-title">Source: AjaxGetters.js</h1>
 
     
 
@@ -44,19 +44,16 @@ const getCrashesUrl = home + 'getCrashes';
 const getAllCountiesUrl = home + 'getAllCounties';
 const getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
 
-/**
- * @callback ajaxCallback
- * @param {object|Array} d - returned data
- */
+
 
 
 /**
- *
- * @param {string} url
- * @param {object} [params={}]
- * @param {ajaxCallback} callback
+ * inner function to help ajax
+ * @param {string} url - resource url
+ * @param {object} [params={}] - get params
+ * @param {ajaxCallback} callback - callback function
  */
-function ajaxInner(url, params, callback) {
+function _ajaxInner(url, params, callback) {
     "use strict";
     $.get(url, params, callback, 'json').fail(() => {
         alert("error getting: " + url + JSON.stringify(params));
@@ -64,13 +61,13 @@ function ajaxInner(url, params, callback) {
 }
 
 /**
- *
- * @param {string} url
- * @param {ajaxCallback} callback
- * @param {object} [params={}]
- * @param {ajaxCallback} [calbackHelper=undefined]
+ * outer function to help ajax
+ * @param {string} url - resource url
+ * @param {ajaxCallback} callback - callback function
+ * @param {object} [params={}] get params
+ * @param {ajaxCallback} [calbackHelper=undefined] - callback helper
  */
-function ajaxHelper(url, callback, params, calbackHelper) {
+function _ajaxHelper(url, callback, params, calbackHelper) {
     "use strict";
     params = params || {};
 
@@ -79,9 +76,9 @@ function ajaxHelper(url, callback, params, calbackHelper) {
             d = calbackHelper(d);
             callback(d);
         };
-        ajaxInner(url, params, newCallback);
+        _ajaxInner(url, params, newCallback);
     } else {
-        ajaxInner(url, params, callback);
+        _ajaxInner(url, params, callback);
     }
 }
 
@@ -98,112 +95,131 @@ let countySort = (d) => {
 };
 
 /**
- *
- * @param {ajaxCallback} callback
+ * static methods to make ajax requests
  */
-export function getStartCounties(callback) {
-    "use strict";
+class AjaxGetters {
 
-    ajaxHelper(getStartCountiesUrl, callback, {}, countySort);
+    /**
+     * Do not instantiate this class
+     */
+    constructor(){
+        throw 'this class should not be instantiated';
+    }
+
+
+
+    /**
+     * @static
+     * @param {ajaxCallback} callback - callback function
+     */
+    static getStartCounties(callback) {
+        "use strict";
+
+        _ajaxHelper(getStartCountiesUrl, callback, {}, countySort);
+    }
+
+    /**
+     * Get the highways based on the start county
+     * @param {number} startCountyId - start county id
+     * @param {ajaxCallback} callback - callback function
+     */
+    static getHighways(startCountyId, callback) {
+        "use strict";
+        let params = {"startCountyId": startCountyId};
+
+        _ajaxHelper(getHighwaysUrl, callback, params);
+    }
+
+
+    /**
+     * Get the highways based on the start county
+     * @param {string} highwayName - highway name
+     * @param {ajaxCallback} callback - callback function
+     */
+    static getEndCounties(highwayName, callback) {
+        "use strict";
+        let params = {"highwayName": highwayName};
+
+        _ajaxHelper(getEndCountiesUrl, callback, params, countySort);
+    }
+
+
+    /**
+     * get the segments based on county and route id
+     * @param {number} county - county id
+     * @param {number} routeId - route id
+     * @param {ajaxCallback} callback - callback function
+     */
+    static getSegments(county, routeId, callback) {
+        "use strict";
+        if (typeof routeId == 'string') {
+            routeId = parseInt(routeId);
+        }
+
+        let params = {"routeid": routeId, "county": county};
+        _ajaxHelper(getSegmentsUrl, callback, params);
+    }
+
+
+    /**
+     * get corridor based on start and end pdp id
+     * @param {number} startPdp - start pdp id
+     * @param {number} endPdp - end pdp id
+     * @param {ajaxCallback} callback - callback function
+     */
+    static getCorridor(startPdp, endPdp, callback) {
+        "use strict";
+        let params = {"from": startPdp, "to": endPdp};
+
+        _ajaxHelper(getCorridorUrl, callback, params);
+    }
+
+
+    /**
+     * Get the crash data
+     * @param {ajaxCallback} callback - callback function
+     */
+    static getCrashes(callback) {
+        "use strict";
+        let params = {};
+
+        _ajaxHelper(getCrashesUrl, callback, params);
+    }
+
+    /**
+     * Get all counties as an array
+     * @param {ajaxCallback} callback - callback function
+     */
+    static getAllCounties(callback) {
+        "use strict";
+        let params = {};
+
+        _ajaxHelper(getAllCountiesUrl, callback, params);
+    }
+
+
+    /**
+     * Get highways based on start and end counties
+     * @param {number} startCountyId - start county id
+     * @param {number} endCountyId - end county id
+     * @param {ajaxCallback} callback - callback function
+     *
+     */
+    static getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
+        "use strict";
+
+        let params = {
+            'startCountyId': startCountyId,
+            'endCountyId': endCountyId
+        };
+
+        _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
+    }
+
 }
-nm.getStartCounties = getStartCounties;
 
-/**
- * Get the highways based on the start county
- * @param {number} startCountyId
- * @param {ajaxCallback} callback
- */
-export function getHighways(startCountyId, callback) {
-    "use strict";
-    let params = {"startCountyId": startCountyId};
-
-    ajaxHelper(getHighwaysUrl, callback, params);
-}
-nm.getHighways = getHighways;
-
-
-/**
- * Get the highways based on the start county
- * @param {string} highwayName
- * @param {ajaxCallback} callback
- */
-export function getEndCounties(highwayName, callback) {
-    "use strict";
-    let params = {"highwayName": highwayName};
-
-    ajaxHelper(getEndCountiesUrl, callback, params, countySort);
-}
-nm.getEndCounties = getEndCounties;
-
-
-/**
- *
- * @param {number} county
- * @param {string} highway
- * @param {ajaxCallback} callback
- */
-export function getSegments(county, highway, callback) {
-    "use strict";
-    let params = {"highway": highway, "county": county};
-    ajaxHelper(getSegmentsUrl, callback, params);
-}
-
-nm.getSegments = getSegments;
-
-/**
- *
- * @param {number} startPdp
- * @param {number} endPdp
- * @param {ajaxCallback} callback
- */
-export function getCorridor(startPdp, endPdp, callback) {
-    "use strict";
-    let params = {"from": startPdp, "to": endPdp};
-
-    ajaxHelper(getCorridorUrl, callback, params);
-}
-
-nm.getCorridor = getCorridor;
-
-/**
- *
- * @param {ajaxCallback} callback
- */
-export function getCrashes(callback) {
-    "use strict";
-    let params = {};
-
-    ajaxHelper(getCrashesUrl, callback, params);
-}
-
-/**
- *
- * @param {ajaxCallback} callback
- */
-export function getAllCounties(callback) {
-    "use strict";
-    let params = {};
-
-    ajaxHelper(getAllCountiesUrl, callback, params);
-}
-
-
-/**
- *
- * @param {number} startCountyId
- * @param {number} endCountyId
- * @param {ajaxCallback} callback
- */
-export function getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
-    "use strict";
-
-    let params = {
-        'startCountyId': startCountyId,
-        'endCountyId': endCountyId
-    };
-
-    ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
-}
+export default AjaxGetters;
+nm.AjaxGetters = AjaxGetters;
 </code></pre>
         </article>
     </section>
@@ -214,13 +230,13 @@ export function getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 16:06:27 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Jul 22 2016 14:00:42 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -7,7 +7,7 @@ import ol from 'webmapsjs/src/ol/ol';
 import makeGuid from 'webmapsjs/src/util/makeGuid';
 import provide from 'webmapsjs/src/util/provide';
 import {layerConfigHelper, randomColor} from '../layerStyles';
-import {getCorridor}  from '../ajaxGetters';
+import Ajx  from '../AjaxGetters';
 import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures';
 import * as layerStyles from '../layerStyles';
 
@@ -124,7 +124,7 @@ class Corridor {
         this._valid = false;
         this._error = '';
 
-        getCorridor(this.pdpFrom, this.pdpTo, (d) => {
+        Ajx.getCorridor(this.pdpFrom, this.pdpTo, (d) => {
             this._corridorLayer.addFeatures(d);
 
             if (typeof d['error'] == 'undefined') {

@@ -29,45 +29,12 @@
             <pre class="prettyprint source linenums"><code>/**
  * Created by gavorhes on 5/16/2016.
  */
-import provide from 'webmapsjs/src/util/provide'
+import provide from 'webmapsjs/src/util/provide';
 import * as styles  from '../layerStyles';
 import $ from 'webmapsjs/src/jquery/jquery';
+import * as calcExtent from 'webmapsjs/src/olHelpers/extentUtil';
+
 const nm = provide('ssa');
-
-
-/**
- *
- * @param {Array&lt;Corridor>} corArray - array of corridors
- * @returns {ol.Extent|Array&lt;number>|*} - collective extent
- */
-export function calculateExtent(corArray) {
-    let hasExtent = false;
-
-    let minX = 10E100;
-    let minY = 10E100;
-    let maxX = -10E100;
-    let maxY = -10E100;
-
-    for (let c of corArray) {
-        if (c.olLayer.getSource().getFeatures().length > 0) {
-            hasExtent = true;
-            let ext = c.olLayer.getSource().getExtent();
-            minX = ext[0] &lt; minX ? ext[0] : minX;
-            minY = ext[1] &lt; minY ? ext[1] : minY;
-            maxX = ext[2] > maxX ? ext[2] : maxX;
-            maxY = ext[3] > maxY ? ext[3] : maxY;
-        }
-    }
-
-    if (hasExtent) {
-        return [minX, minY, maxX, maxY];
-    } else {
-        return undefined;
-    }
-}
-nm.calculateExtent = calculateExtent;
-
-
 
 /**
  *
@@ -138,7 +105,7 @@ class CorridorCollection {
     }
 
     /**
-     *
+     * add a corridor
      * @param {Corridor} c - the corridor to be added
      */
     addCorridorCreate(c) {
@@ -152,7 +119,7 @@ class CorridorCollection {
     }
 
     /**
-     *
+     * delete/remove a corridor
      * @param {string|Corridor} cor - the corridor to be removed
      */
     removeCorridor(cor) {
@@ -171,16 +138,15 @@ class CorridorCollection {
         this._corridorArray.splice(ix, 1);
         delete this._coridorLookup[cor.clientId];
 
-        // cor.layer.visible = false;
-        // cor.layer.source.clear();
-        //
-
         this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
         this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
-        // this.ssaMap.mainMap.removeLayer(cor.layer.olLayer);
+
         this.refreshHtmlCreate();
     }
 
+    /**
+     * refresh the contents of the corridor table and hidden corridor data input elements
+     */
     refreshHtmlCreate() {
         this.$innerContainer.html('');
 
@@ -221,13 +187,11 @@ class CorridorCollection {
         for (let i = 0; i &lt; this._corridorArray.length; i++) {
             let cor = this._corridorArray[i];
             cor.getDataHtml(i);
-            // cor.getDataHtmlDisp(i);
             this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
         }
-
-
     }
-
+    
+    
     get visible() {
         return this._visible;
     }
@@ -247,14 +211,21 @@ class CorridorCollection {
     }
 
     get fullExtent() {
-        return calculateExtent(this._corridorArray);
+        return calcExtent.calculateExtent(this._corridorArray);
     }
 
-
+    /**
+     * if currently in a create or modify operation
+     * @returns {boolean} is creating or modifying
+     */
     get createModifyOperation(){
         return this._createModifyOperation;
     }
 
+    /**
+     * if currently in a create or modify operation
+     * @param {boolean} c - is creating or modifying
+     */
     set createModifyOperation(c){
         this._createModifyOperation = c;
 
@@ -278,13 +249,13 @@ export default CorridorCollection;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#ajaxHelper">ajaxHelper</a></li><li><a href="global.html#ajaxInner">ajaxInner</a></li><li><a href="global.html#calculateExtent">calculateExtent</a></li><li><a href="global.html#getAllCounties">getAllCounties</a></li><li><a href="global.html#getCorridor">getCorridor</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#getCrashes">getCrashes</a></li><li><a href="global.html#getEndCounties">getEndCounties</a></li><li><a href="global.html#getHighways">getHighways</a></li><li><a href="global.html#getHwyByStartEndCounty">getHwyByStartEndCounty</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getStartCounties">getStartCounties</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 15 2016 16:06:27 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Jul 22 2016 14:00:42 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

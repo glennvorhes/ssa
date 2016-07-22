@@ -3,7 +3,7 @@
  */
 
 import SelectCounty from './SelectCounty';
-import {getEndCounties} from '../ajaxGetters';
+import {getEndCounties} from '../AjaxGetters';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
 

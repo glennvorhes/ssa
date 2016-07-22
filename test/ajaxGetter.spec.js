@@ -2,7 +2,7 @@
  * Created by gavorhes on 5/12/2016.
  */
 
-import * as ajaxGetters from '../app/ajaxGetters';
+import * as ajaxGetters from '../app/AjaxGetters';
 
 ajaxGetters.getStartCounties((d) => {
     "use strict";
