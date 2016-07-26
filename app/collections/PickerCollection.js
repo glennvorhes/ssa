@@ -6,20 +6,27 @@
 import SelectStartCounty from '../selectBox/SelectStartCounty';
 import SelectHighway from '../selectBox/SelectHighway';
 import SelectEndCounty from '../selectBox/SelectEndCounty';
-import SegmentPickerFrom from '../segmentPicker/SegmentPickerFrom';
-import SegmentPickerTo from '../segmentPicker/SegmentPickerTo';
+// import SegmentPickerFrom from '../segmentPicker/SegmentPickerFrom';
+// import SegmentPickerTo from '../segmentPicker/SegmentPickerTo';
+import SegmentPicker from '../selectBox/SegmentPicker';
 import Corridor from '../corridor/Corridor';
 import provide from 'webmapsjs/src/util/provide';
 import $ from 'webmapsjs/src/jquery/jquery';
 import * as lyrStyles from '../layerStyles';
+// import * as ext from 'webmapsjs/src/olHelpers/extentUtil';
+import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
+
+import LayerEsriMapServer from 'webmapsjs/src/layers/LayerEsriMapServer';
+
 const nm = provide('ssa');
+
 
 class PickerCollection {
 
     /**
      *
-     * @param {string} divId
-     * @param {SsaMapCreate} ssaMapCreate
+     * @param {string} divId - container div id
+     * @param {SsaMapCreate} ssaMapCreate - ssa map create
      */
     constructor(divId, ssaMapCreate) {
         this._ssaMapCreate = ssaMapCreate;
@@ -30,7 +37,6 @@ class PickerCollection {
         this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" disabled="disabled" style="display: none;">');
         this.$containerEl.append('<input type="button" value="Cancel" class="btn btn-default picker-cancel">');
         this.$innerContainer = this.$containerEl.find('.picker-collection');
-        this._visible = false;
 
         this._dummyCorridor = new Corridor(1, 1, '', '', 1, 1, 'h', -1, {
             cancelLoad: true,
@@ -59,14 +65,30 @@ class PickerCollection {
         this.countyEndSelect = new SelectEndCounty(this.$innerContainer);
         this.highwaySelect = new SelectHighway(this.$innerContainer);
 
-        this.segmentPickerFrom = new SegmentPickerFrom(this.$innerContainer);
-        this.segmentPickerTo = new SegmentPickerTo(this.$innerContainer);
+        this._metamanagerSegmentsLayer = new LayerEsriMapServer(
+            'http://transportal.cee.wisc.edu/applications/arcgis2/rest/services/MetaManager/MM_All_Segments/MapServer',
+            {
+                minZoom: 7,
+                visible: false,
+                name: 'Metamanager Segments',
+                opacity: 0.6
+            });
 
-        this.segmentPickerFrom.otherPicker = this.segmentPickerTo;
-        this.segmentPickerTo.otherPicker = this.segmentPickerFrom;
+        this._ssaMapCreate.mainMap.addLayer(this._metamanagerSegmentsLayer.olLayer);
+
+        this.segmentPickerFrom = new SegmentPicker(this.$innerContainer, true);
+        this.segmentPickerTo = new SegmentPicker(this.$innerContainer, false);
+
+        // this.segmentPickerFrom.otherPicker = this.segmentPickerTo;
+        // this.segmentPickerTo.otherPicker = this.segmentPickerFrom;
+
+        this._ssaMapCreate.mainMap.addLayer(this.segmentPickerFrom.segmentLayer.olLayer);
+        this._ssaMapCreate.mainMap.addLayer(this.segmentPickerTo.segmentLayer.olLayer);
+        this._ssaMapCreate.mainMap.addLayer(this.segmentPickerFrom.selectionLayer.olLayer);
+        this._ssaMapCreate.mainMap.addLayer(this.segmentPickerTo.selectionLayer.olLayer);
 
         this.$btnPickerCancel.click(() => {
-            this.cancel();
+            this.stopPicker();
         });
 
         this.$btnPickerPreview.click(() => {
@@ -86,28 +108,28 @@ class PickerCollection {
             "use strict";
 
             this.highwaySelect.setStartEndCounty(v, this.countyEndSelect.selectedValue);
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
 
         this.countyEndSelect.addChangeListener((v) => {
             "use strict";
             this.highwaySelect.setStartEndCounty(this.countyStartSelect.selectedValue, v);
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
 
         this.highwaySelect.addChangeListener((hwy) => {
             "use strict";
             this.segmentPickerFrom.setCountyAndRoute(this.countyStartSelect.selectedValue, hwy);
             this.segmentPickerTo.setCountyAndRoute(this.countyEndSelect.selectedValue, hwy);
-            this.addModifyEnabled = false;
-        });
-        
-        this.segmentPickerFrom.addChangeListener((v) => {
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
 
-        this.segmentPickerTo.addChangeListener((v) => {
-            this.addModifyEnabled = false;
+        this.segmentPickerFrom.addChangeListener(() => {
+            this.addModifyButtonEnabled = false;
+        });
+
+        this.segmentPickerTo.addChangeListener(() => {
+            this.addModifyButtonEnabled = false;
         });
 
         $(document).click((event) => {
@@ -152,26 +174,12 @@ class PickerCollection {
         });
     }
 
-    cancel() {
-        this.$btnPickerAdd.show();
-        this.$btnPickerModify.hide();
-        this.$btnPickerModify.prop('disabled', true);
-        this.visible = false;
-        this._ssaMapCreate.$createCorridorButton.prop('disabled', false);
-        // this.countyStartSelect.box.val(1).trigger('change');
-        this._ssaMapCreate.corridorCollection.visible = true;
-        this._dummyCorridor.layer.clear();
-        this._modifyCorridor = undefined;
-        this._dummyCorridor.nodeLayer.olLayer.getSource().clear();
-        this.addModifyEnabled = false;
-        this._ssaMapCreate.corridorCollection.createModifyOperation = false;
-        $('.corridor-tr-selected').removeClass('corridor-tr-selected');
-    }
+
 
     previewCorridor() {
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
-            
+
             return;
         }
 
@@ -201,78 +209,89 @@ class PickerCollection {
             //TODO better implementation for an early break
             // if (c.valid) {
             //     this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
-            //     this.addModifyEnabled = true;
+            //     this.addModifyButtonEnabled = true;
             // } else {
             //     alert(c.error);
             // }
+
             this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
-            this.addModifyEnabled = true;
+            this.addModifyButtonEnabled = true;
 
         });
-
     }
 
     addCorridor() {
         this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
-        this.cancel();
+        this.stopPicker();
     }
 
     modifyCorridor() {
         this._modifyCorridor.updateCorridor(this._dummyCorridor);
         this._ssaMapCreate.corridorCollection.refreshHtmlCreate();
-        this.cancel();
+        this.stopPicker();
     }
 
     /**
      * Populate the selections based on values from an existing corridor
-     * @param {Corridor} cor - existing corridor
+     * @param {Corridor} [existingCor=undefined] existing corridor if in an edit operation
      */
-    startEditCorridor(cor) {
-        this.visible = true;
-        this.$btnPickerAdd.hide();
-        this.$btnPickerModify.show();
-        this.countyStartSelect.box.val(cor.countyStart);
-        this.countyEndSelect.box.val(cor.countyEnd);
-        this.highwaySelect.setStartEndCounty(cor.countyStart, cor.countyEnd, cor.routeId);
-        
-        this.segmentPickerFrom.setCountyAndRoute(cor.countyStart, cor.routeId, cor.pdpFrom);
-        this.segmentPickerTo.setCountyAndRoute(cor.countyEnd, cor.routeId, cor.pdpTo);
+    startPicker(existingCor) {
+        this._ssaMapCreate.corridorCollection.inCreateModifyOperation = true;
+        this.$containerEl.show();
+        this.segmentPickerFrom.layersVisible = true;
+        this.segmentPickerTo.layersVisible = true;
+        this._metamanagerSegmentsLayer.visible = true;
+        this._ssaMapCreate.corridorCollection.showPopups = false;
 
-        this._modifyCorridor = cor;
 
-        this._dummyCorridor.updateCorridor(cor);
+        if (existingCor) {
+            this.$btnPickerAdd.hide();
+            this.$btnPickerModify.show();
+            this.countyStartSelect.box.val(existingCor.countyStart);
+            this.countyEndSelect.box.val(existingCor.countyEnd);
+            this.highwaySelect.setStartEndCounty(existingCor.countyStart, existingCor.countyEnd, existingCor.routeId);
 
-        this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
-        this._ssaMapCreate.corridorCollection.createModifyOperation = true;
-    }
+            this.segmentPickerFrom.setCountyAndRoute(existingCor.countyStart, existingCor.routeId, existingCor.pdpFrom);
+            this.segmentPickerTo.setCountyAndRoute(existingCor.countyEnd, existingCor.routeId, existingCor.pdpTo);
 
-    /**
-     * Getter for if the collection is visible {boolean}
-     * @returns {boolean} - if visible
-     */
-    get visible() {
-        return this._visible;
-    }
+            this._modifyCorridor = existingCor;
 
-    /**
-     * Setter for if the collection is visible {boolean}
-     * @param {boolean} viz - if visible
-     */
-    set visible(viz) {
-        this._visible = viz;
+            this._dummyCorridor.updateCorridor(existingCor);
 
-        if (this.visible) {
-            this.$containerEl.show();
+            this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
         } else {
-            this.$containerEl.hide();
+            this.$btnPickerAdd.show();
+            this.$btnPickerModify.hide();
         }
     }
 
+    stopPicker() {
+        this._ssaMapCreate.corridorCollection.showPopups = true;
+        this.$btnPickerAdd.show();
+        this.$btnPickerModify.hide();
+        this.$btnPickerModify.prop('disabled', true);
+        this.$containerEl.hide();
+        this._ssaMapCreate.$createCorridorButton.prop('disabled', false);
+        // this.countyStartSelect.box.val(1).trigger('change');
+        this._ssaMapCreate.corridorCollection.visible = true;
+        this._dummyCorridor.layer.clear();
+        this._modifyCorridor = undefined;
+        this._dummyCorridor.nodeLayer.olLayer.getSource().clear();
+        this.addModifyButtonEnabled = false;
+        this._ssaMapCreate.corridorCollection.inCreateModifyOperation = false;
+        $('.corridor-tr-selected').removeClass('corridor-tr-selected');
+        this.segmentPickerFrom.layersVisible = false;
+        this.segmentPickerTo.layersVisible = false;
+        this._metamanagerSegmentsLayer.visible = false;
+        mapPopup.closePopup();
+    }
+
+    
     /**
      * Getter for if an add modify operation is happening {boolean}
      * @returns {boolean} - if the add or modify operation is happening
      */
-    get addModifyEnabled() {
+    get addModifyButtonEnabled() {
         return this._addModifyEnabled;
     }
 
@@ -280,10 +299,10 @@ class PickerCollection {
      * Setter for if an add modify operation is happening {boolean}
      * @param {boolean} isEnabled - if enabled
      */
-    set addModifyEnabled(isEnabled) {
+    set addModifyButtonEnabled(isEnabled) {
         this._addModifyEnabled = isEnabled;
-        this.$btnPickerAdd.prop('disabled', !this.addModifyEnabled);
-        this.$btnPickerModify.prop('disabled', !this.addModifyEnabled);
+        this.$btnPickerAdd.prop('disabled', !this.addModifyButtonEnabled);
+        this.$btnPickerModify.prop('disabled', !this.addModifyButtonEnabled);
     }
 }
 

@@ -114,28 +114,28 @@ class PickerCollection {
             "use strict";
 
             this.highwaySelect.setStartEndCounty(v, this.countyEndSelect.selectedValue);
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
 
         this.countyEndSelect.addChangeListener((v) => {
             "use strict";
             this.highwaySelect.setStartEndCounty(this.countyStartSelect.selectedValue, v);
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
 
         this.highwaySelect.addChangeListener((hwy) => {
             "use strict";
             this.segmentPickerFrom.setCountyAndRoute(this.countyStartSelect.selectedValue, hwy);
             this.segmentPickerTo.setCountyAndRoute(this.countyEndSelect.selectedValue, hwy);
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
         
         this.segmentPickerFrom.addChangeListener((v) => {
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
 
         this.segmentPickerTo.addChangeListener((v) => {
-            this.addModifyEnabled = false;
+            this.addModifyButtonEnabled = false;
         });
 
         $(document).click((event) => {
@@ -191,8 +191,8 @@ class PickerCollection {
         this._dummyCorridor.layer.clear();
         this._modifyCorridor = undefined;
         this._dummyCorridor.nodeLayer.olLayer.getSource().clear();
-        this.addModifyEnabled = false;
-        this._ssaMapCreate.corridorCollection.createModifyOperation = false;
+        this.addModifyButtonEnabled = false;
+        this._ssaMapCreate.corridorCollection.inCreateModifyOperation = false;
         $('.corridor-tr-selected').removeClass('corridor-tr-selected');
     }
 
@@ -229,12 +229,12 @@ class PickerCollection {
             //TODO better implementation for an early break
             // if (c.valid) {
             //     this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
-            //     this.addModifyEnabled = true;
+            //     this.addModifyButtonEnabled = true;
             // } else {
             //     alert(c.error);
             // }
             this._ssaMapCreate.mainMap.getView().fit(c.extent, this._ssaMapCreate.mainMap.getSize());
-            this.addModifyEnabled = true;
+            this.addModifyButtonEnabled = true;
 
         });
 
@@ -255,7 +255,7 @@ class PickerCollection {
      * Populate the selections based on values from an existing corridor
      * @param {Corridor} cor - existing corridor
      */
-    startEditCorridor(cor) {
+    startPicker(cor) {
         this.visible = true;
         this.$btnPickerAdd.hide();
         this.$btnPickerModify.show();
@@ -271,7 +271,7 @@ class PickerCollection {
         this._dummyCorridor.updateCorridor(cor);
 
         this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
-        this._ssaMapCreate.corridorCollection.createModifyOperation = true;
+        this._ssaMapCreate.corridorCollection.inCreateModifyOperation = true;
     }
 
     /**
@@ -300,7 +300,7 @@ class PickerCollection {
      * Getter for if an add modify operation is happening {boolean}
      * @returns {boolean} - if the add or modify operation is happening
      */
-    get addModifyEnabled() {
+    get addModifyButtonEnabled() {
         return this._addModifyEnabled;
     }
 
@@ -308,10 +308,10 @@ class PickerCollection {
      * Setter for if an add modify operation is happening {boolean}
      * @param {boolean} isEnabled - if enabled
      */
-    set addModifyEnabled(isEnabled) {
+    set addModifyButtonEnabled(isEnabled) {
         this._addModifyEnabled = isEnabled;
-        this.$btnPickerAdd.prop('disabled', !this.addModifyEnabled);
-        this.$btnPickerModify.prop('disabled', !this.addModifyEnabled);
+        this.$btnPickerAdd.prop('disabled', !this.addModifyButtonEnabled);
+        this.$btnPickerModify.prop('disabled', !this.addModifyButtonEnabled);
     }
 }
 
@@ -327,7 +327,7 @@ export default PickerCollection;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPicker</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">

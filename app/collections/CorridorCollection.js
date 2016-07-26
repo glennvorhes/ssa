@@ -59,7 +59,9 @@ class CorridorCollection {
         this.$containerEl.append(innerHtml);
         this.$innerContainer = this.$containerEl.find('.corridor-collection');
         this._visible = true;
-        this._createModifyOperation = false;
+        this._inCreateModifyOperation = false;
+
+        this._showPopups = true;
 
 
         /**
@@ -74,7 +76,27 @@ class CorridorCollection {
          * @private
          */
         this._coridorLookup = {};
+
+        this._popupStyle = (props) => {
+            if (!this.showPopups){
+                return false;
+            }
+
+            let returnHtml = '<table class="mm-popup-table">';
+            returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
+            returnHtml += `<tr><td>Highway</td><td>${props['hwyDir']}</td></tr>`;
+            returnHtml += `<tr><td>Description</td><td>${props['descrip'] ? props['descrip'] : '-'}</td></tr>`;
+            returnHtml += `<tr><td>Divided</td><td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}</td></tr>`;
+            returnHtml += `<tr><td>From RP</td><td>${props['pdpFrom']}</td></tr>`;
+            returnHtml += `<tr><td>To RP</td><td>${props['pdpTo']}</td></tr>`;
+            returnHtml += '</table>';
+
+            return returnHtml;
+        };
     }
+
+
+
 
     /**
      * add a corridor
@@ -86,7 +108,7 @@ class CorridorCollection {
         this.ssaMap.mainMap.addLayer(c.olLayer);
         this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
         c.layer.name = corridorName(c.rpFrom, c.rpTo);
-        this.ssaMap.mainMapPopup.addVectorPopup(c.layer, styles.mmPopupContent);
+        this.ssaMap.mainMapPopup.addVectorPopup(c.layer, this._popupStyle);
         this.refreshHtmlCreate();
     }
 
@@ -149,7 +171,7 @@ class CorridorCollection {
             _this.ssaMap.$createCorridorButton.prop('disabled', true);
             let corridorId = $(this).attr('data-corridor');
             let cor = _this._coridorLookup[corridorId];
-            _this.ssaMap.pickerCollection.startEditCorridor(cor);
+            _this.ssaMap.pickerCollection.startPicker(cor);
             $(this).closest('.corridor-tr').addClass('corridor-tr-selected');
         });
 
@@ -162,8 +184,8 @@ class CorridorCollection {
             this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
         }
     }
-    
-    
+
+
     get visible() {
         return this._visible;
     }
@@ -190,22 +212,38 @@ class CorridorCollection {
      * if currently in a create or modify operation
      * @returns {boolean} is creating or modifying
      */
-    get createModifyOperation(){
-        return this._createModifyOperation;
+    get inCreateModifyOperation(){
+        return this._inCreateModifyOperation;
     }
 
     /**
      * if currently in a create or modify operation
-     * @param {boolean} c - is creating or modifying
+     * @param {boolean} isInCreateModifyOperation - is creating or modifying
      */
-    set createModifyOperation(c){
-        this._createModifyOperation = c;
+    set inCreateModifyOperation(isInCreateModifyOperation){
+        this._inCreateModifyOperation = isInCreateModifyOperation;
 
-        if (this._createModifyOperation){
+        if (this._inCreateModifyOperation){
             this.$innerContainer.addClass('corridor-collection-create-modify');
         } else {
             this.$innerContainer.removeClass('corridor-collection-create-modify');
         }
+    }
+
+    /**
+     *
+     * @returns {boolean} if the corridor popups should be shown
+     */
+    get showPopups(){
+        return this._showPopups;
+    }
+
+    /**
+     *
+     * @param {boolean} show - if the corridor popups should be shown
+     */
+    set showPopups(show){
+        this._showPopups = show;
     }
 }
 

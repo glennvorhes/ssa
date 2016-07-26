@@ -10,6 +10,7 @@ import {layerConfigHelper, randomColor} from '../layerStyles';
 import Ajx  from '../AjaxGetters';
 import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures';
 import * as layerStyles from '../layerStyles';
+import * as ext from 'webmapsjs/src/olHelpers/extentUtil';
 
 const nm = provide('ssa');
 
@@ -297,11 +298,7 @@ class Corridor {
      * @returns {ol.Extent|undefined} layer extent
      */
     get extent() {
-        if (this._corridorLayer.source.getFeatures().length > 0) {
-            return this._corridorLayer.source.getExtent();
-        } else {
-            return undefined;
-        }
+        return ext.calculateExtent(this.layer);
     }
 
     get loaded() {

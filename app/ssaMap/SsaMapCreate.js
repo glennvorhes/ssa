@@ -5,6 +5,8 @@
 
 import SsaMapBase from './SsaMapBase';
 import quickMapMulti from 'webmapsjs/src/olHelpers/quickMapMulti';
+import quickMap from 'webmapsjs/src/olHelpers/quickMap';
+import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
 import makeGuid from 'webmapsjs/src/util/makeGuid';
 import PickerCollection from '../collections/PickerCollection';
 import CorridorCollection from '../collections/CorridorCollection';
@@ -12,7 +14,6 @@ import $ from 'webmapsjs/src/jquery/jquery';
 import 'webmapsjs/src/jquery/jquery-ui';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa');
-
 
 
 class SsaMapCreate extends SsaMapBase {
@@ -24,8 +25,21 @@ class SsaMapCreate extends SsaMapBase {
      */
     constructor(divId, corridorDataContainer) {
         super(divId);
-        
-        let multiMap = quickMapMulti({
+
+        // let multiMap = quickMapMulti({
+        //     divId: this.mapId,
+        //     minZoom: 6,
+        //     zoom: 6,
+        //     fullScreen: true
+        // });
+
+
+        this.$mainContainer.prepend(`<div class="ssa-map-sidebar"></div>`);
+
+        /**
+         * @type {ol.Map}
+         */
+        this.mainMap = quickMap({
             divId: this.mapId,
             minZoom: 6,
             zoom: 6,
@@ -33,23 +47,12 @@ class SsaMapCreate extends SsaMapBase {
         });
 
 
-        /**
-         * @type {ol.Map}
-         */
-        this.mainMap = multiMap.map;
-        
-        /**
-         * @type {MapMoveCls}
-         */
-        this.mainMapMove = multiMap.mapMove;
+
 
         /**
          * @type {MapPopupCls}
          */
-        this.mainMapPopup = multiMap.mapPopup;
-        
-        this.$mainContainer.prepend(`<div class="ssa-map-sidebar"></div>`);
-        this.mainMap.updateSize();
+        this.mainMapPopup = mapPopup;
 
         let _corridorDataContainer = $(`.${corridorDataContainer}, #${corridorDataContainer}`);
         if (_corridorDataContainer.length == 0) {
@@ -79,14 +82,14 @@ class SsaMapCreate extends SsaMapBase {
         this.$zoomExtentButton = this.$sideBar.find('.picker-zoom-extent');
 
         this.$createCorridorButton.click(() => {
-            this.pickerCollection.visible = true;
-            this.corridorCollection.createModifyOperation = true;
+            this.pickerCollection.startPicker();
+
             this.$createCorridorButton.prop('disabled', true);
         });
 
         this.$zoomExtentButton.click(() => {
             let ext = this.corridorCollection.fullExtent;
-            if (ext){
+            if (ext) {
                 this.mainMap.getView().fit(ext, this.mainMap.getSize());
             }
         });

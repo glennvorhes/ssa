@@ -87,7 +87,7 @@ class CorridorCollection {
         this.$containerEl.append(innerHtml);
         this.$innerContainer = this.$containerEl.find('.corridor-collection');
         this._visible = true;
-        this._createModifyOperation = false;
+        this._inCreateModifyOperation = false;
 
 
         /**
@@ -177,7 +177,7 @@ class CorridorCollection {
             _this.ssaMap.$createCorridorButton.prop('disabled', true);
             let corridorId = $(this).attr('data-corridor');
             let cor = _this._coridorLookup[corridorId];
-            _this.ssaMap.pickerCollection.startEditCorridor(cor);
+            _this.ssaMap.pickerCollection.startPicker(cor);
             $(this).closest('.corridor-tr').addClass('corridor-tr-selected');
         });
 
@@ -218,18 +218,18 @@ class CorridorCollection {
      * if currently in a create or modify operation
      * @returns {boolean} is creating or modifying
      */
-    get createModifyOperation(){
-        return this._createModifyOperation;
+    get inCreateModifyOperation(){
+        return this._inCreateModifyOperation;
     }
 
     /**
      * if currently in a create or modify operation
      * @param {boolean} c - is creating or modifying
      */
-    set createModifyOperation(c){
-        this._createModifyOperation = c;
+    set inCreateModifyOperation(c){
+        this._inCreateModifyOperation = c;
 
-        if (this._createModifyOperation){
+        if (this._inCreateModifyOperation){
             this.$innerContainer.addClass('corridor-collection-create-modify');
         } else {
             this.$innerContainer.removeClass('corridor-collection-create-modify');
@@ -249,7 +249,7 @@ export default CorridorCollection;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPickerBase</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AjaxGetters.html">AjaxGetters</a></li><li><a href="Corridor.html">Corridor</a></li><li><a href="CorridorCollection.html">CorridorCollection</a></li><li><a href="CorridorConfig.html">CorridorConfig</a></li><li><a href="PickerCollection.html">PickerCollection</a></li><li><a href="SegmentPickerBase.html">SegmentPicker</a></li><li><a href="SegmentPickerFrom.html">SegmentPickerFrom</a></li><li><a href="SegmentPickerTo.html">SegmentPickerTo</a></li><li><a href="SelectBoxBase.html">SelectBoxBase</a></li><li><a href="SelectCounty.html">SelectCounty</a></li><li><a href="SelectEndCounty.html">SelectEndCounty</a></li><li><a href="SelectHighway.html">SelectHighway</a></li><li><a href="SelectStartCounty.html">SelectStartCounty</a></li><li><a href="SsaMapCreate.html">SsaMapCreate</a></li><li><a href="SsaMapView.html">SsaMapView</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_ajaxHelper">_ajaxHelper</a></li><li><a href="global.html#_ajaxInner">_ajaxInner</a></li><li><a href="global.html#_dteStrip">_dteStrip</a></li><li><a href="global.html#crashPointStyle">crashPointStyle</a></li><li><a href="global.html#exampleCrashData">exampleCrashData</a></li><li><a href="global.html#exampleData">exampleData</a></li><li><a href="global.html#getCountyById">getCountyById</a></li><li><a href="global.html#layerConfigHelper">layerConfigHelper</a></li><li><a href="global.html#randomColor">randomColor</a></li><li><a href="global.html#returnedColors">returnedColors</a></li><li><a href="global.html#tableContent">tableContent</a></li></ul>
 </nav>
 
 <br class="clear">
