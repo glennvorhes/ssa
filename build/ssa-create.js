@@ -823,18 +823,13 @@ var PickerCollection = function () {
 
         /**
          * add a corridor
-         * @param {Corridor} [c=undefined}
          */
 
     }, {
         key: 'addCorridor',
-        value: function addCorridor(c) {
-            if (typeof c == "undefined") {
-                this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
-                this.stopPicker();
-            } else {
-                this._ssaMapCreate.corridorCollection.addCorridorCreate(c.clone());
-            }
+        value: function addCorridor() {
+            this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
+            this.stopPicker();
         }
     }, {
         key: 'modifyCorridor',
@@ -870,11 +865,28 @@ var PickerCollection = function () {
                 this.segmentPickerTo.setCountyAndRoute(existingCor.countyEnd, existingCor.routeId, existingCor.pdpTo);
 
                 this._modifyCorridor = existingCor;
-
                 this._dummyCorridor.updateCorridor(existingCor);
-
                 this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
             } else {
+                var $primCounty = (0, _jquery2.default)('#primaryCounty');
+                var $primRoute = (0, _jquery2.default)('#primaryRdwyRteId');
+                var primaryCounty = undefined;
+                var primaryRouteId = undefined;
+
+                if ($primCounty.length > 0) {
+                    primaryCounty = $primCounty.val().length > 0 ? parseInt($primCounty.val()) : undefined;
+                }
+
+                if ($primRoute.length > 0) {
+                    primaryRouteId = $primRoute.val().length > 0 ? parseInt($primRoute.val()) : undefined;
+                }
+
+                if (primaryCounty) {
+                    this.countyStartSelect.box.val(primaryCounty);
+                    this.countyEndSelect.box.val(primaryCounty);
+                    this.highwaySelect.setStartEndCounty(primaryCounty, primaryCounty, primaryRouteId, true);
+                }
+
                 this.$btnPickerAdd.show();
                 this.$btnPickerModify.hide();
             }
@@ -1409,11 +1421,11 @@ var CorridorConfig = function () {
      * 
      * @type {number}
      */
-    this.routeId += parseInt(inputElement.find('.corridor-data-route-id').val());
+    this.routeId = parseInt(inputElement.find('.corridor-data-route-id').val());
   }
 
   /**
-   * @returns {string}
+   * @returns {string} bootstrap formatted corridor description
    */
 
 
@@ -2579,12 +2591,15 @@ var SelectHighway = function (_SelectBoxBase) {
          * @param {number|string|null} startId - start county id
          * @param {number|string|null} endId - end county id
          * @param {number|string|null} [routeId=undefined] - route id for selection
+         * @param {boolean} [forceTrigger=false] - force change trigger to populate the rp pickers
          */
 
     }, {
         key: 'setStartEndCounty',
-        value: function setStartEndCounty(startId, endId, routeId) {
+        value: function setStartEndCounty(startId, endId, routeId, forceTrigger) {
             var _this3 = this;
+
+            forceTrigger = typeof forceTrigger == 'boolean' ? forceTrigger : false;
 
             if (startId == null || startId == undefined || endId == null) {
                 return;
@@ -2650,14 +2665,16 @@ var SelectHighway = function (_SelectBoxBase) {
 
                     if (routeId) {
                         _this3.box.val(routeId.toFixed());
-                    } else {
+                    }
+
+                    if (!routeId || forceTrigger) {
                         _this3.box.trigger('change');
                     }
+
                     _this3.box.prop('disabled', false);
                 } else {
                     _this3.box.prop('disabled', true);
                     _this3.box.trigger('change');
-                    console.log(_this3.box.val());
                 }
             });
         }
@@ -2827,7 +2844,7 @@ exports.default = SsaMapBase;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-        value: true
+    value: true
 });
 
 var _SsaMapBase2 = require('./SsaMapBase');
@@ -2891,103 +2908,105 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var nm = (0, _provide2.default)('ssa');
 
 var SsaMapCreate = function (_SsaMapBase) {
-        _inherits(SsaMapCreate, _SsaMapBase);
+    _inherits(SsaMapCreate, _SsaMapBase);
+
+    /**
+     *
+     * @param {string} divId
+     * @param {string} corridorDataContainer
+     * @param {string} [dataClass=corridor-data] - class selector for the corridor data elements
+     */
+
+    function SsaMapCreate(divId, corridorDataContainer, dataClass) {
+        _classCallCheck(this, SsaMapCreate);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SsaMapCreate).call(this, divId));
+
+        _this.$mainContainer.prepend('<div class="ssa-map-sidebar"></div>');
 
         /**
-         *
-         * @param {string} divId
-         * @param {string} corridorDataContainer
-         * @param {string} [dataClass=corridor-data] - class selector for the corridor data elements
+         * @type {ol.Map}
          */
+        _this.mainMap = (0, _quickMap2.default)({
+            divId: _this.mapId,
+            minZoom: 6,
+            zoom: 6,
+            fullScreen: true
+        });
 
-        function SsaMapCreate(divId, corridorDataContainer, dataClass) {
-                _classCallCheck(this, SsaMapCreate);
+        /**
+         * @type {MapPopupCls}
+         */
+        _this.mainMapPopup = _mapPopup2.default;
 
-                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SsaMapCreate).call(this, divId));
-
-                _this.$mainContainer.prepend('<div class="ssa-map-sidebar"></div>');
-
-                /**
-                 * @type {ol.Map}
-                 */
-                _this.mainMap = (0, _quickMap2.default)({
-                        divId: _this.mapId,
-                        minZoom: 6,
-                        zoom: 6,
-                        fullScreen: true
-                });
-
-                /**
-                 * @type {MapPopupCls}
-                 */
-                _this.mainMapPopup = _mapPopup2.default;
-
-                var _corridorDataContainer = (0, _jquery2.default)('.' + corridorDataContainer + ', #' + corridorDataContainer);
-                if (_corridorDataContainer.length == 0) {
-                        throw 'data container not found';
-                }
-
-                _this.$corridorDataContainer = (0, _jquery2.default)(_corridorDataContainer[0]);
-                _this.$corridorDataContainer.addClass('corridor-data-container');
-
-                _this.$sideBar = _this.$mainContainer.find('.ssa-map-sidebar');
-
-                _this.$sideBar.append('<div>' + '<input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor">' + '<input type="button" value="Zoom to Extent" class="btn btn-default picker-zoom-extent">' + '</div>');
-
-                var pickerGuid = (0, _makeGuid2.default)();
-                _this.$sideBar.append('<div id="' + pickerGuid + '"></div>');
-                _this.pickerCollection = new _PickerCollection2.default(pickerGuid, _this);
-
-                var corridorsGuid = (0, _makeGuid2.default)();
-                _this.$sideBar.append('<div id="' + corridorsGuid + '"></div>');
-                _this.corridorCollection = new _CorridorCollection2.default(corridorsGuid, _this);
-
-                _this.$createCorridorButton = _this.$sideBar.find('.picker-create-corridor');
-                _this.$zoomExtentButton = _this.$sideBar.find('.picker-zoom-extent');
-
-                _this.$createCorridorButton.click(function () {
-                        _this.pickerCollection.startPicker();
-
-                        _this.$createCorridorButton.prop('disabled', true);
-                });
-
-                _this.$zoomExtentButton.click(function () {
-                        var ext = _this.corridorCollection.fullExtent;
-                        if (ext) {
-                                _this.mainMap.getView().fit(ext, _this.mainMap.getSize());
-                        }
-                });
-
-                var $existingCorridors = (0, _jquery2.default)('.' + dataClass || 'corridor-data');
-
-                var existingCount = $existingCorridors.length;
-                var loadedCount = 0;
-
-                // parse the data from the hidden input elements
-                $existingCorridors.each(function (n, el) {
-                        var conf = new _CorridorConfig2.default(el);
-
-                        var corridor = new _Corridor2.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
-                                color: 'black',
-                                loadedCallback: function loadedCallback(c) {
-                                        loadedCount++;
-                                        console.log('here');
-                                        //something special when all the corridors have been loaded
-                                        if (_this.corridorCollection.corridorCount == loadedCount) {
-                                                console.log('all loaded');
-                                                // calcExtent.fitToMap(this._corridorArray, this.mainMap);
-                                        }
-                                }
-                        });
-
-                        _this.pickerCollection.addCorridor(corridor);
-
-                        console.log(corridor);
-                });
-                return _this;
+        var _corridorDataContainer = (0, _jquery2.default)('.' + corridorDataContainer + ', #' + corridorDataContainer);
+        if (_corridorDataContainer.length == 0) {
+            throw 'data container not found';
         }
 
-        return SsaMapCreate;
+        _this.$corridorDataContainer = (0, _jquery2.default)(_corridorDataContainer[0]);
+        _this.$corridorDataContainer.addClass('corridor-data-container');
+
+        _this.$sideBar = _this.$mainContainer.find('.ssa-map-sidebar');
+
+        _this.$sideBar.append('<div>' + '<input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor">' + '<input type="button" value="Zoom to Extent" class="btn btn-default picker-zoom-extent">' + '</div>');
+
+        var pickerGuid = (0, _makeGuid2.default)();
+        _this.$sideBar.append('<div id="' + pickerGuid + '"></div>');
+        _this.pickerCollection = new _PickerCollection2.default(pickerGuid, _this);
+
+        var corridorsGuid = (0, _makeGuid2.default)();
+        _this.$sideBar.append('<div id="' + corridorsGuid + '"></div>');
+        _this.corridorCollection = new _CorridorCollection2.default(corridorsGuid, _this);
+
+        _this.$createCorridorButton = _this.$sideBar.find('.picker-create-corridor');
+        _this.$zoomExtentButton = _this.$sideBar.find('.picker-zoom-extent');
+
+        _this.$createCorridorButton.click(function () {
+            _this.pickerCollection.startPicker();
+
+            _this.$createCorridorButton.prop('disabled', true);
+        });
+
+        _this.$zoomExtentButton.click(function () {
+            var ext = _this.corridorCollection.fullExtent;
+            if (ext) {
+                _this.mainMap.getView().fit(ext, _this.mainMap.getSize());
+            }
+        });
+
+        var $existingCorridors = (0, _jquery2.default)('.' + dataClass || 'corridor-data');
+        var loadedCount = 0;
+
+        // parse the data from the hidden input elements
+        $existingCorridors.each(function (n, el) {
+            var conf = new _CorridorConfig2.default(el);
+
+            var corridor = new _Corridor2.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
+                loadedCallback: function loadedCallback(c) {
+                    loadedCount++;
+                    //something special when all the corridors have been loaded
+                    if (_this.corridorCollection.corridorCount == loadedCount) {
+                        var ext = _this.corridorCollection.fullExtent;
+
+                        if (ext) {
+                            _this.mainMap.getView().fit(ext, _this.mainMap.getSize());
+                        }
+                    }
+                }
+            });
+
+            if (n == 0) {
+                (0, _jquery2.default)('#primaryCounty').val(corridor.countyStart);
+                (0, _jquery2.default)('#primaryRdwyRteId').val(corridor.routeId);
+            }
+
+            _this.corridorCollection.addCorridorCreate(corridor);
+        });
+        return _this;
+    }
+
+    return SsaMapCreate;
 }(_SsaMapBase3.default);
 
 nm.SsaMapCreate = SsaMapCreate;

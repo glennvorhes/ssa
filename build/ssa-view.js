@@ -1277,11 +1277,11 @@ var CorridorConfig = function () {
      * 
      * @type {number}
      */
-    this.routeId += parseInt(inputElement.find('.corridor-data-route-id').val());
+    this.routeId = parseInt(inputElement.find('.corridor-data-route-id').val());
   }
 
   /**
-   * @returns {string}
+   * @returns {string} bootstrap formatted corridor description
    */
 
 
