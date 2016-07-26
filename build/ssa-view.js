@@ -2102,11 +2102,6 @@ var SsaMapView = function (_SsaMapBase) {
         });
 
         /**
-         * @type {MapMoveCls}
-         */
-        _this.mainMapMove = _mapMove2.default;
-
-        /**
          * @type {MapPopupCls}
          */
         _this.mainMapPopup = _mapPopup2.default;
@@ -2134,8 +2129,8 @@ var SsaMapView = function (_SsaMapBase) {
             corridorConfigs.push(new _CorridorConfig2.default(el));
         });
 
-        _this.createdCorridors = corridorConfigs.length;
-        _this.loadedCorridors = 0;
+        _this.createdCorridorsLength = corridorConfigs.length;
+        _this.loadedCorridorsLength = 0;
 
         var outHtml = '';
 
@@ -2147,9 +2142,9 @@ var SsaMapView = function (_SsaMapBase) {
             var corridor = new _Corridor2.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
                 color: 'black',
                 loadedCallback: function loadedCallback(c) {
-                    _this.loadedCorridors++;
+                    _this.loadedCorridorsLength++;
                     //something special when all the corridors have been loaded
-                    if (_this.loadedCorridors == _this.createdCorridors) {
+                    if (_this.loadedCorridorsLength == _this.createdCorridorsLength) {
                         calcExtent.fitToMap(_this._corridorArray, _this.mainMap);
                     }
                     _mmFlags2.default.addCorridor(c);
