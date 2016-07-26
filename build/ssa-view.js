@@ -838,6 +838,10 @@ var _SortedFeatures = require('webmapsjs/src/olHelpers/SortedFeatures');
 
 var _SortedFeatures2 = _interopRequireDefault(_SortedFeatures);
 
+var _extentUtil = require('webmapsjs/src/olHelpers/extentUtil');
+
+var ext = _interopRequireWildcard(_extentUtil);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1166,11 +1170,7 @@ var Corridor = function () {
     }, {
         key: 'extent',
         get: function get() {
-            if (this._corridorLayer.source.getFeatures().length > 0) {
-                return this._corridorLayer.source.getExtent();
-            } else {
-                return undefined;
-            }
+            return ext.calculateExtent(this.layer);
         }
     }, {
         key: 'loaded',
@@ -1186,7 +1186,7 @@ nm.Corridor = Corridor;
 
 exports.default = Corridor;
 
-},{"../AjaxGetters":1,"../layerStyles":12,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":35,"webmapsjs/src/olHelpers/SortedFeatures":23,"webmapsjs/src/util/makeGuid":38,"webmapsjs/src/util/provide":40}],6:[function(require,module,exports){
+},{"../AjaxGetters":1,"../layerStyles":12,"webmapsjs/src/layers/LayerBaseVectorGeoJson":22,"webmapsjs/src/ol/ol":35,"webmapsjs/src/olHelpers/SortedFeatures":23,"webmapsjs/src/olHelpers/extentUtil":24,"webmapsjs/src/util/makeGuid":38,"webmapsjs/src/util/provide":40}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
