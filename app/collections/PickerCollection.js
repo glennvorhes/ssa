@@ -221,15 +221,10 @@ class PickerCollection {
 
     /**
      * add a corridor
-     * @param {Corridor} [c=undefined}
      */
-    addCorridor(c) {
-        if (typeof c == "undefined") {
-            this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
-            this.stopPicker();
-        } else {
-            this._ssaMapCreate.corridorCollection.addCorridorCreate(c.clone());
-        }
+    addCorridor() {
+        this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
+        this.stopPicker();
     }
 
     modifyCorridor() {
@@ -262,11 +257,28 @@ class PickerCollection {
             this.segmentPickerTo.setCountyAndRoute(existingCor.countyEnd, existingCor.routeId, existingCor.pdpTo);
 
             this._modifyCorridor = existingCor;
-
             this._dummyCorridor.updateCorridor(existingCor);
-
             this._ssaMapCreate.mainMap.getView().fit(this._dummyCorridor.extent, this._ssaMapCreate.mainMap.getSize());
         } else {
+            let $primCounty = $('#primaryCounty');
+            let $primRoute = $('#primaryRdwyRteId');
+            let primaryCounty = undefined;
+            let primaryRouteId = undefined;
+
+            if ($primCounty.length > 0) {
+                primaryCounty = $primCounty.val().length > 0 ? parseInt($primCounty.val()) : undefined;
+            }
+
+            if ($primRoute.length > 0) {
+                primaryRouteId = $primRoute.val().length > 0 ? parseInt($primRoute.val()) : undefined;
+            }
+
+            if (primaryCounty) {
+                this.countyStartSelect.box.val(primaryCounty);
+                this.countyEndSelect.box.val(primaryCounty);
+                this.highwaySelect.setStartEndCounty(primaryCounty, primaryCounty, primaryRouteId, true);
+            }
+            
             this.$btnPickerAdd.show();
             this.$btnPickerModify.hide();
         }

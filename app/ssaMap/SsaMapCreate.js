@@ -89,8 +89,6 @@ class SsaMapCreate extends SsaMapBase {
         });
 
         let $existingCorridors = $('.' + dataClass || 'corridor-data');
-
-        let existingCount = $existingCorridors.length;
         let loadedCount = 0;
 
 
@@ -102,23 +100,28 @@ class SsaMapCreate extends SsaMapBase {
                 conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
                 conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
                 {
-                    color: 'black',
                     loadedCallback: (c) => {
                         loadedCount++;
-                        console.log('here');
                         //something special when all the corridors have been loaded
                         if (this.corridorCollection.corridorCount == loadedCount) {
-                            console.log('all loaded');
-                            // calcExtent.fitToMap(this._corridorArray, this.mainMap);
+                            let ext = this.corridorCollection.fullExtent;
+
+                            if (ext){
+                                this.mainMap.getView().fit(ext, this.mainMap.getSize());
+                            }
                         }
                     }
                 }
             );
 
-            this.pickerCollection.addCorridor(corridor);
+            if (n == 0){
+                $('#primaryCounty').val(corridor.countyStart);
+                 $('#primaryRdwyRteId').val(corridor.routeId);
+                
+            }
 
-            console.log(corridor);
 
+            this.corridorCollection.addCorridorCreate(corridor);
         });
     }
 }

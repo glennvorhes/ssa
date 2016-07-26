@@ -49,8 +49,11 @@ class SelectHighway extends SelectBoxBase {
      * @param {number|string|null} startId - start county id
      * @param {number|string|null} endId - end county id
      * @param {number|string|null} [routeId=undefined] - route id for selection
+     * @param {boolean} [forceTrigger=false] - force change trigger to populate the rp pickers
      */
-    setStartEndCounty(startId, endId, routeId) {
+    setStartEndCounty(startId, endId, routeId, forceTrigger) {
+
+        forceTrigger = typeof forceTrigger == 'boolean' ? forceTrigger : false;
 
         if (startId == null || startId == undefined || endId == null) {
             return;
@@ -95,16 +98,17 @@ class SelectHighway extends SelectBoxBase {
 
                 if (routeId) {
                     this.box.val(routeId.toFixed());
-                } else {
+                }
+
+                if (!routeId || forceTrigger) {
                     this.box.trigger('change');
                 }
+
                 this.box.prop('disabled', false);
             } else {
                 this.box.prop('disabled', true);
                 this.box.trigger('change');
-                console.log(this.box.val());
             }
-
         });
     }
 }
