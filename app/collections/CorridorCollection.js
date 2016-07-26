@@ -95,9 +95,7 @@ class CorridorCollection {
         };
     }
 
-
-
-
+    
     /**
      * add a corridor
      * @param {Corridor} c - the corridor to be added
@@ -244,6 +242,10 @@ class CorridorCollection {
      */
     set showPopups(show){
         this._showPopups = show;
+    }
+    
+    get corridorCount(){
+        return this._corridorArray.length;
     }
 }
 

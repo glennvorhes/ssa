@@ -175,7 +175,6 @@ class PickerCollection {
     }
 
 
-
     previewCorridor() {
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
@@ -220,9 +219,17 @@ class PickerCollection {
         });
     }
 
-    addCorridor() {
-        this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
-        this.stopPicker();
+    /**
+     * add a corridor
+     * @param {Corridor} [c=undefined}
+     */
+    addCorridor(c) {
+        if (typeof c == "undefined") {
+            this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
+            this.stopPicker();
+        } else {
+            this._ssaMapCreate.corridorCollection.addCorridorCreate(c.clone());
+        }
     }
 
     modifyCorridor() {
@@ -286,7 +293,7 @@ class PickerCollection {
         mapPopup.closePopup();
     }
 
-    
+
     /**
      * Getter for if an add modify operation is happening {boolean}
      * @returns {boolean} - if the add or modify operation is happening

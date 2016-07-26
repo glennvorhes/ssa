@@ -4,12 +4,14 @@
 
 
 import SsaMapBase from './SsaMapBase';
-import quickMapMulti from 'webmapsjs/src/olHelpers/quickMapMulti';
+import * as calcExtent from 'webmapsjs/src/olHelpers/extentUtil';
 import quickMap from 'webmapsjs/src/olHelpers/quickMap';
 import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
 import makeGuid from 'webmapsjs/src/util/makeGuid';
 import PickerCollection from '../collections/PickerCollection';
 import CorridorCollection from '../collections/CorridorCollection';
+import CorridorConfig from '../corridor/CorridorConfig';
+import Corridor from '../corridor/Corridor';
 import $ from 'webmapsjs/src/jquery/jquery';
 import 'webmapsjs/src/jquery/jquery-ui';
 import provide from 'webmapsjs/src/util/provide';
@@ -22,16 +24,10 @@ class SsaMapCreate extends SsaMapBase {
      *
      * @param {string} divId
      * @param {string} corridorDataContainer
+     * @param {string} [dataClass=corridor-data] - class selector for the corridor data elements
      */
-    constructor(divId, corridorDataContainer) {
+    constructor(divId, corridorDataContainer, dataClass) {
         super(divId);
-
-        // let multiMap = quickMapMulti({
-        //     divId: this.mapId,
-        //     minZoom: 6,
-        //     zoom: 6,
-        //     fullScreen: true
-        // });
 
 
         this.$mainContainer.prepend(`<div class="ssa-map-sidebar"></div>`);
@@ -45,8 +41,6 @@ class SsaMapCreate extends SsaMapBase {
             zoom: 6,
             fullScreen: true
         });
-
-
 
 
         /**
@@ -92,6 +86,39 @@ class SsaMapCreate extends SsaMapBase {
             if (ext) {
                 this.mainMap.getView().fit(ext, this.mainMap.getSize());
             }
+        });
+
+        let $existingCorridors = $('.' + dataClass || 'corridor-data');
+
+        let existingCount = $existingCorridors.length;
+        let loadedCount = 0;
+
+
+        // parse the data from the hidden input elements
+        $existingCorridors.each((n, el) => {
+            let conf = new CorridorConfig(el);
+
+            let corridor = new Corridor(
+                conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
+                conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
+                {
+                    color: 'black',
+                    loadedCallback: (c) => {
+                        loadedCount++;
+                        console.log('here');
+                        //something special when all the corridors have been loaded
+                        if (this.corridorCollection.corridorCount == loadedCount) {
+                            console.log('all loaded');
+                            // calcExtent.fitToMap(this._corridorArray, this.mainMap);
+                        }
+                    }
+                }
+            );
+
+            this.pickerCollection.addCorridor(corridor);
+
+            console.log(corridor);
+
         });
     }
 }

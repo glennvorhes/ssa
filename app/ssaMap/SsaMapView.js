@@ -70,11 +70,6 @@ class SsaMapView extends SsaMapBase {
 
 
         /**
-         * @type {MapMoveCls}
-         */
-        this.mainMapMove = mapMove;
-
-        /**
          * @type {MapPopupCls}
          */
         this.mainMapPopup = mapPopup;
@@ -102,10 +97,9 @@ class SsaMapView extends SsaMapBase {
             corridorConfigs.push(new CorridorConfig(el));
         });
 
-        this.createdCorridors = corridorConfigs.length;
-        this.loadedCorridors = 0;
-
-
+        this.createdCorridorsLength = corridorConfigs.length;
+        this.loadedCorridorsLength = 0;
+        
         let outHtml = '';
 
         // Create the corridors, triggers feature get
@@ -119,9 +113,9 @@ class SsaMapView extends SsaMapBase {
                 {
                     color: 'black',
                     loadedCallback: (c) => {
-                        this.loadedCorridors++;
+                        this.loadedCorridorsLength++;
                         //something special when all the corridors have been loaded
-                        if (this.loadedCorridors == this.createdCorridors) {
+                        if (this.loadedCorridorsLength == this.createdCorridorsLength) {
                             calcExtent.fitToMap(this._corridorArray, this.mainMap);
                         }
                         mmFlags.addCorridor(c);
