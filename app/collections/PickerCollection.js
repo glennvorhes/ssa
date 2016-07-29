@@ -223,12 +223,15 @@ class PickerCollection {
      * add a corridor
      */
     addCorridor() {
-        this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
+        let newCorridor = this._dummyCorridor.clone();
+        newCorridor.isNew = true;
+        this._ssaMapCreate.corridorCollection.addCorridorCreate(newCorridor);
         this.stopPicker();
     }
 
     modifyCorridor() {
         this._modifyCorridor.updateCorridor(this._dummyCorridor);
+        this._modifyCorridor.isUpdated = true;
         this._ssaMapCreate.corridorCollection.refreshHtmlCreate();
         this.stopPicker();
     }

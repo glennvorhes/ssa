@@ -112,6 +112,9 @@ class Corridor {
         } else if (!options.cancelLoad) {
             this.load(options.loadedCallback);
         }
+
+        this._isNew = false;
+        this._isUpdated = false;
     }
 
     /**
@@ -236,6 +239,8 @@ class Corridor {
         outString += `<input type="hidden" class="corridor-data-from-pdp" name="corridors[${i}].startPdp" value="${this.pdpFrom}"/>`;
         outString += `<input type="hidden" class="corridor-data-to-pdp" name="corridors[${i}].endPdp" value="${this.pdpTo}"/>`;
         outString += `<input type="hidden" class="corridor-data-route-id" name="corridors[${i}].routeId" value="${this.routeId}"/>`;
+        outString += `<input type="hidden" class="corridor-data-is-new" name="corridors[${i}].isNew" value="${this._isNew}"/>`;
+        outString += `<input type="hidden" class="corridor-data-is-updated" name="corridors[${i}].isUpdated" value="${this._isUpdated}"/>`;
         outString += `</div>`;
 
         return outString;
@@ -303,6 +308,38 @@ class Corridor {
 
     get loaded() {
         return this._loaded;
+    }
+
+    /**
+     * 
+     * @returns {boolean}
+     */
+    get isNew(){
+        return this._isNew;
+    }
+
+    /**
+     * 
+     * @param {boolean} isNew
+     */
+    set isNew(isNew){
+        this._isNew = isNew;
+    }
+    
+    /**
+     * 
+     * @returns {boolean}
+     */
+    get isUpdated(){
+        return this._isUpdated;
+    }
+
+    /**
+     * 
+     * @param {boolean} isUpdated
+     */
+    set isUpdated(isUpdated){
+        this._isUpdated = isUpdated;
     }
 }
 

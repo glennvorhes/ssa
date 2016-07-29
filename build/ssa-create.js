@@ -828,13 +828,16 @@ var PickerCollection = function () {
     }, {
         key: 'addCorridor',
         value: function addCorridor() {
-            this._ssaMapCreate.corridorCollection.addCorridorCreate(this._dummyCorridor.clone());
+            var newCorridor = this._dummyCorridor.clone();
+            newCorridor.isNew = true;
+            this._ssaMapCreate.corridorCollection.addCorridorCreate(newCorridor);
             this.stopPicker();
         }
     }, {
         key: 'modifyCorridor',
         value: function modifyCorridor() {
             this._modifyCorridor.updateCorridor(this._dummyCorridor);
+            this._modifyCorridor.isUpdated = true;
             this._ssaMapCreate.corridorCollection.refreshHtmlCreate();
             this.stopPicker();
         }
@@ -1091,6 +1094,9 @@ var Corridor = function () {
         } else if (!options.cancelLoad) {
             this.load(options.loadedCallback);
         }
+
+        this._isNew = false;
+        this._isUpdated = false;
     }
 
     /**
@@ -1189,6 +1195,8 @@ var Corridor = function () {
             outString += '<input type="hidden" class="corridor-data-from-pdp" name="corridors[' + i + '].startPdp" value="' + this.pdpFrom + '"/>';
             outString += '<input type="hidden" class="corridor-data-to-pdp" name="corridors[' + i + '].endPdp" value="' + this.pdpTo + '"/>';
             outString += '<input type="hidden" class="corridor-data-route-id" name="corridors[' + i + '].routeId" value="' + this.routeId + '"/>';
+            outString += '<input type="hidden" class="corridor-data-is-new" name="corridors[' + i + '].isNew" value="' + this._isNew + '"/>';
+            outString += '<input type="hidden" class="corridor-data-is-updated" name="corridors[' + i + '].isUpdated" value="' + this._isUpdated + '"/>';
             outString += '</div>';
 
             return outString;
@@ -1320,6 +1328,46 @@ var Corridor = function () {
         key: 'loaded',
         get: function get() {
             return this._loaded;
+        }
+
+        /**
+         * 
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'isNew',
+        get: function get() {
+            return this._isNew;
+        }
+
+        /**
+         * 
+         * @param {boolean} isNew
+         */
+        ,
+        set: function set(isNew) {
+            this._isNew = isNew;
+        }
+
+        /**
+         * 
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'isUpdated',
+        get: function get() {
+            return this._isUpdated;
+        }
+
+        /**
+         * 
+         * @param {boolean} isUpdated
+         */
+        ,
+        set: function set(isUpdated) {
+            this._isUpdated = isUpdated;
         }
     }]);
 
