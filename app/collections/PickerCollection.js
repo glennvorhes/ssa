@@ -3,11 +3,9 @@
  */
 
 
-import SelectStartCounty from '../selectBox/SelectStartCounty';
+
+import SelectCounty from '../selectBox/SelectCounty';
 import SelectHighway from '../selectBox/SelectHighway';
-import SelectEndCounty from '../selectBox/SelectEndCounty';
-// import SegmentPickerFrom from '../segmentPicker/SegmentPickerFrom';
-// import SegmentPickerTo from '../segmentPicker/SegmentPickerTo';
 import SegmentPicker from '../selectBox/SegmentPicker';
 import Corridor from '../corridor/Corridor';
 import provide from 'webmapsjs/src/util/provide';
@@ -19,6 +17,7 @@ import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
 import LayerEsriMapServer from 'webmapsjs/src/layers/LayerEsriMapServer';
 
 const nm = provide('ssa');
+
 
 
 class PickerCollection {
@@ -61,8 +60,8 @@ class PickerCollection {
         this.$btnPickerCancel = this.$containerEl.find('.picker-cancel');
 
 
-        this.countyStartSelect = new SelectStartCounty(this.$innerContainer);
-        this.countyEndSelect = new SelectEndCounty(this.$innerContainer);
+        this.countyStartSelect = new SelectCounty(this.$innerContainer, "Start County");
+        this.countyEndSelect = new SelectCounty(this.$innerContainer, "End County");
         this.highwaySelect = new SelectHighway(this.$innerContainer);
 
         this._metamanagerSegmentsLayer = new LayerEsriMapServer(
