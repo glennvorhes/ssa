@@ -6,7 +6,7 @@ import provide from 'webmapsjs/src/util/provide';
 import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures';
 import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
 import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
-import SelectBoxBase from './SelectBoxBase';
+import SelectBoxBase from 'webmapsjs/src/domUtil/SelectBoxBase';
 import ol from 'webmapsjs/src/ol/ol';
 import Ajx from '../AjaxGetters';
 import $ from 'webmapsjs/src/jquery/jquery';

@@ -3,9 +3,11 @@
  */
 
 import SelectCounty from './SelectCounty';
-import {getEndCounties} from '../AjaxGetters';
+import Ajx from '../AjaxGetters';
 import provide from 'webmapsjs/src/util/provide';
 const nm = provide('ssa.select');
+
+
 
 class SelectEndCounty extends SelectCounty {
 
@@ -23,31 +25,32 @@ class SelectEndCounty extends SelectCounty {
         //     this.box.trigger('change');
         // });
     }
-
-    /**
-     * set the county
-     * @param {string} hwy
-     * @param {number|undefined} [endCounty=undefined}
-     */
-    setHighway(hwy, endCounty) {
-        this.box.html('');
-        this.box.addClass('refresh').removeClass('refresh');
-
-        endCounty = typeof endCounty == 'number' ? endCounty : undefined;
-
-        getEndCounties(hwy, (d) => {
-            for (let c of d) {
-                this.box.append(`<option value="${c['id']}">${c['name']}</option>`)
-            }
-            if (d) {
-                if (typeof endCounty == 'number') {
-                    this.box.val(endCounty.toFixed());
-                } else {
-                    this.box.trigger('change');
-                }
-            }
-        });
-    }
+    //
+    // /**
+    //  * set the county
+    //  * @param {string} hwy
+    //  * @param {number|undefined} [endCounty=undefined}
+    //  */
+    // setHighway(hwy, endCounty) {
+    //     console.log('here');
+    //     this.box.html('');
+    //     this.box.addClass('refresh').removeClass('refresh');
+    //
+    //     endCounty = typeof endCounty == 'number' ? endCounty : undefined;
+    //
+    //     Ajx.getEndCounties(hwy, (d) => {
+    //         for (let c of d) {
+    //             this.box.append(`<option value="${c['id']}">${c['name']}</option>`);
+    //         }
+    //         if (d) {
+    //             if (typeof endCounty == 'number') {
+    //                 this.box.val(endCounty.toFixed());
+    //             } else {
+    //                 this.box.trigger('change');
+    //             }
+    //         }
+    //     });
+    // }
 }
 
 nm.SelectEndCounty = SelectEndCounty;

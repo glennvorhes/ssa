@@ -88,11 +88,12 @@ export const mmPopupContent = (props) => {
 };
 
 export const segNodeStyle = new ol.style.Style({
-    image: new ol.style.Circle({
-        radius: 5,
-        fill: new ol.style.Fill({
-            color: 'rgb(0, 0, 0)'
-        }),
+    image: new ol.style.RegularShape({
+        radius: 6,
+        points: 4,
+        // fill: new ol.style.Fill({
+        //     color: 'rgb(0, 0, 0)'
+        // }),
         stroke: new ol.style.Stroke({color: 'rgb(0, 0, 0', width: 2})
     })
 });
