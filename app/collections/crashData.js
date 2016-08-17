@@ -3,8 +3,8 @@
  */
 
 // uncomment this to use the example crash data
-import exampleCrashData from './_exampleCrashData';
-// let exampleCrashData = undefined;
+// import exampleCrashData from './_exampleCrashData';
+let exampleCrashData = undefined;
 
 import Ajx from '../AjaxGetters';
 import $ from 'webmapsjs/src/jquery/jquery';
