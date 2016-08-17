@@ -7,17 +7,13 @@ export const segmentLayer = new ol.style.Style({
     stroke: new ol.style.Stroke({color: 'darkblue', width: 5})
 });
 
-export const fromColor = '#48FD14';
+export const fromSelectionColor = '#48FD14';
 
-export const segmentSelectionStyleFrom = new ol.style.Style({
-    stroke: new ol.style.Stroke({color: fromColor, width: 7})
-});
 
-export const toColor = '#EE0071';
 
-export const segmentSelectionStyleTo = new ol.style.Style({
-    stroke: new ol.style.Stroke({color: toColor, width: 7})
-});
+export const toSelectionColor = '#EE0071';
+
+
 
 export const corridorPreviewColor = 'black';
 
@@ -98,9 +94,4 @@ export const segNodeStyle = new ol.style.Style({
     })
 });
 
-export const mmFlagStyle = new ol.style.Style({
-    stroke: new ol.style.Stroke({
-        color: '#b81900',
-        width: 6
-    })
-});
+

@@ -286,6 +286,11 @@ select:disabled {
 .mm-popup-table {
   margin: 3px 7px;
 }
+.mm-popup-table input[type=button] {
+  white-space: normal;
+  max-width: 75px;
+  margin-top: 3px;
+}
 .crash-summary-table {
   margin: 8px 7px 3px 7px;
 }
@@ -408,4 +413,10 @@ select:disabled {
 }
 #dummy {
   background-color: #b81900;
+}
+#mm-deficiency-list {
+  color: #00FF00;
+}
+#mm-deficiency-list li {
+  cursor: pointer;
 }

@@ -8,7 +8,12 @@ const nm = provide('ssa');
 
 class FilterBase {
 
-
+    /**
+     * 
+     * @param {string} topCheckId - top checkbox id
+     * @param {string} otherChecksClass - other checkbox class identifier
+     * @param {boolean} defaultOn - is on by default
+     */
     constructor(topCheckId, otherChecksClass, defaultOn) {
         this._topCheck = $('#' + topCheckId);
 

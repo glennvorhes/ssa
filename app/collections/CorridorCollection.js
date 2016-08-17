@@ -3,8 +3,13 @@
  */
 import provide from 'webmapsjs/src/util/provide';
 import * as styles  from '../layerStyles';
+import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
 import $ from 'webmapsjs/src/jquery/jquery';
 import * as calcExtent from 'webmapsjs/src/olHelpers/extentUtil';
+import makeGuid from 'webmapsjs/src/util/makeGuid';
+import CorridorConfig from '../corridor/CorridorConfig';
+import Corridor from '../corridor/Corridor';
+
 
 const nm = provide('ssa');
 
@@ -46,13 +51,33 @@ function corridorName(fromRp, toRp) {
 class CorridorCollection {
 
     /**
-     * @param {string} divId - div id inside which to make the collection
-     * @param {SsaMapCreate|SsaMapBase} ssaMap - the SSA map object
+     * @param {jQuery} parentDiv - div id inside which to make the collection
+     * @param {ol.Map} theMap - the SSA main map
+     * @param {string} corridorDataIdOrClass - the corridor data container id or class
+     * @param {function} afterChange - function to run after a change has taken place
+     * @param {string} [dataClass=corridor-data] - function to run after a change has taken place
      */
-    constructor(divId, ssaMap) {
+    constructor(parentDiv, theMap, corridorDataIdOrClass, afterChange, dataClass) {
 
-        this.ssaMap = ssaMap;
-        this.$containerEl = $('#' + divId).addClass('corridor-collection-container');
+        this._dataClass = dataClass ||  'corridor-data';
+
+
+        this._afterChange = afterChange;
+
+        let _corridorDataContainer = $(`.${corridorDataIdOrClass}, #${corridorDataIdOrClass}`);
+        if (_corridorDataContainer.length == 0) {
+            throw 'data container not found';
+        }
+
+        this.$corridorDataContainer = $(_corridorDataContainer[0]);
+        this.$corridorDataContainer.addClass('corridor-data-container');
+
+        this._map = theMap;
+
+        let corridorsGuid = makeGuid();
+        parentDiv.append(`<div id="${corridorsGuid}"></div>`);
+        this.$containerEl = $('#' + corridorsGuid).addClass('corridor-collection-container');
+
         let innerHtml = '<div class="corridor-collection">';
         innerHtml += tableContent();
         innerHtml += '</div>';
@@ -78,7 +103,7 @@ class CorridorCollection {
         this._coridorLookup = {};
 
         this._popupStyle = (props) => {
-            if (!this.showPopups){
+            if (!this.showPopups) {
                 return false;
             }
 
@@ -93,9 +118,10 @@ class CorridorCollection {
 
             return returnHtml;
         };
+
     }
 
-    
+
     /**
      * add a corridor
      * @param {Corridor} c - the corridor to be added
@@ -103,10 +129,10 @@ class CorridorCollection {
     addCorridorCreate(c) {
         this._corridorArray.push(c);
         this._coridorLookup[c.clientId] = c;
-        this.ssaMap.mainMap.addLayer(c.olLayer);
-        this.ssaMap.mainMap.addLayer(c.nodeLayer.olLayer);
+        this._map.addLayer(c.olLayer);
+        this._map.addLayer(c.nodeLayer.olLayer);
         c.layer.name = corridorName(c.rpFrom, c.rpTo);
-        this.ssaMap.mainMapPopup.addVectorPopup(c.layer, this._popupStyle);
+        mapPopup.addVectorPopup(c.layer, this._popupStyle);
         this.refreshHtmlCreate();
     }
 
@@ -124,14 +150,14 @@ class CorridorCollection {
         }
 
         let ix = this._corridorArray.indexOf(cor);
-        this.ssaMap.mainMapPopup.removeVectorPopup(cor.layer);
-        this.ssaMap.mainMap.removeLayer(cor.olLayer);
-        this.ssaMap.mainMap.removeLayer(cor.nodeLayer.olLayer);
+        mapPopup.removeVectorPopup(cor.layer);
+        this._map.removeLayer(cor.olLayer);
+        this._map.removeLayer(cor.nodeLayer.olLayer);
         this._corridorArray.splice(ix, 1);
         delete this._coridorLookup[cor.clientId];
 
-        this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() - 1);
-        this.ssaMap.mainMap.getView().setZoom(this.ssaMap.mainMap.getView().getZoom() + 1);
+        this._map.getView().setZoom(this._map.getView().getZoom() - 1);
+        this._map.getView().setZoom(this._map.getView().getZoom() + 1);
 
         this.refreshHtmlCreate();
     }
@@ -150,37 +176,15 @@ class CorridorCollection {
 
         this.$innerContainer.append(tableContent(rowContent));
 
-        let _this = this;
 
-        this.$innerContainer.find('.corridor-zoom').click(function () {
-
-            let corridorId = $(this).attr('data-corridor');
-            let cor = _this._coridorLookup[corridorId];
-            _this.ssaMap.mainMap.getView().fit(cor.extent, _this.ssaMap.mainMap.getSize());
-        });
-
-        this.$innerContainer.find('.corridor-delete').click(function () {
-
-            let corridorId = $(this).attr('data-corridor');
-            _this.removeCorridor(corridorId);
-        });
-
-        this.$innerContainer.find('.corridor-edit').click(function () {
-            _this.ssaMap.$createCorridorButton.prop('disabled', true);
-            let corridorId = $(this).attr('data-corridor');
-            let cor = _this._coridorLookup[corridorId];
-            _this.ssaMap.pickerCollection.startPicker(cor);
-            $(this).closest('.corridor-tr').addClass('corridor-tr-selected');
-        });
-
-        this.ssaMap.$corridorDataContainer.html('');
-
+        this.$corridorDataContainer.html('');
 
         for (let i = 0; i < this._corridorArray.length; i++) {
             let cor = this._corridorArray[i];
-            cor.getDataHtml(i);
-            this.ssaMap.$corridorDataContainer.append(cor.getDataHtml(i));
+            this.$corridorDataContainer.append(cor.getDataHtml(i));
         }
+
+        this._afterChange();
     }
 
 
@@ -210,7 +214,7 @@ class CorridorCollection {
      * if currently in a create or modify operation
      * @returns {boolean} is creating or modifying
      */
-    get inCreateModifyOperation(){
+    get inCreateModifyOperation() {
         return this._inCreateModifyOperation;
     }
 
@@ -218,10 +222,10 @@ class CorridorCollection {
      * if currently in a create or modify operation
      * @param {boolean} isInCreateModifyOperation - is creating or modifying
      */
-    set inCreateModifyOperation(isInCreateModifyOperation){
+    set inCreateModifyOperation(isInCreateModifyOperation) {
         this._inCreateModifyOperation = isInCreateModifyOperation;
 
-        if (this._inCreateModifyOperation){
+        if (this.inCreateModifyOperation) {
             this.$innerContainer.addClass('corridor-collection-create-modify');
         } else {
             this.$innerContainer.removeClass('corridor-collection-create-modify');
@@ -232,7 +236,7 @@ class CorridorCollection {
      *
      * @returns {boolean} if the corridor popups should be shown
      */
-    get showPopups(){
+    get showPopups() {
         return this._showPopups;
     }
 
@@ -240,14 +244,62 @@ class CorridorCollection {
      *
      * @param {boolean} show - if the corridor popups should be shown
      */
-    set showPopups(show){
+    set showPopups(show) {
         this._showPopups = show;
     }
-    
-    get corridorCount(){
+
+    get corridorCount() {
         return this._corridorArray.length;
+    }
+
+    /**
+     *
+     * @param {string} corId - corridor id
+     * @returns {Corridor} the corridor matching the id in the lookup
+     */
+    getCorridorById(corId) {
+        return this._coridorLookup[corId];
+    }
+
+    loadExistingCorridors() {
+
+        let $existingCorridors = $('.' + this._dataClass);
+        let loadedCount = 0;
+
+
+        // parse the data from the hidden input elements
+        $existingCorridors.each((n, el) => {
+            let conf = new CorridorConfig(el);
+
+            let corridor = new Corridor(
+                conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
+                conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
+                {
+                    loadedCallback: () => {
+                        loadedCount++;
+                        //something special when all the corridors have been loaded
+                        if (this.corridorCount == loadedCount) {
+                            let ext = this.fullExtent;
+
+                            if (ext) {
+                                this._map.getView().fit(ext, this._map.getSize());
+                            }
+                        }
+                    }
+                }
+            );
+
+            if (n == 0) {
+                $('#primaryCounty').val(corridor.countyStart);
+                $('#primaryRdwyRteId').val(corridor.routeId);
+
+            }
+
+            this.addCorridorCreate(corridor);
+        });
     }
 }
 
 nm.CorridorCollection = CorridorCollection;
+
 export default CorridorCollection;

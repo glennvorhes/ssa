@@ -16,6 +16,7 @@ import $ from 'webmapsjs/src/jquery/jquery';
 import crashData from '../collections/crashData';
 import mmFlags from '../collections/mmFlags';
 import controllingCriteria from '../collections/controllingCriteria';
+import * as constants from '../constants';
 
 const nm = provide('ssa');
 
@@ -114,11 +115,12 @@ class SsaMapView extends SsaMapBase {
                     color: 'black',
                     loadedCallback: (c) => {
                         this.loadedCorridorsLength++;
+                        mmFlags.addCorridor(c);
                         //something special when all the corridors have been loaded
                         if (this.loadedCorridorsLength == this.createdCorridorsLength) {
-                            calcExtent.fitToMap(this._corridorArray, this.mainMap);
+                            this._afterCorridorLoad();
                         }
-                        mmFlags.addCorridor(c);
+
                     }
                 }
             );
@@ -138,6 +140,22 @@ class SsaMapView extends SsaMapBase {
         mmFlags.init(this.mainMap);
 
         this.mainMap.addLayer(crashData.pointCrashes.olLayer);
+    }
+
+    _afterCorridorLoad(){
+        calcExtent.fitToMap(this._corridorArray, this.mainMap);
+        mmFlags.sortFeatures();
+        let _this = this;
+        $(`#${constants.mmFlagListId} li`).click(function(){
+            let $this = $(this);
+
+            let theFeature = mmFlags.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
+
+            _this.mainMap.getView().fit(theFeature.getGeometry().getExtent(), _this.mainMap.getSize());
+            _this.mainMap.getView().setZoom(_this.mainMap.getView().getZoom() - 1);
+        });
+        
+        
     }
 }
 

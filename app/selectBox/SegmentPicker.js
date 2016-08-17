@@ -19,14 +19,13 @@ class SegmentPicker extends SelectBoxBase {
 
     /**
      *
-     * @param {jQuery} parent - parent container
+     * @param {PickerCollection} pickerColl - picker collection
      * @param {boolean} isFrom - is this the start (from) picker
      */
-    constructor(parent, isFrom) {
-        let mapId = undefined;
+    constructor(pickerColl, isFrom) {
+
 
         function contentGen(guid) {
-            mapId = guid + '-map';
             let outString = '';
             outString += `<div style="position: relative;" class="select-picker-map-container">`;
             outString += `<select id="${guid}"></select>`;
@@ -35,8 +34,9 @@ class SegmentPicker extends SelectBoxBase {
             return outString;
         }
 
-        super(parent, isFrom ? 'Ref. Point #1' : 'Ref. Point #2', contentGen);
+        super(pickerColl.$innerContainer, isFrom ? 'Ref. Point #1' : 'Ref. Point #2', contentGen);
         this._isFrom = isFrom;
+        this._pickerColl = pickerColl;
 
         /**
          *
@@ -95,25 +95,39 @@ class SegmentPicker extends SelectBoxBase {
         //     visible: false
         // });
 
+
         /**
          *
          * @type {LayerBaseVectorGeoJson}
          * @private
          */
         this._segmentSelectionLayer = new LayerBaseVectorGeoJson('', {
-            style: this._isFrom ? layerStyles.segmentSelectionStyleFrom : layerStyles.segmentSelectionStyleTo,
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke(
+                    {
+                        color: this._isFrom ? layerStyles.fromSelectionColor : layerStyles.toSelectionColor,
+                        width: 8
+                    }
+                )
+            }),
             minZoom: 7,
             visible: false,
-            zIndex: 100
+            zIndex: this._isFrom ? 100 : 101
         });
 
         this._selectBtnClass = this._isFrom ? "select-seg-btn-from" : "select-seg-btn-to";
+        this._selectBtnClassTo = 'select-seg-btn-to';
 
         mapPopup.addVectorPopup(this._segmentLayer, (props) => {
             let returnHtml = '<table class="mm-popup-table">';
             returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td>;`;
             returnHtml += `<td rowspan="5">`;
-            returnHtml += `<input type="button" id='${props['pdpId']}' class="${this._selectBtnClass}" value="Select"/>`;
+            if (this._pickerColl.startEndCountySame) {
+                returnHtml += `<input type="button" id='${props['pdpId']}' class="${this._selectBtnClass}" value="Select Start"/>`;
+                returnHtml += `<input type="button" id='${props['pdpId']}' class="${this._selectBtnClassTo}" value="Select End"/>`;
+            } else {
+                returnHtml += `<input type="button" id='${props['pdpId']}' class="${this._selectBtnClass}" value="Select"/>`;
+            }
             returnHtml += `</td></tr>`;
             returnHtml += `<tr><td>Hwy</td><td>${props['hwyDir']}</td></tr>`;
             returnHtml += `<tr><td>DivUnd</td><td>${props['divUnd']}</td></tr>`;
@@ -259,8 +273,14 @@ class SegmentPicker extends SelectBoxBase {
 
     set layersVisible(lyrsVisible) {
         this._layersVisible = lyrsVisible;
-        this.segmentLayer.visible = this.layersVisible;
-        this._segNodeLayer.visible = this.layersVisible;
+        if (this._isFrom) {
+            this.segmentLayer.visible = this.layersVisible;
+            this._segNodeLayer.visible = this.layersVisible;
+        } else {
+            this.segmentLayer.visible = this.layersVisible && !this._pickerColl.startEndCountySame;
+            this._segNodeLayer.visible = this.layersVisible && !this._pickerColl.startEndCountySame;
+        }
+
         this.selectionLayer.visible = this.layersVisible;
     }
 

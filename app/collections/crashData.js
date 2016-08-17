@@ -3,8 +3,8 @@
  */
 
 // uncomment this to use the example crash data
-// import exampleCrashData from '../exampleCrashData';
-let exampleCrashData = undefined;
+import exampleCrashData from './_exampleCrashData';
+// let exampleCrashData = undefined;
 
 import Ajx from '../AjaxGetters';
 import $ from 'webmapsjs/src/jquery/jquery';
@@ -151,7 +151,6 @@ const crashPointStyle = (feature) => {
 
     let props = feature.getProperties();
 
-
     let crashColor = filterCrash.getCrashColor(props['injSvr']);
     if (!crashColor) {
         return null;
@@ -176,7 +175,14 @@ class CrashData {
 
         this._crashHtmlLookup = {};
         this._crashArrayLookup = {};
-        this.pointCrashes = new LayerBaseVectorGeoJson('', {name: "Crash Points", zIndex: 7, style: crashPointStyle, minZoom: 10});
+        this.pointCrashes = new LayerBaseVectorGeoJson('', {
+            name: "Crash Points",
+            zIndex: 7,
+            style: crashPointStyle,
+            minZoom: 10
+        });
+
+
     }
 
     init() {
@@ -193,7 +199,7 @@ class CrashData {
         });
 
         filterCrash.addChangeCallback(() => {
-           this.pointCrashes.refresh();
+            this.pointCrashes.refresh();
         });
 
         if (typeof exampleCrashData === 'undefined') {
@@ -221,8 +227,6 @@ class CrashData {
             this._crashArrayLookup[itm.key] = crashes;
 
             for (let c of crashes) {
-
-
                 if (!(c.lon && c.lat)) {
                     continue;
                 }
@@ -236,27 +240,6 @@ class CrashData {
                 p.setProperties(c);
                 this.pointCrashes.source.addFeature(p);
             }
-
-            //     // convert to an int
-            //     let pdp = parseInt(itm.key);
-            //
-            //     // loop over corridors to find which one it is on,
-            //     // don't break as there might be multiples
-            //     for (let corr of this._corridorArray) {
-            //
-            //         /**
-            //          * try to find the feature by exact match
-            //          * @type {ol.Feature|undefined}
-            //          */
-            //         let theFeature = corr.sortedFeatures.getFeature(pdp, true);
-            //
-            //         // if found, set the crashes property using a helper function
-            //         if (theFeature) {
-            //             theFeature.setProperties(
-            //                 {crashInfo: _crashInfoHelper(/**@type {Array<crashData>} */itm.value)}
-            //             );
-            //         }
-            //     }
         }
 
         // flash a crashes loaded message
@@ -271,8 +254,6 @@ class CrashData {
         } else {
             console.log('get crashes message element not found');
         }
-
-
     }
 
     getCrashSummary(pdp) {
@@ -280,10 +261,6 @@ class CrashData {
 
         return summ || '';
     }
-
-
 }
 
 export default new CrashData();
-
-

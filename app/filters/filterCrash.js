@@ -6,7 +6,7 @@ import FilterBase from './FilterBase';
 class FilterCrash extends FilterBase {
 
     constructor() {
-        super('filter-crash', 'filter-crash-sub', true);
+        super('filter-crash', 'filter-crash-sub', false);
     }
 
     /**
