@@ -1990,7 +1990,7 @@ var SegmentPicker = function (_SelectBoxBase) {
                     width: 8
                 })
             }),
-            minZoom: 6,
+            minZoom: 5,
             visible: false,
             zIndex: _this2._isFrom ? 100 : 101
         });

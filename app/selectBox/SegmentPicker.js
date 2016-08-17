@@ -110,7 +110,7 @@ class SegmentPicker extends SelectBoxBase {
                     }
                 )
             }),
-            minZoom: 6,
+            minZoom: 5,
             visible: false,
             zIndex: this._isFrom ? 100 : 101
         });
