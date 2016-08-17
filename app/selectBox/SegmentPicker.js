@@ -69,7 +69,7 @@ class SegmentPicker extends SelectBoxBase {
          */
         this._segmentLayer = new LayerBaseVectorGeoJson('',
             {
-                minZoom: 7,
+                minZoom: 6,
                 name: this._isFrom ? 'Start Segment' : 'End Segment',
                 transform: {dataProjection: 'EPSG:3857', featureProjection: 'EPSG:3857'},
                 style: layerStyles.segmentLayer,
@@ -110,7 +110,7 @@ class SegmentPicker extends SelectBoxBase {
                     }
                 )
             }),
-            minZoom: 5,
+            minZoom: 6,
             visible: false,
             zIndex: this._isFrom ? 100 : 101
         });

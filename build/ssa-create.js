@@ -1952,7 +1952,7 @@ var SegmentPicker = function (_SelectBoxBase) {
          * @protected
          */
         _this2._segmentLayer = new _LayerBaseVectorGeoJson2.default('', {
-            minZoom: 7,
+            minZoom: 6,
             name: _this2._isFrom ? 'Start Segment' : 'End Segment',
             transform: { dataProjection: 'EPSG:3857', featureProjection: 'EPSG:3857' },
             style: layerStyles.segmentLayer,
@@ -1990,7 +1990,7 @@ var SegmentPicker = function (_SelectBoxBase) {
                     width: 8
                 })
             }),
-            minZoom: 5,
+            minZoom: 6,
             visible: false,
             zIndex: _this2._isFrom ? 100 : 101
         });
