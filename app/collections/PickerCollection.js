@@ -106,7 +106,6 @@ class PickerCollection {
         this._addHandlers();
         this._helpDialogInit();
 
-        glob.pickerCollection = this;
     }
 
     _addHandlers() {

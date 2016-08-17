@@ -770,8 +770,6 @@ var PickerCollection = function () {
         this.corridorCollection = undefined;
         this._addHandlers();
         this._helpDialogInit();
-
-        glob.pickerCollection = this;
     }
 
     _createClass(PickerCollection, [{
