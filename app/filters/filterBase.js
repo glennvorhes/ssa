@@ -81,7 +81,6 @@ class FilterBase {
      *
      * @param {string} val - the value to check
      * @returns {boolean} - if the property is on
-     * @protected
      */
     valIsOn(val){
         return this._onValues.indexOf(val) > -1;
@@ -119,7 +118,15 @@ class FilterBase {
         }
     }
 
-
+    /**
+     * array of all values
+     * @returns {Array<string>} all values available in the filter
+     */
+    *allValues(){
+        for (let v of this._allValues){
+            yield v;
+        }
+    }
 }
 
 nm.FilterBase = FilterBase;

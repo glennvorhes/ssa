@@ -47,6 +47,15 @@ class SsaMapBase {
     get mapId(){
         return this._mapId;
     }
+
+    /**
+     * 
+     * @returns {JQuery|jQuery|HTMLElement}
+     * @protected
+     */
+    get $mapDiv(){
+       return $(`#${this.mapId}`); 
+    }
 }
 
 nm.SsaMapBase = SsaMapBase;

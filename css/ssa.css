@@ -393,8 +393,8 @@ select:disabled {
 .crashes-loaded-msg {
   display: none;
   position: absolute;
-  top: 30px;
-  left: 70px;
+  top: 15px;
+  left: 40px;
   z-index: 10;
   background-color: lawngreen;
   padding: 9px 15px;
@@ -414,9 +414,33 @@ select:disabled {
 #dummy {
   background-color: #b81900;
 }
+#mm-deficiency-list li,
+#cc-deficiency-list li {
+  cursor: pointer;
+}
 #mm-deficiency-list {
   color: #00FF00;
 }
-#mm-deficiency-list li {
-  cursor: pointer;
+#cc-deficiency-list {
+  color: #FFC632;
+}
+.segment-index-summary {
+  padding: 5px;
+  position: absolute;
+  left: 10px;
+  top: 64px;
+  min-height: 300px;
+  width: 300px;
+  background-color: rgba(100, 100, 100, 0.9);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: solid black 1px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.segment-index-summary h3,
+.segment-index-summary h4,
+.segment-index-summary h5 {
+  margin: 0;
 }

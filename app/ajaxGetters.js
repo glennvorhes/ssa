@@ -28,7 +28,9 @@ const getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCoun
 function _ajaxInner(url, params, callback) {
     "use strict";
     $.get(url, params, callback, 'json').fail(() => {
-        alert("error getting: " + url + JSON.stringify(params));
+        let msg = "error getting: " + url + JSON.stringify(params);
+        console.warn(msg);
+        // alert("error getting: " + url + JSON.stringify(params));
     });
 }
 

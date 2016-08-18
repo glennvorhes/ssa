@@ -1,13 +1,11 @@
 /**
  * Created by gavorhes on 7/15/2016.
  */
-import LayerBaseVectorGeoJson from 'webmapsjs/src/layers/LayerBaseVectorGeoJson';
 import filterMmFlag from '../filters/filterMmFlag';
 import mapPopup from 'webmapsjs/src/olHelpers/mapPopup';
 import ol from 'webmapsjs/src/ol/ol';
-import $ from 'webmapsjs/src/jquery/jquery';
-import SortedFeatures from 'webmapsjs/src/olHelpers/SortedFeatures';
 import * as constants from '../constants';
+import DeficiencyBase from './_DeficiencyBase';
 
 
 /**
@@ -22,7 +20,7 @@ const mmFlagStyle = (feature) => {
 
 
     let txtFunc = () => {
-        let txt = new ol.style.Text(
+        return new ol.style.Text(
             {
                 text: props['mmId'],
                 scale: 1.5,
@@ -36,7 +34,6 @@ const mmFlagStyle = (feature) => {
             }
         );
 
-        return txt;
     };
 
     if ((props['rateFlag'] > 1 && filterMmFlag.mmRateFlagOn) || props['kabFlag'] > 1 && filterMmFlag.mmKabFlagOn) {
@@ -52,24 +49,11 @@ const mmFlagStyle = (feature) => {
     }
 };
 
-let mmFlagIndex = 0;
 
 
-class MmFlags {
+class MmFlags extends DeficiencyBase {
     constructor() {
-        this.flagLayer = new LayerBaseVectorGeoJson('', {
-            zIndex: 6,
-            style: mmFlagStyle,
-            name: "Safety Flags"
-        });
-
-        /**
-         *
-         * @type {SortedFeatures|undefined}
-         * @private
-         */
-        this._sortedFeatures = undefined;
-
+        super("Safety Flags", mmFlagStyle, 200, constants.mmFlagListId);
     }
 
     /**
@@ -77,13 +61,13 @@ class MmFlags {
      * @param {ol.Map} m - the ol map
      */
     init(m) {
-        m.addLayer(this.flagLayer.olLayer);
+        super.init(m);
 
         filterMmFlag.addChangeCallback(() => {
-            this.flagLayer.refresh();
+            this.deficiencyLayer.refresh();
         });
 
-        mapPopup.addVectorPopup(this.flagLayer, (props) => {
+        mapPopup.addVectorPopup(this.deficiencyLayer, (props) => {
             return "MM ID: " + props['mmId'] + '<br/>' + "Rate Flag: " + props['rateFlag'].toFixed(3) + '<br/>' +
                 "KAB Flag: " + props['kabFlag'].toFixed(3);
         });
@@ -96,10 +80,8 @@ class MmFlags {
     addCorridor(c) {
         let feats = c.layer.source.getFeatures();
 
-        let $mmDeficiencyList = $(`#${constants.mmFlagListId}`);
 
         for (let f of feats) {
-            // f.setProperties()
             let props = f.getProperties();
             let rate = props['rateFlag'];
             let kab = props['kabFlag'];
@@ -108,11 +90,12 @@ class MmFlags {
             let triggerKabFlag = typeof kab == 'number' && kab > 1;
 
             if (triggerRateFlag || triggerKabFlag) {
-                this.flagLayer.source.addFeature(f);
-                mmFlagIndex++;
+                this.deficiencyLayer.source.addFeature(f);
+                
+                this.featureIndex++;
 
-                f.setProperties({mmId: 'MM' + mmFlagIndex.toFixed()});
-                let appendHtml = `<b>MM${mmFlagIndex.toFixed()}</b>:&nbsp;`;
+                f.setProperties({mmId: 'MM' + this.featureIndex.toFixed()});
+                let appendHtml = `<b>MM${this.featureIndex.toFixed()}</b>:&nbsp;`;
                 let flags = [];
                 if (triggerRateFlag) {
                     flags.push('Crash Rate');
@@ -122,25 +105,11 @@ class MmFlags {
                 }
 
                 appendHtml += flags.join(', ');
-                $mmDeficiencyList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
+                this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
             }
         }
     }
 
-    sortFeatures() {
-        this._sortedFeatures = new SortedFeatures(this.flagLayer.features, 'pdpId');
-
-
-    }
-
-    /**
-     * 
-     * @param pdpId
-     * @returns {ol.Feature|undefined}
-     */
-    getFeatureById(pdpId){
-        return this._sortedFeatures.getFeature(pdpId);
-    }
 }
 
 

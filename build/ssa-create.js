@@ -43,7 +43,9 @@ function _ajaxInner(url, params, callback) {
     "use strict";
 
     _jquery2.default.get(url, params, callback, 'json').fail(function () {
-        alert("error getting: " + url + JSON.stringify(params));
+        var msg = "error getting: " + url + JSON.stringify(params);
+        console.warn(msg);
+        // alert("error getting: " + url + JSON.stringify(params));
     });
 }
 
@@ -2615,6 +2617,18 @@ var SsaMapBase = function () {
     key: 'mapId',
     get: function get() {
       return this._mapId;
+    }
+
+    /**
+     * 
+     * @returns {JQuery|jQuery|HTMLElement}
+     * @protected
+     */
+
+  }, {
+    key: '$mapDiv',
+    get: function get() {
+      return (0, _jquery2.default)('#' + this.mapId);
     }
   }]);
 

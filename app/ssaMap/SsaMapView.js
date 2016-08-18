@@ -21,22 +21,7 @@ import * as constants from '../constants';
 const nm = provide('ssa');
 
 
-export const mmPopupContent = (props) => {
 
-    let returnHtml = '<table class="mm-popup-table">';
-    returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
-    returnHtml += `<tr><td>Highway</td><td>${props['hwyDir']}</td></tr>`;
-    returnHtml += `<tr><td>Description</td><td>${props['descrip'] ? props['descrip']: '-'}</td></tr>`;
-    returnHtml += `<tr><td>Divided</td><td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}</td></tr>`;
-    returnHtml += `<tr><td>From RP</td><td>${props['pdpFrom']}</td></tr>`;
-    returnHtml += `<tr><td>To RP</td><td>${props['pdpTo']}</td></tr>`;
-    returnHtml += '</table>';
-    if (props['crashInfo']){
-        returnHtml += props['crashInfo'];
-    }
-
-    return returnHtml;
-};
 
 const mmPopupContentWithCrash = (props) => {
     "use strict";
@@ -68,6 +53,18 @@ class SsaMapView extends SsaMapBase {
             zoom: 6,
             fullScreen: true
         });
+
+        let summaryListHtml = '<div class="segment-index-summary">';
+
+
+        summaryListHtml += `<h4 style="color: ${constants.mmFlagColor}">Metamanager Flags</h4>`;
+        summaryListHtml += `<ul id="${constants.mmFlagListId}"></ul>`;
+        summaryListHtml += `<h4 style="color: ${constants.controllingCriteriaColor}">Controlling Criteria</h4>`;
+        summaryListHtml += `<ul id="${constants.ccListId}"></ul>`;
+
+
+        summaryListHtml += '</div>';
+        this.$mapDiv.append(summaryListHtml);
 
 
         /**
@@ -116,6 +113,8 @@ class SsaMapView extends SsaMapBase {
                     loadedCallback: (c) => {
                         this.loadedCorridorsLength++;
                         mmFlags.addCorridor(c);
+                        controllingCriteria.addCorridor(c);
+                        
                         //something special when all the corridors have been loaded
                         if (this.loadedCorridorsLength == this.createdCorridorsLength) {
                             this._afterCorridorLoad();
@@ -138,22 +137,16 @@ class SsaMapView extends SsaMapBase {
 
         crashData.init(this.mainMap);
         mmFlags.init(this.mainMap);
+        controllingCriteria.init(this.mainMap);
+
 
     }
 
     _afterCorridorLoad(){
         calcExtent.fitToMap(this._corridorArray, this.mainMap);
-        mmFlags.sortFeatures();
-        let _this = this;
-        
-        $(`#${constants.mmFlagListId} li`).click(function(){
-            let $this = $(this);
-
-            let theFeature = mmFlags.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
-
-            _this.mainMap.getView().fit(theFeature.getGeometry().getExtent(), _this.mainMap.getSize());
-            _this.mainMap.getView().setZoom(_this.mainMap.getView().getZoom() - 1);
-        });
+        mmFlags.afterLoad();
+        controllingCriteria.afterLoad();
+       
     }
 }
 
