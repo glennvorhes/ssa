@@ -10,15 +10,15 @@ export const mmFlagColor = '#00FF00';
 export const controllingCriteriaColor = '#FFC632';
 
 export const contollingCriteriaLookup = {
-    DS: 'Design Speed',
-    GR: 'Grade',
-    LW: 'Lane Width',
-    SSD: 'Stopping Sight Distance',
-    SW: 'Shoulder Width',
-    PCP: 'Pavement Cross Slope',
-    HA: 'Horizontal Alignment',
-    VC: 'Vertical Clearance',
-    SE: 'Superelevation',
-    SC: 'Structural Capacity'
+    'Design Speed': 'Design Speed',
+    'Grade': 'Grade',
+    'Lane Width': 'Lane Width',
+    'Stopping Sight Distance': 'Stopping Sight Distance',
+    'Shoulder Width': 'Shoulder Width',
+    'Pavement Cross Slope': 'Pavement Cross Slope',
+    'Horizontal Alignment': 'Horizontal Alignment',
+    'Vertical Clearance': 'Vertical Clearance',
+    'Superelevation': 'Superelevation',
+    'Structural Capacity': 'Structural Capacity'
 };
 

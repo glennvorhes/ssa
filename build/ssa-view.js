@@ -1344,16 +1344,16 @@ var mmFlagColor = exports.mmFlagColor = '#00FF00';
 var controllingCriteriaColor = exports.controllingCriteriaColor = '#FFC632';
 
 var contollingCriteriaLookup = exports.contollingCriteriaLookup = {
-    DS: 'Design Speed',
-    GR: 'Grade',
-    LW: 'Lane Width',
-    SSD: 'Stopping Sight Distance',
-    SW: 'Shoulder Width',
-    PCP: 'Pavement Cross Slope',
-    HA: 'Horizontal Alignment',
-    VC: 'Vertical Clearance',
-    SE: 'Superelevation',
-    SC: 'Structural Capacity'
+    'Design Speed': 'Design Speed',
+    'Grade': 'Grade',
+    'Lane Width': 'Lane Width',
+    'Stopping Sight Distance': 'Stopping Sight Distance',
+    'Shoulder Width': 'Shoulder Width',
+    'Pavement Cross Slope': 'Pavement Cross Slope',
+    'Horizontal Alignment': 'Horizontal Alignment',
+    'Vertical Clearance': 'Vertical Clearance',
+    'Superelevation': 'Superelevation',
+    'Structural Capacity': 'Structural Capacity'
 };
 
 },{}],7:[function(require,module,exports){
