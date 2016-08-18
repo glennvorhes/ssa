@@ -68,6 +68,7 @@ class SsaMapView extends SsaMapBase {
             zoom: 6,
             fullScreen: true
         });
+        return;
 
 
         /**
