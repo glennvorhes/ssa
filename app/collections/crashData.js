@@ -3,8 +3,8 @@
  */
 
 // uncomment this to use the example crash data
-// import exampleCrashData from './_exampleCrashData';
-let exampleCrashData = undefined;
+import exampleCrashData from './_exampleCrashData';
+// let exampleCrashData = undefined;
 
 import Ajx from '../AjaxGetters';
 import $ from 'webmapsjs/src/jquery/jquery';
@@ -185,7 +185,12 @@ class CrashData {
 
     }
 
-    init() {
+    /**
+     *
+     * @param {ol.Map} m - the main map
+     */
+    init(m) {
+        return;
         mapPopup.addVectorPopup(this.pointCrashes, (props) => {
             let returnHtml = '<table class="crash-popup-table">';
             returnHtml += `<tr><td>Date</td><td>${props['dte'] + ' ' + props['time']}</td></tr>`;
@@ -210,6 +215,9 @@ class CrashData {
         } else {
             this._processCrashData(exampleCrashData);
         }
+
+        m.addLayer(crashData.pointCrashes.olLayer);
+
     }
 
     _processCrashData(d) {

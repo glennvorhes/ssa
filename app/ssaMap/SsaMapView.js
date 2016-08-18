@@ -136,16 +136,16 @@ class SsaMapView extends SsaMapBase {
 
         $('#' + infoAnchorId).after(outHtml);
 
-        crashData.init();
+        crashData.init(this.mainMap);
         mmFlags.init(this.mainMap);
 
-        this.mainMap.addLayer(crashData.pointCrashes.olLayer);
     }
 
     _afterCorridorLoad(){
         calcExtent.fitToMap(this._corridorArray, this.mainMap);
         mmFlags.sortFeatures();
         let _this = this;
+        
         $(`#${constants.mmFlagListId} li`).click(function(){
             let $this = $(this);
 
@@ -154,8 +154,6 @@ class SsaMapView extends SsaMapBase {
             _this.mainMap.getView().fit(theFeature.getGeometry().getExtent(), _this.mainMap.getSize());
             _this.mainMap.getView().setZoom(_this.mainMap.getView().getZoom() - 1);
         });
-        
-        
     }
 }
 
