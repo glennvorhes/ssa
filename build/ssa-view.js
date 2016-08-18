@@ -2230,7 +2230,6 @@ var SsaMapView = function (_SsaMapBase) {
             zoom: 6,
             fullScreen: true
         });
-        return _possibleConstructorReturn(_this2);
 
         /**
          * @type {MapPopupCls}
