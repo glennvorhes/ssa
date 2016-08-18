@@ -546,7 +546,6 @@ var CrashData = function () {
         value: function init(m) {
             var _this = this;
 
-            return;
             _mapPopup2.default.addVectorPopup(this.pointCrashes, function (props) {
                 var returnHtml = '<table class="crash-popup-table">';
                 returnHtml += '<tr><td>Date</td><td>' + (props['dte'] + ' ' + props['time']) + '</td></tr>';
@@ -791,7 +790,6 @@ var MmFlags = function () {
         value: function init(m) {
             var _this = this;
 
-            return;
             m.addLayer(this.flagLayer.olLayer);
 
             _filterMmFlag2.default.addChangeCallback(function () {

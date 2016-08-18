@@ -77,7 +77,6 @@ class MmFlags {
      * @param {ol.Map} m - the ol map
      */
     init(m) {
-        return;
         m.addLayer(this.flagLayer.olLayer);
 
         filterMmFlag.addChangeCallback(() => {

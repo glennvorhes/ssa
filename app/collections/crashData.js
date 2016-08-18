@@ -190,7 +190,6 @@ class CrashData {
      * @param {ol.Map} m - the main map
      */
     init(m) {
-        return;
         mapPopup.addVectorPopup(this.pointCrashes, (props) => {
             let returnHtml = '<table class="crash-popup-table">';
             returnHtml += `<tr><td>Date</td><td>${props['dte'] + ' ' + props['time']}</td></tr>`;
