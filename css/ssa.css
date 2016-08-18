@@ -436,7 +436,7 @@ select:disabled {
   -moz-border-radius: 5px;
   border-radius: 5px;
   border: solid black 1px;
-  max-height: 500px;
+  max-height: 400px;
   overflow-y: auto;
 }
 .segment-index-summary h3,
