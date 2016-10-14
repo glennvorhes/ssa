@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/ssa.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="../css/_testing.css">
+</head>
+<body>
+<a href=".">Back</a><br/>
+<a href="../doc/index.html" target="_blank">Documentation</a>
+
+<form>
+    <div class="grid main-grid">
+        <div class="row" style="margin-top: 1.5em; margin-bottom: 1.5em;">
+            <div id="ssa-map-container" class="col-xs-12 ssa-map-container"></div>
+        </div>
+    </div>
+    <div class="data-container corridor-data-container"></div>
+    <input type="hidden" id="primaryCounty" name="primaryCounty">
+    <input type="hidden" id="primaryRdwyRteId" name="primaryRdwyRteId">
+    <input id="site-root" type="hidden" value="/SSA/"/>
+</form>
+
+
+<!--<script src="{{ url_for('static', filename='ssa/test.build/ajaxGetter.js') }}"></script>-->
+<!--<script src="{{ url_for('static', filename='ssa/test.build/makeMap.js') }}"></script>-->
+<!--<script src="{{ url_for('static', filename='ssa/test.build/selectBox.js') }}"></script>-->
+
+<script src="../build/ssaApps.js"></script>
+<script>
+    //    var glob = {};
+    new SsaMapCreate('ssa-map-container', 'data-container', 'corridor-data');
+</script>
+
+<!--<script src="{{ url_for('static', filename='ssa/build/ssa-view.js') }}"></script>-->
+<!--<script>-->
+<!--var glob = {};-->
+<!--new gv.ssa.SsaMapView('ssa-map-container', 'corridor-data', 'ssa-corridor-info-anchor');-->
+<!--</script>-->
+
+</body>
+</html>

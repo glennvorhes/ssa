@@ -1,0 +1,21 @@
+{
+  "compileOnSave": true,
+  "version": "2.0.3",
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "dist",
+    "target": "es5",
+    "rootDir": "src",
+    "sourceMap": true,
+    "jsx": "react",
+    "watch": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+

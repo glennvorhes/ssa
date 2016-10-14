@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/ssa.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="../css/_testing.css">
+</head>
+<body>
+<a href=".">Back</a><br/>
+<a href="../doc/index.html" target="_blank">Documentation</a>
+
+<form>
+    <div class="grid main-grid">
+        <div class="row" style="margin-top: 1.5em; margin-bottom: 1.5em;">
+            <div id="ssa-map-container" class="col-xs-12 ssa-map-container"></div>
+        </div>
+    </div>
+    <div class="data-container corridor-data-container">
+        <div class="corridor-data">
+            <input type="hidden" class="corridor-data-start-county" name="corridors[1].startCounty" value="13">
+            <input type="hidden" class="corridor-data-end-county" name="corridors[1].endCounty" value="13">
+            <input type="hidden" class="corridor-data-highway" name="corridors[1].highway" value="US 12 EB">
+            <input type="hidden" class="corridor-data-from-rp" name="corridors[1].startRp" value="012E307M012">
+            <input type="hidden" class="corridor-data-to-rp" name="corridors[1].endRp" value="012E317M000">
+            <input type="hidden" class="corridor-data-from-pdp" name="corridors[1].startPdp" value="1706">
+            <input type="hidden" class="corridor-data-to-pdp" name="corridors[1].endPdp" value="1713">
+            <input type="hidden" class="corridor-data-route-id" name="corridors[1].routeId" value="9">
+        </div>
+        <div class="corridor-data">
+            <input type="hidden" class="corridor-data-start-county" name="corridors[0].startCounty" value="1">
+            <input type="hidden" class="corridor-data-end-county" name="corridors[0].endCounty" value="1">
+            <input type="hidden" class="corridor-data-highway" name="corridors[0].highway" value="WIS 13 NB">
+            <input type="hidden" class="corridor-data-from-rp" name="corridors[0].startRp" value="013N005M011">
+            <input type="hidden" class="corridor-data-to-rp" name="corridors[0].endRp" value="013N026 000">
+            <input type="hidden" class="corridor-data-from-pdp" name="corridors[0].startPdp" value="2051">
+            <input type="hidden" class="corridor-data-to-pdp" name="corridors[0].endPdp" value="2066">
+            <input type="hidden" class="corridor-data-route-id" name="corridors[0].routeId" value="11">
+        </div>
+    </div>
+    <input type="hidden" id="primaryCounty" name="primaryCounty" value="40">
+    <input type="hidden" id="primaryRdwyRteId" name="primaryRdwyRteId" value="75">
+    <input id="site-root" type="hidden" value="/SSA/"/>
+</form>
+
+
+<script src="../build/ssaApps.js"></script>
+<script>
+    var glob = {};
+    new SsaMapCreate('ssa-map-container', 'data-container', 'corridor-data');
+</script>
+</body>
+</html>

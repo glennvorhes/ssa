@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>View</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/ssa.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="../css/_testing.css">
+</head>
+<body>
+<a href=".">Back</a><br/>
+<a href="../doc/index.html" target="_blank">Documentation</a>
+
+<form>
+    <div class="grid main-grid">
+        <div class="row" id="ssa-corridor-info-anchor">
+            <div class="col-xs-10">
+                <h4>Corridors</h4>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1.5em; margin-bottom: 1.5em;">
+            <div id="ssa-map-container" class="col-xs-12 ssa-map-container"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Filters/Layers</strong>
+            </div>
+        </div>
+        <div style="padding: 0 18px;" class="round-borders row grid map-filters">
+            <div class="row">
+                <div class="col-xs-2 ">
+                    <label><input id="filter-crash" type="checkbox" value=""> <strong>Crashes</strong></label>
+                </div>
+            </div>
+            <div class="row grid round-borders">
+                <div class="row">
+                    <div class="col-xs-2 col-xs-offset-1">
+                        <strong> Crash Severity: </strong>
+                    </div>
+                    <div class="checkbox-inline col-xs-1">
+                        <label><input class="filter-crash-sub" type="checkbox" value="K">K</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-1">
+                        <label><input class="filter-crash-sub" type="checkbox" value="A">A</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-1">
+                        <label><input class="filter-crash-sub" type="checkbox" value="B">B</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-1">
+                        <label><input class="filter-crash-sub" type="checkbox" value="C">C</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-1">
+                        <label><input class="filter-crash-sub" type="checkbox" value="O">O</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="checkbox col-xs-2">
+                    <label><input id="filter-controlling-criteria" type="checkbox" value=""><strong>Controlling
+                        Criteria</strong></label>
+                </div>
+            </div>
+            <div class="row grid round-borders">
+                <div class="row">
+                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Design Speed">Design
+                            Speed</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-3">
+                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
+                                      value="Grade">Grade</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
+                        <label><input class="filter-controlling-criteria-sub" type="checkbox" value="Lane Width">Lane
+                            Width</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-3">
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox"
+                                   value="Stopping Sight Distance">Stopping
+                            Sight Distance</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Shoulder Width">Shoulder
+                            Width</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-3">
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Pavement Cross Slope">Pavement
+                            Cross Slope</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Horizontal Alignment">Horizontal
+                            Alignment</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-3">
+                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
+                                      value="Vertical Clearance">Vertical
+                            Clearance</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
+                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
+                                      value="Superelevation">Superelevation</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-3">
+                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
+                                      value="Structural Capacity">Structural
+                            Capacity</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="checkbox col-xs-2 ">
+                    <label><input id="mm-flags" type="checkbox" value=""><strong>Meta Manager Flags</strong></label>
+                </div>
+            </div>
+            <div class="row grid round-borders">
+                <div class="row">
+                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
+                        <label><input class="mm-flags-sub" type="checkbox" value="mm-rate-flag">Rate</label>
+                    </div>
+                    <div class="checkbox-inline col-xs-3">
+                        <label><input class="mm-flags-sub" type="checkbox" value="mm-kab-flag">KAB</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="data-container corridor-data-container">
+        <div class="corridor-data">
+            <input type="hidden" class="corridor-data-start-county" name="corridors[1].startCounty" value="13">
+            <input type="hidden" class="corridor-data-end-county" name="corridors[1].endCounty" value="13">
+            <input type="hidden" class="corridor-data-highway" name="corridors[1].highway" value="US 12 EB">
+            <input type="hidden" class="corridor-data-from-rp" name="corridors[1].startRp" value="012E307M012">
+            <input type="hidden" class="corridor-data-to-rp" name="corridors[1].endRp" value="012E317M000">
+            <input type="hidden" class="corridor-data-from-pdp" name="corridors[1].startPdp" value="1706">
+            <input type="hidden" class="corridor-data-to-pdp" name="corridors[1].endPdp" value="1713">
+            <input type="hidden" class="corridor-data-route-id" name="corridors[1].routeId" value="9">
+        </div>
+        <div class="corridor-data">
+            <input type="hidden" class="corridor-data-start-county" name="corridors[0].startCounty" value="1">
+            <input type="hidden" class="corridor-data-end-county" name="corridors[0].endCounty" value="1">
+            <input type="hidden" class="corridor-data-highway" name="corridors[0].highway" value="WIS 13 NB">
+            <input type="hidden" class="corridor-data-from-rp" name="corridors[0].startRp" value="013N005M011">
+            <input type="hidden" class="corridor-data-to-rp" name="corridors[0].endRp" value="013N026 000">
+            <input type="hidden" class="corridor-data-from-pdp" name="corridors[0].startPdp" value="2051">
+            <input type="hidden" class="corridor-data-to-pdp" name="corridors[0].endPdp" value="2066">
+            <input type="hidden" class="corridor-data-route-id" name="corridors[0].routeId" value="11">
+        </div>
+    </div>
+    <input type="hidden" id="primaryCounty" name="primaryCounty">
+    <input type="hidden" id="primaryRdwyRteId" name="primaryRdwyRteId">
+    <input id="site-root" type="hidden" value="/SSA/"/>
+</form>
+
+<script src="../build/ssaApps.js"></script>
+<script>
+    var glob = {};
+    new SsaMapView('ssa-map-container', 'corridor-data', 'ssa-corridor-info-anchor');
+</script>
+</body>
+</html>
