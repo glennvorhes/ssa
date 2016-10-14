@@ -8,7 +8,6 @@ var home = $('#site-root').val();
 if (window.location.port == '5001') {
     home = 'http://localhost:5004/';
 }
-console.log(home);
 var getStartCountiesUrl = home + 'getStartCounties';
 var getHighwaysUrl = home + 'getHighways';
 var getEndCountiesUrl = home + 'getEndCounties';

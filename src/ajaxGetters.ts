@@ -12,8 +12,6 @@ if (window.location.port == '5001'){
     home ='http://localhost:5004/'
 }
 
-console.log(home);
-
 const getStartCountiesUrl = home + 'getStartCounties';
 const getHighwaysUrl = home + 'getHighways';
 const getEndCountiesUrl = home + 'getEndCounties';
