@@ -13769,7 +13769,6 @@
 	var layerStyles = __webpack_require__(/*! ../layerStyles */ 28);
 	var ext = __webpack_require__(/*! webmapsjs/dist/olHelpers/extentUtil */ 30);
 	var custom_ol_1 = __webpack_require__(/*! custom-ol */ 8);
-	console.log(custom_ol_1.default);
 	var nm = provide_1.default('ssa');
 	function escapeHtml(string) {
 	    return String(string).replace(/[&<>"'\/]/g, function (s) {

@@ -15,7 +15,6 @@ import * as ext from 'webmapsjs/dist/olHelpers/extentUtil';
 import ol from 'custom-ol';
 
 
-console.log(ol);
 const nm = provide('ssa');
 
 

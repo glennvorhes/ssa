@@ -18,7 +18,7 @@
             <div id="ssa-map-container" class="col-xs-12 ssa-map-container"></div>
         </div>
     </div>
-    <div class="data-container corridor-data-container"></div>
+    <div class="corridor-data-container"></div>
     <input type="hidden" id="primaryCounty" name="primaryCounty">
     <input type="hidden" id="primaryRdwyRteId" name="primaryRdwyRteId">
     <input id="site-root" type="hidden" value="/SSA/"/>
@@ -32,7 +32,7 @@
 <script src="../build/ssaApps.js"></script>
 <script>
     //    var glob = {};
-    new SsaMapCreate('ssa-map-container', 'data-container', 'corridor-data');
+    new SsaMapCreate('ssa-map-container', 'corridor-data-container', 'corridor-data');
 </script>
 
 <!--<script src="{{ url_for('static', filename='ssa/build/ssa-view.js') }}"></script>-->

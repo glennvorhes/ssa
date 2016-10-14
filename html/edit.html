@@ -18,26 +18,42 @@
             <div id="ssa-map-container" class="col-xs-12 ssa-map-container"></div>
         </div>
     </div>
-    <div class="data-container corridor-data-container">
+    <div class="corridor-data-container">
         <div class="corridor-data">
-            <input type="hidden" class="corridor-data-start-county" name="corridors[1].startCounty" value="13">
-            <input type="hidden" class="corridor-data-end-county" name="corridors[1].endCounty" value="13">
-            <input type="hidden" class="corridor-data-highway" name="corridors[1].highway" value="US 12 EB">
-            <input type="hidden" class="corridor-data-from-rp" name="corridors[1].startRp" value="012E307M012">
-            <input type="hidden" class="corridor-data-to-rp" name="corridors[1].endRp" value="012E317M000">
-            <input type="hidden" class="corridor-data-from-pdp" name="corridors[1].startPdp" value="1706">
-            <input type="hidden" class="corridor-data-to-pdp" name="corridors[1].endPdp" value="1713">
-            <input type="hidden" class="corridor-data-route-id" name="corridors[1].routeId" value="9">
+            <label>Start County</label>
+            <input type="hidden" class="corridor-data-start-county" name="corridors[1].startCounty" value="13"><br>
+            <label>End County</label>
+            <input type="hidden" class="corridor-data-end-county" name="corridors[1].endCounty" value="13"><br>
+            <label>Highway</label>
+            <input type="hidden" class="corridor-data-highway" name="corridors[1].stdhighway" value="US 12 EB"><br>
+            <label>Start Rp</label>
+            <input type="hidden" class="corridor-data-from-rp" name="corridors[1].startRp" value="012E307M012"><br>
+            <label>End Rp</label>
+            <input type="hidden" class="corridor-data-to-rp" name="corridors[1].endRp" value="012E317M000"><br>
+            <label>Start Pdp</label>
+            <input type="hidden" class="corridor-data-from-pdp" name="corridors[1].startPdpid" value="1706"><br>
+            <label>End Pdp</label>
+            <input type="hidden" class="corridor-data-to-pdp" name="corridors[1].endPdpid" value="1713"><br>
+            <label>Route Id</label>
+            <input type="hidden" class="corridor-data-route-id" name="corridors[1].rdwyRteId" value="9">
         </div>
         <div class="corridor-data">
-            <input type="hidden" class="corridor-data-start-county" name="corridors[0].startCounty" value="1">
-            <input type="hidden" class="corridor-data-end-county" name="corridors[0].endCounty" value="1">
-            <input type="hidden" class="corridor-data-highway" name="corridors[0].highway" value="WIS 13 NB">
-            <input type="hidden" class="corridor-data-from-rp" name="corridors[0].startRp" value="013N005M011">
-            <input type="hidden" class="corridor-data-to-rp" name="corridors[0].endRp" value="013N026 000">
-            <input type="hidden" class="corridor-data-from-pdp" name="corridors[0].startPdp" value="2051">
-            <input type="hidden" class="corridor-data-to-pdp" name="corridors[0].endPdp" value="2066">
-            <input type="hidden" class="corridor-data-route-id" name="corridors[0].routeId" value="11">
+            <label>Start County</label>
+            <input type="hidden" class="corridor-data-start-county" name="corridors[0].startCounty" value="1"><br>
+            <label>End County</label>
+            <input type="hidden" class="corridor-data-end-county" name="corridors[0].endCounty" value="1"><br>
+            <label>Highway</label>
+            <input type="hidden" class="corridor-data-highway" name="corridors[0].stdhighway" value="WIS 13 NB"><br>
+            <label>Start Rp</label>
+            <input type="hidden" class="corridor-data-from-rp" name="corridors[0].startRp" value="013N005M011"><br>
+            <label>End Pdp</label>
+            <input type="hidden" class="corridor-data-to-rp" name="corridors[0].endRp" value="013N026 000"><br>
+            <label>Start Pdp</label>
+            <input type="hidden" class="corridor-data-from-pdp" name="corridors[0].startPdpid" value="2051"><br>
+            <label>End Pdp</label>
+            <input type="hidden" class="corridor-data-to-pdp" name="corridors[0].endPdpid" value="2066"><br>
+            <label>Route Id</label>
+            <input type="hidden" class="corridor-data-route-id" name="corridors[0].rdwyRteId" value="11">
         </div>
     </div>
     <input type="hidden" id="primaryCounty" name="primaryCounty" value="40">
@@ -49,7 +65,29 @@
 <script src="../build/ssaApps.js"></script>
 <script>
     var glob = {};
-    new SsaMapCreate('ssa-map-container', 'data-container', 'corridor-data');
+    new SsaMapCreate('ssa-map-container', 'corridor-data-container', 'corridor-data');
 </script>
 </body>
 </html>
+
+<!--<div class="corridor-data">-->
+    <!--<label>Start County</label>-->
+    <!--<input type="text" class="corridor-data-start-county" readonly="" name="corridors[0].startCounty" value="1"><br>-->
+    <!--<label>End County</label>-->
+    <!--<input type="text" class="corridor-data-end-county" readonly="" name="corridors[0].endCounty" value="1"><br>-->
+    <!--<label>Highway</label><input type="text" class="corridor-data-highway" readonly="" name="corridors[0].stdhighway"                      value="WIS 13 NB"><br>-->
+    <!--<label>Start Rp</label>-->
+    <!--<input type="text" class="corridor-data-from-rp" readonly="" name="corridors[0].startRp"-->
+           <!--value="013N005M011"><br><label>End Rp</label>-->
+    <!--<input type="text" class="corridor-data-to-rp" readonly="" name="corridors[0].endRp" value="013N014 000"><br>-->
+    <!--<label>Start Pdp</label>-->
+    <!--<input type="text" class="corridor-data-from-pdp" readonly="" name="corridors[0].startPdpid" value="2051"><br>-->
+    <!--<label>End Pdp</label>-->
+    <!--<input type="text" class="corridor-data-to-pdp" readonly="" name="corridors[0].endPdpid" value="2058"><br>-->
+    <!--<label>Route Id</label><input type="text" class="corridor-data-route-id" readonly="" name="corridors[0].rdwyRteId"-->
+                                  <!--value="11"><br>-->
+    <!--<label>Is new</label>-->
+    <!--<input type="text" class="corridor-data-is-new" readonly="" name="corridors[0].isNew" value="true"><br>-->
+    <!--<label>Is Updated</label>-->
+    <!--<input type="text" class="corridor-data-is-updated" readonly="" name="corridors[0].isUpdated" value="false">-->
+<!--</div>-->

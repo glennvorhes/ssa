@@ -11,7 +11,6 @@ var SortedFeatures_1 = require('webmapsjs/dist/olHelpers/SortedFeatures');
 var layerStyles = require('../layerStyles');
 var ext = require('webmapsjs/dist/olHelpers/extentUtil');
 var custom_ol_1 = require('custom-ol');
-console.log(custom_ol_1.default);
 var nm = provide_1.default('ssa');
 function escapeHtml(string) {
     return String(string).replace(/[&<>"'\/]/g, function (s) {
