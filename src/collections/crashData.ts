@@ -194,7 +194,7 @@ export class CrashData {
         this._crashArrayLookup = {};
         this.pointCrashes = new LayerBaseVectorGeoJson('', {
             name: "Crash Points",
-            zIndex: 7,
+            zIndex: 204,
             minZoom: 10
         });
 

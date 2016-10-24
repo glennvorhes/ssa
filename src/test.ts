@@ -4,3 +4,5 @@
 
 import ol from 'custom-ol'
 
+// import ajax = require('a')
+

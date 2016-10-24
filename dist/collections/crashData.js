@@ -147,7 +147,7 @@ var CrashData = (function () {
         this._crashArrayLookup = {};
         this.pointCrashes = new LayerBaseVectorGeoJson_1.default('', {
             name: "Crash Points",
-            zIndex: 7,
+            zIndex: 204,
             minZoom: 10
         });
         this.pointCrashes.style = crashPointStyle;
