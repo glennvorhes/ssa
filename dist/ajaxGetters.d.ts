@@ -58,5 +58,6 @@ export declare class AjaxGetters {
      *
      */
     static getHwyByStartEndCounty(startCountyId: any, endCountyId: any, callback: any): void;
+    static getCcGeom(ssaId: number, snapshot: number, callback: any): void;
 }
 export default AjaxGetters;
