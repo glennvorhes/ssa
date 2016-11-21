@@ -39,6 +39,8 @@ var SsaMapView = (function (_super) {
     function SsaMapView(divId, dataClass, infoAnchorId) {
         var _this = this;
         _super.call(this, divId);
+        var ssaId = parseInt($('#hidden-ssa-id').val());
+        var snap = parseInt($('#hidden-snapshot-id').val());
         /**
          * @type {ol.Map}
          */
@@ -81,8 +83,8 @@ var SsaMapView = (function (_super) {
         this.loadedCorridorsLength = 0;
         var returnLookup = {};
         var returnArr = [];
-        ajaxGetters_1.default.getCcGeom(parseInt($('#hidden-ssa-id').val()), parseInt($('#hidden-snapshot-id').val()), function (d) {
-            for (var _i = 0, _a = d.features; _i < _a.length; _i++) {
+        ajaxGetters_1.default.getCcGeom(ssaId, snap, function (d) {
+            for (var _i = 0, _a = d['features']; _i < _a.length; _i++) {
                 var f = _a[_i];
                 var corId = f['properties']['corridorId'].toFixed();
                 if (!returnLookup[corId]) {
@@ -109,7 +111,7 @@ var SsaMapView = (function (_super) {
             _this._afterCorridorLoad();
             $('#' + infoAnchorId).after(outHtml);
         });
-        crashData_1.default.init(this.mainMap);
+        crashData_1.default.init(this.mainMap, ssaId, snap);
         mmFlags_1.default.init(this.mainMap);
         controllingCriteria_1.default.init(this.mainMap);
     }

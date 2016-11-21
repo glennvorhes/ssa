@@ -187,9 +187,7 @@ export class CrashData {
     _crashHtmlLookup: {[s: string]: string};
     _crashArrayLookup: {[s: string]: Array<CrashDataObject>};
 
-
     constructor() {
-
         this._crashHtmlLookup = {};
         this._crashArrayLookup = {};
         this.pointCrashes = new LayerBaseVectorGeoJson('', {
@@ -205,7 +203,7 @@ export class CrashData {
      *
      * @param {ol.Map} m - the main map
      */
-    init(m: ol.Map) {
+    init(m: ol.Map, ssaId: number, snapshot: number) {
         mapPopup.addVectorPopup(this.pointCrashes, (props) => {
             let returnHtml = '<table class="crash-popup-table">';
             returnHtml += `<tr><td>Date</td><td>${props['dte'] + ' ' + props['time']}</td></tr>`;
@@ -222,7 +220,7 @@ export class CrashData {
             this.pointCrashes.refresh();
         });
 
-        Ajx.getCrashes((d) => {
+        Ajx.getCrashes(ssaId, snapshot, (d) => {
             this._processCrashData(d);
         });
 

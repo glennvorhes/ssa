@@ -156,7 +156,7 @@ var CrashData = (function () {
      *
      * @param {ol.Map} m - the main map
      */
-    CrashData.prototype.init = function (m) {
+    CrashData.prototype.init = function (m, ssaId, snapshot) {
         var _this = this;
         mapPopup_1.default.addVectorPopup(this.pointCrashes, function (props) {
             var returnHtml = '<table class="crash-popup-table">';
@@ -171,7 +171,7 @@ var CrashData = (function () {
         filterCrash_1.default.addChangeCallback(function () {
             _this.pointCrashes.refresh();
         });
-        AjaxGetters_1.default.getCrashes(function (d) {
+        AjaxGetters_1.default.getCrashes(ssaId, snapshot, function (d) {
             _this._processCrashData(d);
         });
         m.addLayer(this.pointCrashes.olLayer);

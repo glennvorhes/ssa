@@ -114,10 +114,14 @@ var AjaxGetters = (function () {
      */
     AjaxGetters.getSegments = function (county, routeId, callback) {
         "use strict";
+        var routeIdNum;
         if (typeof routeId == 'string') {
-            routeId = parseInt(routeId);
+            routeIdNum = parseInt(routeId);
         }
-        var params = { "routeid": routeId, "county": county };
+        else {
+            routeIdNum = routeId;
+        }
+        var params = { "routeid": routeIdNum, "county": county };
         _ajaxHelper(getSegmentsUrl, callback, params);
     };
     /**
@@ -133,11 +137,16 @@ var AjaxGetters = (function () {
     };
     /**
      * Get the crash data
+     * @param {number} ssaId
+     * @param {number} snapshot
      * @param {ajaxCallback} callback - callback function
      */
-    AjaxGetters.getCrashes = function (callback) {
+    AjaxGetters.getCrashes = function (ssaId, snapshot, callback) {
         "use strict";
-        var params = {};
+        var params = {
+            'ssaId': ssaId,
+            'snapshot': snapshot
+        };
         _ajaxHelper(getCrashesUrl, callback, params);
     };
     /**

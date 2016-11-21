@@ -46,6 +46,9 @@ export class SsaMapView extends SsaMapBase {
      */
     constructor(divId, dataClass, infoAnchorId) {
         super(divId);
+        let ssaId = parseInt($('#hidden-ssa-id').val());
+        let snap = parseInt($('#hidden-snapshot-id').val());
+
 
         /**
          * @type {ol.Map}
@@ -103,8 +106,8 @@ export class SsaMapView extends SsaMapBase {
         let returnLookup = {};
         let returnArr = [];
 
-        ajx.getCcGeom(parseInt($('#hidden-ssa-id').val()), parseInt($('#hidden-snapshot-id').val()), (d) => {
-            for (let f of d.features) {
+        ajx.getCcGeom(ssaId, snap, (d) => {
+            for (let f of d['features']) {
                 let corId = f['properties']['corridorId'].toFixed();
 
                 if (!returnLookup[corId]) {
@@ -146,10 +149,9 @@ export class SsaMapView extends SsaMapBase {
             $('#' + infoAnchorId).after(outHtml);
         });
 
-        crashData.init(this.mainMap);
+        crashData.init(this.mainMap, ssaId, snap);
         mmFlags.init(this.mainMap);
         controllingCriteria.init(this.mainMap);
-
 
     }
 

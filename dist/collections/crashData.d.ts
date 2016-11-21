@@ -23,7 +23,7 @@ export declare class CrashData {
      *
      * @param {ol.Map} m - the main map
      */
-    init(m: ol.Map): void;
+    init(m: ol.Map, ssaId: number, snapshot: number): void;
     _processCrashData(d: any): void;
     getCrashSummary(pdp: any): string;
 }

@@ -12103,10 +12103,14 @@
 	     */
 	    AjaxGetters.getSegments = function (county, routeId, callback) {
 	        "use strict";
+	        var routeIdNum;
 	        if (typeof routeId == 'string') {
-	            routeId = parseInt(routeId);
+	            routeIdNum = parseInt(routeId);
 	        }
-	        var params = { "routeid": routeId, "county": county };
+	        else {
+	            routeIdNum = routeId;
+	        }
+	        var params = { "routeid": routeIdNum, "county": county };
 	        _ajaxHelper(getSegmentsUrl, callback, params);
 	    };
 	    /**
@@ -12122,11 +12126,16 @@
 	    };
 	    /**
 	     * Get the crash data
+	     * @param {number} ssaId
+	     * @param {number} snapshot
 	     * @param {ajaxCallback} callback - callback function
 	     */
-	    AjaxGetters.getCrashes = function (callback) {
+	    AjaxGetters.getCrashes = function (ssaId, snapshot, callback) {
 	        "use strict";
-	        var params = {};
+	        var params = {
+	            'ssaId': ssaId,
+	            'snapshot': snapshot
+	        };
 	        _ajaxHelper(getCrashesUrl, callback, params);
 	    };
 	    /**
@@ -30284,6 +30293,8 @@
 	    function SsaMapView(divId, dataClass, infoAnchorId) {
 	        var _this = this;
 	        _super.call(this, divId);
+	        var ssaId = parseInt($('#hidden-ssa-id').val());
+	        var snap = parseInt($('#hidden-snapshot-id').val());
 	        /**
 	         * @type {ol.Map}
 	         */
@@ -30326,8 +30337,8 @@
 	        this.loadedCorridorsLength = 0;
 	        var returnLookup = {};
 	        var returnArr = [];
-	        ajaxGetters_1.default.getCcGeom(parseInt($('#hidden-ssa-id').val()), parseInt($('#hidden-snapshot-id').val()), function (d) {
-	            for (var _i = 0, _a = d.features; _i < _a.length; _i++) {
+	        ajaxGetters_1.default.getCcGeom(ssaId, snap, function (d) {
+	            for (var _i = 0, _a = d['features']; _i < _a.length; _i++) {
 	                var f = _a[_i];
 	                var corId = f['properties']['corridorId'].toFixed();
 	                if (!returnLookup[corId]) {
@@ -30354,7 +30365,7 @@
 	            _this._afterCorridorLoad();
 	            $('#' + infoAnchorId).after(outHtml);
 	        });
-	        crashData_1.default.init(this.mainMap);
+	        crashData_1.default.init(this.mainMap, ssaId, snap);
 	        mmFlags_1.default.init(this.mainMap);
 	        controllingCriteria_1.default.init(this.mainMap);
 	    }
@@ -30537,7 +30548,7 @@
 	     *
 	     * @param {ol.Map} m - the main map
 	     */
-	    CrashData.prototype.init = function (m) {
+	    CrashData.prototype.init = function (m, ssaId, snapshot) {
 	        var _this = this;
 	        mapPopup_1.default.addVectorPopup(this.pointCrashes, function (props) {
 	            var returnHtml = '<table class="crash-popup-table">';
@@ -30552,7 +30563,7 @@
 	        filterCrash_1.default.addChangeCallback(function () {
 	            _this.pointCrashes.refresh();
 	        });
-	        AjaxGetters_1.default.getCrashes(function (d) {
+	        AjaxGetters_1.default.getCrashes(ssaId, snapshot, function (d) {
 	            _this._processCrashData(d);
 	        });
 	        m.addLayer(this.pointCrashes.olLayer);
@@ -31584,10 +31595,14 @@
 	     */
 	    AjaxGetters.getSegments = function (county, routeId, callback) {
 	        "use strict";
+	        var routeIdNum;
 	        if (typeof routeId == 'string') {
-	            routeId = parseInt(routeId);
+	            routeIdNum = parseInt(routeId);
 	        }
-	        var params = { "routeid": routeId, "county": county };
+	        else {
+	            routeIdNum = routeId;
+	        }
+	        var params = { "routeid": routeIdNum, "county": county };
 	        _ajaxHelper(getSegmentsUrl, callback, params);
 	    };
 	    /**
@@ -31603,11 +31618,16 @@
 	    };
 	    /**
 	     * Get the crash data
+	     * @param {number} ssaId
+	     * @param {number} snapshot
 	     * @param {ajaxCallback} callback - callback function
 	     */
-	    AjaxGetters.getCrashes = function (callback) {
+	    AjaxGetters.getCrashes = function (ssaId, snapshot, callback) {
 	        "use strict";
-	        var params = {};
+	        var params = {
+	            'ssaId': ssaId,
+	            'snapshot': snapshot
+	        };
 	        _ajaxHelper(getCrashesUrl, callback, params);
 	    };
 	    /**

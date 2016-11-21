@@ -22,8 +22,8 @@ def after_request(response):
 
 @app.route('/<some_url>')
 def proxy(some_url):
-    if some_url == 'getCrashes':
-        return json.dumps(example_crash.crash_lookup)
+    # if some_url == 'getCrashes':
+    #     return json.dumps(example_crash.crash_lookup)
 
     arg_dict = {k: v for k, v in request.args.items()}
     if arg_dict:

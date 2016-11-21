@@ -25,7 +25,7 @@ const nm = provide('ssa');
 
 
 export interface ajaxCallback{
-    (inObject: any[]|Object) : any
+    (inObject) : any
 }
 
 
@@ -81,6 +81,8 @@ let _countySort = (d) => {
     return d;
 };
 
+
+
 /**
  * static methods to make ajax requests
  */
@@ -99,7 +101,7 @@ export class AjaxGetters {
      * @static
      * @param {ajaxCallback} callback - callback function
      */
-    public static getStartCounties(callback) {
+    public static getStartCounties(callback: ajaxCallback) {
         "use strict";
 
         _ajaxHelper(getStartCountiesUrl, callback, {}, _countySort);
@@ -110,7 +112,7 @@ export class AjaxGetters {
      * @param {number} startCountyId - start county id
      * @param {ajaxCallback} callback - callback function
      */
-    public static getHighways(startCountyId, callback) {
+    public static getHighways(startCountyId: number, callback: ajaxCallback) {
         "use strict";
         let params = {"startCountyId": startCountyId};
 
@@ -123,7 +125,7 @@ export class AjaxGetters {
      * @param {string} highwayName - highway name
      * @param {ajaxCallback} callback - callback function
      */
-    public static getEndCounties(highwayName, callback) {
+    public static getEndCounties(highwayName: string, callback: ajaxCallback) {
         "use strict";
         let params = {"highwayName": highwayName};
 
@@ -137,13 +139,17 @@ export class AjaxGetters {
      * @param {number} routeId - route id
      * @param {ajaxCallback} callback - callback function
      */
-    public static getSegments(county, routeId, callback) {
+    public static getSegments(county: number, routeId: string|number, callback: ajaxCallback) {
         "use strict";
+
+        let routeIdNum;
         if (typeof routeId == 'string') {
-            routeId = parseInt(routeId);
+            routeIdNum = parseInt(routeId as string);
+        } else {
+            routeIdNum = routeId;
         }
 
-        let params = {"routeid": routeId, "county": county};
+        let params = {"routeid": routeIdNum, "county": county};
         _ajaxHelper(getSegmentsUrl, callback, params);
     }
 
@@ -154,7 +160,7 @@ export class AjaxGetters {
      * @param {number} endPdp - end pdp id
      * @param {ajaxCallback} callback - callback function
      */
-    public static getCorridor(startPdp, endPdp, callback) {
+    public static getCorridor(startPdp: number, endPdp: number,  callback: ajaxCallback) {
         "use strict";
         let params = {"from": startPdp, "to": endPdp};
 
@@ -164,11 +170,17 @@ export class AjaxGetters {
 
     /**
      * Get the crash data
+     * @param {number} ssaId
+     * @param {number} snapshot
      * @param {ajaxCallback} callback - callback function
      */
-    public static getCrashes(callback) {
+    public static getCrashes(ssaId: number, snapshot: number, callback: ajaxCallback){
         "use strict";
-        let params = {};
+
+        let params = {
+            'ssaId': ssaId,
+            'snapshot': snapshot
+        };
 
         _ajaxHelper(getCrashesUrl, callback, params);
     }
@@ -177,7 +189,7 @@ export class AjaxGetters {
      * Get all counties as an array
      * @param {ajaxCallback} callback - callback function
      */
-    public static getAllCounties(callback) {
+    public static getAllCounties(callback: ajaxCallback) {
         "use strict";
         let params = {};
 
@@ -192,7 +204,7 @@ export class AjaxGetters {
      * @param {ajaxCallback} callback - callback function
      *
      */
-    public static getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
+    public static getHwyByStartEndCounty(startCountyId: number, endCountyId: number, callback: ajaxCallback) {
         "use strict";
 
         let params = {
@@ -203,7 +215,7 @@ export class AjaxGetters {
         _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
     }
 
-    public static getCcGeom(ssaId: number, snapshot: number, callback){
+    public static getCcGeom(ssaId: number, snapshot: number, callback: ajaxCallback){
         "use strict";
 
         let params = {
