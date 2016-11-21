@@ -20,6 +20,7 @@ const getCorridorUrl = home + 'getCorridor';
 const getCrashesUrl = home + 'getCrashes';
 const getAllCountiesUrl = home + 'getAllCounties';
 const getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
+const getCcGeomUrl = home + 'getCcGeom';
 const nm = provide('ssa');
 
 
@@ -98,7 +99,7 @@ export class AjaxGetters {
      * @static
      * @param {ajaxCallback} callback - callback function
      */
-    static getStartCounties(callback) {
+    public static getStartCounties(callback) {
         "use strict";
 
         _ajaxHelper(getStartCountiesUrl, callback, {}, _countySort);
@@ -109,7 +110,7 @@ export class AjaxGetters {
      * @param {number} startCountyId - start county id
      * @param {ajaxCallback} callback - callback function
      */
-    static getHighways(startCountyId, callback) {
+    public static getHighways(startCountyId, callback) {
         "use strict";
         let params = {"startCountyId": startCountyId};
 
@@ -122,7 +123,7 @@ export class AjaxGetters {
      * @param {string} highwayName - highway name
      * @param {ajaxCallback} callback - callback function
      */
-    static getEndCounties(highwayName, callback) {
+    public static getEndCounties(highwayName, callback) {
         "use strict";
         let params = {"highwayName": highwayName};
 
@@ -136,7 +137,7 @@ export class AjaxGetters {
      * @param {number} routeId - route id
      * @param {ajaxCallback} callback - callback function
      */
-    static getSegments(county, routeId, callback) {
+    public static getSegments(county, routeId, callback) {
         "use strict";
         if (typeof routeId == 'string') {
             routeId = parseInt(routeId);
@@ -153,7 +154,7 @@ export class AjaxGetters {
      * @param {number} endPdp - end pdp id
      * @param {ajaxCallback} callback - callback function
      */
-    static getCorridor(startPdp, endPdp, callback) {
+    public static getCorridor(startPdp, endPdp, callback) {
         "use strict";
         let params = {"from": startPdp, "to": endPdp};
 
@@ -165,7 +166,7 @@ export class AjaxGetters {
      * Get the crash data
      * @param {ajaxCallback} callback - callback function
      */
-    static getCrashes(callback) {
+    public static getCrashes(callback) {
         "use strict";
         let params = {};
 
@@ -176,7 +177,7 @@ export class AjaxGetters {
      * Get all counties as an array
      * @param {ajaxCallback} callback - callback function
      */
-    static getAllCounties(callback) {
+    public static getAllCounties(callback) {
         "use strict";
         let params = {};
 
@@ -191,7 +192,7 @@ export class AjaxGetters {
      * @param {ajaxCallback} callback - callback function
      *
      */
-    static getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
+    public static getHwyByStartEndCounty(startCountyId, endCountyId, callback) {
         "use strict";
 
         let params = {
@@ -202,6 +203,16 @@ export class AjaxGetters {
         _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
     }
 
+    public static getCcGeom(ssaId: number, snapshot: number, callback){
+        "use strict";
+
+        let params = {
+            'ssaId': ssaId,
+            'snapshot': snapshot
+        };
+
+        _ajaxHelper(getCcGeomUrl, callback, params);
+    }
 }
 
 export default AjaxGetters;

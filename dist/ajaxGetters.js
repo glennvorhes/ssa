@@ -16,6 +16,7 @@ var getCorridorUrl = home + 'getCorridor';
 var getCrashesUrl = home + 'getCrashes';
 var getAllCountiesUrl = home + 'getAllCounties';
 var getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
+var getCcGeomUrl = home + 'getCcGeom';
 var nm = provide_1.default('ssa');
 /**
  * inner function to help ajax
@@ -162,6 +163,14 @@ var AjaxGetters = (function () {
             'endCountyId': endCountyId
         };
         _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
+    };
+    AjaxGetters.getCcGeom = function (ssaId, snapshot, callback) {
+        "use strict";
+        var params = {
+            'ssaId': ssaId,
+            'snapshot': snapshot
+        };
+        _ajaxHelper(getCcGeomUrl, callback, params);
     };
     return AjaxGetters;
 }());

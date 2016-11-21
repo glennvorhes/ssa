@@ -1,5 +1,6 @@
 import DeficiencyBase from './_DeficiencyBase';
 export declare class ControllingCriteria extends DeficiencyBase {
+    static propNames: string[];
     constructor();
     /**
      * initialize with the map

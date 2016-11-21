@@ -6,8 +6,8 @@ import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 import * as constants from '../constants';
 import DeficiencyBase from './_DeficiencyBase';
 import ol from 'custom-ol';
+import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers'
 
-const addRandomCcs = true;
 
 /**
  *
@@ -23,12 +23,14 @@ const ccStyle = (feature) => {
     let show = false;
 
 
-    for (let cc of filterControllingCritera.allValues){
+    for (let cc of filterControllingCritera._allValues){
         if (props[cc] && filterControllingCritera.valIsOn(cc)){
             show = true;
             break;
         }
     }
+
+    show = true;
 
 
     let txtFunc = () => {
@@ -47,7 +49,6 @@ const ccStyle = (feature) => {
         );
     };
 
-    // if ((props['rateFlag'] > 1 && filterMmFlag.mmRateFlagOn) || props['kabFlag'] > 1 && filterMmFlag.mmKabFlagOn) {
     if (show) {
         return [new ol.style.Style({
             stroke: new ol.style.Stroke({
@@ -64,6 +65,9 @@ const ccStyle = (feature) => {
 
 
 export class ControllingCriteria extends DeficiencyBase {
+    static propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
+        'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
+
     constructor() {
         super("Controlling Criteria", ccStyle, 201, constants.ccListId);
     }
@@ -84,9 +88,9 @@ export class ControllingCriteria extends DeficiencyBase {
             let returnHtml = 'Geometric Deficiencies';
             returnHtml += '<ul>';
             
-            for (let cc of filterControllingCritera.allValues){
-                if (props[cc]){
-                    returnHtml += `<li>${constants.contollingCriteriaLookup[cc]}</li>`;
+            for (let cc of keyValPairs(constants.controllingCriteriaProps)){
+                if (props[cc.key]){
+                    returnHtml += `<li>${cc.value}</li>`;
                 }
             }
 
@@ -97,6 +101,7 @@ export class ControllingCriteria extends DeficiencyBase {
         });
     }
 
+
     /**
      *
      * @param {Corridor} c - the corridor to be added
@@ -104,96 +109,37 @@ export class ControllingCriteria extends DeficiencyBase {
     addCorridor(c) {
         let feats = c.layer.source.getFeatures();
 
-
         for (let f of feats) {
-            // f.setProperties()
-
             let props = f.getProperties();
 
-            if (Math.random() > 0.85 && addRandomCcs) {
+
+            let deficiencyList = [];
+
+            for (let f of keyValPairs(constants.controllingCriteriaProps)){
+                let ccProps = props[f.key];
+
+                if (ccProps) {
+                    deficiencyList.push(f.value)
+                }
+            }
+
+            if (deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
 
                 this.featureIndex++;
 
                 f.setProperties({ccId: 'CC' + this.featureIndex.toFixed()});
 
-                let deficiencyList = [];
 
-                for (let cc of filterControllingCritera.allValues){
+                let appendHtml = `<b>CC${this.featureIndex.toFixed()}</b>:&nbsp;`;
+                appendHtml += deficiencyList.join(', ');
+                this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
 
-                    if (Math.random() > 0.85){
-                        let tmp = {};
-                        tmp[cc] = true;
-
-                        f.setProperties(tmp);
-                        deficiencyList.push(constants.contollingCriteriaLookup[cc]);
-                    }
-                }
-
-                if (deficiencyList.length > 0){
-                    let appendHtml = `<b>CC${this.featureIndex.toFixed()}</b>:&nbsp;`;
-                    appendHtml += deficiencyList.join(', ');
-                    this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
-
-                }
             }
 
-                //             f.setProperties({mmId: 'MM' + this.featureIndex.toFixed()});
-                // let appendHtml = `<b>MM${this.featureIndex.toFixed()}</b>:&nbsp;`;
-                // let flags = [];
-                // if (triggerRateFlag) {
-                //     flags.push('Crash Rate');
-                // }
-                // if (triggerKabFlag) {
-                //     flags.push('KAB');
-                // }
-                //
-                // appendHtml += flags.join(', ');
-                // $mmDeficiencyList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
-
-            // let props = f.getProperties();
-            // let rate = props['rateFlag'];
-            // let kab = props['kabFlag'];
-            //
-            // let triggerRateFlag = typeof rate == 'number' && rate > 1;
-            // let triggerKabFlag = typeof kab == 'number' && kab > 1;
-            //
-            // if (triggerRateFlag || triggerKabFlag) {
-            //     this.deficiencyLayer.source.addFeature(f);
-            //     ccIndex++;
-            //
-            //     f.setProperties({mmId: 'MM' + mmFlagIndex.toFixed()});
-            //     let appendHtml = `<b>MM${mmFlagIndex.toFixed()}</b>:&nbsp;`;
-            //     let flags = [];
-            //     if (triggerRateFlag) {
-            //         flags.push('Crash Rate');
-            //     }
-            //     if (triggerKabFlag) {
-            //         flags.push('KAB');
-            //     }
-            //
-            //     appendHtml += flags.join(', ');
-            //     $mmDeficiencyList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
-            // }
         }
     }
 
-    //
-    // afterLoad() {
-    //     super.afterLoad();
-    //
-    //     let _this = this;
-    //
-    //     // $(`#${constants.mmFlagListId} li`).click(function () {
-    //     //     let $this = $(this);
-    //     //
-    //     //     let theFeature = mmFlags.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
-    //     //
-    //     //     _this.mainMap.getView().fit(theFeature.getGeometry().getExtent(), _this.mainMap.getSize());
-    //     //     _this.mainMap.getView().setZoom(_this.mainMap.getView().getZoom() - 1);
-    //     // });
-    //
-    // }
 }
 
 

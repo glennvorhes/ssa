@@ -18,3 +18,6 @@ export declare const contollingCriteriaLookup: {
     'Superelevation': string;
     'Structural Capacity': string;
 };
+export declare const propNames: string[];
+export declare const propValues: string[];
+export declare const controllingCriteriaProps: {};

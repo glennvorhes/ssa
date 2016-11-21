@@ -94,7 +94,8 @@ class Corridor {
                     databaseId?: number|string,
                     color?: string,
                     features?: Array<ol.Feature>,
-                    cancelLoad?: boolean
+                    cancelLoad?: boolean,
+                    jsonFeatures?: JSON
                 } = {}) {
 
 
@@ -160,6 +161,12 @@ class Corridor {
 
         if (options.features) {
             this._corridorLayer.source.addFeatures(options.features);
+        } else if (options.jsonFeatures) {
+            this._corridorLayer.addFeatures(options.jsonFeatures);
+            this._loaded = true;
+            this.sortedFeatures = new SortedFeatures(this.olLayer.getSource().getFeatures(), 'pdpId');
+
+            this.buildNodes();
         } else if (!options.cancelLoad) {
             this.load(options.loadedCallback);
         }

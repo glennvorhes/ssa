@@ -12,7 +12,7 @@ var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
 var constants = require('../constants');
 var _DeficiencyBase_1 = require('./_DeficiencyBase');
 var custom_ol_1 = require('custom-ol');
-var addRandomCcs = true;
+var objectHelpers_1 = require('webmapsjs/dist/util/objectHelpers');
 /**
  *
  * @param {ol.Feature} feature - the input feature
@@ -22,13 +22,14 @@ var ccStyle = function (feature) {
     "use strict";
     var props = feature.getProperties();
     var show = false;
-    for (var _i = 0, _a = filterContollingCriteria_1.default.allValues; _i < _a.length; _i++) {
+    for (var _i = 0, _a = filterContollingCriteria_1.default._allValues; _i < _a.length; _i++) {
         var cc = _a[_i];
         if (props[cc] && filterContollingCriteria_1.default.valIsOn(cc)) {
             show = true;
             break;
         }
     }
+    show = true;
     var txtFunc = function () {
         return new custom_ol_1.default.style.Text({
             text: props['ccId'],
@@ -42,7 +43,6 @@ var ccStyle = function (feature) {
             })
         });
     };
-    // if ((props['rateFlag'] > 1 && filterMmFlag.mmRateFlagOn) || props['kabFlag'] > 1 && filterMmFlag.mmKabFlagOn) {
     if (show) {
         return [new custom_ol_1.default.style.Style({
                 stroke: new custom_ol_1.default.style.Stroke({
@@ -74,10 +74,10 @@ var ControllingCriteria = (function (_super) {
         mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
             var returnHtml = 'Geometric Deficiencies';
             returnHtml += '<ul>';
-            for (var _i = 0, _a = filterContollingCriteria_1.default.allValues; _i < _a.length; _i++) {
+            for (var _i = 0, _a = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _i < _a.length; _i++) {
                 var cc = _a[_i];
-                if (props[cc]) {
-                    returnHtml += "<li>" + constants.contollingCriteriaLookup[cc] + "</li>";
+                if (props[cc.key]) {
+                    returnHtml += "<li>" + cc.value + "</li>";
                 }
             }
             returnHtml += '</ul>';
@@ -92,30 +92,27 @@ var ControllingCriteria = (function (_super) {
         var feats = c.layer.source.getFeatures();
         for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
             var f = feats_1[_i];
-            // f.setProperties()
             var props = f.getProperties();
-            if (Math.random() > 0.85 && addRandomCcs) {
+            var deficiencyList = [];
+            for (var _a = 0, _b = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _a < _b.length; _a++) {
+                var f_1 = _b[_a];
+                var ccProps = props[f_1.key];
+                if (ccProps) {
+                    deficiencyList.push(f_1.value);
+                }
+            }
+            if (deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
                 this.featureIndex++;
                 f.setProperties({ ccId: 'CC' + this.featureIndex.toFixed() });
-                var deficiencyList = [];
-                for (var _a = 0, _b = filterContollingCriteria_1.default.allValues; _a < _b.length; _a++) {
-                    var cc = _b[_a];
-                    if (Math.random() > 0.85) {
-                        var tmp = {};
-                        tmp[cc] = true;
-                        f.setProperties(tmp);
-                        deficiencyList.push(constants.contollingCriteriaLookup[cc]);
-                    }
-                }
-                if (deficiencyList.length > 0) {
-                    var appendHtml = "<b>CC" + this.featureIndex.toFixed() + "</b>:&nbsp;";
-                    appendHtml += deficiencyList.join(', ');
-                    this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
-                }
+                var appendHtml = "<b>CC" + this.featureIndex.toFixed() + "</b>:&nbsp;";
+                appendHtml += deficiencyList.join(', ');
+                this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
             }
         }
     };
+    ControllingCriteria.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
+        'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
     return ControllingCriteria;
 }(_DeficiencyBase_1.default));
 exports.ControllingCriteria = ControllingCriteria;

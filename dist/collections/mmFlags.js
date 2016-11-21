@@ -33,7 +33,7 @@ var mmFlagStyle = function (feature) {
             })
         });
     };
-    if ((props['rateFlag'] > 1 && filterMmFlag_1.default.mmRateFlagOn) || props['kabFlag'] > 1 && filterMmFlag_1.default.mmKabFlagOn) {
+    if ((props['crashFlag'] == 'Y' && filterMmFlag_1.default.mmRateFlagOn) || props['kabrateflag'] == 'Y' && filterMmFlag_1.default.mmKabFlagOn) {
         return [new custom_ol_1.default.style.Style({
                 stroke: new custom_ol_1.default.style.Stroke({
                     color: constants.mmFlagColor,
@@ -62,8 +62,7 @@ var MmFlags = (function (_super) {
             _this.deficiencyLayer.refresh();
         });
         mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
-            return "MM ID: " + props['mmId'] + '<br/>' + "Rate Flag: " + props['rateFlag'].toFixed(3) + '<br/>' +
-                "KAB Flag: " + props['kabFlag'].toFixed(3);
+            return "MM ID: " + props['mmId'] + "<br/>Rate Flag: " + props['crashFlag'] + "<br/>KAB Flag: " + props['kabrateflag'];
         });
     };
     /**
@@ -75,10 +74,8 @@ var MmFlags = (function (_super) {
         for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
             var f = feats_1[_i];
             var props = f.getProperties();
-            var rate = props['rateFlag'];
-            var kab = props['kabFlag'];
-            var triggerRateFlag = typeof rate == 'number' && rate > 1;
-            var triggerKabFlag = typeof kab == 'number' && kab > 1;
+            var triggerRateFlag = props['crashFlag'] == 'Y';
+            var triggerKabFlag = props['kabrateflag'] == 'Y';
             if (triggerRateFlag || triggerKabFlag) {
                 this.deficiencyLayer.source.addFeature(f);
                 this.featureIndex++;

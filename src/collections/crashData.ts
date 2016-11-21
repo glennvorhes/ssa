@@ -238,7 +238,7 @@ export class CrashData {
              *
              * @type {Array.<CrashDataObject>}
              */
-            let crashes = itm.value;
+            let crashes = itm.value as CrashDataObject[];
 
 
             this._crashHtmlLookup[itm.key] = _crashInfoHelper(crashes);

@@ -36,7 +36,7 @@ const mmFlagStyle = (feature: ol.Feature): Array<ol.style.Style> => {
 
     };
 
-    if ((props['rateFlag'] > 1 && filterMmFlag.mmRateFlagOn) || props['kabFlag'] > 1 && filterMmFlag.mmKabFlagOn) {
+    if ((props['crashFlag'] == 'Y' && filterMmFlag.mmRateFlagOn) || props['kabrateflag'] == 'Y' && filterMmFlag.mmKabFlagOn) {
         return [new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: constants.mmFlagColor,
@@ -68,8 +68,7 @@ export class MmFlags extends DeficiencyBase {
         });
 
         mapPopup.addVectorPopup(this.deficiencyLayer, (props) => {
-            return "MM ID: " + props['mmId'] + '<br/>' + "Rate Flag: " + props['rateFlag'].toFixed(3) + '<br/>' +
-                "KAB Flag: " + props['kabFlag'].toFixed(3);
+            return `MM ID: ${props['mmId']}<br/>Rate Flag: ${props['crashFlag']}<br/>KAB Flag: ${props['kabrateflag']}`;
         });
     }
 
@@ -83,11 +82,8 @@ export class MmFlags extends DeficiencyBase {
 
         for (let f of feats) {
             let props = f.getProperties();
-            let rate = props['rateFlag'];
-            let kab = props['kabFlag'];
-
-            let triggerRateFlag = typeof rate == 'number' && rate > 1;
-            let triggerKabFlag = typeof kab == 'number' && kab > 1;
+            let triggerRateFlag = props['crashFlag'] == 'Y';
+            let triggerKabFlag = props['kabrateflag'] == 'Y';
 
             if (triggerRateFlag || triggerKabFlag) {
                 this.deficiencyLayer.source.addFeature(f);

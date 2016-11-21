@@ -21,3 +21,17 @@ export const contollingCriteriaLookup = {
     'Superelevation': 'Superelevation',
     'Structural Capacity': 'Structural Capacity'
 };
+
+export const propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
+        'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
+
+export const propValues = ['Design Speed', 'Lane Width', 'Shoulder Width', 'Horizontal Alignment', 'Superelevation',
+        'Grade', 'Stopping Sight Distance', 'Pavement Cross Slope', 'Vertical Clearance', 'Structural Capacity'];
+
+export const controllingCriteriaProps = {};
+
+
+for (let i = 0; i < propNames.length; i++){
+    controllingCriteriaProps[propNames[i]] = propValues[i];
+}
+

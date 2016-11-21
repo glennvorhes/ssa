@@ -19,6 +19,7 @@ var crashData_1 = require('../collections/crashData');
 var mmFlags_1 = require('../collections/mmFlags');
 var controllingCriteria_1 = require('../collections/controllingCriteria');
 var constants = require('../constants');
+var ajaxGetters_1 = require('../ajaxGetters');
 var $ = require('jquery');
 var nm = provide_1.default('ssa');
 var mmPopupContentWithCrash = function (props) {
@@ -78,29 +79,36 @@ var SsaMapView = (function (_super) {
         });
         this.createdCorridorsLength = corridorConfigs.length;
         this.loadedCorridorsLength = 0;
-        var outHtml = '';
-        // Create the corridors, triggers feature get
-        for (var i = 0; i < corridorConfigs.length; i++) {
-            var conf = corridorConfigs[i];
-            outHtml += conf.bootstrapHtml(i);
-            var corridor = new Corridor_1.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
-                color: 'black',
-                loadedCallback: function (c) {
-                    _this.loadedCorridorsLength++;
-                    mmFlags_1.default.addCorridor(c);
-                    controllingCriteria_1.default.addCorridor(c);
-                    //something special when all the corridors have been loaded
-                    if (_this.loadedCorridorsLength == _this.createdCorridorsLength) {
-                        _this._afterCorridorLoad();
-                    }
+        var returnLookup = {};
+        var returnArr = [];
+        ajaxGetters_1.default.getCcGeom(parseInt($('#hidden-ssa-id').val()), parseInt($('#hidden-snapshot-id').val()), function (d) {
+            for (var _i = 0, _a = d.features; _i < _a.length; _i++) {
+                var f = _a[_i];
+                var corId = f['properties']['corridorId'].toFixed();
+                if (!returnLookup[corId]) {
+                    returnArr.push(corId);
+                    returnLookup[corId] = { crs: d['crs'], type: d['type'], features: [] };
                 }
-            });
-            this._corridorArray.push(corridor);
-            this.mainMap.addLayer(corridor.olLayer);
-            this.mainMap.addLayer(corridor.nodeLayer.olLayer);
-            this.mainMapPopup.addVectorPopup(corridor.layer, mmPopupContentWithCrash);
-        }
-        $('#' + infoAnchorId).after(outHtml);
+                returnLookup[corId].features.push(f);
+            }
+            var outHtml = '';
+            for (var i = 0; i < returnArr.length; i++) {
+                var conf = corridorConfigs[i];
+                outHtml += conf.bootstrapHtml(i);
+                var corridor = new Corridor_1.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
+                    color: 'black',
+                    jsonFeatures: returnLookup[i.toFixed()],
+                });
+                mmFlags_1.default.addCorridor(corridor);
+                controllingCriteria_1.default.addCorridor(corridor);
+                _this._corridorArray.push(corridor);
+                _this.mainMap.addLayer(corridor.olLayer);
+                _this.mainMap.addLayer(corridor.nodeLayer.olLayer);
+                _this.mainMapPopup.addVectorPopup(corridor.layer, mmPopupContentWithCrash);
+            }
+            _this._afterCorridorLoad();
+            $('#' + infoAnchorId).after(outHtml);
+        });
         crashData_1.default.init(this.mainMap);
         mmFlags_1.default.init(this.mainMap);
         controllingCriteria_1.default.init(this.mainMap);

@@ -65,29 +65,52 @@
 <script src="../build/ssaApps.js"></script>
 <script>
     var glob = {};
+
+
     new SsaMapCreate('ssa-map-container', 'corridor-data-container', 'corridor-data');
+
+    var disableEdit = true;
+    if (disableEdit) {
+        var addButton = document.getElementsByClassName('picker-create-corridor');
+        if (addButton.length > 0) {
+            addButton[0].disabled = 'disabled';
+        }
+
+        var editButtons = document.getElementsByClassName('corridor-edit');
+
+        for (var i = 0; i < editButtons.length; i++) {
+            editButtons[i].style.display = 'none';
+        }
+
+        var deleteButtons = document.getElementsByClassName('corridor-delete');
+
+        for (i = 0; i < deleteButtons.length; i++) {
+            deleteButtons[i].style.display = 'none';
+        }
+    }
+
 </script>
 </body>
 </html>
 
 <!--<div class="corridor-data">-->
-    <!--<label>Start County</label>-->
-    <!--<input type="text" class="corridor-data-start-county" readonly="" name="corridors[0].startCounty" value="1"><br>-->
-    <!--<label>End County</label>-->
-    <!--<input type="text" class="corridor-data-end-county" readonly="" name="corridors[0].endCounty" value="1"><br>-->
-    <!--<label>Highway</label><input type="text" class="corridor-data-highway" readonly="" name="corridors[0].stdhighway"                      value="WIS 13 NB"><br>-->
-    <!--<label>Start Rp</label>-->
-    <!--<input type="text" class="corridor-data-from-rp" readonly="" name="corridors[0].startRp"-->
-           <!--value="013N005M011"><br><label>End Rp</label>-->
-    <!--<input type="text" class="corridor-data-to-rp" readonly="" name="corridors[0].endRp" value="013N014 000"><br>-->
-    <!--<label>Start Pdp</label>-->
-    <!--<input type="text" class="corridor-data-from-pdp" readonly="" name="corridors[0].startPdpid" value="2051"><br>-->
-    <!--<label>End Pdp</label>-->
-    <!--<input type="text" class="corridor-data-to-pdp" readonly="" name="corridors[0].endPdpid" value="2058"><br>-->
-    <!--<label>Route Id</label><input type="text" class="corridor-data-route-id" readonly="" name="corridors[0].rdwyRteId"-->
-                                  <!--value="11"><br>-->
-    <!--<label>Is new</label>-->
-    <!--<input type="text" class="corridor-data-is-new" readonly="" name="corridors[0].isNew" value="true"><br>-->
-    <!--<label>Is Updated</label>-->
-    <!--<input type="text" class="corridor-data-is-updated" readonly="" name="corridors[0].isUpdated" value="false">-->
+<!--<label>Start County</label>-->
+<!--<input type="text" class="corridor-data-start-county" readonly="" name="corridors[0].startCounty" value="1"><br>-->
+<!--<label>End County</label>-->
+<!--<input type="text" class="corridor-data-end-county" readonly="" name="corridors[0].endCounty" value="1"><br>-->
+<!--<label>Highway</label><input type="text" class="corridor-data-highway" readonly="" name="corridors[0].stdhighway"                      value="WIS 13 NB"><br>-->
+<!--<label>Start Rp</label>-->
+<!--<input type="text" class="corridor-data-from-rp" readonly="" name="corridors[0].startRp"-->
+<!--value="013N005M011"><br><label>End Rp</label>-->
+<!--<input type="text" class="corridor-data-to-rp" readonly="" name="corridors[0].endRp" value="013N014 000"><br>-->
+<!--<label>Start Pdp</label>-->
+<!--<input type="text" class="corridor-data-from-pdp" readonly="" name="corridors[0].startPdpid" value="2051"><br>-->
+<!--<label>End Pdp</label>-->
+<!--<input type="text" class="corridor-data-to-pdp" readonly="" name="corridors[0].endPdpid" value="2058"><br>-->
+<!--<label>Route Id</label><input type="text" class="corridor-data-route-id" readonly="" name="corridors[0].rdwyRteId"-->
+<!--value="11"><br>-->
+<!--<label>Is new</label>-->
+<!--<input type="text" class="corridor-data-is-new" readonly="" name="corridors[0].isNew" value="true"><br>-->
+<!--<label>Is Updated</label>-->
+<!--<input type="text" class="corridor-data-is-updated" readonly="" name="corridors[0].isUpdated" value="false">-->
 <!--</div>-->

@@ -16,11 +16,10 @@ import mmFlags from '../collections/mmFlags';
 import controllingCriteria from '../collections/controllingCriteria';
 import * as constants from '../constants';
 import ol from 'custom-ol';
+import ajx from '../ajaxGetters';
 import $ = require('jquery');
 
 const nm = provide('ssa');
-
-
 
 
 const mmPopupContentWithCrash = (props) => {
@@ -28,7 +27,7 @@ const mmPopupContentWithCrash = (props) => {
     let returnHtml = styles.mmPopupContent(props);
 
     returnHtml += crashData.getCrashSummary(props['pdpId']);
-    
+
     return returnHtml;
 };
 
@@ -60,7 +59,6 @@ export class SsaMapView extends SsaMapBase {
 
         let summaryListHtml = '<div class="segment-index-summary">';
 
-
         summaryListHtml += `<h4 style="color: ${constants.mmFlagColor}">Metamanager Flags</h4>`;
         summaryListHtml += `<ul id="${constants.mmFlagListId}"></ul>`;
         summaryListHtml += `<h4 style="color: ${constants.controllingCriteriaColor}">Controlling Criteria</h4>`;
@@ -87,7 +85,7 @@ export class SsaMapView extends SsaMapBase {
          * @type {Array<CorridorConfig>}
          */
         let corridorConfigs = [];
-        
+
         /**
          *
          * @type {Array<Corridor>}
@@ -101,43 +99,52 @@ export class SsaMapView extends SsaMapBase {
 
         this.createdCorridorsLength = corridorConfigs.length;
         this.loadedCorridorsLength = 0;
-        
-        let outHtml = '';
 
-        // Create the corridors, triggers feature get
-        for (let i = 0; i < corridorConfigs.length; i++) {
-            let conf = corridorConfigs[i];
-            outHtml += conf.bootstrapHtml(i);
+        let returnLookup = {};
+        let returnArr = [];
 
-            let corridor = new Corridor(
-                conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
-                conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
-                {
-                    color: 'black',
-                    loadedCallback: (c) => {
-                        this.loadedCorridorsLength++;
-                        mmFlags.addCorridor(c);
-                        controllingCriteria.addCorridor(c);
-                        
-                        //something special when all the corridors have been loaded
-                        if (this.loadedCorridorsLength == this.createdCorridorsLength) {
-                            this._afterCorridorLoad();
-                        }
+        ajx.getCcGeom(parseInt($('#hidden-ssa-id').val()), parseInt($('#hidden-snapshot-id').val()), (d) => {
+            for (let f of d.features) {
+                let corId = f['properties']['corridorId'].toFixed();
 
-                    }
+                if (!returnLookup[corId]) {
+                    returnArr.push(corId);
+                    returnLookup[corId] = {crs: d['crs'], type: d['type'], features: []};
                 }
-            );
 
+                returnLookup[corId].features.push(f);
+            }
 
-            this._corridorArray.push(corridor);
+            let outHtml = '';
 
-            this.mainMap.addLayer(corridor.olLayer);
-            this.mainMap.addLayer(corridor.nodeLayer.olLayer);
+            for (let i = 0; i < returnArr.length; i++) {
+                let conf = corridorConfigs[i];
+                outHtml += conf.bootstrapHtml(i);
 
-            this.mainMapPopup.addVectorPopup(corridor.layer, mmPopupContentWithCrash);
-        }
+                let corridor = new Corridor(
+                    conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
+                    conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId,
+                    {
+                        color: 'black',
+                        jsonFeatures: returnLookup[i.toFixed()],
+                    }
+                );
 
-        $('#' + infoAnchorId).after(outHtml);
+                mmFlags.addCorridor(corridor);
+                controllingCriteria.addCorridor(corridor);
+
+                this._corridorArray.push(corridor);
+
+                this.mainMap.addLayer(corridor.olLayer);
+                this.mainMap.addLayer(corridor.nodeLayer.olLayer);
+
+                this.mainMapPopup.addVectorPopup(corridor.layer, mmPopupContentWithCrash);
+            }
+
+            this._afterCorridorLoad();
+
+            $('#' + infoAnchorId).after(outHtml);
+        });
 
         crashData.init(this.mainMap);
         mmFlags.init(this.mainMap);
@@ -146,11 +153,11 @@ export class SsaMapView extends SsaMapBase {
 
     }
 
-    _afterCorridorLoad(){
+    _afterCorridorLoad() {
         calcExtent.fitToMap(this._corridorArray, this.mainMap);
         mmFlags.afterLoad();
         controllingCriteria.afterLoad();
-       
+
     }
 }
 

@@ -47,6 +47,7 @@ declare class Corridor {
         color?: string;
         features?: Array<ol.Feature>;
         cancelLoad?: boolean;
+        jsonFeatures?: JSON;
     });
     /**
      *
