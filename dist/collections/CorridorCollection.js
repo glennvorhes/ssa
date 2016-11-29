@@ -251,6 +251,7 @@ var CorridorCollection = (function () {
                     }
                 }
             });
+            corridor.setDbValues(conf);
             if (n == 0) {
                 $('#primaryCounty').val(corridor.countyStart);
                 $('#primaryRdwyRteId').val(corridor.routeId);

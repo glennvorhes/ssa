@@ -304,6 +304,7 @@ export class CorridorCollection {
                     }
                 }
             );
+            corridor.setDbValues(conf);
 
             if (n == 0) {
                 $('#primaryCounty').val(corridor.countyStart);

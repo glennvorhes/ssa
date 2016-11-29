@@ -13,6 +13,7 @@ import * as layerStyles from '../layerStyles';
 import * as ext from 'webmapsjs/dist/olHelpers/extentUtil';
 
 import ol from 'custom-ol';
+import CorridorConfig from "./CorridorConfig";
 
 
 const nm = provide('ssa');
@@ -64,7 +65,9 @@ class Corridor {
     countyEnd: number;
     highway: string;
     routeId: number;
-    guid: string;
+    ssaId: number = -1;
+    snapshotVersion: number = -1;
+    corridorId: number = -1;
 
 
     /**
@@ -96,9 +99,6 @@ class Corridor {
                     cancelLoad?: boolean,
                     jsonFeatures?: JSON
                 } = {}) {
-
-        this.guid = makeGuid().toUpperCase().replace(/-/g, '');
-        console.log(this.guid);
 
 
         options.features = options.features ? options.features : undefined;
@@ -172,6 +172,12 @@ class Corridor {
         } else if (!options.cancelLoad) {
             this.load(options.loadedCallback);
         }
+    }
+
+    setDbValues(corConfig: CorridorConfig){
+        this.ssaId = corConfig.ssaId;
+        this.snapshotVersion = corConfig.snapshotVersion;
+        this.corridorId = corConfig.corridorId;
     }
 
     /**
@@ -287,9 +293,15 @@ class Corridor {
         return outString;
     }
 
+
     getDataHtml(i) {
         let outString = '<div class="corridor-data">';
-        // outString += `<input type="hidden" class="corridor-data-database-id" name="corridors[${i}].corridorId" value="${this.databaseId}"/>`;
+        outString += `<label>Ssa Id</label>`;
+        outString += `<input type="text" readonly class="corridor-data-ssa-id" name="corridors[${i}].id.ssaId" value="${this.ssaId }"><br>`;
+        outString += `<label>Snapshot version</label>`;
+        outString += `<input type="text" readonly class="corridor-data-snapshot" name="corridors[${i}].id.snapshotVersion" value="${this.snapshotVersion }"><br>`;
+        outString += `<label>Corridor Id</label>`;
+        outString += `<input type="text" readonly class="corridor-data-corridor-id" name="corridors[${i}].id.corridorId" value="${this.corridorId }"><br>`;
         outString += `<label>Start County</label>`;
         outString += `<input type="text" class="corridor-data-start-county" readonly name="corridors[${i}].startCounty" value="${this.countyStart}"/><br>`;
         outString += `<label>End County</label>`;
@@ -306,8 +318,7 @@ class Corridor {
         outString += `<input type="text" class="corridor-data-to-pdp" readonly name="corridors[${i}].endPdpid" value="${this.pdpTo}"/><br>`;
         outString += `<label>Route Id</label>`;
         outString += `<input type="text" class="corridor-data-route-id" readonly name="corridors[${i}].rdwyRteId" value="${this.routeId}"/><br>`;
-        outString += `<label>Guid</label>`;
-        outString += `<input type="text" class="corridor-data-guid" readonly name="corridors[${i}].guid" value="${this.guid}"/><br>`;
+
         outString += `</div>`;
 
         return outString;

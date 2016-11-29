@@ -7,6 +7,9 @@ declare class CorridorConfig {
     startPdp: number;
     endPdp: number;
     routeId: number;
+    ssaId: number;
+    snapshotVersion: number;
+    corridorId: number;
     /**
      *
      * @param {jQuery|HTMLDivElement|*} inputElement

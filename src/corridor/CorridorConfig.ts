@@ -29,6 +29,9 @@ class CorridorConfig {
     startPdp: number;
     endPdp: number;
     routeId: number;
+    ssaId: number;
+    snapshotVersion: number;
+    corridorId: number;
 
     /**
      *
@@ -40,53 +43,27 @@ class CorridorConfig {
             inputElement = $(inputElement);
         }
 
-        /**
-         *
-         * @type {number}
-         */
+
+        this.ssaId = parseInt(inputElement.find('.corridor-data-ssa-id').val());
+
+        this.snapshotVersion = parseInt(inputElement.find('.corridor-data-snapshot').val());
+
+        this.corridorId = parseInt(inputElement.find('.corridor-data-corridor-id').val());
+
         this.startCounty = parseInt(inputElement.find('.corridor-data-start-county').val());
 
-        /**
-         *
-         * @type {number}
-         */
         this.endCounty = parseInt(inputElement.find('.corridor-data-end-county').val());
 
-        /**
-         *
-         * @type {string}
-         */
         this.hgwy = inputElement.find('.corridor-data-highway').val();
 
-        /**
-         *
-         * @type {string}
-         */
         this.startRp = inputElement.find('.corridor-data-from-rp').val();
 
-        /**
-         *
-         * @type {string}
-         */
         this.endRp = inputElement.find('.corridor-data-to-rp').val();
 
-        /**
-         *
-         * @type {number}
-         */
         this.startPdp = parseInt(inputElement.find('.corridor-data-from-pdp').val());
 
-        /**
-         *
-         * @type {number}
-         */
         this.endPdp = parseInt(inputElement.find('.corridor-data-to-pdp').val());
 
-
-        /**
-         * 
-         * @type {number}
-         */
         this.routeId =  parseInt(inputElement.find('.corridor-data-route-id').val());
     }
 

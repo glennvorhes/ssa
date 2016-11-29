@@ -55,8 +55,9 @@ var Corridor = (function () {
      */
     function Corridor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, routeId, options) {
         if (options === void 0) { options = {}; }
-        this.guid = makeGuid_1.default().toUpperCase().replace(/-/g, '');
-        console.log(this.guid);
+        this.ssaId = -1;
+        this.snapshotVersion = -1;
+        this.corridorId = -1;
         options.features = options.features ? options.features : undefined;
         options.cancelLoad = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
         this.clientId = makeGuid_1.default();
@@ -120,6 +121,11 @@ var Corridor = (function () {
             this.load(options.loadedCallback);
         }
     }
+    Corridor.prototype.setDbValues = function (corConfig) {
+        this.ssaId = corConfig.ssaId;
+        this.snapshotVersion = corConfig.snapshotVersion;
+        this.corridorId = corConfig.corridorId;
+    };
     /**
      *
      * @param {corridorLoaded} [loadedCallback=function(c){}] - function to call on load
@@ -235,7 +241,12 @@ var Corridor = (function () {
     });
     Corridor.prototype.getDataHtml = function (i) {
         var outString = '<div class="corridor-data">';
-        // outString += `<input type="hidden" class="corridor-data-database-id" name="corridors[${i}].corridorId" value="${this.databaseId}"/>`;
+        outString += "<label>Ssa Id</label>";
+        outString += "<input type=\"text\" readonly class=\"corridor-data-ssa-id\" name=\"corridors[" + i + "].id.ssaId\" value=\"" + this.ssaId + "\"><br>";
+        outString += "<label>Snapshot version</label>";
+        outString += "<input type=\"text\" readonly class=\"corridor-data-snapshot\" name=\"corridors[" + i + "].id.snapshotVersion\" value=\"" + this.snapshotVersion + "\"><br>";
+        outString += "<label>Corridor Id</label>";
+        outString += "<input type=\"text\" readonly class=\"corridor-data-corridor-id\" name=\"corridors[" + i + "].id.corridorId\" value=\"" + this.corridorId + "\"><br>";
         outString += "<label>Start County</label>";
         outString += "<input type=\"text\" class=\"corridor-data-start-county\" readonly name=\"corridors[" + i + "].startCounty\" value=\"" + this.countyStart + "\"/><br>";
         outString += "<label>End County</label>";
@@ -252,8 +263,6 @@ var Corridor = (function () {
         outString += "<input type=\"text\" class=\"corridor-data-to-pdp\" readonly name=\"corridors[" + i + "].endPdpid\" value=\"" + this.pdpTo + "\"/><br>";
         outString += "<label>Route Id</label>";
         outString += "<input type=\"text\" class=\"corridor-data-route-id\" readonly name=\"corridors[" + i + "].rdwyRteId\" value=\"" + this.routeId + "\"/><br>";
-        outString += "<label>Guid</label>";
-        outString += "<input type=\"text\" class=\"corridor-data-guid\" readonly name=\"corridors[" + i + "].guid\" value=\"" + this.guid + "\"/><br>";
         outString += "</div>";
         return outString;
     };
