@@ -4,6 +4,7 @@
 import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
 import ol from 'custom-ol';
+import CorridorConfig from "./CorridorConfig";
 declare class Corridor {
     _valid: boolean;
     _error: string;
@@ -22,7 +23,9 @@ declare class Corridor {
     countyEnd: number;
     highway: string;
     routeId: number;
-    guid: string;
+    ssaId: number;
+    snapshotVersion: number;
+    corridorId: number;
     /**
      *
      * @param {number} pdpFrom - from segment id
@@ -48,6 +51,7 @@ declare class Corridor {
         cancelLoad?: boolean;
         jsonFeatures?: JSON;
     });
+    setDbValues(corConfig: CorridorConfig): void;
     /**
      *
      * @param {corridorLoaded} [loadedCallback=function(c){}] - function to call on load
