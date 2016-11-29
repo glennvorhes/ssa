@@ -22,6 +22,7 @@ declare class Corridor {
     countyEnd: number;
     highway: string;
     routeId: number;
+    guid: string;
     /**
      *
      * @param {number} pdpFrom - from segment id

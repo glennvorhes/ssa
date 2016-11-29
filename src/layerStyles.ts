@@ -68,7 +68,6 @@ export function layerConfigHelper(name: string, color: string, visible: boolean)
 
 export const mmPopupContent = (props: {[s: string]: string|number}) => {
 
-    console.log(props);
     let returnHtml = '<table class="mm-popup-table">';
     returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
     returnHtml += `<tr><td>Highway</td><td>${props['hwyDir']}</td></tr>`;

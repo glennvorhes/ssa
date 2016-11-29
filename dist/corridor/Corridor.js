@@ -55,6 +55,8 @@ var Corridor = (function () {
      */
     function Corridor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, routeId, options) {
         if (options === void 0) { options = {}; }
+        this.guid = makeGuid_1.default().toUpperCase().replace(/-/g, '');
+        console.log(this.guid);
         options.features = options.features ? options.features : undefined;
         options.cancelLoad = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
         this.clientId = makeGuid_1.default();
@@ -250,6 +252,8 @@ var Corridor = (function () {
         outString += "<input type=\"text\" class=\"corridor-data-to-pdp\" readonly name=\"corridors[" + i + "].endPdpid\" value=\"" + this.pdpTo + "\"/><br>";
         outString += "<label>Route Id</label>";
         outString += "<input type=\"text\" class=\"corridor-data-route-id\" readonly name=\"corridors[" + i + "].rdwyRteId\" value=\"" + this.routeId + "\"/><br>";
+        outString += "<label>Guid</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-guid\" readonly name=\"corridors[" + i + "].guid\" value=\"" + this.guid + "\"/><br>";
         outString += "</div>";
         return outString;
     };

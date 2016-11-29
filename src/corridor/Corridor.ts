@@ -64,6 +64,7 @@ class Corridor {
     countyEnd: number;
     highway: string;
     routeId: number;
+    guid: string;
 
 
     /**
@@ -95,6 +96,9 @@ class Corridor {
                     cancelLoad?: boolean,
                     jsonFeatures?: JSON
                 } = {}) {
+
+        this.guid = makeGuid().toUpperCase().replace(/-/g, '');
+        console.log(this.guid);
 
 
         options.features = options.features ? options.features : undefined;
@@ -302,6 +306,8 @@ class Corridor {
         outString += `<input type="text" class="corridor-data-to-pdp" readonly name="corridors[${i}].endPdpid" value="${this.pdpTo}"/><br>`;
         outString += `<label>Route Id</label>`;
         outString += `<input type="text" class="corridor-data-route-id" readonly name="corridors[${i}].rdwyRteId" value="${this.routeId}"/><br>`;
+        outString += `<label>Guid</label>`;
+        outString += `<input type="text" class="corridor-data-guid" readonly name="corridors[${i}].guid" value="${this.guid}"/><br>`;
         outString += `</div>`;
 
         return outString;
