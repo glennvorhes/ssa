@@ -173,13 +173,6 @@ var PickerCollection = (function () {
         this._map.addLayer(this._dummyCorridor.layer.olLayer);
         this._map.addLayer(this._dummyCorridor.nodeLayer.olLayer);
         this._dummyCorridor.load(function (c) {
-            //TODO better implementation for an early break
-            // if (c.valid) {
-            //     this._map.getView().fit(c.extent, this._map.getSize());
-            //     this.addModifyButtonEnabled = true;
-            // } else {
-            //     alert(c.error);
-            // }
             _this._map.getView().fit(c.extent, _this._map.getSize());
             _this.addModifyButtonEnabled = true;
         });
@@ -189,14 +182,12 @@ var PickerCollection = (function () {
      */
     PickerCollection.prototype.addCorridor = function () {
         var newCorridor = this._dummyCorridor.clone();
-        newCorridor.isNew = true;
         this.corridorCollection.addCorridorCreate(newCorridor);
         this.segmentPickerTo.segmentLayer.visible = !this.startEndCountySame;
         this.stopPicker();
     };
     PickerCollection.prototype.modifyCorridor = function () {
         this._modifyCorridor.updateCorridor(this._dummyCorridor);
-        this._modifyCorridor.isUpdated = true;
         this.corridorCollection.refreshHtmlCreate();
         this.stopPicker();
     };

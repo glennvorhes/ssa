@@ -6,7 +6,7 @@
 // import exampleCrashData from './_exampleCrashData';
 let exampleCrashData = undefined;
 
-import Ajx from '../AjaxGetters';
+import Ajx from '../ajaxGetters';
 import * as objHelp from 'webmapsjs/dist/util/objectHelpers';
 import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 import filterCrash from '../filters/filterCrash';
@@ -272,9 +272,8 @@ export class CrashData {
         }
     }
 
-    getCrashSummary(pdp) {
-        let summ = this._crashHtmlLookup[pdp];
-
+    getCrashSummary(pdp: string|number) {
+        let summ = this._crashHtmlLookup[pdp.toString()];
         return summ || '';
     }
 }

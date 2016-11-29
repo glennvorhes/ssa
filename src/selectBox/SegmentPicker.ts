@@ -7,7 +7,7 @@ import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
 import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 import SelectBoxBase from 'webmapsjs/dist/domUtil/SelectBoxBase';
-import Ajx from '../AjaxGetters';
+import Ajx from '../ajaxGetters';
 import * as layerStyles from '../layerStyles';
 import {zoomToResolution} from 'webmapsjs/dist/olHelpers/zoomResolutionConvert';
 
@@ -228,7 +228,7 @@ export class SegmentPicker extends SelectBoxBase {
             rteId = parseInt(rteId as string);
         }
 
-        Ajx.getSegments(county, rteId, (d) => {
+        Ajx.getSegments(county as number, rteId, (d) => {
                 this._segmentLayer.clear();
                 this._segNodeLayer.clear();
                 this._processAjaxResult(d['features']);

@@ -10,8 +10,6 @@ declare class Corridor {
     _loaded: boolean;
     clientId: string;
     _color: string;
-    _isNew: boolean;
-    _isUpdated: boolean;
     _corridorLayer: LayerBaseVectorGeoJson;
     nodeLayer: LayerBaseVectorGeoJson;
     sortedFeatures: SortedFeatures;
@@ -114,23 +112,5 @@ declare class Corridor {
      */
     readonly extent: ol.Extent | Array<number>;
     readonly loaded: boolean;
-    /**
-     *
-     * @returns {boolean}
-     */
-    /**
-     *
-     * @param {boolean} isNew
-     */
-    isNew: boolean;
-    /**
-     *
-     * @returns {boolean}
-     */
-    /**
-     *
-     * @param {boolean} isUpdated
-     */
-    isUpdated: boolean;
 }
 export default Corridor;

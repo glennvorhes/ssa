@@ -60,13 +60,14 @@ function layerConfigHelper(name, color, visible) {
 }
 exports.layerConfigHelper = layerConfigHelper;
 exports.mmPopupContent = function (props) {
+    console.log(props);
     var returnHtml = '<table class="mm-popup-table">';
     returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td></tr>";
     returnHtml += "<tr><td>Highway</td><td>" + props['hwyDir'] + "</td></tr>";
     returnHtml += "<tr><td>Description</td><td>" + (props['descrip'] ? props['descrip'] : '-') + "</td></tr>";
     returnHtml += "<tr><td>Divided</td><td>" + (props['divUnd'] == 'D' ? 'Yes' : 'No') + "</td></tr>";
-    returnHtml += "<tr><td>From RP</td><td>" + props['pdpFrom'] + "</td></tr>";
-    returnHtml += "<tr><td>To RP</td><td>" + props['pdpTo'] + "</td></tr>";
+    returnHtml += "<tr><td>From RP</td><td>" + props['startRp'] + "</td></tr>";
+    returnHtml += "<tr><td>To RP</td><td>" + props['endRp'] + "</td></tr>";
     returnHtml += '</table>';
     return returnHtml;
 };

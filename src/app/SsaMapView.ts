@@ -21,7 +21,6 @@ import $ = require('jquery');
 
 const nm = provide('ssa');
 
-
 const mmPopupContentWithCrash = (props) => {
     "use strict";
     let returnHtml = styles.mmPopupContent(props);
@@ -36,7 +35,8 @@ export class SsaMapView extends SsaMapBase {
     createdCorridorsLength: number;
     _corridorArray: Corridor[];
     loadedCorridorsLength: number;
-
+    private _ssaId: number;
+    private _snap: number;
 
     /**
      *
@@ -46,8 +46,8 @@ export class SsaMapView extends SsaMapBase {
      */
     constructor(divId, dataClass, infoAnchorId) {
         super(divId);
-        let ssaId = parseInt($('#hidden-ssa-id').val());
-        let snap = parseInt($('#hidden-snapshot-id').val());
+        this._ssaId = parseInt($('#hidden-ssa-id').val());
+        this._snap = parseInt($('#hidden-snapshot-id').val());
 
 
         /**
@@ -106,7 +106,7 @@ export class SsaMapView extends SsaMapBase {
         let returnLookup = {};
         let returnArr = [];
 
-        ajx.getCcGeom(ssaId, snap, (d) => {
+        ajx.getCcGeom(this._ssaId, this._snap, (d) => {
             for (let f of d['features']) {
                 let corId = f['properties']['corridorId'].toFixed();
 
@@ -149,7 +149,7 @@ export class SsaMapView extends SsaMapBase {
             $('#' + infoAnchorId).after(outHtml);
         });
 
-        crashData.init(this.mainMap, ssaId, snap);
+
         mmFlags.init(this.mainMap);
         controllingCriteria.init(this.mainMap);
 
@@ -157,6 +157,7 @@ export class SsaMapView extends SsaMapBase {
 
     _afterCorridorLoad() {
         calcExtent.fitToMap(this._corridorArray, this.mainMap);
+        crashData.init(this.mainMap, this._ssaId, this._snap);
         mmFlags.afterLoad();
         controllingCriteria.afterLoad();
 

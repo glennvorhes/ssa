@@ -10160,7 +10160,7 @@
 	 * @param {number} [options.maxZoom=undefined] max zoom
 	 * @param {boolean} [options.baseSwitcher=true] if add base map switcher
 	 * @param {boolean} [options.fullScreen=false] if add base map switcher
-	 * @returns the ol map
+	 * @returns {ol.Map} the ol map
 	 */
 	function quickMap(options) {
 	    var m = quickMapBase_1.quickMapBase(options);
@@ -11685,13 +11685,6 @@
 	        this._map.addLayer(this._dummyCorridor.layer.olLayer);
 	        this._map.addLayer(this._dummyCorridor.nodeLayer.olLayer);
 	        this._dummyCorridor.load(function (c) {
-	            //TODO better implementation for an early break
-	            // if (c.valid) {
-	            //     this._map.getView().fit(c.extent, this._map.getSize());
-	            //     this.addModifyButtonEnabled = true;
-	            // } else {
-	            //     alert(c.error);
-	            // }
 	            _this._map.getView().fit(c.extent, _this._map.getSize());
 	            _this.addModifyButtonEnabled = true;
 	        });
@@ -11701,14 +11694,12 @@
 	     */
 	    PickerCollection.prototype.addCorridor = function () {
 	        var newCorridor = this._dummyCorridor.clone();
-	        newCorridor.isNew = true;
 	        this.corridorCollection.addCorridorCreate(newCorridor);
 	        this.segmentPickerTo.segmentLayer.visible = !this.startEndCountySame;
 	        this.stopPicker();
 	    };
 	    PickerCollection.prototype.modifyCorridor = function () {
 	        this._modifyCorridor.updateCorridor(this._dummyCorridor);
-	        this._modifyCorridor.isUpdated = true;
 	        this.corridorCollection.refreshHtmlCreate();
 	        this.stopPicker();
 	    };
@@ -11832,7 +11823,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var SelectBoxBase_1 = __webpack_require__(/*! webmapsjs/dist/domUtil/SelectBoxBase */ 18);
-	var AjaxGetters_1 = __webpack_require__(/*! ../AjaxGetters */ 19);
+	var ajaxGetters_1 = __webpack_require__(/*! ../ajaxGetters */ 19);
 	var provide_1 = __webpack_require__(/*! webmapsjs/dist/util/provide */ 4);
 	var nm = provide_1.default('ssa.select');
 	var SelectCounty = (function (_super) {
@@ -11845,7 +11836,7 @@
 	    function SelectCounty(parent, labelContent) {
 	        var _this = this;
 	        _super.call(this, parent, labelContent);
-	        AjaxGetters_1.default.getAllCounties(function (d) {
+	        ajaxGetters_1.default.getAllCounties(function (d) {
 	            for (var _i = 0, d_1 = d; _i < d_1.length; _i++) {
 	                var c = d_1[_i];
 	                _this.box.append("<option value=\"" + c['id'] + "\" " + (c['primary'] ? 'selected' : '') + ">" + c['name'] + "</option>");
@@ -11983,7 +11974,7 @@
 /***/ },
 /* 19 */
 /*!*****************************!*\
-  !*** ./dist/AjaxGetters.js ***!
+  !*** ./dist/ajaxGetters.js ***!
   \*****************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -12195,7 +12186,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var SelectBoxBase_1 = __webpack_require__(/*! webmapsjs/dist/domUtil/SelectBoxBase */ 18);
-	var AjaxGetters_1 = __webpack_require__(/*! ../AjaxGetters */ 19);
+	var ajaxGetters_1 = __webpack_require__(/*! ../ajaxGetters */ 19);
 	var provide_1 = __webpack_require__(/*! webmapsjs/dist/util/provide */ 4);
 	var nm = provide_1.default('ssa.select');
 	var SelectHighway = (function (_super) {
@@ -12261,7 +12252,7 @@
 	        if (typeof routeId == 'string') {
 	            routeId = parseInt(routeId);
 	        }
-	        AjaxGetters_1.default.getHwyByStartEndCounty(startId, endId, function (d) {
+	        ajaxGetters_1.default.getHwyByStartEndCounty(startId, endId, function (d) {
 	            if (d.length > 0) {
 	                d.sort(function (a, b) {
 	                    var aName = a['name'];
@@ -12320,7 +12311,7 @@
 	var LayerBaseVectorGeoJson_1 = __webpack_require__(/*! webmapsjs/dist/layers/LayerBaseVectorGeoJson */ 23);
 	var mapPopup_1 = __webpack_require__(/*! webmapsjs/dist/olHelpers/mapPopup */ 14);
 	var SelectBoxBase_1 = __webpack_require__(/*! webmapsjs/dist/domUtil/SelectBoxBase */ 18);
-	var AjaxGetters_1 = __webpack_require__(/*! ../AjaxGetters */ 19);
+	var ajaxGetters_1 = __webpack_require__(/*! ../ajaxGetters */ 19);
 	var layerStyles = __webpack_require__(/*! ../layerStyles */ 28);
 	var custom_ol_1 = __webpack_require__(/*! custom-ol */ 8);
 	var $ = __webpack_require__(/*! jquery */ 5);
@@ -12491,7 +12482,7 @@
 	        if (typeof rteId == 'string') {
 	            rteId = parseInt(rteId);
 	        }
-	        AjaxGetters_1.default.getSegments(county, rteId, function (d) {
+	        ajaxGetters_1.default.getSegments(county, rteId, function (d) {
 	            _this._segmentLayer.clear();
 	            _this._segNodeLayer.clear();
 	            _this._processAjaxResult(d['features']);
@@ -13744,13 +13735,14 @@
 	}
 	exports.layerConfigHelper = layerConfigHelper;
 	exports.mmPopupContent = function (props) {
+	    console.log(props);
 	    var returnHtml = '<table class="mm-popup-table">';
 	    returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td></tr>";
 	    returnHtml += "<tr><td>Highway</td><td>" + props['hwyDir'] + "</td></tr>";
 	    returnHtml += "<tr><td>Description</td><td>" + (props['descrip'] ? props['descrip'] : '-') + "</td></tr>";
 	    returnHtml += "<tr><td>Divided</td><td>" + (props['divUnd'] == 'D' ? 'Yes' : 'No') + "</td></tr>";
-	    returnHtml += "<tr><td>From RP</td><td>" + props['pdpFrom'] + "</td></tr>";
-	    returnHtml += "<tr><td>To RP</td><td>" + props['pdpTo'] + "</td></tr>";
+	    returnHtml += "<tr><td>From RP</td><td>" + props['startRp'] + "</td></tr>";
+	    returnHtml += "<tr><td>To RP</td><td>" + props['endRp'] + "</td></tr>";
 	    returnHtml += '</table>';
 	    return returnHtml;
 	};
@@ -13781,7 +13773,7 @@
 	var makeGuid_1 = __webpack_require__(/*! webmapsjs/dist/util/makeGuid */ 3);
 	var provide_1 = __webpack_require__(/*! webmapsjs/dist/util/provide */ 4);
 	var layerStyles_1 = __webpack_require__(/*! ../layerStyles */ 28);
-	var AjaxGetters_1 = __webpack_require__(/*! ../AjaxGetters */ 19);
+	var ajaxGetters_1 = __webpack_require__(/*! ../ajaxGetters */ 19);
 	var SortedFeatures_1 = __webpack_require__(/*! webmapsjs/dist/olHelpers/SortedFeatures */ 22);
 	var layerStyles = __webpack_require__(/*! ../layerStyles */ 28);
 	var ext = __webpack_require__(/*! webmapsjs/dist/olHelpers/extentUtil */ 30);
@@ -13892,8 +13884,6 @@
 	        else if (!options.cancelLoad) {
 	            this.load(options.loadedCallback);
 	        }
-	        this._isNew = false;
-	        this._isUpdated = false;
 	    }
 	    /**
 	     *
@@ -13905,7 +13895,7 @@
 	        };
 	        this._valid = false;
 	        this._error = '';
-	        AjaxGetters_1.default.getCorridor(this.pdpFrom, this.pdpTo, function (d) {
+	        ajaxGetters_1.default.getCorridor(this.pdpFrom, this.pdpTo, function (d) {
 	            _this._corridorLayer.addFeatures(d);
 	            if (typeof d['error'] == 'undefined') {
 	                _this._valid = true;
@@ -14027,10 +14017,6 @@
 	        outString += "<input type=\"text\" class=\"corridor-data-to-pdp\" readonly name=\"corridors[" + i + "].endPdpid\" value=\"" + this.pdpTo + "\"/><br>";
 	        outString += "<label>Route Id</label>";
 	        outString += "<input type=\"text\" class=\"corridor-data-route-id\" readonly name=\"corridors[" + i + "].rdwyRteId\" value=\"" + this.routeId + "\"/><br>";
-	        outString += "<label>Is new</label>";
-	        outString += "<input type=\"text\" class=\"corridor-data-is-new\" readonly name=\"corridors[" + i + "].isNew\" value=\"" + this._isNew + "\"/><br>";
-	        outString += "<label>Is Updated</label>";
-	        outString += "<input type=\"text\" class=\"corridor-data-is-updated\" readonly name=\"corridors[" + i + "].isUpdated\" value=\"" + this._isUpdated + "\"/>";
 	        outString += "</div>";
 	        return outString;
 	    };
@@ -14107,42 +14093,6 @@
 	    Object.defineProperty(Corridor.prototype, "loaded", {
 	        get: function () {
 	            return this._loaded;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Corridor.prototype, "isNew", {
-	        /**
-	         *
-	         * @returns {boolean}
-	         */
-	        get: function () {
-	            return this._isNew;
-	        },
-	        /**
-	         *
-	         * @param {boolean} isNew
-	         */
-	        set: function (isNew) {
-	            this._isNew = isNew;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Corridor.prototype, "isUpdated", {
-	        /**
-	         *
-	         * @returns {boolean}
-	         */
-	        get: function () {
-	            return this._isUpdated;
-	        },
-	        /**
-	         *
-	         * @param {boolean} isUpdated
-	         */
-	        set: function (isUpdated) {
-	            this._isUpdated = isUpdated;
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -30273,7 +30223,7 @@
 	var mmFlags_1 = __webpack_require__(/*! ../collections/mmFlags */ 43);
 	var controllingCriteria_1 = __webpack_require__(/*! ../collections/controllingCriteria */ 47);
 	var constants = __webpack_require__(/*! ../constants */ 45);
-	var ajaxGetters_1 = __webpack_require__(/*! ../ajaxGetters */ 49);
+	var ajaxGetters_1 = __webpack_require__(/*! ../ajaxGetters */ 19);
 	var $ = __webpack_require__(/*! jquery */ 5);
 	var nm = provide_1.default('ssa');
 	var mmPopupContentWithCrash = function (props) {
@@ -30293,8 +30243,8 @@
 	    function SsaMapView(divId, dataClass, infoAnchorId) {
 	        var _this = this;
 	        _super.call(this, divId);
-	        var ssaId = parseInt($('#hidden-ssa-id').val());
-	        var snap = parseInt($('#hidden-snapshot-id').val());
+	        this._ssaId = parseInt($('#hidden-ssa-id').val());
+	        this._snap = parseInt($('#hidden-snapshot-id').val());
 	        /**
 	         * @type {ol.Map}
 	         */
@@ -30337,7 +30287,7 @@
 	        this.loadedCorridorsLength = 0;
 	        var returnLookup = {};
 	        var returnArr = [];
-	        ajaxGetters_1.default.getCcGeom(ssaId, snap, function (d) {
+	        ajaxGetters_1.default.getCcGeom(this._ssaId, this._snap, function (d) {
 	            for (var _i = 0, _a = d['features']; _i < _a.length; _i++) {
 	                var f = _a[_i];
 	                var corId = f['properties']['corridorId'].toFixed();
@@ -30365,12 +30315,12 @@
 	            _this._afterCorridorLoad();
 	            $('#' + infoAnchorId).after(outHtml);
 	        });
-	        crashData_1.default.init(this.mainMap, ssaId, snap);
 	        mmFlags_1.default.init(this.mainMap);
 	        controllingCriteria_1.default.init(this.mainMap);
 	    }
 	    SsaMapView.prototype._afterCorridorLoad = function () {
 	        calcExtent.fitToMap(this._corridorArray, this.mainMap);
+	        crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
 	        mmFlags_1.default.afterLoad();
 	        controllingCriteria_1.default.afterLoad();
 	    };
@@ -30397,7 +30347,7 @@
 	// uncomment this to use the example crash data
 	// import exampleCrashData from './_exampleCrashData';
 	var exampleCrashData = undefined;
-	var AjaxGetters_1 = __webpack_require__(/*! ../AjaxGetters */ 19);
+	var ajaxGetters_1 = __webpack_require__(/*! ../ajaxGetters */ 19);
 	var objHelp = __webpack_require__(/*! webmapsjs/dist/util/objectHelpers */ 39);
 	var LayerBaseVectorGeoJson_1 = __webpack_require__(/*! webmapsjs/dist/layers/LayerBaseVectorGeoJson */ 23);
 	var filterCrash_1 = __webpack_require__(/*! ../filters/filterCrash */ 40);
@@ -30563,7 +30513,7 @@
 	        filterCrash_1.default.addChangeCallback(function () {
 	            _this.pointCrashes.refresh();
 	        });
-	        AjaxGetters_1.default.getCrashes(ssaId, snapshot, function (d) {
+	        ajaxGetters_1.default.getCrashes(ssaId, snapshot, function (d) {
 	            _this._processCrashData(d);
 	        });
 	        m.addLayer(this.pointCrashes.olLayer);
@@ -30604,7 +30554,7 @@
 	        }
 	    };
 	    CrashData.prototype.getCrashSummary = function (pdp) {
-	        var summ = this._crashHtmlLookup[pdp];
+	        var summ = this._crashHtmlLookup[pdp.toString()];
 	        return summ || '';
 	    };
 	    return CrashData;
@@ -30627,11 +30577,6 @@
 	"use strict";
 	var provide_1 = __webpack_require__(/*! ./provide */ 4);
 	var nm = provide_1.default('util');
-	/**
-	 * @typedef {object} keyValuePair
-	 * @property {string} key
-	 * @property {object} value
-	 */
 	/**
 	 * iterate over the key value pairs of an object
 	 * @param {object} obj - the input object
@@ -31470,204 +31415,6 @@
 	exports.FilterControllingCriteria = FilterControllingCriteria;
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = new FilterControllingCriteria();
-
-
-/***/ },
-/* 49 */
-/*!*****************************!*\
-  !*** ./dist/ajaxGetters.js ***!
-  \*****************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Created by gavorhes on 5/12/2016.
-	 */
-	"use strict";
-	var provide_1 = __webpack_require__(/*! webmapsjs/dist/util/provide */ 4);
-	var $ = __webpack_require__(/*! jquery */ 5);
-	var home = $('#site-root').val();
-	if (window.location.port == '5001') {
-	    home = 'http://localhost:5004/';
-	}
-	var getStartCountiesUrl = home + 'getStartCounties';
-	var getHighwaysUrl = home + 'getHighways';
-	var getEndCountiesUrl = home + 'getEndCounties';
-	var getSegmentsUrl = home + 'getSegments';
-	var getCorridorUrl = home + 'getCorridor';
-	var getCrashesUrl = home + 'getCrashes';
-	var getAllCountiesUrl = home + 'getAllCounties';
-	var getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
-	var getCcGeomUrl = home + 'getCcGeom';
-	var nm = provide_1.default('ssa');
-	/**
-	 * inner function to help ajax
-	 * @param {string} url - resource url
-	 * @param {object} [params={}] - get params
-	 * @param {ajaxCallback} callback - callback function
-	 */
-	function _ajaxInner(url, params, callback) {
-	    "use strict";
-	    $.get(url, params, callback, 'json').fail(function () {
-	        var msg = "error getting: " + url + JSON.stringify(params);
-	        console.warn(msg);
-	    });
-	}
-	/**
-	 * outer function to help ajax
-	 * @param {string} url - resource url
-	 * @param {ajaxCallback} callback - callback function
-	 * @param {object} [params={}] get params
-	 * @param {ajaxCallback} [calbackHelper=undefined] - callback helper
-	 */
-	function _ajaxHelper(url, callback, params, calbackHelper) {
-	    "use strict";
-	    if (params === void 0) { params = {}; }
-	    if (typeof calbackHelper == 'function') {
-	        var newCallback = function (d) {
-	            d = calbackHelper(d);
-	            callback(d);
-	        };
-	        _ajaxInner(url, params, newCallback);
-	    }
-	    else {
-	        _ajaxInner(url, params, callback);
-	    }
-	}
-	/**
-	 * sort function for counties
-	 * @param {Array<object>} d - county object
-	 * @returns {Array<object>} sorted array of county key val pair objects
-	 */
-	var _countySort = function (d) {
-	    d.sort(function (a, b) {
-	        if (a['name'] == b['name']) {
-	            return 0;
-	        }
-	        else {
-	            return a['name'] < b['name'] ? -1 : 1;
-	        }
-	    });
-	    return d;
-	};
-	/**
-	 * static methods to make ajax requests
-	 */
-	var AjaxGetters = (function () {
-	    /**
-	     * Do not instantiate this class - only static methods
-	     */
-	    function AjaxGetters() {
-	        throw 'this class should not be instantiated';
-	    }
-	    /**
-	     * @static
-	     * @param {ajaxCallback} callback - callback function
-	     */
-	    AjaxGetters.getStartCounties = function (callback) {
-	        "use strict";
-	        _ajaxHelper(getStartCountiesUrl, callback, {}, _countySort);
-	    };
-	    /**
-	     * Get the highways based on the start county
-	     * @param {number} startCountyId - start county id
-	     * @param {ajaxCallback} callback - callback function
-	     */
-	    AjaxGetters.getHighways = function (startCountyId, callback) {
-	        "use strict";
-	        var params = { "startCountyId": startCountyId };
-	        _ajaxHelper(getHighwaysUrl, callback, params);
-	    };
-	    /**
-	     * Get the highways based on the start county
-	     * @param {string} highwayName - highway name
-	     * @param {ajaxCallback} callback - callback function
-	     */
-	    AjaxGetters.getEndCounties = function (highwayName, callback) {
-	        "use strict";
-	        var params = { "highwayName": highwayName };
-	        _ajaxHelper(getEndCountiesUrl, callback, params, _countySort);
-	    };
-	    /**
-	     * get the segments based on county and route id
-	     * @param {number} county - county id
-	     * @param {number} routeId - route id
-	     * @param {ajaxCallback} callback - callback function
-	     */
-	    AjaxGetters.getSegments = function (county, routeId, callback) {
-	        "use strict";
-	        var routeIdNum;
-	        if (typeof routeId == 'string') {
-	            routeIdNum = parseInt(routeId);
-	        }
-	        else {
-	            routeIdNum = routeId;
-	        }
-	        var params = { "routeid": routeIdNum, "county": county };
-	        _ajaxHelper(getSegmentsUrl, callback, params);
-	    };
-	    /**
-	     * get corridor based on start and end pdp id
-	     * @param {number} startPdp - start pdp id
-	     * @param {number} endPdp - end pdp id
-	     * @param {ajaxCallback} callback - callback function
-	     */
-	    AjaxGetters.getCorridor = function (startPdp, endPdp, callback) {
-	        "use strict";
-	        var params = { "from": startPdp, "to": endPdp };
-	        _ajaxHelper(getCorridorUrl, callback, params);
-	    };
-	    /**
-	     * Get the crash data
-	     * @param {number} ssaId
-	     * @param {number} snapshot
-	     * @param {ajaxCallback} callback - callback function
-	     */
-	    AjaxGetters.getCrashes = function (ssaId, snapshot, callback) {
-	        "use strict";
-	        var params = {
-	            'ssaId': ssaId,
-	            'snapshot': snapshot
-	        };
-	        _ajaxHelper(getCrashesUrl, callback, params);
-	    };
-	    /**
-	     * Get all counties as an array
-	     * @param {ajaxCallback} callback - callback function
-	     */
-	    AjaxGetters.getAllCounties = function (callback) {
-	        "use strict";
-	        var params = {};
-	        _ajaxHelper(getAllCountiesUrl, callback, params);
-	    };
-	    /**
-	     * Get highways based on start and end counties
-	     * @param {number} startCountyId - start county id
-	     * @param {number} endCountyId - end county id
-	     * @param {ajaxCallback} callback - callback function
-	     *
-	     */
-	    AjaxGetters.getHwyByStartEndCounty = function (startCountyId, endCountyId, callback) {
-	        "use strict";
-	        var params = {
-	            'startCountyId': startCountyId,
-	            'endCountyId': endCountyId
-	        };
-	        _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
-	    };
-	    AjaxGetters.getCcGeom = function (ssaId, snapshot, callback) {
-	        "use strict";
-	        var params = {
-	            'ssaId': ssaId,
-	            'snapshot': snapshot
-	        };
-	        _ajaxHelper(getCcGeomUrl, callback, params);
-	    };
-	    return AjaxGetters;
-	}());
-	exports.AjaxGetters = AjaxGetters;
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = AjaxGetters;
-	nm.AjaxGetters = AjaxGetters;
 
 
 /***/ }

@@ -7,7 +7,7 @@ import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson
 import makeGuid from 'webmapsjs/dist/util/makeGuid';
 import provide from 'webmapsjs/dist/util/provide';
 import {layerConfigHelper, randomColor} from '../layerStyles';
-import Ajx  from '../AjaxGetters';
+import Ajx  from '../ajaxGetters';
 import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
 import * as layerStyles from '../layerStyles';
 import * as ext from 'webmapsjs/dist/olHelpers/extentUtil';
@@ -50,8 +50,6 @@ class Corridor {
     _loaded: boolean;
     clientId: string;
     _color: string;
-    _isNew: boolean;
-    _isUpdated: boolean;
     _corridorLayer: LayerBaseVectorGeoJson;
     nodeLayer: LayerBaseVectorGeoJson;
 
@@ -170,9 +168,6 @@ class Corridor {
         } else if (!options.cancelLoad) {
             this.load(options.loadedCallback);
         }
-
-        this._isNew = false;
-        this._isUpdated = false;
     }
 
     /**
@@ -187,7 +182,7 @@ class Corridor {
         this._error = '';
 
         Ajx.getCorridor(this.pdpFrom, this.pdpTo, (d) => {
-            this._corridorLayer.addFeatures(d);
+            this._corridorLayer.addFeatures(d as JSON);
 
             if (typeof d['error'] == 'undefined') {
                 this._valid = true;
@@ -307,10 +302,6 @@ class Corridor {
         outString += `<input type="text" class="corridor-data-to-pdp" readonly name="corridors[${i}].endPdpid" value="${this.pdpTo}"/><br>`;
         outString += `<label>Route Id</label>`;
         outString += `<input type="text" class="corridor-data-route-id" readonly name="corridors[${i}].rdwyRteId" value="${this.routeId}"/><br>`;
-        outString += `<label>Is new</label>`;
-        outString += `<input type="text" class="corridor-data-is-new" readonly name="corridors[${i}].isNew" value="${this._isNew}"/><br>`;
-        outString += `<label>Is Updated</label>`;
-        outString += `<input type="text" class="corridor-data-is-updated" readonly name="corridors[${i}].isUpdated" value="${this._isUpdated}"/>`;
         outString += `</div>`;
 
         return outString;
@@ -378,38 +369,6 @@ class Corridor {
 
     get loaded(): boolean {
         return this._loaded;
-    }
-
-    /**
-     *
-     * @returns {boolean}
-     */
-    get isNew(): boolean {
-        return this._isNew;
-    }
-
-    /**
-     *
-     * @param {boolean} isNew
-     */
-    set isNew(isNew: boolean) {
-        this._isNew = isNew;
-    }
-
-    /**
-     *
-     * @returns {boolean}
-     */
-    get isUpdated(): boolean {
-        return this._isUpdated;
-    }
-
-    /**
-     *
-     * @param {boolean} isUpdated
-     */
-    set isUpdated(isUpdated: boolean) {
-        this._isUpdated = isUpdated;
     }
 }
 

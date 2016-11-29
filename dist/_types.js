@@ -19,8 +19,4 @@
  * @callback corridorLoaded
  * @param {Corridor} theCorridor
  */
-/**
- * @callback ajaxCallback
- * @param {object|Array} d - returned data
- */
 //# sourceMappingURL=_types.js.map

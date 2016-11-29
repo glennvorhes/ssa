@@ -3,7 +3,7 @@
  */
 
 import SelectBoxBase from 'webmapsjs/dist/domUtil/SelectBoxBase';
-import Ajx from '../AjaxGetters';
+import Ajx from '../ajaxGetters';
 import provide from 'webmapsjs/dist/util/provide';
 const nm = provide('ssa.select');
 
@@ -78,7 +78,7 @@ export class SelectHighway extends SelectBoxBase {
             routeId = parseInt(routeId as string);
         }
 
-        Ajx.getHwyByStartEndCounty(startId, endId, (d) => {
+        Ajx.getHwyByStartEndCounty(startId as number, endId as number, (d) => {
             if (d.length > 0) {
 
                 d.sort((a, b) => {

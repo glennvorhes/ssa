@@ -4,7 +4,7 @@
 
 
 import SelectBoxBase from 'webmapsjs/dist/domUtil/SelectBoxBase';
-import Ajx from '../AjaxGetters';
+import Ajx from '../ajaxGetters';
 import provide from 'webmapsjs/dist/util/provide';
 const nm = provide('ssa.select');
 

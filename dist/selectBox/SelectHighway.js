@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var SelectBoxBase_1 = require('webmapsjs/dist/domUtil/SelectBoxBase');
-var AjaxGetters_1 = require('../AjaxGetters');
+var ajaxGetters_1 = require('../ajaxGetters');
 var provide_1 = require('webmapsjs/dist/util/provide');
 var nm = provide_1.default('ssa.select');
 var SelectHighway = (function (_super) {
@@ -74,7 +74,7 @@ var SelectHighway = (function (_super) {
         if (typeof routeId == 'string') {
             routeId = parseInt(routeId);
         }
-        AjaxGetters_1.default.getHwyByStartEndCounty(startId, endId, function (d) {
+        ajaxGetters_1.default.getHwyByStartEndCounty(startId, endId, function (d) {
             if (d.length > 0) {
                 d.sort(function (a, b) {
                     var aName = a['name'];

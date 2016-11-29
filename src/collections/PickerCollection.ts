@@ -263,14 +263,6 @@ class PickerCollection {
         this._map.addLayer(this._dummyCorridor.nodeLayer.olLayer);
 
         this._dummyCorridor.load((c) => {
-            //TODO better implementation for an early break
-            // if (c.valid) {
-            //     this._map.getView().fit(c.extent, this._map.getSize());
-            //     this.addModifyButtonEnabled = true;
-            // } else {
-            //     alert(c.error);
-            // }
-
             this._map.getView().fit(c.extent, this._map.getSize());
             this.addModifyButtonEnabled = true;
 
@@ -282,7 +274,6 @@ class PickerCollection {
      */
     addCorridor() {
         let newCorridor = this._dummyCorridor.clone();
-        newCorridor.isNew = true;
         this.corridorCollection.addCorridorCreate(newCorridor);
         this.segmentPickerTo.segmentLayer.visible = !this.startEndCountySame;
         this.stopPicker();
@@ -290,7 +281,6 @@ class PickerCollection {
 
     modifyCorridor() {
         this._modifyCorridor.updateCorridor(this._dummyCorridor);
-        this._modifyCorridor.isUpdated = true;
         this.corridorCollection.refreshHtmlCreate();
         this.stopPicker();
     }

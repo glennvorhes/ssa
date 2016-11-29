@@ -6,7 +6,7 @@ var LayerBaseVectorGeoJson_1 = require('webmapsjs/dist/layers/LayerBaseVectorGeo
 var makeGuid_1 = require('webmapsjs/dist/util/makeGuid');
 var provide_1 = require('webmapsjs/dist/util/provide');
 var layerStyles_1 = require('../layerStyles');
-var AjaxGetters_1 = require('../AjaxGetters');
+var ajaxGetters_1 = require('../ajaxGetters');
 var SortedFeatures_1 = require('webmapsjs/dist/olHelpers/SortedFeatures');
 var layerStyles = require('../layerStyles');
 var ext = require('webmapsjs/dist/olHelpers/extentUtil');
@@ -117,8 +117,6 @@ var Corridor = (function () {
         else if (!options.cancelLoad) {
             this.load(options.loadedCallback);
         }
-        this._isNew = false;
-        this._isUpdated = false;
     }
     /**
      *
@@ -130,7 +128,7 @@ var Corridor = (function () {
         };
         this._valid = false;
         this._error = '';
-        AjaxGetters_1.default.getCorridor(this.pdpFrom, this.pdpTo, function (d) {
+        ajaxGetters_1.default.getCorridor(this.pdpFrom, this.pdpTo, function (d) {
             _this._corridorLayer.addFeatures(d);
             if (typeof d['error'] == 'undefined') {
                 _this._valid = true;
@@ -252,10 +250,6 @@ var Corridor = (function () {
         outString += "<input type=\"text\" class=\"corridor-data-to-pdp\" readonly name=\"corridors[" + i + "].endPdpid\" value=\"" + this.pdpTo + "\"/><br>";
         outString += "<label>Route Id</label>";
         outString += "<input type=\"text\" class=\"corridor-data-route-id\" readonly name=\"corridors[" + i + "].rdwyRteId\" value=\"" + this.routeId + "\"/><br>";
-        outString += "<label>Is new</label>";
-        outString += "<input type=\"text\" class=\"corridor-data-is-new\" readonly name=\"corridors[" + i + "].isNew\" value=\"" + this._isNew + "\"/><br>";
-        outString += "<label>Is Updated</label>";
-        outString += "<input type=\"text\" class=\"corridor-data-is-updated\" readonly name=\"corridors[" + i + "].isUpdated\" value=\"" + this._isUpdated + "\"/>";
         outString += "</div>";
         return outString;
     };
@@ -332,42 +326,6 @@ var Corridor = (function () {
     Object.defineProperty(Corridor.prototype, "loaded", {
         get: function () {
             return this._loaded;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Corridor.prototype, "isNew", {
-        /**
-         *
-         * @returns {boolean}
-         */
-        get: function () {
-            return this._isNew;
-        },
-        /**
-         *
-         * @param {boolean} isNew
-         */
-        set: function (isNew) {
-            this._isNew = isNew;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Corridor.prototype, "isUpdated", {
-        /**
-         *
-         * @returns {boolean}
-         */
-        get: function () {
-            return this._isUpdated;
-        },
-        /**
-         *
-         * @param {boolean} isUpdated
-         */
-        set: function (isUpdated) {
-            this._isUpdated = isUpdated;
         },
         enumerable: true,
         configurable: true

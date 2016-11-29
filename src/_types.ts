@@ -32,7 +32,3 @@
 
 
 
-/**
- * @callback ajaxCallback
- * @param {object|Array} d - returned data
- */

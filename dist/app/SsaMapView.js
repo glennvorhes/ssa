@@ -39,8 +39,8 @@ var SsaMapView = (function (_super) {
     function SsaMapView(divId, dataClass, infoAnchorId) {
         var _this = this;
         _super.call(this, divId);
-        var ssaId = parseInt($('#hidden-ssa-id').val());
-        var snap = parseInt($('#hidden-snapshot-id').val());
+        this._ssaId = parseInt($('#hidden-ssa-id').val());
+        this._snap = parseInt($('#hidden-snapshot-id').val());
         /**
          * @type {ol.Map}
          */
@@ -83,7 +83,7 @@ var SsaMapView = (function (_super) {
         this.loadedCorridorsLength = 0;
         var returnLookup = {};
         var returnArr = [];
-        ajaxGetters_1.default.getCcGeom(ssaId, snap, function (d) {
+        ajaxGetters_1.default.getCcGeom(this._ssaId, this._snap, function (d) {
             for (var _i = 0, _a = d['features']; _i < _a.length; _i++) {
                 var f = _a[_i];
                 var corId = f['properties']['corridorId'].toFixed();
@@ -111,12 +111,12 @@ var SsaMapView = (function (_super) {
             _this._afterCorridorLoad();
             $('#' + infoAnchorId).after(outHtml);
         });
-        crashData_1.default.init(this.mainMap, ssaId, snap);
         mmFlags_1.default.init(this.mainMap);
         controllingCriteria_1.default.init(this.mainMap);
     }
     SsaMapView.prototype._afterCorridorLoad = function () {
         calcExtent.fitToMap(this._corridorArray, this.mainMap);
+        crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
         mmFlags_1.default.afterLoad();
         controllingCriteria_1.default.afterLoad();
     };

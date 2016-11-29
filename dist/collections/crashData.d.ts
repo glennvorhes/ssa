@@ -25,7 +25,7 @@ export declare class CrashData {
      */
     init(m: ol.Map, ssaId: number, snapshot: number): void;
     _processCrashData(d: any): void;
-    getCrashSummary(pdp: any): string;
+    getCrashSummary(pdp: string | number): string;
 }
 declare var _default: CrashData;
 export default _default;

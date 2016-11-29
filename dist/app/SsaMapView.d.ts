@@ -7,6 +7,8 @@ export declare class SsaMapView extends SsaMapBase {
     createdCorridorsLength: number;
     _corridorArray: Corridor[];
     loadedCorridorsLength: number;
+    private _ssaId;
+    private _snap;
     /**
      *
      * @param {string} divId - container for the map

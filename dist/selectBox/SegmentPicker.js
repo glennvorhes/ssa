@@ -12,7 +12,7 @@ var SortedFeatures_1 = require('webmapsjs/dist/olHelpers/SortedFeatures');
 var LayerBaseVectorGeoJson_1 = require('webmapsjs/dist/layers/LayerBaseVectorGeoJson');
 var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
 var SelectBoxBase_1 = require('webmapsjs/dist/domUtil/SelectBoxBase');
-var AjaxGetters_1 = require('../AjaxGetters');
+var ajaxGetters_1 = require('../ajaxGetters');
 var layerStyles = require('../layerStyles');
 var custom_ol_1 = require('custom-ol');
 var $ = require('jquery');
@@ -183,7 +183,7 @@ var SegmentPicker = (function (_super) {
         if (typeof rteId == 'string') {
             rteId = parseInt(rteId);
         }
-        AjaxGetters_1.default.getSegments(county, rteId, function (d) {
+        ajaxGetters_1.default.getSegments(county, rteId, function (d) {
             _this._segmentLayer.clear();
             _this._segNodeLayer.clear();
             _this._processAjaxResult(d['features']);

@@ -5,7 +5,7 @@
 // uncomment this to use the example crash data
 // import exampleCrashData from './_exampleCrashData';
 var exampleCrashData = undefined;
-var AjaxGetters_1 = require('../AjaxGetters');
+var ajaxGetters_1 = require('../ajaxGetters');
 var objHelp = require('webmapsjs/dist/util/objectHelpers');
 var LayerBaseVectorGeoJson_1 = require('webmapsjs/dist/layers/LayerBaseVectorGeoJson');
 var filterCrash_1 = require('../filters/filterCrash');
@@ -171,7 +171,7 @@ var CrashData = (function () {
         filterCrash_1.default.addChangeCallback(function () {
             _this.pointCrashes.refresh();
         });
-        AjaxGetters_1.default.getCrashes(ssaId, snapshot, function (d) {
+        ajaxGetters_1.default.getCrashes(ssaId, snapshot, function (d) {
             _this._processCrashData(d);
         });
         m.addLayer(this.pointCrashes.olLayer);
@@ -212,7 +212,7 @@ var CrashData = (function () {
         }
     };
     CrashData.prototype.getCrashSummary = function (pdp) {
-        var summ = this._crashHtmlLookup[pdp];
+        var summ = this._crashHtmlLookup[pdp.toString()];
         return summ || '';
     };
     return CrashData;
