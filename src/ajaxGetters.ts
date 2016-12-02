@@ -150,6 +150,14 @@ export class AjaxGetters {
         }
 
         let params = {"routeid": routeIdNum, "county": county};
+
+        let $mm = $('#hidden-mm-version');
+
+        if ($mm.length > 0){
+            params['mm'] = $mm.val();
+        }
+
+
         _ajaxHelper(getSegmentsUrl, callback, params);
     }
 
@@ -163,6 +171,12 @@ export class AjaxGetters {
     public static getCorridor(startPdp: number, endPdp: number,  callback: ajaxCallback) {
         "use strict";
         let params = {"from": startPdp, "to": endPdp};
+
+        let $mm = $('#hidden-mm-version');
+
+        if ($mm.length > 0){
+            params['mm'] = $mm.val();
+        }
 
         _ajaxHelper(getCorridorUrl, callback, params);
     }

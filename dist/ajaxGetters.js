@@ -122,6 +122,10 @@ var AjaxGetters = (function () {
             routeIdNum = routeId;
         }
         var params = { "routeid": routeIdNum, "county": county };
+        var $mm = $('#hidden-mm-version');
+        if ($mm.length > 0) {
+            params['mm'] = $mm.val();
+        }
         _ajaxHelper(getSegmentsUrl, callback, params);
     };
     /**
@@ -133,6 +137,10 @@ var AjaxGetters = (function () {
     AjaxGetters.getCorridor = function (startPdp, endPdp, callback) {
         "use strict";
         var params = { "from": startPdp, "to": endPdp };
+        var $mm = $('#hidden-mm-version');
+        if ($mm.length > 0) {
+            params['mm'] = $mm.val();
+        }
         _ajaxHelper(getCorridorUrl, callback, params);
     };
     /**

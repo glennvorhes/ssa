@@ -257,12 +257,12 @@ var Corridor = (function () {
         outString += "<input type=\"text\" class=\"corridor-data-from-rp\" readonly name=\"corridors[" + i + "].startRp\" value=\"" + this.rpFrom + "\"/><br>";
         outString += "<label>End Rp</label>";
         outString += "<input type=\"text\" class=\"corridor-data-to-rp\" readonly name=\"corridors[" + i + "].endRp\" value=\"" + this.rpTo + "\"/><br>";
-        outString += "<label>Start Pdp</label>";
-        outString += "<input type=\"text\" class=\"corridor-data-from-pdp\" readonly name=\"corridors[" + i + "].startPdpid\" value=\"" + this.pdpFrom + "\"/><br>";
-        outString += "<label>End Pdp</label>";
-        outString += "<input type=\"text\" class=\"corridor-data-to-pdp\" readonly name=\"corridors[" + i + "].endPdpid\" value=\"" + this.pdpTo + "\"/><br>";
         outString += "<label>Route Id</label>";
         outString += "<input type=\"text\" class=\"corridor-data-route-id\" readonly name=\"corridors[" + i + "].rdwyRteId\" value=\"" + this.routeId + "\"/><br>";
+        outString += "<label>Start Pdp</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-from-pdp\" readonly value=\"" + this.pdpFrom + "\"/><br>";
+        outString += "<label>End Pdp</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-to-pdp\" readonly value=\"" + this.pdpTo + "\"/><br>";
         outString += "</div>";
         return outString;
     };
