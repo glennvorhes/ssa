@@ -30974,7 +30974,7 @@
 	            })
 	        });
 	    };
-	    if ((props['crashFlag'] == 'Y' && filterMmFlag_1.default.mmRateFlagOn) || props['kabrateflag'] == 'Y' && filterMmFlag_1.default.mmKabFlagOn) {
+	    if ((props['rateFlag'] >= 1 && filterMmFlag_1.default.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag_1.default.mmKabFlagOn) {
 	        return [new custom_ol_1.default.style.Style({
 	                stroke: new custom_ol_1.default.style.Stroke({
 	                    color: constants.mmFlagColor,
@@ -31003,7 +31003,14 @@
 	            _this.deficiencyLayer.refresh();
 	        });
 	        mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
-	            return "MM ID: " + props['mmId'] + "<br/>Rate Flag: " + props['crashFlag'] + "<br/>KAB Flag: " + props['kabrateflag'];
+	            var rates = [];
+	            if (props['rateFlag'] != null) {
+	                rates.push("Rate Flag: " + props['rateFlag'].toFixed(4));
+	            }
+	            if (props['kabCrshFlag'] != null) {
+	                rates.push("KAB Flag: " + props['kabCrshFlag'].toFixed(4));
+	            }
+	            return "MM ID: " + props['mmId'] + "<br/>" + rates.join('<br>');
 	        });
 	    };
 	    /**
@@ -31015,13 +31022,12 @@
 	        for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
 	            var f = feats_1[_i];
 	            var props = f.getProperties();
-	            var triggerRateFlag = props['crashFlag'] == 'Y';
-	            var triggerKabFlag = props['kabrateflag'] == 'Y';
-	            if (triggerRateFlag || triggerKabFlag) {
+	            var triggerRateFlag = props['rateFlag'] >= 1;
+	            var triggerKabFlag = props['kabCrshFlag'] >= 1;
+	            if (props['rateFlag'] >= 1 || props['kabCrshFlag'] >= 1) {
 	                this.deficiencyLayer.source.addFeature(f);
-	                this.featureIndex++;
-	                f.setProperties({ mmId: 'MM' + this.featureIndex.toFixed() });
-	                var appendHtml = "<b>MM" + this.featureIndex.toFixed() + "</b>:&nbsp;";
+	                f.setProperties({ mmId: "MM" + props['pdpId'] });
+	                var appendHtml = "<b>MM" + props['pdpId'] + "</b>:&nbsp;";
 	                var flags = [];
 	                if (triggerRateFlag) {
 	                    flags.push('Crash Rate');
@@ -31065,14 +31071,14 @@
 	    }
 	    Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
 	        get: function () {
-	            return this.valIsOn('mm-rate-flag');
+	            return this.valIsOn('rateFlag');
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
 	    Object.defineProperty(FilterMmFlag.prototype, "mmKabFlagOn", {
 	        get: function () {
-	            return this.valIsOn('mm-kab-flag');
+	            return this.valIsOn('kabCrshFlag');
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -31100,18 +31106,18 @@
 	exports.pdpDataAttr = 'data-pdp-id';
 	exports.mmFlagColor = '#00FF00';
 	exports.controllingCriteriaColor = '#FFC632';
-	exports.contollingCriteriaLookup = {
-	    'Design Speed': 'Design Speed',
-	    'Grade': 'Grade',
-	    'Lane Width': 'Lane Width',
-	    'Stopping Sight Distance': 'Stopping Sight Distance',
-	    'Shoulder Width': 'Shoulder Width',
-	    'Pavement Cross Slope': 'Pavement Cross Slope',
-	    'Horizontal Alignment': 'Horizontal Alignment',
-	    'Vertical Clearance': 'Vertical Clearance',
-	    'Superelevation': 'Superelevation',
-	    'Structural Capacity': 'Structural Capacity'
-	};
+	// export const contollingCriteriaLookup = {
+	//     'ccDesignSpeed': 'Design Speed',
+	//     'Grade': 'Grade',
+	//     'Lane Width': 'Lane Width',
+	//     'Stopping Sight Distance': 'Stopping Sight Distance',
+	//     'Shoulder Width': 'Shoulder Width',
+	//     'Pavement Cross Slope': 'Pavement Cross Slope',
+	//     'Horizontal Alignment': 'Horizontal Alignment',
+	//     'Vertical Clearance': 'Vertical Clearance',
+	//     'Superelevation': 'Superelevation',
+	//     'Structural Capacity': 'Structural Capacity'
+	// };
 	exports.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
 	    'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
 	exports.propValues = ['Design Speed', 'Lane Width', 'Shoulder Width', 'Horizontal Alignment', 'Superelevation',
@@ -31163,11 +31169,6 @@
 	         * @private
 	         */
 	        this._map = undefined;
-	        /**
-	         *
-	         * @type {number}
-	         */
-	        this.featureIndex = 0;
 	        this._summaryListId = summaryListId;
 	        /**
 	         *
@@ -31289,7 +31290,6 @@
 	            break;
 	        }
 	    }
-	    show = true;
 	    var txtFunc = function () {
 	        return new custom_ol_1.default.style.Text({
 	            text: props['ccId'],
@@ -31337,7 +31337,16 @@
 	            for (var _i = 0, _a = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _i < _a.length; _i++) {
 	                var cc = _a[_i];
 	                if (props[cc.key]) {
-	                    returnHtml += "<li>" + cc.value + "</li>";
+	                    returnHtml += "<li>";
+	                    returnHtml += cc.value;
+	                    var subEls = props[cc.key].split('::');
+	                    returnHtml += '<ul>';
+	                    for (var _b = 0, subEls_1 = subEls; _b < subEls_1.length; _b++) {
+	                        var s = subEls_1[_b];
+	                        returnHtml += "<li>" + s + "</li>";
+	                    }
+	                    returnHtml += '</ul>';
+	                    returnHtml += '</li>';
 	                }
 	            }
 	            returnHtml += '</ul>';
@@ -31363,9 +31372,8 @@
 	            }
 	            if (deficiencyList.length > 0) {
 	                this.deficiencyLayer.source.addFeature(f);
-	                this.featureIndex++;
-	                f.setProperties({ ccId: 'CC' + this.featureIndex.toFixed() });
-	                var appendHtml = "<b>CC" + this.featureIndex.toFixed() + "</b>:&nbsp;";
+	                f.setProperties({ ccId: "CC" + props['pdpId'] });
+	                var appendHtml = "<b>CC" + props['pdpId'] + "</b>:&nbsp;";
 	                appendHtml += deficiencyList.join(', ');
 	                this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
 	            }
@@ -31402,6 +31410,76 @@
 	    function FilterControllingCriteria() {
 	        _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true);
 	    }
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignSpeedOn", {
+	        get: function () {
+	            return this.valIsOn('ccDesignSpeed');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccLaneWidthOn", {
+	        get: function () {
+	            return this.valIsOn('ccLaneWidth');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccShoulderWidthOn", {
+	        get: function () {
+	            return this.valIsOn('ccShoulderWidth');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccHorizontalCurveOn", {
+	        get: function () {
+	            return this.valIsOn('ccHorizontalCurve');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccSuperelevationOn", {
+	        get: function () {
+	            return this.valIsOn('ccSuperelevation');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccMaximumGradeOn", {
+	        get: function () {
+	            return this.valIsOn('ccMaximumGrade');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccStoppingSightOn", {
+	        get: function () {
+	            return this.valIsOn('ccStoppingSight');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccCrossSlopeOn", {
+	        get: function () {
+	            return this.valIsOn('ccCrossSlope');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccVerticalClearanceOn", {
+	        get: function () {
+	            return this.valIsOn('ccVerticalClearance');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignLoadingOn", {
+	        get: function () {
+	            return this.valIsOn('ccDesignLoading');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    return FilterControllingCriteria;
 	}(FilterBase_1.default));
 	exports.FilterControllingCriteria = FilterControllingCriteria;

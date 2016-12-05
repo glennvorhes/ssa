@@ -22,16 +22,12 @@ const ccStyle = (feature) => {
 
     let show = false;
 
-
-    for (let cc of filterControllingCritera._allValues){
-        if (props[cc] && filterControllingCritera.valIsOn(cc)){
+    for (let cc of filterControllingCritera._allValues) {
+        if (props[cc] && filterControllingCritera.valIsOn(cc)) {
             show = true;
             break;
         }
     }
-
-    show = true;
-
 
     let txtFunc = () => {
         return new ol.style.Text(
@@ -63,7 +59,6 @@ const ccStyle = (feature) => {
 };
 
 
-
 export class ControllingCriteria extends DeficiencyBase {
     static propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
         'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
@@ -87,17 +82,31 @@ export class ControllingCriteria extends DeficiencyBase {
 
             let returnHtml = 'Geometric Deficiencies';
             returnHtml += '<ul>';
-            
-            for (let cc of keyValPairs(constants.controllingCriteriaProps)){
-                if (props[cc.key]){
-                    returnHtml += `<li>${cc.value}</li>`;
+
+            for (let cc of keyValPairs(constants.controllingCriteriaProps)) {
+                if (props[cc.key]) {
+                    returnHtml += `<li>`;
+                    returnHtml += cc.value;
+
+                    let subEls = (props[cc.key] as string).split('::');
+
+                    returnHtml += '<ul>';
+
+                    for (let s of subEls) {
+                        returnHtml += `<li>${s}</li>`;
+                    }
+
+                    returnHtml += '</ul>';
+
+                    returnHtml += '</li>';
+
                 }
             }
 
             returnHtml += '</ul>';
-            
+
             return returnHtml;
-           
+
         });
     }
 
@@ -115,7 +124,7 @@ export class ControllingCriteria extends DeficiencyBase {
 
             let deficiencyList = [];
 
-            for (let f of keyValPairs(constants.controllingCriteriaProps)){
+            for (let f of keyValPairs(constants.controllingCriteriaProps)) {
                 let ccProps = props[f.key];
 
                 if (ccProps) {
@@ -126,12 +135,9 @@ export class ControllingCriteria extends DeficiencyBase {
             if (deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
 
-                this.featureIndex++;
+                f.setProperties({ccId: `CC${props['pdpId']}`});
 
-                f.setProperties({ccId: 'CC' + this.featureIndex.toFixed()});
-
-
-                let appendHtml = `<b>CC${this.featureIndex.toFixed()}</b>:&nbsp;`;
+                let appendHtml = `<b>CC${props['pdpId']}</b>:&nbsp;`;
                 appendHtml += deficiencyList.join(', ');
                 this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
 

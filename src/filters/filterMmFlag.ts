@@ -9,12 +9,12 @@ export class FilterMmFlag extends FilterBase {
         super('mm-flags', 'mm-flags-sub', true);
     }
 
-    get mmRateFlagOn() {
-        return this.valIsOn('mm-rate-flag');
+    get mmRateFlagOn(): boolean {
+        return this.valIsOn('rateFlag');
     }
 
-    get mmKabFlagOn() {
-        return this.valIsOn('mm-kab-flag');
+    get mmKabFlagOn(): boolean {
+        return this.valIsOn('kabCrshFlag');
     }
 
 }

@@ -32,11 +32,6 @@ var DeficiencyBase = (function () {
          * @private
          */
         this._map = undefined;
-        /**
-         *
-         * @type {number}
-         */
-        this.featureIndex = 0;
         this._summaryListId = summaryListId;
         /**
          *

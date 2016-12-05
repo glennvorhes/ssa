@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="../css/_testing.css">
 </head>
 <body>
-<input id="hidden-ssa-id" type="hidden" value="66">
+<input id="hidden-ssa-id" type="hidden" value="135">
 <input id="hidden-snapshot-id" type="hidden" value="0">
-<input id="hidden-mm-version" type="hidden" value="2016-05">
+<input id="hidden-mm-version" type="hidden" value="2016-09">
 <input id="hidden-stn-version" type="hidden" value="2014">
 <a href=".">Back</a><br/>
 <a href="../doc/index.html" target="_blank">Documentation</a>
@@ -60,83 +60,106 @@
                 </div>
             </div>
             <div class="row">
-                <div class="checkbox col-xs-2">
-                    <label><input id="filter-controlling-criteria" type="checkbox" value=""><strong>Controlling
-                        Criteria</strong></label>
+                <div class="checkbox col-xs-2 ">
+                    <label>
+                        <input id="filter-controlling-criteria" type="checkbox" value="">
+                        <strong>Controlling Criteria</strong>
+                    </label>
                 </div>
             </div>
             <div class="row grid round-borders">
                 <div class="row">
                     <div class="checkbox-inline col-xs-3 col-xs-offset-2">
                         <label>
-                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Design Speed">Design
-                            Speed</label>
-                    </div>
-                    <div class="checkbox-inline col-xs-3">
-                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
-                                      value="Grade">Grade</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
-                        <label><input class="filter-controlling-criteria-sub" type="checkbox" value="Lane Width">Lane
-                            Width</label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccDesignSpeed">
+                            Design Speed
+                        </label>
                     </div>
                     <div class="checkbox-inline col-xs-3">
                         <label>
-                            <input class="filter-controlling-criteria-sub" type="checkbox"
-                                   value="Stopping Sight Distance">Stopping
-                            Sight Distance</label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccMaximumGrade">
+                            Maximum Grade
+                        </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="checkbox-inline col-xs-3 col-xs-offset-2">
                         <label>
-                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Shoulder Width">Shoulder
-                            Width</label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccLaneWidth">
+                            Lane Width
+                        </label>
                     </div>
                     <div class="checkbox-inline col-xs-3">
                         <label>
-                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Pavement Cross Slope">Pavement
-                            Cross Slope</label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccStoppingSight">
+                            Stopping Sight Distance
+                        </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="checkbox-inline col-xs-3 col-xs-offset-2">
                         <label>
-                            <input class="filter-controlling-criteria-sub" type="checkbox" value="Horizontal Alignment">Horizontal
-                            Alignment</label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccShoulderWidth">
+                            Shoulder Width
+                        </label>
                     </div>
                     <div class="checkbox-inline col-xs-3">
-                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
-                                      value="Vertical Clearance">Vertical
-                            Clearance</label>
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccCrossSlope">
+                            Cross Slope
+                        </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="checkbox-inline col-xs-3 col-xs-offset-2">
-                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
-                                      value="Superelevation">Superelevation</label>
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccHorizontalCurve">
+                            Horizontal Curve Radius
+                        </label>
                     </div>
                     <div class="checkbox-inline col-xs-3">
-                        <label><input class="filter-controlling-criteria-sub" type="checkbox"
-                                      value="Structural Capacity">Structural
-                            Capacity</label>
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccVerticalClearance">
+                            Vertical Clearance
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="checkbox-inline col-xs-3 col-xs-offset-2">
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccSuperelevation">
+                            Superelevation
+                        </label>
+                    </div>
+                    <div class="checkbox-inline col-xs-3">
+                        <label>
+                            <input class="filter-controlling-criteria-sub" type="checkbox" value="ccDesignLoading">
+                            Design Loading Structural Capacity
+                        </label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="checkbox col-xs-2 ">
-                    <label><input id="mm-flags" type="checkbox" value=""><strong>Meta Manager Flags</strong></label>
+                    <label>
+                        <input id="mm-flags" type="checkbox" value="">
+                        <strong>Meta Manager Flags</strong>
+                    </label>
                 </div>
             </div>
             <div class="row grid round-borders">
                 <div class="row">
                     <div class="checkbox-inline col-xs-3 col-xs-offset-2">
-                        <label><input class="mm-flags-sub" type="checkbox" value="mm-rate-flag">Rate</label>
+                        <label>
+                            <input class="mm-flags-sub" type="checkbox" value="rateFlag">
+                            Rate
+                        </label>
                     </div>
                     <div class="checkbox-inline col-xs-3">
-                        <label><input class="mm-flags-sub" type="checkbox" value="mm-kab-flag">KAB</label>
+                        <label>
+                            <input class="mm-flags-sub" type="checkbox" value="kabCrshFlag">
+                            KAB
+                        </label>
                     </div>
                 </div>
 
@@ -144,54 +167,69 @@
         </div>
     </div>
     <div class="corridor-data-container">
+
         <div class="corridor-data">
             <label>Ssa Id</label>
-            <input type="text" readonly="" class="corridor-data-ssa-id" name="corridors[0].id.ssaId" value="64"><br>
+            <input type="text" readonly="" class="corridor-data-ssa-id" name="corridors[0].id.ssaId" value="135"><br>
             <label>Snapshot version</label>
-            <input type="text" readonly="" class="corridor-data-snapshot" name="corridors[0].id.snapshotVersion" value="0"><br>
+            <input type="text" readonly="" class="corridor-data-snapshot" name="corridors[0].id.snapshotVersion"
+                   value="0"><br>
             <label>Corridor Id</label>
-            <input type="text" readonly="" class="corridor-data-corridor-id" name="corridors[0].id.corridorId" value="0"><br>
+            <input type="text" readonly="" class="corridor-data-corridor-id" name="corridors[0].id.corridorId"
+                   value="0"><br>
             <label>Start County</label>
             <input type="text" readonly="" class="corridor-data-start-county" name="corridors[0].startCounty" value="1"><br>
             <label>End County</label>
             <input type="text" readonly="" class="corridor-data-end-county" name="corridors[0].endCounty" value="1"><br>
             <label>Highway</label>
-            <input type="text" readonly="" class="corridor-data-highway" name="corridors[0].stdhighway" value="WIS 13 NB"><br>
+            <input type="text" readonly="" class="corridor-data-highway" name="corridors[0].stdhighway"
+                   value="WIS 13 NB"><br>
             <label>Start Rp</label>
-            <input type="text" readonly="" class="corridor-data-from-rp" name="corridors[0].startRp" value="013N005M011"><br>
+            <input type="text" readonly="" class="corridor-data-from-rp" name="corridors[0].startRp"
+                   value="013N005M011"><br>
             <label>End Rp</label>
-            <input type="text" readonly="" class="corridor-data-to-rp" name="corridors[0].endRp" value="013N008M000"><br>
+            <input type="text" readonly="" class="corridor-data-to-rp" name="corridors[0].endRp"
+                   value="013N006M000"><br>
             <label>Start Pdp</label>
-            <input type="text" readonly="" class="corridor-data-from-pdp" name="corridors[0].startPdpid" value="2051"><br>
+            <input type="text" readonly="" class="corridor-data-from-pdp" name="corridors[0].startPdpid"
+                   value="2074"><br>
             <label>End Pdp</label>
-            <input type="text" readonly="" class="corridor-data-to-pdp" name="corridors[0].endPdpid" value="2053"><br>
+            <input type="text" readonly="" class="corridor-data-to-pdp" name="corridors[0].endPdpid" value="2075"><br>
             <label>Route Id</label>
             <input type="text" readonly="" class="corridor-data-route-id" name="corridors[0].rdwyRteId" value="11">
         </div>
+
         <div class="corridor-data">
             <label>Ssa Id</label>
-            <input type="text" readonly="" class="corridor-data-ssa-id" name="corridors[1].id.ssaId" value="64"><br>
+            <input type="text" readonly="" class="corridor-data-ssa-id" name="corridors[1].id.ssaId" value="135"><br>
             <label>Snapshot version</label>
-            <input type="text" readonly="" class="corridor-data-snapshot" name="corridors[1].id.snapshotVersion" value="0"><br>
+            <input type="text" readonly="" class="corridor-data-snapshot" name="corridors[1].id.snapshotVersion"
+                   value="0"><br>
             <label>Corridor Id</label>
-            <input type="text" readonly="" class="corridor-data-corridor-id" name="corridors[1].id.corridorId" value="1"><br>
+            <input type="text" readonly="" class="corridor-data-corridor-id" name="corridors[1].id.corridorId"
+                   value="1"><br>
             <label>Start County</label>
             <input type="text" readonly="" class="corridor-data-start-county" name="corridors[1].startCounty" value="1"><br>
             <label>End County</label>
             <input type="text" readonly="" class="corridor-data-end-county" name="corridors[1].endCounty" value="1"><br>
             <label>Highway</label>
-            <input type="text" readonly="" class="corridor-data-highway" name="corridors[1].stdhighway" value="WIS 13 NB"><br>
+            <input type="text" readonly="" class="corridor-data-highway" name="corridors[1].stdhighway"
+                   value="WIS 13 NB"><br>
             <label>Start Rp</label>
-            <input type="text" readonly="" class="corridor-data-from-rp" name="corridors[1].startRp" value="013N009 000"><br>
+            <input type="text" readonly="" class="corridor-data-from-rp" name="corridors[1].startRp"
+                   value="013N012 000"><br>
             <label>End Rp</label>
-            <input type="text" readonly="" class="corridor-data-to-rp" name="corridors[1].endRp" value="013N012 000"><br>
+            <input type="text" readonly="" class="corridor-data-to-rp" name="corridors[1].endRp"
+                   value="013N027 000"><br>
             <label>Start Pdp</label>
-            <input type="text" readonly="" class="corridor-data-from-pdp" name="corridors[1].startPdpid" value="2055"><br>
+            <input type="text" readonly="" class="corridor-data-from-pdp" name="corridors[1].startPdpid"
+                   value="2081"><br>
             <label>End Pdp</label>
-            <input type="text" readonly="" class="corridor-data-to-pdp" name="corridors[1].endPdpid" value="2057"><br>
+            <input type="text" readonly="" class="corridor-data-to-pdp" name="corridors[1].endPdpid" value="2090"><br>
             <label>Route Id</label>
             <input type="text" readonly="" class="corridor-data-route-id" name="corridors[1].rdwyRteId" value="11">
         </div>
+
     </div>
     <input type="hidden" id="primaryCounty" name="primaryCounty">
     <input type="hidden" id="primaryRdwyRteId" name="primaryRdwyRteId">

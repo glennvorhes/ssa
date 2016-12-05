@@ -29,7 +29,6 @@ var ccStyle = function (feature) {
             break;
         }
     }
-    show = true;
     var txtFunc = function () {
         return new custom_ol_1.default.style.Text({
             text: props['ccId'],
@@ -77,7 +76,16 @@ var ControllingCriteria = (function (_super) {
             for (var _i = 0, _a = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _i < _a.length; _i++) {
                 var cc = _a[_i];
                 if (props[cc.key]) {
-                    returnHtml += "<li>" + cc.value + "</li>";
+                    returnHtml += "<li>";
+                    returnHtml += cc.value;
+                    var subEls = props[cc.key].split('::');
+                    returnHtml += '<ul>';
+                    for (var _b = 0, subEls_1 = subEls; _b < subEls_1.length; _b++) {
+                        var s = subEls_1[_b];
+                        returnHtml += "<li>" + s + "</li>";
+                    }
+                    returnHtml += '</ul>';
+                    returnHtml += '</li>';
                 }
             }
             returnHtml += '</ul>';
@@ -103,9 +111,8 @@ var ControllingCriteria = (function (_super) {
             }
             if (deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
-                this.featureIndex++;
-                f.setProperties({ ccId: 'CC' + this.featureIndex.toFixed() });
-                var appendHtml = "<b>CC" + this.featureIndex.toFixed() + "</b>:&nbsp;";
+                f.setProperties({ ccId: "CC" + props['pdpId'] });
+                var appendHtml = "<b>CC" + props['pdpId'] + "</b>:&nbsp;";
                 appendHtml += deficiencyList.join(', ');
                 this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
             }

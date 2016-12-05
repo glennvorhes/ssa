@@ -33,7 +33,7 @@ var mmFlagStyle = function (feature) {
             })
         });
     };
-    if ((props['crashFlag'] == 'Y' && filterMmFlag_1.default.mmRateFlagOn) || props['kabrateflag'] == 'Y' && filterMmFlag_1.default.mmKabFlagOn) {
+    if ((props['rateFlag'] >= 1 && filterMmFlag_1.default.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag_1.default.mmKabFlagOn) {
         return [new custom_ol_1.default.style.Style({
                 stroke: new custom_ol_1.default.style.Stroke({
                     color: constants.mmFlagColor,
@@ -62,7 +62,14 @@ var MmFlags = (function (_super) {
             _this.deficiencyLayer.refresh();
         });
         mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
-            return "MM ID: " + props['mmId'] + "<br/>Rate Flag: " + props['crashFlag'] + "<br/>KAB Flag: " + props['kabrateflag'];
+            var rates = [];
+            if (props['rateFlag'] != null) {
+                rates.push("Rate Flag: " + props['rateFlag'].toFixed(4));
+            }
+            if (props['kabCrshFlag'] != null) {
+                rates.push("KAB Flag: " + props['kabCrshFlag'].toFixed(4));
+            }
+            return "MM ID: " + props['mmId'] + "<br/>" + rates.join('<br>');
         });
     };
     /**
@@ -74,13 +81,12 @@ var MmFlags = (function (_super) {
         for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
             var f = feats_1[_i];
             var props = f.getProperties();
-            var triggerRateFlag = props['crashFlag'] == 'Y';
-            var triggerKabFlag = props['kabrateflag'] == 'Y';
-            if (triggerRateFlag || triggerKabFlag) {
+            var triggerRateFlag = props['rateFlag'] >= 1;
+            var triggerKabFlag = props['kabCrshFlag'] >= 1;
+            if (props['rateFlag'] >= 1 || props['kabCrshFlag'] >= 1) {
                 this.deficiencyLayer.source.addFeature(f);
-                this.featureIndex++;
-                f.setProperties({ mmId: 'MM' + this.featureIndex.toFixed() });
-                var appendHtml = "<b>MM" + this.featureIndex.toFixed() + "</b>:&nbsp;";
+                f.setProperties({ mmId: "MM" + props['pdpId'] });
+                var appendHtml = "<b>MM" + props['pdpId'] + "</b>:&nbsp;";
                 var flags = [];
                 if (triggerRateFlag) {
                     flags.push('Crash Rate');

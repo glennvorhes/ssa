@@ -36,7 +36,8 @@ const mmFlagStyle = (feature: ol.Feature): Array<ol.style.Style> => {
 
     };
 
-    if ((props['crashFlag'] == 'Y' && filterMmFlag.mmRateFlagOn) || props['kabrateflag'] == 'Y' && filterMmFlag.mmKabFlagOn) {
+
+    if ((props['rateFlag'] >= 1 && filterMmFlag.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag.mmKabFlagOn) {
         return [new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: constants.mmFlagColor,
@@ -68,7 +69,18 @@ export class MmFlags extends DeficiencyBase {
         });
 
         mapPopup.addVectorPopup(this.deficiencyLayer, (props) => {
-            return `MM ID: ${props['mmId']}<br/>Rate Flag: ${props['crashFlag']}<br/>KAB Flag: ${props['kabrateflag']}`;
+
+            let rates = [];
+
+            if (props['rateFlag'] != null){
+                rates.push(`Rate Flag: ${props['rateFlag'].toFixed(4)}`);
+            }
+
+            if (props['kabCrshFlag'] != null){
+                rates.push(`KAB Flag: ${props['kabCrshFlag'].toFixed(4)}`);
+            }
+
+            return `MM ID: ${props['mmId']}<br/>${rates.join('<br>')}`;
         });
     }
 
@@ -82,16 +94,16 @@ export class MmFlags extends DeficiencyBase {
 
         for (let f of feats) {
             let props = f.getProperties();
-            let triggerRateFlag = props['crashFlag'] == 'Y';
-            let triggerKabFlag = props['kabrateflag'] == 'Y';
 
-            if (triggerRateFlag || triggerKabFlag) {
+            let triggerRateFlag = props['rateFlag'] >= 1;
+            let triggerKabFlag =props['kabCrshFlag'] >= 1;
+
+            if (props['rateFlag'] >= 1 || props['kabCrshFlag'] >= 1) {
+
                 this.deficiencyLayer.source.addFeature(f);
-                
-                this.featureIndex++;
 
-                f.setProperties({mmId: 'MM' + this.featureIndex.toFixed()});
-                let appendHtml = `<b>MM${this.featureIndex.toFixed()}</b>:&nbsp;`;
+                f.setProperties({mmId: `MM${props['pdpId']}`});
+                let appendHtml = `<b>MM${props['pdpId']}</b>:&nbsp;`;
                 let flags = [];
                 if (triggerRateFlag) {
                     flags.push('Crash Rate');

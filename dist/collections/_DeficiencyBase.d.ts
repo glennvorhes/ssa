@@ -11,7 +11,6 @@ declare class DeficiencyBase {
     deficiencyLayer: LayerBaseVectorGeoJson;
     _sortedFeatures: SortedFeatures;
     $summaryList: JQuery;
-    featureIndex: number;
     _summaryListId: string;
     /**
      *

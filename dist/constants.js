@@ -7,18 +7,18 @@ exports.ccListId = 'cc-deficiency-list';
 exports.pdpDataAttr = 'data-pdp-id';
 exports.mmFlagColor = '#00FF00';
 exports.controllingCriteriaColor = '#FFC632';
-exports.contollingCriteriaLookup = {
-    'Design Speed': 'Design Speed',
-    'Grade': 'Grade',
-    'Lane Width': 'Lane Width',
-    'Stopping Sight Distance': 'Stopping Sight Distance',
-    'Shoulder Width': 'Shoulder Width',
-    'Pavement Cross Slope': 'Pavement Cross Slope',
-    'Horizontal Alignment': 'Horizontal Alignment',
-    'Vertical Clearance': 'Vertical Clearance',
-    'Superelevation': 'Superelevation',
-    'Structural Capacity': 'Structural Capacity'
-};
+// export const contollingCriteriaLookup = {
+//     'ccDesignSpeed': 'Design Speed',
+//     'Grade': 'Grade',
+//     'Lane Width': 'Lane Width',
+//     'Stopping Sight Distance': 'Stopping Sight Distance',
+//     'Shoulder Width': 'Shoulder Width',
+//     'Pavement Cross Slope': 'Pavement Cross Slope',
+//     'Horizontal Alignment': 'Horizontal Alignment',
+//     'Vertical Clearance': 'Vertical Clearance',
+//     'Superelevation': 'Superelevation',
+//     'Structural Capacity': 'Structural Capacity'
+// };
 exports.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
     'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
 exports.propValues = ['Design Speed', 'Lane Width', 'Shoulder Width', 'Horizontal Alignment', 'Superelevation',

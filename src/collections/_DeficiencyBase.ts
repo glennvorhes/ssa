@@ -17,7 +17,6 @@ class DeficiencyBase {
     _sortedFeatures: SortedFeatures;
 
     $summaryList: JQuery;
-    featureIndex: number;
     _summaryListId: string;
 
     /**
@@ -51,12 +50,6 @@ class DeficiencyBase {
          * @private
          */
         this._map = undefined;
-
-        /**
-         *
-         * @type {number}
-         */
-        this.featureIndex = 0;
 
         this._summaryListId = summaryListId;
 

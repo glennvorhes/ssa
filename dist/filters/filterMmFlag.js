@@ -15,14 +15,14 @@ var FilterMmFlag = (function (_super) {
     }
     Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
         get: function () {
-            return this.valIsOn('mm-rate-flag');
+            return this.valIsOn('rateFlag');
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(FilterMmFlag.prototype, "mmKabFlagOn", {
         get: function () {
-            return this.valIsOn('mm-kab-flag');
+            return this.valIsOn('kabCrshFlag');
         },
         enumerable: true,
         configurable: true
