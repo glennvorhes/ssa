@@ -111,8 +111,8 @@ var ControllingCriteria = (function (_super) {
             }
             if (deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
-                f.setProperties({ ccId: "CC" + props['pdpId'] });
-                var appendHtml = "<b>CC" + props['pdpId'] + "</b>:&nbsp;";
+                f.setProperties({ ccId: "" + props['pdpId'] });
+                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
                 appendHtml += deficiencyList.join(', ');
                 this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
             }

@@ -13,6 +13,7 @@ import {popupCallback} from 'webmapsjs/dist/olHelpers/mapPopupCls'
 import ol from 'custom-ol';
 
 import $ = require('jquery');
+import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";
 const nm = provide('ssa');
 
 /**
@@ -223,7 +224,13 @@ export class CorridorCollection {
     }
 
     get fullExtent(): ol.Extent|Array<number>{
-        return calcExtent.calculateExtent(this._corridorArray);
+        let lyrs: LayerBaseVector[] = [];
+
+        for (let c of this._corridorArray){
+            lyrs.push(c.layer);
+        }
+
+        return calcExtent.calculateExtent(lyrs);
     }
 
     /**

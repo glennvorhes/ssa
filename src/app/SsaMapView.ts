@@ -18,6 +18,7 @@ import * as constants from '../constants';
 import ol from 'custom-ol';
 import ajx from '../ajaxGetters';
 import $ = require('jquery');
+import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";
 
 const nm = provide('ssa');
 
@@ -156,7 +157,14 @@ export class SsaMapView extends SsaMapBase {
     }
 
     _afterCorridorLoad() {
-        calcExtent.fitToMap(this._corridorArray, this.mainMap);
+        let lyrs: LayerBaseVector[] = [];
+
+        for (let c of this._corridorArray){
+            lyrs.push(c.layer);
+        }
+
+
+        calcExtent.fitToMap(lyrs, this.mainMap);
         crashData.init(this.mainMap, this._ssaId, this._snap);
         mmFlags.afterLoad();
         controllingCriteria.afterLoad();

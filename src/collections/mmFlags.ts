@@ -102,8 +102,8 @@ export class MmFlags extends DeficiencyBase {
 
                 this.deficiencyLayer.source.addFeature(f);
 
-                f.setProperties({mmId: `MM${props['pdpId']}`});
-                let appendHtml = `<b>MM${props['pdpId']}</b>:&nbsp;`;
+                f.setProperties({mmId: `${props['pdpId']}`});
+                let appendHtml = `<b>${props['pdpId']}</b>:&nbsp;`;
                 let flags = [];
                 if (triggerRateFlag) {
                     flags.push('Crash Rate');

@@ -85,8 +85,8 @@ var MmFlags = (function (_super) {
             var triggerKabFlag = props['kabCrshFlag'] >= 1;
             if (props['rateFlag'] >= 1 || props['kabCrshFlag'] >= 1) {
                 this.deficiencyLayer.source.addFeature(f);
-                f.setProperties({ mmId: "MM" + props['pdpId'] });
-                var appendHtml = "<b>MM" + props['pdpId'] + "</b>:&nbsp;";
+                f.setProperties({ mmId: "" + props['pdpId'] });
+                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
                 var flags = [];
                 if (triggerRateFlag) {
                     flags.push('Crash Rate');

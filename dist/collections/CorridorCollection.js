@@ -170,7 +170,12 @@ var CorridorCollection = (function () {
     });
     Object.defineProperty(CorridorCollection.prototype, "fullExtent", {
         get: function () {
-            return calcExtent.calculateExtent(this._corridorArray);
+            var lyrs = [];
+            for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
+                var c = _a[_i];
+                lyrs.push(c.layer);
+            }
+            return calcExtent.calculateExtent(lyrs);
         },
         enumerable: true,
         configurable: true

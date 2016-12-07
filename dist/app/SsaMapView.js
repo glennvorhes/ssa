@@ -115,7 +115,12 @@ var SsaMapView = (function (_super) {
         controllingCriteria_1.default.init(this.mainMap);
     }
     SsaMapView.prototype._afterCorridorLoad = function () {
-        calcExtent.fitToMap(this._corridorArray, this.mainMap);
+        var lyrs = [];
+        for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
+            var c = _a[_i];
+            lyrs.push(c.layer);
+        }
+        calcExtent.fitToMap(lyrs, this.mainMap);
         crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
         mmFlags_1.default.afterLoad();
         controllingCriteria_1.default.afterLoad();

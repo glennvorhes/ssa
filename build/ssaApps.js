@@ -14105,7 +14105,7 @@
 	         * @returns {ol.Extent|undefined} layer extent
 	         */
 	        get: function () {
-	            return ext.calculateExtent(this.layer);
+	            return ext.calculateExtent([this.layer]);
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -14144,9 +14144,6 @@
 	 */
 	function calculateExtent(layers) {
 	    "use strict";
-	    if (layers.constructor.name != 'Array') {
-	        layers = [layers];
-	    }
 	    var hasExtent = false;
 	    var minX = 10E100;
 	    var minY = 10E100;
@@ -14179,16 +14176,12 @@
 	nm.calculateExtent = calculateExtent;
 	/**
 	 * given one or an array of layers, fit to the map
-	 * @param {Array<LayerBaseVector>|Array<ol.layer.Vector>|LayerBaseVector|ol.layer.Vector} layers - array of layers or single
-	 * @param {ol.Map} mp - the map to fit
-	 * @param {number|undefined} [zoomOut=undefined] - levels to zoom out after fit
+	 * @param layers - array of layers or single
+	 * @param  mp - the map to fit
+	 * @param [zoomOut=undefined] - levels to zoom out after fit
 	 */
 	function fitToMap(layers, mp, zoomOut) {
 	    "use strict";
-	    /**
-	     *
-	     * @type {ol.Extent|undefined}
-	     */
 	    var ext = calculateExtent(layers);
 	    if (typeof ext == 'undefined') {
 	        return;
@@ -29921,7 +29914,12 @@
 	    });
 	    Object.defineProperty(CorridorCollection.prototype, "fullExtent", {
 	        get: function () {
-	            return calcExtent.calculateExtent(this._corridorArray);
+	            var lyrs = [];
+	            for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
+	                var c = _a[_i];
+	                lyrs.push(c.layer);
+	            }
+	            return calcExtent.calculateExtent(lyrs);
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -30311,7 +30309,12 @@
 	        controllingCriteria_1.default.init(this.mainMap);
 	    }
 	    SsaMapView.prototype._afterCorridorLoad = function () {
-	        calcExtent.fitToMap(this._corridorArray, this.mainMap);
+	        var lyrs = [];
+	        for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
+	            var c = _a[_i];
+	            lyrs.push(c.layer);
+	        }
+	        calcExtent.fitToMap(lyrs, this.mainMap);
 	        crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
 	        mmFlags_1.default.afterLoad();
 	        controllingCriteria_1.default.afterLoad();
@@ -31026,8 +31029,8 @@
 	            var triggerKabFlag = props['kabCrshFlag'] >= 1;
 	            if (props['rateFlag'] >= 1 || props['kabCrshFlag'] >= 1) {
 	                this.deficiencyLayer.source.addFeature(f);
-	                f.setProperties({ mmId: "MM" + props['pdpId'] });
-	                var appendHtml = "<b>MM" + props['pdpId'] + "</b>:&nbsp;";
+	                f.setProperties({ mmId: "" + props['pdpId'] });
+	                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
 	                var flags = [];
 	                if (triggerRateFlag) {
 	                    flags.push('Crash Rate');
@@ -31372,8 +31375,8 @@
 	            }
 	            if (deficiencyList.length > 0) {
 	                this.deficiencyLayer.source.addFeature(f);
-	                f.setProperties({ ccId: "CC" + props['pdpId'] });
-	                var appendHtml = "<b>CC" + props['pdpId'] + "</b>:&nbsp;";
+	                f.setProperties({ ccId: "" + props['pdpId'] });
+	                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
 	                appendHtml += deficiencyList.join(', ');
 	                this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
 	            }

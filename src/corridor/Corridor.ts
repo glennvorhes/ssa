@@ -380,7 +380,7 @@ class Corridor {
      * @returns {ol.Extent|undefined} layer extent
      */
     get extent(): ol.Extent|Array<number> {
-        return ext.calculateExtent(this.layer);
+        return ext.calculateExtent([this.layer]);
     }
 
     get loaded(): boolean {

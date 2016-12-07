@@ -135,9 +135,9 @@ export class ControllingCriteria extends DeficiencyBase {
             if (deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
 
-                f.setProperties({ccId: `CC${props['pdpId']}`});
+                f.setProperties({ccId: `${props['pdpId']}`});
 
-                let appendHtml = `<b>CC${props['pdpId']}</b>:&nbsp;`;
+                let appendHtml = `<b>${props['pdpId']}</b>:&nbsp;`;
                 appendHtml += deficiencyList.join(', ');
                 this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
 

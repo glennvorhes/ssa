@@ -331,7 +331,7 @@ var Corridor = (function () {
          * @returns {ol.Extent|undefined} layer extent
          */
         get: function () {
-            return ext.calculateExtent(this.layer);
+            return ext.calculateExtent([this.layer]);
         },
         enumerable: true,
         configurable: true
