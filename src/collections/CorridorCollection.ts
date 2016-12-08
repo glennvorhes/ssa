@@ -9,7 +9,6 @@ import makeGuid from 'webmapsjs/dist/util/makeGuid';
 import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
 import {popupCallback} from 'webmapsjs/dist/olHelpers/mapPopupCls'
-
 import ol from 'custom-ol';
 
 import $ = require('jquery');
@@ -82,11 +81,14 @@ export class CorridorCollection {
         this._afterChange = afterChange;
 
         let _corridorDataContainer = $(`.${corridorDataIdOrClass}, #${corridorDataIdOrClass}`);
+
         if (_corridorDataContainer.length == 0) {
             throw 'data container not found';
         }
 
         this.$corridorDataContainer = $(_corridorDataContainer[0]);
+
+
         this.$corridorDataContainer.addClass('corridor-data-container');
 
         this._map = theMap;
@@ -135,22 +137,24 @@ export class CorridorCollection {
 
             return returnHtml;
         };
-
     }
 
 
     /**
      * add a corridor
      * @param {Corridor} c - the corridor to be added
+     * @param [refreshData=true] c - the corridor to be added
      */
-    addCorridorCreate(c) {
+    addCorridorCreate(c: Corridor, refreshData = true) {
         this._corridorArray.push(c);
         this._coridorLookup[c.clientId] = c;
         this._map.addLayer(c.olLayer);
         this._map.addLayer(c.nodeLayer.olLayer);
         c.layer.name = corridorName(c.rpFrom, c.rpTo);
         mapPopup.addVectorPopup(c.layer, this._popupStyle);
-        this.refreshHtmlCreate();
+        if (refreshData){
+            this.refreshHtmlCreate();
+        }
     }
 
     /**
@@ -286,13 +290,18 @@ export class CorridorCollection {
 
     loadExistingCorridors() {
 
-        let $existingCorridors = $('.' + this._dataClass);
         let loadedCount = 0;
 
+        let existingCorridors = document.getElementsByClassName(this._dataClass);
+
+        // throw 'cat';
 
         // parse the data from the hidden input elements
-        $existingCorridors.each((n, el) => {
+        for (let n = 0; n < existingCorridors.length; n++) {
+            let el = existingCorridors[n];
+
             let conf = new CorridorConfig(el);
+
 
             let corridor = new Corridor(
                 conf.startPdp, conf.endPdp, conf.startRp, conf.endRp,
@@ -307,6 +316,8 @@ export class CorridorCollection {
                             if (ext) {
                                 this._map.getView().fit(ext as ol.Extent, this._map.getSize());
                             }
+
+                            this.refreshHtmlCreate();
                         }
                     }
                 }
@@ -316,11 +327,10 @@ export class CorridorCollection {
             if (n == 0) {
                 $('#primaryCounty').val(corridor.countyStart);
                 $('#primaryRdwyRteId').val(corridor.routeId);
-
             }
 
-            this.addCorridorCreate(corridor);
-        });
+            this.addCorridorCreate(corridor, false);
+        }
     }
 }
 

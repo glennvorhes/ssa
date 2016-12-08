@@ -29844,15 +29844,19 @@
 	    /**
 	     * add a corridor
 	     * @param {Corridor} c - the corridor to be added
+	     * @param [refreshData=true] c - the corridor to be added
 	     */
-	    CorridorCollection.prototype.addCorridorCreate = function (c) {
+	    CorridorCollection.prototype.addCorridorCreate = function (c, refreshData) {
+	        if (refreshData === void 0) { refreshData = true; }
 	        this._corridorArray.push(c);
 	        this._coridorLookup[c.clientId] = c;
 	        this._map.addLayer(c.olLayer);
 	        this._map.addLayer(c.nodeLayer.olLayer);
 	        c.layer.name = corridorName(c.rpFrom, c.rpTo);
 	        mapPopup_1.default.addVectorPopup(c.layer, this._popupStyle);
-	        this.refreshHtmlCreate();
+	        if (refreshData) {
+	            this.refreshHtmlCreate();
+	        }
 	    };
 	    /**
 	     * delete/remove a corridor
@@ -29983,10 +29987,12 @@
 	    };
 	    CorridorCollection.prototype.loadExistingCorridors = function () {
 	        var _this = this;
-	        var $existingCorridors = $('.' + this._dataClass);
 	        var loadedCount = 0;
+	        var existingCorridors = document.getElementsByClassName(this._dataClass);
+	        // throw 'cat';
 	        // parse the data from the hidden input elements
-	        $existingCorridors.each(function (n, el) {
+	        for (var n = 0; n < existingCorridors.length; n++) {
+	            var el = existingCorridors[n];
 	            var conf = new CorridorConfig_1.default(el);
 	            var corridor = new Corridor_1.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
 	                loadedCallback: function () {
@@ -29997,6 +30003,7 @@
 	                        if (ext) {
 	                            _this._map.getView().fit(ext, _this._map.getSize());
 	                        }
+	                        _this.refreshHtmlCreate();
 	                    }
 	                }
 	            });
@@ -30005,8 +30012,8 @@
 	                $('#primaryCounty').val(corridor.countyStart);
 	                $('#primaryRdwyRteId').val(corridor.routeId);
 	            }
-	            _this.addCorridorCreate(corridor);
-	        });
+	            this.addCorridorCreate(corridor, false);
+	        }
 	    };
 	    return CorridorCollection;
 	}());
@@ -30074,6 +30081,9 @@
 	        outHtml += labelValueHelper('End RP', this.endRp);
 	        outHtml += '</div>';
 	        return outHtml;
+	    };
+	    CorridorConfig.prototype.toString = function () {
+	        return "CorId " + this.corridorId + " " + this.startRp + " - " + this.endRp;
 	    };
 	    return CorridorConfig;
 	}());

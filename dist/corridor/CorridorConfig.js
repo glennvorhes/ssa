@@ -50,6 +50,9 @@ var CorridorConfig = (function () {
         outHtml += '</div>';
         return outHtml;
     };
+    CorridorConfig.prototype.toString = function () {
+        return "CorId " + this.corridorId + " " + this.startRp + " - " + this.endRp;
+    };
     return CorridorConfig;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });

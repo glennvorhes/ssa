@@ -19,5 +19,6 @@ declare class CorridorConfig {
      * @returns {string} bootstrap formatted corridor description
      */
     bootstrapHtml(index: any): string;
+    toString(): string;
 }
 export default CorridorConfig;

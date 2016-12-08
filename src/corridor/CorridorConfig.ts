@@ -85,6 +85,10 @@ class CorridorConfig {
         outHtml += '</div>';
         return outHtml;
     }
+
+    public toString(): string{
+        return `CorId ${this.corridorId} ${this.startRp} - ${this.endRp}`;
+    }
 }
 
 export default CorridorConfig;

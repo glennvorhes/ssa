@@ -29,8 +29,9 @@ export declare class CorridorCollection {
     /**
      * add a corridor
      * @param {Corridor} c - the corridor to be added
+     * @param [refreshData=true] c - the corridor to be added
      */
-    addCorridorCreate(c: any): void;
+    addCorridorCreate(c: Corridor, refreshData?: boolean): void;
     /**
      * delete/remove a corridor
      * @param {string|Corridor} cor - the corridor to be removed
