@@ -16,41 +16,9 @@ import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 
 import ol from 'custom-ol';
 import $ = require('jquery');
-/**
- *
- * @param {string} inDate - input date to format
- * @returns {string} formatted date
- */
-function _dteStrip(inDate) {
-    "use strict";
-    let parts = inDate.split('/');
-    let m = parts[0];
-    let d = parts[1];
-    let y = parts[2];
 
-    if (m[0] == '0') {
-        m = m.slice(1);
-    }
 
-    if (d[0] == '0') {
-        d = d.slice(1);
-    }
-    y = y.slice(2);
-
-    return [m, d, y].join('/');
-}
-
-function _timeStrip(tm) {
-    "use strict";
-    tm = tm.replace(/:\d{2} /, '');
-    if (tm[0] == '0') {
-        tm = tm.slice(1);
-    }
-
-    return tm;
-}
-
-function injColor(inj) {
+function injColor(inj: string): string {
     "use strict";
 
     let color = {
@@ -66,14 +34,84 @@ function injColor(inj) {
 
 
 export interface CrashDataObject {
+    pdpId: number;
     cumulMile: number;
+    accdnmbr: string;
+    doctnmbr: string;
+    multiflag: string;
+    accDate: string;
+    ntfyHour: number;
+    county: string;
+    municipality: string;
+    munitype: string;
+    onHwyRp: string;
+    onHwyDir: string;
+    onStr: string;
+    athHwy: string;
+    atStr: string;
+    intDir: string;
+    intDis: string;
+    accdSvr: string;
+    injSvr: string;
+    totFatl: number;
+    toInj: number;
+    accdType: string;
     mnrColl: string;
-    deer: boolean;
+    accdLoc: string;
+    hwyClass: string;
+    roadCond: string;
+    wthrCond: string;
+    consZone: string;
+    alcFlag: string;
+    bikeFlag: string;
+    cyclFlag: string;
+    pedFlag: string;
+    totVeh: number;
     lon: number;
     lat: number;
-    time: string;
-    injSvr: string;
-    dte: string
+}
+
+let crashProps = [
+    'doctnmbr',
+    'multiflag',
+    'accDate',
+    'ntfyHour',
+    'county',
+    'municipality',
+    'munitype',
+    'onHwyRp',
+    'onHwyDir',
+    'onStr',
+    'athHwy',
+    'atStr',
+    'intDir',
+    'intDis',
+    'accdSvr',
+    'injSvr',
+    'totFatl',
+    'toInj',
+    'accdType',
+    'mnrColl',
+    'accdLoc',
+    'hwyClass',
+    'roadCond',
+    'wthrCond',
+    'consZone',
+    'alcFlag',
+    'bikeFlag',
+    'cyclFlag',
+    'pedFlag',
+    'totVeh',
+    'lon',
+    'lat'
+];
+
+function processVal(v) {
+    if (v == null || typeof v == 'undefined') {
+        return '';
+    } else {
+        return v;
+    }
 }
 
 /**
@@ -110,10 +148,7 @@ function _crashInfoHelper(crashData: Array<CrashDataObject>): string {
 
 
         returnHtml += `<li style="background-color: ${injColor(c.injSvr)};">`;
-        returnHtml += _dteStrip(c.dte);
-        if (c.time) {
-            returnHtml += ', ' + _timeStrip(c.time);
-        }
+        returnHtml += c.accDate ? c.accDate : '';
 
         if (c.mnrColl) {
             returnHtml += ', ' + c.mnrColl;
@@ -201,16 +236,18 @@ export class CrashData {
 
     /**
      *
-     * @param {ol.Map} m - the main map
+     * @param m
+     * @param ssaId
+     * @param snapshot
      */
     init(m: ol.Map, ssaId: number, snapshot: number) {
         mapPopup.addVectorPopup(this.pointCrashes, (props) => {
             let returnHtml = '<table class="crash-popup-table">';
-            returnHtml += `<tr><td>Date</td><td>${props['dte'] + ' ' + props['time']}</td></tr>`;
-            returnHtml += `<tr><td>Cuml. Ml.</td><td>${props['cumulMile']}</td></tr>`;
-            returnHtml += `<tr><td>Severity</td><td>${props['injSvr']}</td></tr>`;
-            returnHtml += `<tr><td>Lat</td><td>${props['lat']}</td></tr>`;
-            returnHtml += `<tr><td>Lon</td><td>${props['lon']}</td></tr>`;
+
+
+            for (let p of crashProps) {
+                returnHtml += `<tr><td>${p}</td><td>${processVal(props[p])}</td></tr>`;
+            }
             returnHtml += '</table>';
 
             return returnHtml;
@@ -229,6 +266,8 @@ export class CrashData {
     }
 
     _processCrashData(d) {
+
+        console.log(d);
 
         for (let itm of objHelp.keyValPairs(d)) {
 

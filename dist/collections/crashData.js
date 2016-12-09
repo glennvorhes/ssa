@@ -14,34 +14,6 @@ var proj = require('webmapsjs/dist/olHelpers/projections');
 var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
 var custom_ol_1 = require('custom-ol');
 var $ = require('jquery');
-/**
- *
- * @param {string} inDate - input date to format
- * @returns {string} formatted date
- */
-function _dteStrip(inDate) {
-    "use strict";
-    var parts = inDate.split('/');
-    var m = parts[0];
-    var d = parts[1];
-    var y = parts[2];
-    if (m[0] == '0') {
-        m = m.slice(1);
-    }
-    if (d[0] == '0') {
-        d = d.slice(1);
-    }
-    y = y.slice(2);
-    return [m, d, y].join('/');
-}
-function _timeStrip(tm) {
-    "use strict";
-    tm = tm.replace(/:\d{2} /, '');
-    if (tm[0] == '0') {
-        tm = tm.slice(1);
-    }
-    return tm;
-}
 function injColor(inj) {
     "use strict";
     var color = {
@@ -52,6 +24,48 @@ function injColor(inj) {
         'P': 'rgb(141,227,230)'
     }[inj];
     return color || 'rgba(255,255,255,0)';
+}
+var crashProps = [
+    'doctnmbr',
+    'multiflag',
+    'accDate',
+    'ntfyHour',
+    'county',
+    'municipality',
+    'munitype',
+    'onHwyRp',
+    'onHwyDir',
+    'onStr',
+    'athHwy',
+    'atStr',
+    'intDir',
+    'intDis',
+    'accdSvr',
+    'injSvr',
+    'totFatl',
+    'toInj',
+    'accdType',
+    'mnrColl',
+    'accdLoc',
+    'hwyClass',
+    'roadCond',
+    'wthrCond',
+    'consZone',
+    'alcFlag',
+    'bikeFlag',
+    'cyclFlag',
+    'pedFlag',
+    'totVeh',
+    'lon',
+    'lat'
+];
+function processVal(v) {
+    if (v == null || typeof v == 'undefined') {
+        return '';
+    }
+    else {
+        return v;
+    }
 }
 /**
  *
@@ -83,10 +97,7 @@ function _crashInfoHelper(crashData) {
             crashSummary[c.injSvr]++;
         }
         returnHtml += "<li style=\"background-color: " + injColor(c.injSvr) + ";\">";
-        returnHtml += _dteStrip(c.dte);
-        if (c.time) {
-            returnHtml += ', ' + _timeStrip(c.time);
-        }
+        returnHtml += c.accDate ? c.accDate : '';
         if (c.mnrColl) {
             returnHtml += ', ' + c.mnrColl;
         }
@@ -154,17 +165,18 @@ var CrashData = (function () {
     }
     /**
      *
-     * @param {ol.Map} m - the main map
+     * @param m
+     * @param ssaId
+     * @param snapshot
      */
     CrashData.prototype.init = function (m, ssaId, snapshot) {
         var _this = this;
         mapPopup_1.default.addVectorPopup(this.pointCrashes, function (props) {
             var returnHtml = '<table class="crash-popup-table">';
-            returnHtml += "<tr><td>Date</td><td>" + (props['dte'] + ' ' + props['time']) + "</td></tr>";
-            returnHtml += "<tr><td>Cuml. Ml.</td><td>" + props['cumulMile'] + "</td></tr>";
-            returnHtml += "<tr><td>Severity</td><td>" + props['injSvr'] + "</td></tr>";
-            returnHtml += "<tr><td>Lat</td><td>" + props['lat'] + "</td></tr>";
-            returnHtml += "<tr><td>Lon</td><td>" + props['lon'] + "</td></tr>";
+            for (var _i = 0, crashProps_1 = crashProps; _i < crashProps_1.length; _i++) {
+                var p = crashProps_1[_i];
+                returnHtml += "<tr><td>" + p + "</td><td>" + processVal(props[p]) + "</td></tr>";
+            }
             returnHtml += '</table>';
             return returnHtml;
         });
@@ -177,6 +189,7 @@ var CrashData = (function () {
         m.addLayer(this.pointCrashes.olLayer);
     };
     CrashData.prototype._processCrashData = function (d) {
+        console.log(d);
         for (var _i = 0, _a = objHelp.keyValPairs(d); _i < _a.length; _i++) {
             var itm = _a[_i];
             /**

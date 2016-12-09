@@ -1,14 +1,41 @@
 import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 import ol from 'custom-ol';
 export interface CrashDataObject {
+    pdpId: number;
     cumulMile: number;
+    accdnmbr: string;
+    doctnmbr: string;
+    multiflag: string;
+    accDate: string;
+    ntfyHour: number;
+    county: string;
+    municipality: string;
+    munitype: string;
+    onHwyRp: string;
+    onHwyDir: string;
+    onStr: string;
+    athHwy: string;
+    atStr: string;
+    intDir: string;
+    intDis: string;
+    accdSvr: string;
+    injSvr: string;
+    totFatl: number;
+    toInj: number;
+    accdType: string;
     mnrColl: string;
-    deer: boolean;
+    accdLoc: string;
+    hwyClass: string;
+    roadCond: string;
+    wthrCond: string;
+    consZone: string;
+    alcFlag: string;
+    bikeFlag: string;
+    cyclFlag: string;
+    pedFlag: string;
+    totVeh: number;
     lon: number;
     lat: number;
-    time: string;
-    injSvr: string;
-    dte: string;
 }
 export declare class CrashData {
     pointCrashes: LayerBaseVectorGeoJson;
@@ -21,7 +48,9 @@ export declare class CrashData {
     constructor();
     /**
      *
-     * @param {ol.Map} m - the main map
+     * @param m
+     * @param ssaId
+     * @param snapshot
      */
     init(m: ol.Map, ssaId: number, snapshot: number): void;
     _processCrashData(d: any): void;
