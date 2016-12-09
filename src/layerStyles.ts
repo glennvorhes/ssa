@@ -66,20 +66,21 @@ export function layerConfigHelper(name: string, color: string, visible: boolean)
     };
 }
 
-export const mmPopupContent = (props: {[s: string]: string|number}) => {
+export const mmPopupContent = (props: Object) => {
+
+    console.log(props);
 
     let returnHtml = '<table class="mm-popup-table">';
     returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
-    returnHtml += `<tr><td>Highway</td><td>${props['hwyDir']}</td></tr>`;
-    returnHtml += `<tr><td>Description</td><td>${props['descrip'] ? props['descrip'] : '-'}</td></tr>`;
-    returnHtml += `<tr><td>Divided</td><td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}</td></tr>`;
+    returnHtml += `<tr><td>Highway</td><td>${props['stdName']}</td></tr>`;
+    returnHtml += `<tr><td>Description</td><td>${props['rpDesc'] ? props['rpDesc'] : '-'}</td></tr>`;
+    returnHtml += `<tr><td>Divided</td><td>${props['divUnd']}</td></tr>`;
     returnHtml += `<tr><td>From RP</td><td>${props['startRp']}</td></tr>`;
     returnHtml += `<tr><td>To RP</td><td>${props['endRp']}</td></tr>`;
     returnHtml += '</table>';
 
     return returnHtml;
 };
-
 
 export const segNodeStyle = new ol.style.Style({
     image: new ol.style.RegularShape({

@@ -13,6 +13,7 @@ import ol from 'custom-ol';
 
 import $ = require('jquery');
 import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";
+import {mmPopupContent} from "../layerStyles";
 const nm = provide('ssa');
 
 /**
@@ -126,16 +127,7 @@ export class CorridorCollection {
                 return false;
             }
 
-            let returnHtml = '<table class="mm-popup-table">';
-            returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
-            returnHtml += `<tr><td>Highway</td><td>${props['hwyDir']}</td></tr>`;
-            returnHtml += `<tr><td>Description</td><td>${props['descrip'] ? props['descrip'] : '-'}</td></tr>`;
-            returnHtml += `<tr><td>Divided</td><td>${props['divUnd'] == 'D' ? 'Yes' : 'No'}</td></tr>`;
-            returnHtml += `<tr><td>From RP</td><td>${props['pdpFrom']}</td></tr>`;
-            returnHtml += `<tr><td>To RP</td><td>${props['pdpTo']}</td></tr>`;
-            returnHtml += '</table>';
-
-            return returnHtml;
+            return mmPopupContent(props);
         };
     }
 
@@ -293,8 +285,6 @@ export class CorridorCollection {
         let loadedCount = 0;
 
         let existingCorridors = document.getElementsByClassName(this._dataClass);
-
-        // throw 'cat';
 
         // parse the data from the hidden input elements
         for (let n = 0; n < existingCorridors.length; n++) {

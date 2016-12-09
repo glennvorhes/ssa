@@ -97,18 +97,6 @@ export class SegmentPicker extends SelectBoxBase {
             visible: false
         });
 
-        // /**
-        //  *
-        //  * @type {ol.layer.Vector}
-        //  * @private
-        //  */
-        // this._segmentSelectionLayer = new ol.layer.Vector({
-        //     source: new ol.source.Vector(),
-        //     style: this._isFrom ? layerStyles.segmentSelectionStyleFrom : layerStyles.segmentSelectionStyleTo,
-        //     zIndex: 100,
-        //     visible: false
-        // });
-
 
         /**
          *
@@ -167,6 +155,25 @@ export class SegmentPicker extends SelectBoxBase {
 
         this._enabled = false;
         this._layersVisible = false;
+
+        this._box.click((evt) => {
+            evt.stopPropagation();
+        });
+
+        this._box.parent('div').click(() => {
+            if (this._sortedFeatures == null){
+                return;
+            }
+
+            let selectedFeature = this._sortedFeatures.getFeature(this.selectedPdpId) as ol.Feature;
+
+            if (selectedFeature == null){
+                return;
+            }
+
+            mapPopup.map.getView().fit(selectedFeature.getGeometry().getExtent(), mapPopup.map.getSize());
+            mapPopup.map.getView().setZoom(mapPopup.map.getView().getZoom() - 2);
+        })
     }
 
 
@@ -176,8 +183,8 @@ export class SegmentPicker extends SelectBoxBase {
     _processAjaxResult(arr) {
 
         arr.sort((a, b) => {
-            let c = this._isFrom ? a['properties']['pdpFrom'] : a['properties']['pdpTo'];
-            let d = this._isFrom ? b['properties']['pdpFrom'] : b['properties']['pdpTo'];
+            let c = this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
+            let d = this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
 
             if (c == d) {
                 return 0;
@@ -189,10 +196,10 @@ export class SegmentPicker extends SelectBoxBase {
         for (let feat of arr) {
             let props = feat['properties'];
             if (this._isFrom) {
-                this._box.append(`<option value="${props['pdpId']}">${props['pdpFrom']}</option>`);
+                this._box.append(`<option value="${props['pdpId']}">${props['startRp']}</option>`);
 
             } else {
-                this._box.append(`<option value="${props['pdpId']}">${props['pdpTo']}</option>`);
+                this._box.append(`<option value="${props['pdpId']}">${props['endRp']}</option>`);
             }
         }
     }

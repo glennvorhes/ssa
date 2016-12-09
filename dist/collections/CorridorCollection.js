@@ -10,6 +10,7 @@ var makeGuid_1 = require('webmapsjs/dist/util/makeGuid');
 var CorridorConfig_1 = require('../corridor/CorridorConfig');
 var Corridor_1 = require('../corridor/Corridor');
 var $ = require('jquery');
+var layerStyles_1 = require("../layerStyles");
 var nm = provide_1.default('ssa');
 /**
  *
@@ -86,15 +87,7 @@ var CorridorCollection = (function () {
             if (!_this.showPopups) {
                 return false;
             }
-            var returnHtml = '<table class="mm-popup-table">';
-            returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td></tr>";
-            returnHtml += "<tr><td>Highway</td><td>" + props['hwyDir'] + "</td></tr>";
-            returnHtml += "<tr><td>Description</td><td>" + (props['descrip'] ? props['descrip'] : '-') + "</td></tr>";
-            returnHtml += "<tr><td>Divided</td><td>" + (props['divUnd'] == 'D' ? 'Yes' : 'No') + "</td></tr>";
-            returnHtml += "<tr><td>From RP</td><td>" + props['pdpFrom'] + "</td></tr>";
-            returnHtml += "<tr><td>To RP</td><td>" + props['pdpTo'] + "</td></tr>";
-            returnHtml += '</table>';
-            return returnHtml;
+            return layerStyles_1.mmPopupContent(props);
         };
     }
     /**
@@ -245,7 +238,6 @@ var CorridorCollection = (function () {
         var _this = this;
         var loadedCount = 0;
         var existingCorridors = document.getElementsByClassName(this._dataClass);
-        // throw 'cat';
         // parse the data from the hidden input elements
         for (var n = 0; n < existingCorridors.length; n++) {
             var el = existingCorridors[n];

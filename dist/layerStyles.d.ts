@@ -20,7 +20,5 @@ export declare function randomColor(): string;
  * @returns {{minZoom: number, name: *, transform: {dataProjection: string, featureProjection: string}, style: ol.style.Style, visible: *}}
  */
 export declare function layerConfigHelper(name: string, color: string, visible: boolean): LayerBaseVectorGeoJsonOptions;
-export declare const mmPopupContent: (props: {
-    [s: string]: string | number;
-}) => string;
+export declare const mmPopupContent: (props: Object) => string;
 export declare const segNodeStyle: ol.style.Style;

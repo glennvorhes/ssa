@@ -12380,17 +12380,6 @@
 	            minZoom: 11,
 	            visible: false
 	        });
-	        // /**
-	        //  *
-	        //  * @type {ol.layer.Vector}
-	        //  * @private
-	        //  */
-	        // this._segmentSelectionLayer = new ol.layer.Vector({
-	        //     source: new ol.source.Vector(),
-	        //     style: this._isFrom ? layerStyles.segmentSelectionStyleFrom : layerStyles.segmentSelectionStyleTo,
-	        //     zIndex: 100,
-	        //     visible: false
-	        // });
 	        /**
 	         *
 	         * @type {LayerBaseVectorGeoJson}
@@ -12440,6 +12429,20 @@
 	        });
 	        this._enabled = false;
 	        this._layersVisible = false;
+	        this._box.click(function (evt) {
+	            evt.stopPropagation();
+	        });
+	        this._box.parent('div').click(function () {
+	            if (_this._sortedFeatures == null) {
+	                return;
+	            }
+	            var selectedFeature = _this._sortedFeatures.getFeature(_this.selectedPdpId);
+	            if (selectedFeature == null) {
+	                return;
+	            }
+	            mapPopup_1.default.map.getView().fit(selectedFeature.getGeometry().getExtent(), mapPopup_1.default.map.getSize());
+	            mapPopup_1.default.map.getView().setZoom(mapPopup_1.default.map.getView().getZoom() - 2);
+	        });
 	    }
 	    /**
 	     * @param {Array<object>} arr - array of returned objects, implementation defined in derived classes
@@ -12447,8 +12450,8 @@
 	    SegmentPicker.prototype._processAjaxResult = function (arr) {
 	        var _this = this;
 	        arr.sort(function (a, b) {
-	            var c = _this._isFrom ? a['properties']['pdpFrom'] : a['properties']['pdpTo'];
-	            var d = _this._isFrom ? b['properties']['pdpFrom'] : b['properties']['pdpTo'];
+	            var c = _this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
+	            var d = _this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
 	            if (c == d) {
 	                return 0;
 	            }
@@ -12458,10 +12461,10 @@
 	            var feat = arr_1[_i];
 	            var props = feat['properties'];
 	            if (this._isFrom) {
-	                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['pdpFrom'] + "</option>");
+	                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['startRp'] + "</option>");
 	            }
 	            else {
-	                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['pdpTo'] + "</option>");
+	                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['endRp'] + "</option>");
 	            }
 	        }
 	    };
@@ -13743,11 +13746,12 @@
 	}
 	exports.layerConfigHelper = layerConfigHelper;
 	exports.mmPopupContent = function (props) {
+	    console.log(props);
 	    var returnHtml = '<table class="mm-popup-table">';
 	    returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td></tr>";
-	    returnHtml += "<tr><td>Highway</td><td>" + props['hwyDir'] + "</td></tr>";
-	    returnHtml += "<tr><td>Description</td><td>" + (props['descrip'] ? props['descrip'] : '-') + "</td></tr>";
-	    returnHtml += "<tr><td>Divided</td><td>" + (props['divUnd'] == 'D' ? 'Yes' : 'No') + "</td></tr>";
+	    returnHtml += "<tr><td>Highway</td><td>" + props['stdName'] + "</td></tr>";
+	    returnHtml += "<tr><td>Description</td><td>" + (props['rpDesc'] ? props['rpDesc'] : '-') + "</td></tr>";
+	    returnHtml += "<tr><td>Divided</td><td>" + props['divUnd'] + "</td></tr>";
 	    returnHtml += "<tr><td>From RP</td><td>" + props['startRp'] + "</td></tr>";
 	    returnHtml += "<tr><td>To RP</td><td>" + props['endRp'] + "</td></tr>";
 	    returnHtml += '</table>';
@@ -29754,6 +29758,7 @@
 	var CorridorConfig_1 = __webpack_require__(/*! ../corridor/CorridorConfig */ 35);
 	var Corridor_1 = __webpack_require__(/*! ../corridor/Corridor */ 29);
 	var $ = __webpack_require__(/*! jquery */ 5);
+	var layerStyles_1 = __webpack_require__(/*! ../layerStyles */ 28);
 	var nm = provide_1.default('ssa');
 	/**
 	 *
@@ -29830,15 +29835,7 @@
 	            if (!_this.showPopups) {
 	                return false;
 	            }
-	            var returnHtml = '<table class="mm-popup-table">';
-	            returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td></tr>";
-	            returnHtml += "<tr><td>Highway</td><td>" + props['hwyDir'] + "</td></tr>";
-	            returnHtml += "<tr><td>Description</td><td>" + (props['descrip'] ? props['descrip'] : '-') + "</td></tr>";
-	            returnHtml += "<tr><td>Divided</td><td>" + (props['divUnd'] == 'D' ? 'Yes' : 'No') + "</td></tr>";
-	            returnHtml += "<tr><td>From RP</td><td>" + props['pdpFrom'] + "</td></tr>";
-	            returnHtml += "<tr><td>To RP</td><td>" + props['pdpTo'] + "</td></tr>";
-	            returnHtml += '</table>';
-	            return returnHtml;
+	            return layerStyles_1.mmPopupContent(props);
 	        };
 	    }
 	    /**
@@ -29989,7 +29986,6 @@
 	        var _this = this;
 	        var loadedCount = 0;
 	        var existingCorridors = document.getElementsByClassName(this._dataClass);
-	        // throw 'cat';
 	        // parse the data from the hidden input elements
 	        for (var n = 0; n < existingCorridors.length; n++) {
 	            var el = existingCorridors[n];

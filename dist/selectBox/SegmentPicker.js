@@ -73,17 +73,6 @@ var SegmentPicker = (function (_super) {
             minZoom: 11,
             visible: false
         });
-        // /**
-        //  *
-        //  * @type {ol.layer.Vector}
-        //  * @private
-        //  */
-        // this._segmentSelectionLayer = new ol.layer.Vector({
-        //     source: new ol.source.Vector(),
-        //     style: this._isFrom ? layerStyles.segmentSelectionStyleFrom : layerStyles.segmentSelectionStyleTo,
-        //     zIndex: 100,
-        //     visible: false
-        // });
         /**
          *
          * @type {LayerBaseVectorGeoJson}
@@ -133,6 +122,20 @@ var SegmentPicker = (function (_super) {
         });
         this._enabled = false;
         this._layersVisible = false;
+        this._box.click(function (evt) {
+            evt.stopPropagation();
+        });
+        this._box.parent('div').click(function () {
+            if (_this._sortedFeatures == null) {
+                return;
+            }
+            var selectedFeature = _this._sortedFeatures.getFeature(_this.selectedPdpId);
+            if (selectedFeature == null) {
+                return;
+            }
+            mapPopup_1.default.map.getView().fit(selectedFeature.getGeometry().getExtent(), mapPopup_1.default.map.getSize());
+            mapPopup_1.default.map.getView().setZoom(mapPopup_1.default.map.getView().getZoom() - 2);
+        });
     }
     /**
      * @param {Array<object>} arr - array of returned objects, implementation defined in derived classes
@@ -140,8 +143,8 @@ var SegmentPicker = (function (_super) {
     SegmentPicker.prototype._processAjaxResult = function (arr) {
         var _this = this;
         arr.sort(function (a, b) {
-            var c = _this._isFrom ? a['properties']['pdpFrom'] : a['properties']['pdpTo'];
-            var d = _this._isFrom ? b['properties']['pdpFrom'] : b['properties']['pdpTo'];
+            var c = _this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
+            var d = _this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
             if (c == d) {
                 return 0;
             }
@@ -151,10 +154,10 @@ var SegmentPicker = (function (_super) {
             var feat = arr_1[_i];
             var props = feat['properties'];
             if (this._isFrom) {
-                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['pdpFrom'] + "</option>");
+                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['startRp'] + "</option>");
             }
             else {
-                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['pdpTo'] + "</option>");
+                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['endRp'] + "</option>");
             }
         }
     };
