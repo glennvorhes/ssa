@@ -31317,7 +31317,7 @@
 	    "use strict";
 	    var props = feature.getProperties();
 	    var show = false;
-	    for (var _i = 0, _a = filterContollingCriteria_1.default._allValues; _i < _a.length; _i++) {
+	    for (var _i = 0, _a = filterContollingCriteria_1.default.allValues; _i < _a.length; _i++) {
 	        var cc = _a[_i];
 	        if (props[cc] && filterContollingCriteria_1.default.valIsOn(cc)) {
 	            show = true;
@@ -31353,7 +31353,7 @@
 	var ControllingCriteria = (function (_super) {
 	    __extends(ControllingCriteria, _super);
 	    function ControllingCriteria() {
-	        _super.call(this, "Controlling Criteria", ccStyle, 201, constants.ccListId);
+	        _super.call(this, "Geometric Deficiencies", ccStyle, 201, constants.ccListId);
 	    }
 	    /**
 	     * initialize with the map
@@ -31366,7 +31366,7 @@
 	            _this.deficiencyLayer.refresh();
 	        });
 	        mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
-	            var returnHtml = 'Geometric Deficiencies';
+	            var returnHtml = '';
 	            returnHtml += '<ul>';
 	            for (var _i = 0, _a = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _i < _a.length; _i++) {
 	                var cc = _a[_i];

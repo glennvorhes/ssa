@@ -19,10 +19,9 @@ const ccStyle = (feature) => {
 
     let props = feature.getProperties();
 
-
     let show = false;
 
-    for (let cc of filterControllingCritera._allValues) {
+    for (let cc of filterControllingCritera.allValues) {
         if (props[cc] && filterControllingCritera.valIsOn(cc)) {
             show = true;
             break;
@@ -64,7 +63,7 @@ export class ControllingCriteria extends DeficiencyBase {
         'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
 
     constructor() {
-        super("Controlling Criteria", ccStyle, 201, constants.ccListId);
+        super("Geometric Deficiencies", ccStyle, 201, constants.ccListId);
     }
 
     /**
@@ -80,7 +79,7 @@ export class ControllingCriteria extends DeficiencyBase {
 
         mapPopup.addVectorPopup(this.deficiencyLayer, (props) => {
 
-            let returnHtml = 'Geometric Deficiencies';
+            let returnHtml = '';
             returnHtml += '<ul>';
 
             for (let cc of keyValPairs(constants.controllingCriteriaProps)) {
