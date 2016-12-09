@@ -159,7 +159,18 @@ var CrashData = (function () {
         this.pointCrashes = new LayerBaseVectorGeoJson_1.default('', {
             name: "Crash Points",
             zIndex: 204,
-            minZoom: 10
+            minZoom: 10,
+            renderOrder: function (a, b) {
+                var sevOrder = ['P', 'C', 'B', 'A', 'K'];
+                var sevA = a.getProperties()['injSvr'];
+                var sevB = b.getProperties()['injSvr'];
+                var sevAInd = sevOrder.indexOf(sevA);
+                var sevBInd = sevOrder.indexOf(sevB);
+                if (sevAInd == sevBInd) {
+                    return 0;
+                }
+                return sevAInd > sevBInd ? 1 : -1;
+            }
         });
         this.pointCrashes.style = crashPointStyle;
     }

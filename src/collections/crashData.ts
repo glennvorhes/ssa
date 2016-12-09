@@ -228,7 +228,22 @@ export class CrashData {
         this.pointCrashes = new LayerBaseVectorGeoJson('', {
             name: "Crash Points",
             zIndex: 204,
-            minZoom: 10
+            minZoom: 10,
+            renderOrder: (a: ol.Feature, b: ol.Feature): number => {
+                let sevOrder = ['P', 'C', 'B', 'A', 'K'];
+
+                let sevA = a.getProperties()['injSvr'];
+                let sevB = b.getProperties()['injSvr'];
+
+                let sevAInd = sevOrder.indexOf(sevA);
+                let sevBInd = sevOrder.indexOf(sevB);
+
+                if (sevAInd == sevBInd) {
+                    return 0;
+                }
+
+                return sevAInd > sevBInd ? 1 : -1;
+            }
         });
 
         this.pointCrashes.style = crashPointStyle;
