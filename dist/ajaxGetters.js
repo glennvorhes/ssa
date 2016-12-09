@@ -41,6 +41,7 @@ function _ajaxInner(url, params, callback) {
 function _ajaxHelper(url, callback, params, calbackHelper) {
     "use strict";
     if (params === void 0) { params = {}; }
+    params[(Math.random() * 1000000).toFixed()] = (Math.random() * 1000000).toFixed();
     if (typeof calbackHelper == 'function') {
         var newCallback = function (d) {
             d = calbackHelper(d);
