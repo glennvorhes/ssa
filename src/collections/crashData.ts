@@ -37,8 +37,9 @@ export interface CrashDataObject {
     pdpId: number;
     cumulMile: number;
     accdnmbr: string;
+
     doctnmbr: string;
-    multiflag: string;
+    // multiflag: string;
     accDate: string;
     ntfyHour: number;
     county: string;
@@ -73,7 +74,7 @@ export interface CrashDataObject {
 
 let crashProps = [
     'doctnmbr',
-    'multiflag',
+    // 'multiflag',
     'accDate',
     'ntfyHour',
     'county',
@@ -281,8 +282,6 @@ export class CrashData {
     }
 
     _processCrashData(d) {
-
-        console.log(d);
 
         for (let itm of objHelp.keyValPairs(d)) {
 

@@ -27,7 +27,7 @@ function injColor(inj) {
 }
 var crashProps = [
     'doctnmbr',
-    'multiflag',
+    // 'multiflag',
     'accDate',
     'ntfyHour',
     'county',
@@ -200,7 +200,6 @@ var CrashData = (function () {
         m.addLayer(this.pointCrashes.olLayer);
     };
     CrashData.prototype._processCrashData = function (d) {
-        console.log(d);
         for (var _i = 0, _a = objHelp.keyValPairs(d); _i < _a.length; _i++) {
             var itm = _a[_i];
             /**

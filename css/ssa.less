@@ -338,8 +338,8 @@
 .segment-index-summary{
   padding: 5px;
   position: absolute;
-  left: 10px;
-  top: 64px;
+  left: 9px;
+  top: 62px;
   min-height: 300px;
   width: 300px;
   background-color: rgba(100,100,100,0.9);
@@ -350,6 +350,27 @@
 
   h3, h4, h5{
     margin: 0;
+  }
+
+  .segment-index-summary-toggles{
+    float: right;
+    display: inline-block;
+
+    span:first-of-type{
+      margin-right: 3px;
+    }
+  }
+
+  .segment-index-summary-toggle{
+    font-size: large;
+    font-weight: bolder;
+    padding: 1px 6px;
+    color: rgb(100,100,100);
+    background-color: lightgray;
+    cursor: pointer;
+    display: inline-block;
+    border: solid gray 1px;
+    .rounded-border;
   }
 
 }

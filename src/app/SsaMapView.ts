@@ -62,6 +62,11 @@ export class SsaMapView extends SsaMapBase {
         });
 
         let summaryListHtml = '<div class="segment-index-summary">';
+        summaryListHtml += '<div class="segment-index-summary-toggles">';
+        summaryListHtml += `<span class="segment-index-summary-toggle segment-index-summary-zoom" title="Zoom To Initial Extent">&#8634;</span>`;
+        summaryListHtml += `<span class="segment-index-summary-toggle segment-index-summary-close" title="Hide Legend">&#8598;</span>`;
+        summaryListHtml += `<span class="segment-index-summary-toggle segment-index-summary-open" title="Show Legend">&#8600;</span>`;
+        summaryListHtml += '</div>';
 
         summaryListHtml += `<h4 style="color: ${constants.mmFlagColor}">Metamanager Flags</h4>`;
         summaryListHtml += `<ul id="${constants.mmFlagListId}"></ul>`;
@@ -71,6 +76,56 @@ export class SsaMapView extends SsaMapBase {
 
         summaryListHtml += '</div>';
         this.$mapDiv.append(summaryListHtml);
+
+        let $legendDiv = this.$mapDiv.find('.segment-index-summary');
+        let $closeButton = $legendDiv.find('.segment-index-summary-close');
+        let $openButton = $legendDiv.find('.segment-index-summary-open');
+        let $zoomExtent = $legendDiv.find('.segment-index-summary-zoom');
+
+        $openButton.hide();
+
+        let hideShowWorking = false;
+        let originalWidth = $legendDiv.width();
+        let originalMinHeight = $legendDiv.css('min-height') as string;
+        let originalPadding = $legendDiv.css('padding') as string;
+
+        $closeButton.click(() => {
+            if (hideShowWorking) {
+                return;
+            }
+            hideShowWorking = true;
+
+            $legendDiv.find('ul, h3, h4, h5').fadeOut(100, ()=> {
+                $legendDiv.css('padding', '2px');
+                $legendDiv.width('auto');
+                $legendDiv.css('min-height', 'auto');
+
+                $closeButton.hide();
+                $openButton.show();
+                hideShowWorking = false;
+            });
+        });
+
+        $openButton.click(() => {
+            if (hideShowWorking) {
+                return;
+            }
+            hideShowWorking = true;
+
+            $legendDiv.css('padding', originalPadding);
+            $legendDiv.width(originalWidth);
+            $legendDiv.css('min-height', originalMinHeight);
+
+            $legendDiv.find('ul, h3, h4, h5').fadeIn(100, ()=> {
+                $closeButton.show();
+                $openButton.hide();
+                hideShowWorking = false;
+            });
+        });
+
+        $zoomExtent.click(()=> {
+            this._fitExtent();
+        });
 
 
         /**
@@ -157,17 +212,25 @@ export class SsaMapView extends SsaMapBase {
     }
 
     _afterCorridorLoad() {
-        let lyrs: LayerBaseVector[] = [];
 
-        for (let c of this._corridorArray){
-            lyrs.push(c.layer);
-        }
+        this._fitExtent();
 
-
-        calcExtent.fitToMap(lyrs, this.mainMap);
         crashData.init(this.mainMap, this._ssaId, this._snap);
         mmFlags.afterLoad();
         controllingCriteria.afterLoad();
+    }
+
+    private _fitExtent() {
+
+        let lyrs: LayerBaseVector[] = [];
+
+        for (let c of this._corridorArray) {
+            lyrs.push(c.layer);
+        }
+
+        if (lyrs.length > 0){
+            calcExtent.fitToMap(lyrs, this.mainMap);
+        }
 
     }
 }

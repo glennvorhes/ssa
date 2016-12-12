@@ -5,7 +5,6 @@ export interface CrashDataObject {
     cumulMile: number;
     accdnmbr: string;
     doctnmbr: string;
-    multiflag: string;
     accDate: string;
     ntfyHour: number;
     county: string;

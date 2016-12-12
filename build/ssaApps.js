@@ -30252,12 +30252,57 @@
 	            fullScreen: true
 	        });
 	        var summaryListHtml = '<div class="segment-index-summary">';
+	        summaryListHtml += '<div class="segment-index-summary-toggles">';
+	        summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-zoom\" title=\"Zoom To Initial Extent\">&#8634;</span>";
+	        summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-close\" title=\"Hide Legend\">&#8598;</span>";
+	        summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-open\" title=\"Show Legend\">&#8600;</span>";
+	        summaryListHtml += '</div>';
 	        summaryListHtml += "<h4 style=\"color: " + constants.mmFlagColor + "\">Metamanager Flags</h4>";
 	        summaryListHtml += "<ul id=\"" + constants.mmFlagListId + "\"></ul>";
 	        summaryListHtml += "<h4 style=\"color: " + constants.controllingCriteriaColor + "\">Controlling Criteria</h4>";
 	        summaryListHtml += "<ul id=\"" + constants.ccListId + "\"></ul>";
 	        summaryListHtml += '</div>';
 	        this.$mapDiv.append(summaryListHtml);
+	        var $legendDiv = this.$mapDiv.find('.segment-index-summary');
+	        var $closeButton = $legendDiv.find('.segment-index-summary-close');
+	        var $openButton = $legendDiv.find('.segment-index-summary-open');
+	        var $zoomExtent = $legendDiv.find('.segment-index-summary-zoom');
+	        $openButton.hide();
+	        var hideShowWorking = false;
+	        var originalWidth = $legendDiv.width();
+	        var originalMinHeight = $legendDiv.css('min-height');
+	        var originalPadding = $legendDiv.css('padding');
+	        $closeButton.click(function () {
+	            if (hideShowWorking) {
+	                return;
+	            }
+	            hideShowWorking = true;
+	            $legendDiv.find('ul, h3, h4, h5').fadeOut(100, function () {
+	                $legendDiv.css('padding', '2px');
+	                $legendDiv.width('auto');
+	                $legendDiv.css('min-height', 'auto');
+	                $closeButton.hide();
+	                $openButton.show();
+	                hideShowWorking = false;
+	            });
+	        });
+	        $openButton.click(function () {
+	            if (hideShowWorking) {
+	                return;
+	            }
+	            hideShowWorking = true;
+	            $legendDiv.css('padding', originalPadding);
+	            $legendDiv.width(originalWidth);
+	            $legendDiv.css('min-height', originalMinHeight);
+	            $legendDiv.find('ul, h3, h4, h5').fadeIn(100, function () {
+	                $closeButton.show();
+	                $openButton.hide();
+	                hideShowWorking = false;
+	            });
+	        });
+	        $zoomExtent.click(function () {
+	            _this._fitExtent();
+	        });
 	        /**
 	         * @type {MapPopupCls}
 	         */
@@ -30316,15 +30361,20 @@
 	        controllingCriteria_1.default.init(this.mainMap);
 	    }
 	    SsaMapView.prototype._afterCorridorLoad = function () {
+	        this._fitExtent();
+	        crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
+	        mmFlags_1.default.afterLoad();
+	        controllingCriteria_1.default.afterLoad();
+	    };
+	    SsaMapView.prototype._fitExtent = function () {
 	        var lyrs = [];
 	        for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
 	            var c = _a[_i];
 	            lyrs.push(c.layer);
 	        }
-	        calcExtent.fitToMap(lyrs, this.mainMap);
-	        crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
-	        mmFlags_1.default.afterLoad();
-	        controllingCriteria_1.default.afterLoad();
+	        if (lyrs.length > 0) {
+	            calcExtent.fitToMap(lyrs, this.mainMap);
+	        }
 	    };
 	    return SsaMapView;
 	}(SsaMapBase_1.default));
@@ -30371,7 +30421,7 @@
 	}
 	var crashProps = [
 	    'doctnmbr',
-	    'multiflag',
+	    // 'multiflag',
 	    'accDate',
 	    'ntfyHour',
 	    'county',
@@ -30544,7 +30594,6 @@
 	        m.addLayer(this.pointCrashes.olLayer);
 	    };
 	    CrashData.prototype._processCrashData = function (d) {
-	        console.log(d);
 	        for (var _i = 0, _a = objHelp.keyValPairs(d); _i < _a.length; _i++) {
 	            var itm = _a[_i];
 	            /**

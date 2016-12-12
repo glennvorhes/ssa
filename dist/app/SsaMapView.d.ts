@@ -17,5 +17,6 @@ export declare class SsaMapView extends SsaMapBase {
      */
     constructor(divId: any, dataClass: any, infoAnchorId: any);
     _afterCorridorLoad(): void;
+    private _fitExtent();
 }
 export default SsaMapView;
