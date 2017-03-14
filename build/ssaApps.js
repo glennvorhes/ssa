@@ -1,24 +1,6317 @@
-!function(t){function e(s){if(i[s])return i[s].exports;var n=i[s]={exports:{},id:s,loaded:!1};return t[s].call(n.exports,n,n.exports,e),n.loaded=!0,n.exports}var i={};return e.m=t,e.c=i,e.p="",e(0)}([function(t,e,i){"use strict";var s=i(26),n=i(27);window.SsaMapCreate=s.SsaMapCreate,window.SsaMapView=n.SsaMapView,console.log("here"),console.log("here")},function(t,e){"use strict";function i(t){"undefined"==typeof window.gv&&(window.gv={});for(var e=t.split("."),i=window.gv,s=0;s<e.length;s++){var n=i[e[s]];"undefined"==typeof n&&(i[e[s]]={}),i=i[e[s]]}return i}Object.defineProperty(e,"__esModule",{value:!0}),i("util"),window.gv.util.provide=i,e.default=i},function(t,e){t.exports=$},function(t,e){t.exports=ol},function(t,e,i){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s=i(44);e.mapPopup=new s.default,e.default=e.mapPopup},function(t,e,i){"use strict";function s(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(t){var e=16*Math.random()|0,i="x"==t?e:3&e|8;return i.toString(16)})}Object.defineProperty(e,"__esModule",{value:!0});var n=i(1),o=n.default("util");o.makeGuid=s,e.default=s},function(t,e,i){"use strict";function s(t,e,i){r.get(t,e,i,"json").fail(function(){var i="error getting: "+t+JSON.stringify(e);console.warn(i)})}function n(t,e,i,n){if(void 0===i&&(i={}),i[(1e6*Math.random()).toFixed()]=(1e6*Math.random()).toFixed(),"function"==typeof n){var o=function(t){t=n(t),e(t)};s(t,i,o)}else s(t,i,e)}var o=i(1),r=i(2),a=r("#site-root").val();"5001"==window.location.port&&(a="http://localhost:5004/");var l=a+"getStartCounties",h=a+"getHighways",c=a+"getEndCounties",u=a+"getSegments",d=a+"getCorridor",p=a+"getCrashes",f=a+"getAllCounties",g=a+"getAllHighwaysForStartEndCounty",m=a+"getCcGeom",v=o.default("ssa"),y=function(t){return t.sort(function(t,e){return t.name==e.name?0:t.name<e.name?-1:1}),t},_=function(){function t(){throw"this class should not be instantiated"}return t.getStartCounties=function(t){n(l,t,{},y)},t.getHighways=function(t,e){var i={startCountyId:t};n(h,e,i)},t.getEndCounties=function(t,e){var i={highwayName:t};n(c,e,i,y)},t.getSegments=function(t,e,i){var s;s="string"==typeof e?parseInt(e):e;var o={routeid:s,county:t},a=r("#hidden-mm-version");a.length>0&&(o.mm=a.val()),n(u,i,o)},t.getCorridor=function(t,e,i){var s={from:t,to:e},o=r("#hidden-mm-version");o.length>0&&(s.mm=o.val()),n(d,i,s)},t.getCrashes=function(t,e,i){var s={ssaId:t,snapshot:e};n(p,i,s)},t.getAllCounties=function(t){var e={};n(f,t,e)},t.getHwyByStartEndCounty=function(t,e,i){var s={startCountyId:t,endCountyId:e};n(g,i,s)},t.getCcGeom=function(t,e,i){var s={ssaId:t,snapshot:e};n(m,i,s)},t}();e.AjaxGetters=_,Object.defineProperty(e,"__esModule",{value:!0}),e.default=_,v.AjaxGetters=_},function(t,e,i){"use strict";function s(){for(a.length==l.length&&(a=[]);;){var t=l[Math.floor(Math.random()*l.length)];if(a.indexOf(t)<0)return a.push(t),t}}function n(t,e,i){return{minZoom:4,name:t,transform:{dataProjection:r.proj3857,featureProjection:r.proj3857},style:new o.style.Style({stroke:new o.style.Stroke({color:e,width:6})}),visible:i}}var o=i(3),r=i(15);e.segmentLayer=new o.style.Style({stroke:new o.style.Stroke({color:"darkblue",width:5})}),e.fromSelectionColor="#48FD14",e.toSelectionColor="#EE0071",e.corridorPreviewColor="black";var a=[],l=["#FF00FF","#7FFF00","#FA8072","#FF6347","#40E0D0","#ADFF2F","#6495ED","#FF8C00","#7FFFD4","#DA70D6"];e.randomColor=s,e.layerConfigHelper=n,e.mmPopupContent=function(t){var e='<table class="mm-popup-table">';return e+="<tr><td>PdpId</td><td>"+t.pdpId+"</td></tr>",e+="<tr><td>Highway</td><td>"+t.stdName+"</td></tr>",e+="<tr><td>Description</td><td>"+(t.rpDesc?t.rpDesc:"-")+"</td></tr>",e+="<tr><td>Divided</td><td>"+t.divUnd+"</td></tr>",e+="<tr><td>From RP</td><td>"+t.startRp+"</td></tr>",e+="<tr><td>To RP</td><td>"+t.endRp+"</td></tr>",e+="</table>"},e.segNodeStyle=new o.style.Style({image:new o.style.RegularShape({radius:6,points:4,fill:new o.style.Fill({color:"rgb(0, 0, 0)"}),stroke:new o.style.Stroke({color:"rgb(0, 0, 0",width:2})})})},function(t,e){"use strict";e.mmFlagListId="mm-deficiency-list",e.ccListId="cc-deficiency-list",e.pdpDataAttr="data-pdp-id",e.mmFlagColor="#00FF00",e.controllingCriteriaColor="#FFC632",e.propNames=["ccDesignSpeed","ccLaneWidth","ccShoulderWidth","ccHorizontalCurve","ccSuperelevation","ccMaximumGrade","ccStoppingSight","ccCrossSlope","ccVerticalClearance","ccDesignLoading"],e.propValues=["Design Speed","Lane Width","Shoulder Width","Horizontal Alignment","Superelevation","Grade","Stopping Sight Distance","Pavement Cross Slope","Vertical Clearance","Structural Capacity"],e.controllingCriteriaProps={};for(var i=0;i<e.propNames.length;i++)e.controllingCriteriaProps[e.propNames[i]]=e.propValues[i]},function(t,e,i){"use strict";var s=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)e.hasOwnProperty(i)&&(t[i]=e[i])};return function(e,i){function s(){this.constructor=e}t(e,i),e.prototype=null===i?Object.create(i):(s.prototype=i.prototype,new s)}}();Object.defineProperty(e,"__esModule",{value:!0});var n=i(40),o=i(1),r=i(3),a=i(15),l=i(2),h=o.default("layers"),c=function(t){function e(e,i){void 0===i&&(i={});var s=this;return e="string"==typeof e?e:"",s=t.call(this,e,i)||this,s._geoJsonFormat=new r.format.GeoJSON,s._transform=i.transform||{dataProjection:a.proj4326,featureProjection:a.proj3857},(s.autoLoad||s.visible)&&s._load(),s}return s(e,t),e.prototype.addFeatures=function(t){"EPSG:3857"==this._transform.dataProjection&&"EPSG:3857"==this._transform.featureProjection?this._source.addFeatures(this._geoJsonFormat.readFeatures(t)):this._source.addFeatures(this._geoJsonFormat.readFeatures(t,this._transform))},e.prototype._load=function(){var e=this;return!!t.prototype._load.call(this)||(l.get(this._url,this._params,function(t){e.addFeatures(t),e.loadCallback(e)},"json").fail(function(){this._loaded=!1}),!1)},e.prototype.mapMoveCallback=function(e){t.prototype.mapMoveCallback.call(this,e),this._source.addFeatures(this._geoJsonFormat.readFeatures(e,this._transform))},e}(n.LayerBaseVector);e.LayerBaseVectorGeoJson=c,h.LayerBaseVectorGeoJson=c,e.default=c},function(t,e,i){"use strict";function s(t){return String(t).replace(/[&<>"'\/]/g,function(t){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","/":"&#x2F;"}[t]})}function n(t,e){return t.substring(0,7)+" - "+e.substring(0,7)}var o=i(9),r=i(5),a=i(1),l=i(7),h=i(6),c=i(13),u=i(7),d=i(14),p=i(3),f=a.default("ssa"),g=function(){function t(t,e,i,s,a,h,d,p,f){if(void 0===f&&(f={}),this.ssaId=-1,this.snapshotVersion=-1,this.corridorId=-1,f.features=f.features?f.features:void 0,f.cancelLoad="boolean"==typeof f.cancelLoad&&f.cancelLoad,this.clientId=r.default(),f.color?this._color=f.color:this._color=l.randomColor(),this.databaseId=f.databaseId||void 0,this._valid=!1,this._error="",this._loaded=!1,this.sortedFeatures=null,this.pdpFrom=t,this.pdpTo=e,"string"==typeof a?this.countyStart=parseInt(a):this.countyStart=a,"string"==typeof h?this.countyEnd=parseInt(h):this.countyEnd=h,"string"==typeof p?this.routeId=parseInt(p):this.routeId=p,this.highway=d,this.rpFrom=i,this.rpTo=s,"number"!=typeof p)throw"route id is not number";this._corridorLayer=new o.LayerBaseVectorGeoJson("",l.layerConfigHelper(n(this.rpFrom,this.rpTo),this._color,!0)),this.nodeLayer=new o.LayerBaseVectorGeoJson("",{style:u.segNodeStyle,minZoom:11,zIndex:3}),f.features?this._corridorLayer.source.addFeatures(f.features):f.jsonFeatures?(this._corridorLayer.addFeatures(f.jsonFeatures),this._loaded=!0,this.sortedFeatures=new c.default(this.olLayer.getSource().getFeatures(),"pdpId"),this.buildNodes()):f.cancelLoad||this.load(f.loadedCallback)}return t.prototype.setDbValues=function(t){this.ssaId=t.ssaId,this.snapshotVersion=t.snapshotVersion,this.corridorId=t.corridorId},t.prototype.load=function(t){var e=this;t="function"==typeof t?t:function(){},this._valid=!1,this._error="",h.default.getCorridor(this.pdpFrom,this.pdpTo,function(i){e._corridorLayer.addFeatures(i),"undefined"==typeof i.error?e._valid=!0:e._error=i.error,e._loaded=!0,e.sortedFeatures=new c.default(e.olLayer.getSource().getFeatures(),"pdpId"),e.buildNodes(),t(e)})},t.prototype.buildNodes=function(){this.nodeLayer.clear();for(var t=this._corridorLayer.olLayer.getSource().getFeatures(),e=0;e<t.length;e++){var i=t[e].getGeometry().getCoordinates();if(i&&i.length>0){var s=new p.geom.Point(i[0]),n=new p.geom.Point(i[i.length-1]);this.nodeLayer.olLayer.getSource().addFeature(new p.Feature(s)),this.nodeLayer.olLayer.getSource().addFeature(new p.Feature(n))}}},t.prototype.clone=function(){var e=new t(this.pdpFrom,this.pdpTo,this.rpFrom,this.rpTo,this.countyStart,this.countyEnd,this.highway,this.routeId,{features:this.features});return e.buildNodes(),e},t.prototype.updateCorridor=function(t){this.pdpFrom=t.pdpFrom,this.pdpTo=t.pdpTo,this.countyStart=t.countyStart,this.countyEnd=t.countyEnd,this.highway=t.highway,this.rpFrom=t.rpFrom,this.rpTo=t.rpTo,this.routeId=t.routeId,this.layer.name=n(this.rpFrom,this.rpTo),this.layer.clear(),this.layer.olLayer.getSource().addFeatures(t.features),this.buildNodes()},Object.defineProperty(t.prototype,"color",{get:function(){return this._color},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"valid",{get:function(){return this._valid},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"error",{get:function(){return this._error},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"tableHtmlCreate",{get:function(){var t='<tr class="corridor-tr">';return t+='<td style="background-color: '+this._color+'"></td>',t+="<td>"+n(this.rpFrom,this.rpTo)+"</td>",t+="<td>",t+='<span title="Zoom To" class="corridor-zoom" data-corridor="'+this.clientId+'"></span>',t+='<span title="Edit Corridor"  class="corridor-edit" data-corridor="'+this.clientId+'"></span>',t+='<span title="Remove Corridor"  class="corridor-delete" data-corridor="'+this.clientId+'"></span>',t+="</td>",t+="</tr>"},enumerable:!0,configurable:!0}),t.prototype.getDataHtml=function(t){var e='<div class="corridor-data">';return e+="<label>Ssa Id</label>",e+='<input type="text" readonly class="corridor-data-ssa-id" name="corridors['+t+'].id.ssaId" value="'+this.ssaId+'"><br>',e+="<label>Snapshot version</label>",e+='<input type="text" readonly class="corridor-data-snapshot" name="corridors['+t+'].id.snapshotVersion" value="'+this.snapshotVersion+'"><br>',e+="<label>Corridor Id</label>",e+='<input type="text" readonly class="corridor-data-corridor-id" name="corridors['+t+'].id.corridorId" value="'+this.corridorId+'"><br>',e+="<label>Start County</label>",e+='<input type="text" class="corridor-data-start-county" readonly name="corridors['+t+'].startCounty" value="'+this.countyStart+'"/><br>',e+="<label>End County</label>",e+='<input type="text" class="corridor-data-end-county" readonly name="corridors['+t+'].endCounty" value="'+this.countyEnd+'"/><br>',e+="<label>Highway</label>",e+='<input type="text" class="corridor-data-highway" readonly name="corridors['+t+'].stdhighway" value="'+this.highway+'"/><br>',e+="<label>Start Rp</label>",e+='<input type="text" class="corridor-data-from-rp" readonly name="corridors['+t+'].startRp" value="'+this.rpFrom+'"/><br>',e+="<label>End Rp</label>",e+='<input type="text" class="corridor-data-to-rp" readonly name="corridors['+t+'].endRp" value="'+this.rpTo+'"/><br>',e+="<label>Route Id</label>",e+='<input type="text" class="corridor-data-route-id" readonly name="corridors['+t+'].rdwyRteId" value="'+this.routeId+'"/><br>',e+="<label>Start Pdp</label>",e+='<input type="text" class="corridor-data-from-pdp" readonly value="'+this.pdpFrom+'"/><br>',e+="<label>End Pdp</label>",e+='<input type="text" class="corridor-data-to-pdp" readonly value="'+this.pdpTo+'"/><br>',e+="</div>"},t.prototype.getDataHtmlDisp=function(t){var e=this.getDataHtml(t);return e=s(e),e=e.replace(/&quot;&#x2F;&gt;/g,"&quot;&#x2F;&gt;<br>"),e=e.replace(/corridor-data&quot;&gt;/g,"corridor-data&quot;&gt;<br>"),e+"<br>"},Object.defineProperty(t.prototype,"olLayer",{get:function(){return this._corridorLayer.olLayer},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"layer",{get:function(){return this._corridorLayer},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"visible",{get:function(){return this._corridorLayer.visible},set:function(t){this._corridorLayer.visible=t},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"features",{get:function(){return this._corridorLayer.features},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"extent",{get:function(){return d.calculateExtent([this.layer])},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"loaded",{get:function(){return this._loaded},enumerable:!0,configurable:!0}),t}();f.Corridor=g,Object.defineProperty(e,"__esModule",{value:!0}),e.default=g},function(t,e,i){"use strict";var s=i(1),n=i(2),o=s.default("ssa"),r=function(){function t(t,e,i){var s=this;this._topCheck=n("#"+t),this._subChecks=n("."+e),this._changeCallbacks=[],this._onValues=[],this._allValues=[],this._subChecks.each(function(t,e){s._allValues.push(n(e).val())}),this._topCheck.prop("checked",i),this._setAllOnOff(i),this._topCheck.change(function(){s._setAllOnOff(s._topCheck.prop("checked"))});var o=this;this._subChecks.change(function(){var t=n(this),e=t.val(),i=t.prop("checked"),s=o._onValues.indexOf(e);i&&s==-1?o._onValues.push(e):i||s==-1||o._onValues.splice(s,1),o._topCheck.prop("checked",o._onValues.length==o._allValues.length),o._fireCallbacks()})}return t.prototype.addChangeCallback=function(t){this._changeCallbacks.push(t)},t.prototype.valIsOn=function(t){return this._onValues.indexOf(t)>-1},t.prototype._setAllOnOff=function(t,e){if(void 0===e&&(e=!0),this._subChecks.prop("checked",t),this._onValues=[],t)for(var i=0,s=this._allValues;i<s.length;i++){var n=s[i];this._onValues.push(n)}e&&this._fireCallbacks()},t.prototype._fireCallbacks=function(){for(var t=0,e=this._changeCallbacks;t<e.length;t++){var i=e[t];i()}},Object.defineProperty(t.prototype,"allValues",{get:function(){for(var t=[],e=0,i=this._allValues;e<i.length;e++){var s=i[e];t.push(s)}return t},enumerable:!0,configurable:!0}),t}();o.FilterBase=r,Object.defineProperty(e,"__esModule",{value:!0}),e.default=r},function(t,e,i){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s=i(5),n=i(1),o=n.default("domUtil"),r=function(){function t(t,e,i){var n=this,o=s.default(),r=s.default(),a='<div id="'+o+'">';if(a+='<label for="'+r+'">'+e+"</label>",a+=i?i(r):'<select id="'+r+'"></select>',a+="</div>",t.append(a),this._$container=t.find("#"+o),this.$label=this._$container.find("label"),this._changeListeners=[],this._box=t.find("#"+r),!this._box)throw"the select box was not found";this._box.change(function(){n.changed()})}return Object.defineProperty(t.prototype,"box",{get:function(){return this._box},enumerable:!0,configurable:!0}),t.prototype.changed=function(){for(var t=this._box.val(),e=0,i=this._changeListeners;e<i.length;e++){var s=i[e];s(t)}},t.prototype.addChangeListener=function(t){this._changeListeners.push(t)},Object.defineProperty(t.prototype,"selectedValue",{get:function(){var t=this.box.val();return null==t||"undefined"==typeof t?null:isNaN(t)?t:t.indexOf(".")>-1?parseFloat(t):parseInt(t)},set:function(t){this.box.val(t)},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"selectedText",{get:function(){return this.box.find("option:selected").text()},enumerable:!0,configurable:!0}),t}();e.SelectBoxBase=r,o.SelectBoxBase=r,e.default=r},function(t,e,i){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s=i(1),n=s.default("olHelpers"),o=function(){function t(t,e){if(this.sortedFeatures=t,this.propertyName=e,this.sortedFeatures.length>0){this._propertyType=typeof this.sortedFeatures[0].getProperties()[this.propertyName];var i=this;this.sortedFeatures.sort(function(t,e){if("number"==i._propertyType){var s=t.getProperties()[i.propertyName]-e.getProperties()[i.propertyName];return 0==s?0:s>0?1:-1}if("string"==i._propertyType){var n=t.getProperties()[i.propertyName]||"",o=e.getProperties()[i.propertyName]||"";return n=n.toString().trim(),o=o.toString().trim(),n==o?0:n>o?1:0}})}}return t.prototype.getFeature=function(t,e,i){if(void 0===e&&(e=!1),"undefined"==typeof i&&(i=this.sortedFeatures),0!=i.length){if(1==i.length)return e?i[0].getProperties()[this.propertyName]==t?i[0]:void 0:i[0];var s=i[0].getProperties()[this.propertyName],n=i[i.length-1].getProperties()[this.propertyName];if(e){if(s==t)return i[0];if(t<s)return;if(n==t)return i[i.length-1];if(t>n)return}else{if(t<=s)return i[0];if(t>=n)return i[i.length-1]}var o=Math.floor(i.length/2),r=i[o],a=r.getProperties()[this.propertyName];return a===t?r:t<a?this.getFeature(t,e,i.slice(0,o)):this.getFeature(t,e,i.slice(o))}},t}();n.SortedFeatures=o,e.default=o},function(t,e,i){"use strict";function s(t){for(var e=!1,i=1e101,s=1e101,n=-1e101,o=-1e101,r=0,a=t;r<a.length;r++){var l=a[r],h=l.olLayer||l;if(h.getSource().getFeatures().length>0){e=!0;var c=h.getSource().getExtent();i=c[0]<i?c[0]:i,s=c[1]<s?c[1]:s,n=c[2]>n?c[2]:n,o=c[3]>o?c[3]:o}}return e?[i,s,n,o]:void 0}function n(t,e,i){var n=s(t);"undefined"!=typeof n&&(e.getView().fit(n,e.getSize()),"number"==typeof i&&e.getView().setZoom(e.getView().getZoom()-i))}Object.defineProperty(e,"__esModule",{value:!0});var o=i(1),r=o.default("util");e.calculateExtent=s,r.calculateExtent=s,e.fitToMap=n,r.calculateExtent=s},function(t,e,i){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s=i(3);e.proj4326=new s.proj.Projection({code:"EPSG:4326"}),e.proj3857=new s.proj.Projection({code:"EPSG:3857"}),e.proj3070=new s.proj.Projection({code:"EPSG:3070"})},function(t,e,i){"use strict";var s=i(5),n=i(1),o=i(2),r=n.default("ssa"),a=function(){function t(t){this.$mainContainer=o("#"+t),this.$mainContainer.addClass("ssa-map-container"),this._mapId=s.default(),this.$mainContainer.append('<div id="'+this._mapId+'" class="ssa-main-map"></div>'),o(".ol-zoom-out").html("&#8211;"),this.mainMapMove=void 0,this.mainMapPopup=void 0}return Object.defineProperty(t.prototype,"mapId",{get:function(){return this._mapId},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"$mapDiv",{get:function(){return o("#"+this.mapId)},enumerable:!0,configurable:!0}),t}();e.SsaMapBase=a,r.SsaMapBase=a,Object.defineProperty(e,"__esModule",{value:!0}),e.default=a},function(t,e,i){"use strict";var s=i(9),n=i(13),o=i(8),r=i(2),a=function(){function t(t,e,i,n){this.deficiencyLayer=new s.default("",{zIndex:i,name:t}),this.deficiencyLayer.style=e,this._sortedFeatures=void 0,this._map=void 0,this._summaryListId=n,this.$summaryList=void 0}return t.prototype.init=function(t){this._map=t,t.addLayer(this.deficiencyLayer.olLayer),this.$summaryList=r("#"+this._summaryListId)},t.prototype.addCorridor=function(t){},t.prototype.getFeatureById=function(t){return this._sortedFeatures.getFeature(t)},t.prototype.afterLoad=function(){this._sortedFeatures=new n.default(this.deficiencyLayer.features,"pdpId");var t=this;this.$summaryList.find("li").click(function(){var e=r(this),i=t.getFeatureById(parseInt(e.attr(o.pdpDataAttr)));t._map.getView().fit(i.getGeometry().getExtent(),t._map.getSize()),t._map.getView().setZoom(t._map.getView().getZoom()-1)})},t}();Object.defineProperty(e,"__esModule",{value:!0}),e.default=a},function(t,e,i){"use strict";function s(t,e){var i='<div class="col-xs-2">';return i+="<label>"+t+"</label>",i+='<input class="form-control" type="text" readonly="" value="'+e+'">',i+="</div>"}var n=i(33),o=i(2),r=function(){function t(t){t.val||(t=o(t)),this.ssaId=parseInt(t.find(".corridor-data-ssa-id").val()),this.snapshotVersion=parseInt(t.find(".corridor-data-snapshot").val()),this.corridorId=parseInt(t.find(".corridor-data-corridor-id").val()),this.startCounty=parseInt(t.find(".corridor-data-start-county").val()),this.endCounty=parseInt(t.find(".corridor-data-end-county").val()),this.hgwy=t.find(".corridor-data-highway").val(),this.startRp=t.find(".corridor-data-from-rp").val(),this.endRp=t.find(".corridor-data-to-rp").val(),this.startPdp=parseInt(t.find(".corridor-data-from-pdp").val()),this.endPdp=parseInt(t.find(".corridor-data-to-pdp").val()),this.routeId=parseInt(t.find(".corridor-data-route-id").val())}return t.prototype.bootstrapHtml=function(t){t++;var e='<div class="row ssa-corridor-info-row">';return e+='<div class="col-xs-2">',e+="<label>Corridor #"+t+"</label>",e+="</div>",e+=s("Highway",this.hgwy),e+=s("Start County",n.getCountyById(this.startCounty)),e+=s("End County",n.getCountyById(this.endCounty)),e+=s("Start RP",this.startRp),e+=s("End RP",this.endRp),e+="</div>"},t.prototype.toString=function(){return"CorId "+this.corridorId+" "+this.startRp+" - "+this.endRp},t}();Object.defineProperty(e,"__esModule",{value:!0}),e.default=r},function(t,e,i){var s=i(2);/*! jQuery UI - v1.10.3 - 2013-05-03
-	* http://jqueryui.com
-	* Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.ui.effect.js, jquery.ui.accordion.js, jquery.ui.autocomplete.js, jquery.ui.button.js, jquery.ui.datepicker.js, jquery.ui.dialog.js, jquery.ui.effect-blind.js, jquery.ui.effect-bounce.js, jquery.ui.effect-clip.js, jquery.ui.effect-drop.js, jquery.ui.effect-explode.js, jquery.ui.effect-fade.js, jquery.ui.effect-fold.js, jquery.ui.effect-highlight.js, jquery.ui.effect-pulsate.js, jquery.ui.effect-scale.js, jquery.ui.effect-shake.js, jquery.ui.effect-slide.js, jquery.ui.effect-transfer.js, jquery.ui.menu.js, jquery.ui.position.js, jquery.ui.progressbar.js, jquery.ui.slider.js, jquery.ui.spinner.js, jquery.ui.tabs.js, jquery.ui.tooltip.js
-	* Copyright 2013 jQuery Foundation and other contributors; Licensed MIT */
-!function(t,e){function i(e,i){var n,o,r,a=e.nodeName.toLowerCase();return"area"===a?(n=e.parentNode,o=n.name,!(!e.href||!o||"map"!==n.nodeName.toLowerCase())&&(r=t("img[usemap=#"+o+"]")[0],!!r&&s(r))):(/input|select|textarea|button|object/.test(a)?!e.disabled:"a"===a?e.href||i:i)&&s(e)}function s(e){return t.expr.filters.visible(e)&&!t(e).parents().addBack().filter(function(){return"hidden"===t.css(this,"visibility")}).length}var n=0,o=/^ui-id-\d+$/;t.ui=t.ui||{},t.extend(t.ui,{version:"1.10.3",keyCode:{BACKSPACE:8,COMMA:188,DELETE:46,DOWN:40,END:35,ENTER:13,ESCAPE:27,HOME:36,LEFT:37,NUMPAD_ADD:107,NUMPAD_DECIMAL:110,NUMPAD_DIVIDE:111,NUMPAD_ENTER:108,NUMPAD_MULTIPLY:106,NUMPAD_SUBTRACT:109,PAGE_DOWN:34,PAGE_UP:33,PERIOD:190,RIGHT:39,SPACE:32,TAB:9,UP:38}}),t.fn.extend({focus:function(e){return function(i,s){return"number"==typeof i?this.each(function(){var e=this;setTimeout(function(){t(e).focus(),s&&s.call(e)},i)}):e.apply(this,arguments)}}(t.fn.focus),scrollParent:function(){var e;return e=t.ui.ie&&/(static|relative)/.test(this.css("position"))||/absolute/.test(this.css("position"))?this.parents().filter(function(){return/(relative|absolute|fixed)/.test(t.css(this,"position"))&&/(auto|scroll)/.test(t.css(this,"overflow")+t.css(this,"overflow-y")+t.css(this,"overflow-x"))}).eq(0):this.parents().filter(function(){return/(auto|scroll)/.test(t.css(this,"overflow")+t.css(this,"overflow-y")+t.css(this,"overflow-x"))}).eq(0),/fixed/.test(this.css("position"))||!e.length?t(document):e},zIndex:function(i){if(i!==e)return this.css("zIndex",i);if(this.length)for(var s,n,o=t(this[0]);o.length&&o[0]!==document;){if(s=o.css("position"),("absolute"===s||"relative"===s||"fixed"===s)&&(n=parseInt(o.css("zIndex"),10),!isNaN(n)&&0!==n))return n;o=o.parent()}return 0},uniqueId:function(){return this.each(function(){this.id||(this.id="ui-id-"+ ++n)})},removeUniqueId:function(){return this.each(function(){o.test(this.id)&&t(this).removeAttr("id")})}}),t.extend(t.expr[":"],{data:t.expr.createPseudo?t.expr.createPseudo(function(e){return function(i){return!!t.data(i,e)}}):function(e,i,s){return!!t.data(e,s[3])},focusable:function(e){return i(e,!isNaN(t.attr(e,"tabindex")))},tabbable:function(e){var s=t.attr(e,"tabindex"),n=isNaN(s);return(n||s>=0)&&i(e,!n)}}),t("<a>").outerWidth(1).jquery||t.each(["Width","Height"],function(i,s){function n(e,i,s,n){return t.each(o,function(){i-=parseFloat(t.css(e,"padding"+this))||0,s&&(i-=parseFloat(t.css(e,"border"+this+"Width"))||0),n&&(i-=parseFloat(t.css(e,"margin"+this))||0)}),i}var o="Width"===s?["Left","Right"]:["Top","Bottom"],r=s.toLowerCase(),a={innerWidth:t.fn.innerWidth,innerHeight:t.fn.innerHeight,outerWidth:t.fn.outerWidth,outerHeight:t.fn.outerHeight};t.fn["inner"+s]=function(i){return i===e?a["inner"+s].call(this):this.each(function(){t(this).css(r,n(this,i)+"px")})},t.fn["outer"+s]=function(e,i){return"number"!=typeof e?a["outer"+s].call(this,e):this.each(function(){t(this).css(r,n(this,e,!0,i)+"px")})}}),t.fn.addBack||(t.fn.addBack=function(t){return this.add(null==t?this.prevObject:this.prevObject.filter(t))}),t("<a>").data("a-b","a").removeData("a-b").data("a-b")&&(t.fn.removeData=function(e){return function(i){return arguments.length?e.call(this,t.camelCase(i)):e.call(this)}}(t.fn.removeData)),t.ui.ie=!!/msie [\w.]+/.exec(navigator.userAgent.toLowerCase()),t.support.selectstart="onselectstart"in document.createElement("div"),t.fn.extend({disableSelection:function(){return this.bind((t.support.selectstart?"selectstart":"mousedown")+".ui-disableSelection",function(t){t.preventDefault()})},enableSelection:function(){return this.unbind(".ui-disableSelection")}}),t.extend(t.ui,{plugin:{add:function(e,i,s){var n,o=t.ui[e].prototype;for(n in s)o.plugins[n]=o.plugins[n]||[],o.plugins[n].push([i,s[n]])},call:function(t,e,i){var s,n=t.plugins[e];if(n&&t.element[0].parentNode&&11!==t.element[0].parentNode.nodeType)for(s=0;s<n.length;s++)t.options[n[s][0]]&&n[s][1].apply(t.element,i)}},hasScroll:function(e,i){if("hidden"===t(e).css("overflow"))return!1;var s=i&&"left"===i?"scrollLeft":"scrollTop",n=!1;return e[s]>0||(e[s]=1,n=e[s]>0,e[s]=0,n)}})}(s),function(t,e){var i=0,s=Array.prototype.slice,n=t.cleanData;t.cleanData=function(e){for(var i,s=0;null!=(i=e[s]);s++)try{t(i).triggerHandler("remove")}catch(t){}n(e)},t.widget=function(e,i,s){var n,o,r,a,l={},h=e.split(".")[0];e=e.split(".")[1],n=h+"-"+e,s||(s=i,i=t.Widget),t.expr[":"][n.toLowerCase()]=function(e){return!!t.data(e,n)},t[h]=t[h]||{},o=t[h][e],r=t[h][e]=function(t,e){return this._createWidget?void(arguments.length&&this._createWidget(t,e)):new r(t,e)},t.extend(r,o,{version:s.version,_proto:t.extend({},s),_childConstructors:[]}),a=new i,a.options=t.widget.extend({},a.options),t.each(s,function(e,s){return t.isFunction(s)?void(l[e]=function(){var t=function(){return i.prototype[e].apply(this,arguments)},n=function(t){return i.prototype[e].apply(this,t)};return function(){var e,i=this._super,o=this._superApply;return this._super=t,this._superApply=n,e=s.apply(this,arguments),this._super=i,this._superApply=o,e}}()):void(l[e]=s)}),r.prototype=t.widget.extend(a,{widgetEventPrefix:o?a.widgetEventPrefix:e},l,{constructor:r,namespace:h,widgetName:e,widgetFullName:n}),o?(t.each(o._childConstructors,function(e,i){var s=i.prototype;t.widget(s.namespace+"."+s.widgetName,r,i._proto)}),delete o._childConstructors):i._childConstructors.push(r),t.widget.bridge(e,r)},t.widget.extend=function(i){for(var n,o,r=s.call(arguments,1),a=0,l=r.length;a<l;a++)for(n in r[a])o=r[a][n],r[a].hasOwnProperty(n)&&o!==e&&(t.isPlainObject(o)?i[n]=t.isPlainObject(i[n])?t.widget.extend({},i[n],o):t.widget.extend({},o):i[n]=o);return i},t.widget.bridge=function(i,n){var o=n.prototype.widgetFullName||i;t.fn[i]=function(r){var a="string"==typeof r,l=s.call(arguments,1),h=this;return r=!a&&l.length?t.widget.extend.apply(null,[r].concat(l)):r,a?this.each(function(){var s,n=t.data(this,o);return n?t.isFunction(n[r])&&"_"!==r.charAt(0)?(s=n[r].apply(n,l),s!==n&&s!==e?(h=s&&s.jquery?h.pushStack(s.get()):s,!1):void 0):t.error("no such method '"+r+"' for "+i+" widget instance"):t.error("cannot call methods on "+i+" prior to initialization; attempted to call method '"+r+"'")}):this.each(function(){var e=t.data(this,o);e?e.option(r||{})._init():t.data(this,o,new n(r,this))}),h}},t.Widget=function(){},t.Widget._childConstructors=[],t.Widget.prototype={widgetName:"widget",widgetEventPrefix:"",defaultElement:"<div>",options:{disabled:!1,create:null},_createWidget:function(e,s){s=t(s||this.defaultElement||this)[0],this.element=t(s),this.uuid=i++,this.eventNamespace="."+this.widgetName+this.uuid,this.options=t.widget.extend({},this.options,this._getCreateOptions(),e),this.bindings=t(),this.hoverable=t(),this.focusable=t(),s!==this&&(t.data(s,this.widgetFullName,this),this._on(!0,this.element,{remove:function(t){t.target===s&&this.destroy()}}),this.document=t(s.style?s.ownerDocument:s.document||s),this.window=t(this.document[0].defaultView||this.document[0].parentWindow)),this._create(),this._trigger("create",null,this._getCreateEventData()),this._init()},_getCreateOptions:t.noop,_getCreateEventData:t.noop,_create:t.noop,_init:t.noop,destroy:function(){this._destroy(),this.element.unbind(this.eventNamespace).removeData(this.widgetName).removeData(this.widgetFullName).removeData(t.camelCase(this.widgetFullName)),this.widget().unbind(this.eventNamespace).removeAttr("aria-disabled").removeClass(this.widgetFullName+"-disabled ui-state-disabled"),this.bindings.unbind(this.eventNamespace),this.hoverable.removeClass("ui-state-hover"),this.focusable.removeClass("ui-state-focus")},_destroy:t.noop,widget:function(){return this.element},option:function(i,s){var n,o,r,a=i;if(0===arguments.length)return t.widget.extend({},this.options);if("string"==typeof i)if(a={},n=i.split("."),i=n.shift(),n.length){for(o=a[i]=t.widget.extend({},this.options[i]),r=0;r<n.length-1;r++)o[n[r]]=o[n[r]]||{},o=o[n[r]];if(i=n.pop(),s===e)return o[i]===e?null:o[i];o[i]=s}else{if(s===e)return this.options[i]===e?null:this.options[i];a[i]=s}return this._setOptions(a),this},_setOptions:function(t){var e;for(e in t)this._setOption(e,t[e]);return this},_setOption:function(t,e){return this.options[t]=e,"disabled"===t&&(this.widget().toggleClass(this.widgetFullName+"-disabled ui-state-disabled",!!e).attr("aria-disabled",e),this.hoverable.removeClass("ui-state-hover"),this.focusable.removeClass("ui-state-focus")),this},enable:function(){return this._setOption("disabled",!1)},disable:function(){return this._setOption("disabled",!0)},_on:function(e,i,s){var n,o=this;"boolean"!=typeof e&&(s=i,i=e,e=!1),s?(i=n=t(i),this.bindings=this.bindings.add(i)):(s=i,i=this.element,n=this.widget()),t.each(s,function(s,r){function a(){if(e||o.options.disabled!==!0&&!t(this).hasClass("ui-state-disabled"))return("string"==typeof r?o[r]:r).apply(o,arguments)}"string"!=typeof r&&(a.guid=r.guid=r.guid||a.guid||t.guid++);var l=s.match(/^(\w+)\s*(.*)$/),h=l[1]+o.eventNamespace,c=l[2];c?n.delegate(c,h,a):i.bind(h,a)})},_off:function(t,e){e=(e||"").split(" ").join(this.eventNamespace+" ")+this.eventNamespace,t.unbind(e).undelegate(e)},_delay:function(t,e){function i(){return("string"==typeof t?s[t]:t).apply(s,arguments)}var s=this;return setTimeout(i,e||0)},_hoverable:function(e){this.hoverable=this.hoverable.add(e),this._on(e,{mouseenter:function(e){t(e.currentTarget).addClass("ui-state-hover")},mouseleave:function(e){t(e.currentTarget).removeClass("ui-state-hover")}})},_focusable:function(e){this.focusable=this.focusable.add(e),this._on(e,{focusin:function(e){t(e.currentTarget).addClass("ui-state-focus")},focusout:function(e){t(e.currentTarget).removeClass("ui-state-focus")}})},_trigger:function(e,i,s){var n,o,r=this.options[e];if(s=s||{},i=t.Event(i),i.type=(e===this.widgetEventPrefix?e:this.widgetEventPrefix+e).toLowerCase(),i.target=this.element[0],o=i.originalEvent)for(n in o)n in i||(i[n]=o[n]);return this.element.trigger(i,s),!(t.isFunction(r)&&r.apply(this.element[0],[i].concat(s))===!1||i.isDefaultPrevented())}},t.each({show:"fadeIn",hide:"fadeOut"},function(e,i){t.Widget.prototype["_"+e]=function(s,n,o){"string"==typeof n&&(n={effect:n});var r,a=n?n===!0||"number"==typeof n?i:n.effect||i:e;n=n||{},"number"==typeof n&&(n={duration:n}),r=!t.isEmptyObject(n),n.complete=o,n.delay&&s.delay(n.delay),r&&t.effects&&t.effects.effect[a]?s[e](n):a!==e&&s[a]?s[a](n.duration,n.easing,o):s.queue(function(i){t(this)[e](),o&&o.call(s[0]),i()})}})}(s),function(t,e){var i=!1;t(document).mouseup(function(){i=!1}),t.widget("ui.mouse",{version:"1.10.3",options:{cancel:"input,textarea,button,select,option",distance:1,delay:0},_mouseInit:function(){var e=this;this.element.bind("mousedown."+this.widgetName,function(t){return e._mouseDown(t)}).bind("click."+this.widgetName,function(i){if(!0===t.data(i.target,e.widgetName+".preventClickEvent"))return t.removeData(i.target,e.widgetName+".preventClickEvent"),i.stopImmediatePropagation(),!1}),this.started=!1},_mouseDestroy:function(){this.element.unbind("."+this.widgetName),this._mouseMoveDelegate&&t(document).unbind("mousemove."+this.widgetName,this._mouseMoveDelegate).unbind("mouseup."+this.widgetName,this._mouseUpDelegate)},_mouseDown:function(e){if(!i){this._mouseStarted&&this._mouseUp(e),this._mouseDownEvent=e;var s=this,n=1===e.which,o=!("string"!=typeof this.options.cancel||!e.target.nodeName)&&t(e.target).closest(this.options.cancel).length;return!(n&&!o&&this._mouseCapture(e))||(this.mouseDelayMet=!this.options.delay,this.mouseDelayMet||(this._mouseDelayTimer=setTimeout(function(){s.mouseDelayMet=!0},this.options.delay)),this._mouseDistanceMet(e)&&this._mouseDelayMet(e)&&(this._mouseStarted=this._mouseStart(e)!==!1,!this._mouseStarted)?(e.preventDefault(),!0):(!0===t.data(e.target,this.widgetName+".preventClickEvent")&&t.removeData(e.target,this.widgetName+".preventClickEvent"),this._mouseMoveDelegate=function(t){return s._mouseMove(t)},this._mouseUpDelegate=function(t){return s._mouseUp(t)},t(document).bind("mousemove."+this.widgetName,this._mouseMoveDelegate).bind("mouseup."+this.widgetName,this._mouseUpDelegate),e.preventDefault(),i=!0,!0))}},_mouseMove:function(e){return t.ui.ie&&(!document.documentMode||document.documentMode<9)&&!e.button?this._mouseUp(e):this._mouseStarted?(this._mouseDrag(e),e.preventDefault()):(this._mouseDistanceMet(e)&&this._mouseDelayMet(e)&&(this._mouseStarted=this._mouseStart(this._mouseDownEvent,e)!==!1,this._mouseStarted?this._mouseDrag(e):this._mouseUp(e)),!this._mouseStarted)},_mouseUp:function(e){return t(document).unbind("mousemove."+this.widgetName,this._mouseMoveDelegate).unbind("mouseup."+this.widgetName,this._mouseUpDelegate),this._mouseStarted&&(this._mouseStarted=!1,e.target===this._mouseDownEvent.target&&t.data(e.target,this.widgetName+".preventClickEvent",!0),this._mouseStop(e)),!1},_mouseDistanceMet:function(t){return Math.max(Math.abs(this._mouseDownEvent.pageX-t.pageX),Math.abs(this._mouseDownEvent.pageY-t.pageY))>=this.options.distance},_mouseDelayMet:function(){return this.mouseDelayMet},_mouseStart:function(){},_mouseDrag:function(){},_mouseStop:function(){},_mouseCapture:function(){return!0}})}(s),function(t,e){t.widget("ui.draggable",t.ui.mouse,{version:"1.10.3",widgetEventPrefix:"drag",options:{addClasses:!0,appendTo:"parent",axis:!1,connectToSortable:!1,containment:!1,cursor:"auto",cursorAt:!1,grid:!1,handle:!1,helper:"original",iframeFix:!1,opacity:!1,refreshPositions:!1,revert:!1,revertDuration:500,scope:"default",scroll:!0,scrollSensitivity:20,scrollSpeed:20,snap:!1,snapMode:"both",snapTolerance:20,stack:!1,zIndex:!1,drag:null,start:null,stop:null},_create:function(){"original"!==this.options.helper||/^(?:r|a|f)/.test(this.element.css("position"))||(this.element[0].style.position="relative"),this.options.addClasses&&this.element.addClass("ui-draggable"),this.options.disabled&&this.element.addClass("ui-draggable-disabled"),this._mouseInit()},_destroy:function(){this.element.removeClass("ui-draggable ui-draggable-dragging ui-draggable-disabled"),this._mouseDestroy()},_mouseCapture:function(e){var i=this.options;return!(this.helper||i.disabled||t(e.target).closest(".ui-resizable-handle").length>0)&&(this.handle=this._getHandle(e),!!this.handle&&(t(i.iframeFix===!0?"iframe":i.iframeFix).each(function(){t("<div class='ui-draggable-iframeFix' style='background: #fff;'></div>").css({width:this.offsetWidth+"px",height:this.offsetHeight+"px",position:"absolute",opacity:"0.001",zIndex:1e3}).css(t(this).offset()).appendTo("body")}),!0))},_mouseStart:function(e){var i=this.options;return this.helper=this._createHelper(e),this.helper.addClass("ui-draggable-dragging"),this._cacheHelperProportions(),t.ui.ddmanager&&(t.ui.ddmanager.current=this),this._cacheMargins(),this.cssPosition=this.helper.css("position"),this.scrollParent=this.helper.scrollParent(),this.offsetParent=this.helper.offsetParent(),this.offsetParentCssPosition=this.offsetParent.css("position"),this.offset=this.positionAbs=this.element.offset(),this.offset={top:this.offset.top-this.margins.top,left:this.offset.left-this.margins.left},this.offset.scroll=!1,t.extend(this.offset,{click:{left:e.pageX-this.offset.left,top:e.pageY-this.offset.top},parent:this._getParentOffset(),relative:this._getRelativeOffset()}),this.originalPosition=this.position=this._generatePosition(e),this.originalPageX=e.pageX,this.originalPageY=e.pageY,i.cursorAt&&this._adjustOffsetFromHelper(i.cursorAt),this._setContainment(),this._trigger("start",e)===!1?(this._clear(),!1):(this._cacheHelperProportions(),t.ui.ddmanager&&!i.dropBehaviour&&t.ui.ddmanager.prepareOffsets(this,e),this._mouseDrag(e,!0),t.ui.ddmanager&&t.ui.ddmanager.dragStart(this,e),!0)},_mouseDrag:function(e,i){if("fixed"===this.offsetParentCssPosition&&(this.offset.parent=this._getParentOffset()),this.position=this._generatePosition(e),this.positionAbs=this._convertPositionTo("absolute"),!i){var s=this._uiHash();if(this._trigger("drag",e,s)===!1)return this._mouseUp({}),!1;this.position=s.position}return this.options.axis&&"y"===this.options.axis||(this.helper[0].style.left=this.position.left+"px"),this.options.axis&&"x"===this.options.axis||(this.helper[0].style.top=this.position.top+"px"),t.ui.ddmanager&&t.ui.ddmanager.drag(this,e),!1},_mouseStop:function(e){var i=this,s=!1;return t.ui.ddmanager&&!this.options.dropBehaviour&&(s=t.ui.ddmanager.drop(this,e)),this.dropped&&(s=this.dropped,this.dropped=!1),!("original"===this.options.helper&&!t.contains(this.element[0].ownerDocument,this.element[0]))&&("invalid"===this.options.revert&&!s||"valid"===this.options.revert&&s||this.options.revert===!0||t.isFunction(this.options.revert)&&this.options.revert.call(this.element,s)?t(this.helper).animate(this.originalPosition,parseInt(this.options.revertDuration,10),function(){i._trigger("stop",e)!==!1&&i._clear()}):this._trigger("stop",e)!==!1&&this._clear(),!1)},_mouseUp:function(e){return t("div.ui-draggable-iframeFix").each(function(){this.parentNode.removeChild(this)}),t.ui.ddmanager&&t.ui.ddmanager.dragStop(this,e),t.ui.mouse.prototype._mouseUp.call(this,e)},cancel:function(){return this.helper.is(".ui-draggable-dragging")?this._mouseUp({}):this._clear(),this},_getHandle:function(e){return!this.options.handle||!!t(e.target).closest(this.element.find(this.options.handle)).length},_createHelper:function(e){var i=this.options,s=t.isFunction(i.helper)?t(i.helper.apply(this.element[0],[e])):"clone"===i.helper?this.element.clone().removeAttr("id"):this.element;return s.parents("body").length||s.appendTo("parent"===i.appendTo?this.element[0].parentNode:i.appendTo),s[0]===this.element[0]||/(fixed|absolute)/.test(s.css("position"))||s.css("position","absolute"),s},_adjustOffsetFromHelper:function(e){"string"==typeof e&&(e=e.split(" ")),t.isArray(e)&&(e={left:+e[0],top:+e[1]||0}),"left"in e&&(this.offset.click.left=e.left+this.margins.left),"right"in e&&(this.offset.click.left=this.helperProportions.width-e.right+this.margins.left),"top"in e&&(this.offset.click.top=e.top+this.margins.top),"bottom"in e&&(this.offset.click.top=this.helperProportions.height-e.bottom+this.margins.top)},_getParentOffset:function(){var e=this.offsetParent.offset();return"absolute"===this.cssPosition&&this.scrollParent[0]!==document&&t.contains(this.scrollParent[0],this.offsetParent[0])&&(e.left+=this.scrollParent.scrollLeft(),e.top+=this.scrollParent.scrollTop()),(this.offsetParent[0]===document.body||this.offsetParent[0].tagName&&"html"===this.offsetParent[0].tagName.toLowerCase()&&t.ui.ie)&&(e={top:0,left:0}),{top:e.top+(parseInt(this.offsetParent.css("borderTopWidth"),10)||0),left:e.left+(parseInt(this.offsetParent.css("borderLeftWidth"),10)||0)}},_getRelativeOffset:function(){if("relative"===this.cssPosition){var t=this.element.position();return{top:t.top-(parseInt(this.helper.css("top"),10)||0)+this.scrollParent.scrollTop(),left:t.left-(parseInt(this.helper.css("left"),10)||0)+this.scrollParent.scrollLeft()}}return{top:0,left:0}},_cacheMargins:function(){this.margins={left:parseInt(this.element.css("marginLeft"),10)||0,top:parseInt(this.element.css("marginTop"),10)||0,right:parseInt(this.element.css("marginRight"),10)||0,bottom:parseInt(this.element.css("marginBottom"),10)||0}},_cacheHelperProportions:function(){this.helperProportions={width:this.helper.outerWidth(),height:this.helper.outerHeight()}},_setContainment:function(){var e,i,s,n=this.options;return n.containment?"window"===n.containment?void(this.containment=[t(window).scrollLeft()-this.offset.relative.left-this.offset.parent.left,t(window).scrollTop()-this.offset.relative.top-this.offset.parent.top,t(window).scrollLeft()+t(window).width()-this.helperProportions.width-this.margins.left,t(window).scrollTop()+(t(window).height()||document.body.parentNode.scrollHeight)-this.helperProportions.height-this.margins.top]):"document"===n.containment?void(this.containment=[0,0,t(document).width()-this.helperProportions.width-this.margins.left,(t(document).height()||document.body.parentNode.scrollHeight)-this.helperProportions.height-this.margins.top]):n.containment.constructor===Array?void(this.containment=n.containment):("parent"===n.containment&&(n.containment=this.helper[0].parentNode),i=t(n.containment),s=i[0],void(s&&(e="hidden"!==i.css("overflow"),this.containment=[(parseInt(i.css("borderLeftWidth"),10)||0)+(parseInt(i.css("paddingLeft"),10)||0),(parseInt(i.css("borderTopWidth"),10)||0)+(parseInt(i.css("paddingTop"),10)||0),(e?Math.max(s.scrollWidth,s.offsetWidth):s.offsetWidth)-(parseInt(i.css("borderRightWidth"),10)||0)-(parseInt(i.css("paddingRight"),10)||0)-this.helperProportions.width-this.margins.left-this.margins.right,(e?Math.max(s.scrollHeight,s.offsetHeight):s.offsetHeight)-(parseInt(i.css("borderBottomWidth"),10)||0)-(parseInt(i.css("paddingBottom"),10)||0)-this.helperProportions.height-this.margins.top-this.margins.bottom],this.relative_container=i))):void(this.containment=null)},_convertPositionTo:function(e,i){i||(i=this.position);var s="absolute"===e?1:-1,n="absolute"!==this.cssPosition||this.scrollParent[0]!==document&&t.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent;return this.offset.scroll||(this.offset.scroll={top:n.scrollTop(),left:n.scrollLeft()}),{top:i.top+this.offset.relative.top*s+this.offset.parent.top*s-("fixed"===this.cssPosition?-this.scrollParent.scrollTop():this.offset.scroll.top)*s,left:i.left+this.offset.relative.left*s+this.offset.parent.left*s-("fixed"===this.cssPosition?-this.scrollParent.scrollLeft():this.offset.scroll.left)*s}},_generatePosition:function(e){var i,s,n,o,r=this.options,a="absolute"!==this.cssPosition||this.scrollParent[0]!==document&&t.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent,l=e.pageX,h=e.pageY;return this.offset.scroll||(this.offset.scroll={top:a.scrollTop(),left:a.scrollLeft()}),this.originalPosition&&(this.containment&&(this.relative_container?(s=this.relative_container.offset(),i=[this.containment[0]+s.left,this.containment[1]+s.top,this.containment[2]+s.left,this.containment[3]+s.top]):i=this.containment,e.pageX-this.offset.click.left<i[0]&&(l=i[0]+this.offset.click.left),e.pageY-this.offset.click.top<i[1]&&(h=i[1]+this.offset.click.top),e.pageX-this.offset.click.left>i[2]&&(l=i[2]+this.offset.click.left),e.pageY-this.offset.click.top>i[3]&&(h=i[3]+this.offset.click.top)),r.grid&&(n=r.grid[1]?this.originalPageY+Math.round((h-this.originalPageY)/r.grid[1])*r.grid[1]:this.originalPageY,h=i?n-this.offset.click.top>=i[1]||n-this.offset.click.top>i[3]?n:n-this.offset.click.top>=i[1]?n-r.grid[1]:n+r.grid[1]:n,o=r.grid[0]?this.originalPageX+Math.round((l-this.originalPageX)/r.grid[0])*r.grid[0]:this.originalPageX,l=i?o-this.offset.click.left>=i[0]||o-this.offset.click.left>i[2]?o:o-this.offset.click.left>=i[0]?o-r.grid[0]:o+r.grid[0]:o)),{top:h-this.offset.click.top-this.offset.relative.top-this.offset.parent.top+("fixed"===this.cssPosition?-this.scrollParent.scrollTop():this.offset.scroll.top),left:l-this.offset.click.left-this.offset.relative.left-this.offset.parent.left+("fixed"===this.cssPosition?-this.scrollParent.scrollLeft():this.offset.scroll.left)}},_clear:function(){this.helper.removeClass("ui-draggable-dragging"),this.helper[0]===this.element[0]||this.cancelHelperRemoval||this.helper.remove(),this.helper=null,this.cancelHelperRemoval=!1},_trigger:function(e,i,s){return s=s||this._uiHash(),t.ui.plugin.call(this,e,[i,s]),"drag"===e&&(this.positionAbs=this._convertPositionTo("absolute")),t.Widget.prototype._trigger.call(this,e,i,s)},plugins:{},_uiHash:function(){return{helper:this.helper,position:this.position,originalPosition:this.originalPosition,offset:this.positionAbs}}}),t.ui.plugin.add("draggable","connectToSortable",{start:function(e,i){var s=t(this).data("ui-draggable"),n=s.options,o=t.extend({},i,{item:s.element});s.sortables=[],t(n.connectToSortable).each(function(){var i=t.data(this,"ui-sortable");i&&!i.options.disabled&&(s.sortables.push({instance:i,shouldRevert:i.options.revert}),i.refreshPositions(),i._trigger("activate",e,o))})},stop:function(e,i){var s=t(this).data("ui-draggable"),n=t.extend({},i,{item:s.element});t.each(s.sortables,function(){this.instance.isOver?(this.instance.isOver=0,s.cancelHelperRemoval=!0,this.instance.cancelHelperRemoval=!1,this.shouldRevert&&(this.instance.options.revert=this.shouldRevert),this.instance._mouseStop(e),this.instance.options.helper=this.instance.options._helper,"original"===s.options.helper&&this.instance.currentItem.css({top:"auto",left:"auto"})):(this.instance.cancelHelperRemoval=!1,this.instance._trigger("deactivate",e,n))})},drag:function(e,i){var s=t(this).data("ui-draggable"),n=this;t.each(s.sortables,function(){var o=!1,r=this;this.instance.positionAbs=s.positionAbs,this.instance.helperProportions=s.helperProportions,this.instance.offset.click=s.offset.click,this.instance._intersectsWith(this.instance.containerCache)&&(o=!0,t.each(s.sortables,function(){return this.instance.positionAbs=s.positionAbs,this.instance.helperProportions=s.helperProportions,this.instance.offset.click=s.offset.click,this!==r&&this.instance._intersectsWith(this.instance.containerCache)&&t.contains(r.instance.element[0],this.instance.element[0])&&(o=!1),o})),o?(this.instance.isOver||(this.instance.isOver=1,this.instance.currentItem=t(n).clone().removeAttr("id").appendTo(this.instance.element).data("ui-sortable-item",!0),this.instance.options._helper=this.instance.options.helper,this.instance.options.helper=function(){return i.helper[0]},e.target=this.instance.currentItem[0],this.instance._mouseCapture(e,!0),this.instance._mouseStart(e,!0,!0),this.instance.offset.click.top=s.offset.click.top,this.instance.offset.click.left=s.offset.click.left,this.instance.offset.parent.left-=s.offset.parent.left-this.instance.offset.parent.left,this.instance.offset.parent.top-=s.offset.parent.top-this.instance.offset.parent.top,s._trigger("toSortable",e),s.dropped=this.instance.element,s.currentItem=s.element,this.instance.fromOutside=s),this.instance.currentItem&&this.instance._mouseDrag(e)):this.instance.isOver&&(this.instance.isOver=0,this.instance.cancelHelperRemoval=!0,this.instance.options.revert=!1,this.instance._trigger("out",e,this.instance._uiHash(this.instance)),this.instance._mouseStop(e,!0),this.instance.options.helper=this.instance.options._helper,this.instance.currentItem.remove(),this.instance.placeholder&&this.instance.placeholder.remove(),s._trigger("fromSortable",e),s.dropped=!1)})}}),t.ui.plugin.add("draggable","cursor",{start:function(){var e=t("body"),i=t(this).data("ui-draggable").options;e.css("cursor")&&(i._cursor=e.css("cursor")),e.css("cursor",i.cursor)},stop:function(){var e=t(this).data("ui-draggable").options;e._cursor&&t("body").css("cursor",e._cursor)}}),t.ui.plugin.add("draggable","opacity",{start:function(e,i){var s=t(i.helper),n=t(this).data("ui-draggable").options;s.css("opacity")&&(n._opacity=s.css("opacity")),s.css("opacity",n.opacity)},stop:function(e,i){var s=t(this).data("ui-draggable").options;s._opacity&&t(i.helper).css("opacity",s._opacity)}}),t.ui.plugin.add("draggable","scroll",{start:function(){var e=t(this).data("ui-draggable");e.scrollParent[0]!==document&&"HTML"!==e.scrollParent[0].tagName&&(e.overflowOffset=e.scrollParent.offset())},drag:function(e){var i=t(this).data("ui-draggable"),s=i.options,n=!1;i.scrollParent[0]!==document&&"HTML"!==i.scrollParent[0].tagName?(s.axis&&"x"===s.axis||(i.overflowOffset.top+i.scrollParent[0].offsetHeight-e.pageY<s.scrollSensitivity?i.scrollParent[0].scrollTop=n=i.scrollParent[0].scrollTop+s.scrollSpeed:e.pageY-i.overflowOffset.top<s.scrollSensitivity&&(i.scrollParent[0].scrollTop=n=i.scrollParent[0].scrollTop-s.scrollSpeed)),s.axis&&"y"===s.axis||(i.overflowOffset.left+i.scrollParent[0].offsetWidth-e.pageX<s.scrollSensitivity?i.scrollParent[0].scrollLeft=n=i.scrollParent[0].scrollLeft+s.scrollSpeed:e.pageX-i.overflowOffset.left<s.scrollSensitivity&&(i.scrollParent[0].scrollLeft=n=i.scrollParent[0].scrollLeft-s.scrollSpeed))):(s.axis&&"x"===s.axis||(e.pageY-t(document).scrollTop()<s.scrollSensitivity?n=t(document).scrollTop(t(document).scrollTop()-s.scrollSpeed):t(window).height()-(e.pageY-t(document).scrollTop())<s.scrollSensitivity&&(n=t(document).scrollTop(t(document).scrollTop()+s.scrollSpeed))),s.axis&&"y"===s.axis||(e.pageX-t(document).scrollLeft()<s.scrollSensitivity?n=t(document).scrollLeft(t(document).scrollLeft()-s.scrollSpeed):t(window).width()-(e.pageX-t(document).scrollLeft())<s.scrollSensitivity&&(n=t(document).scrollLeft(t(document).scrollLeft()+s.scrollSpeed)))),n!==!1&&t.ui.ddmanager&&!s.dropBehaviour&&t.ui.ddmanager.prepareOffsets(i,e)}}),t.ui.plugin.add("draggable","snap",{start:function(){var e=t(this).data("ui-draggable"),i=e.options;e.snapElements=[],t(i.snap.constructor!==String?i.snap.items||":data(ui-draggable)":i.snap).each(function(){var i=t(this),s=i.offset();this!==e.element[0]&&e.snapElements.push({item:this,width:i.outerWidth(),height:i.outerHeight(),top:s.top,left:s.left})})},drag:function(e,i){var s,n,o,r,a,l,h,c,u,d,p=t(this).data("ui-draggable"),f=p.options,g=f.snapTolerance,m=i.offset.left,v=m+p.helperProportions.width,y=i.offset.top,_=y+p.helperProportions.height;for(u=p.snapElements.length-1;u>=0;u--)a=p.snapElements[u].left,l=a+p.snapElements[u].width,h=p.snapElements[u].top,c=h+p.snapElements[u].height,v<a-g||m>l+g||_<h-g||y>c+g||!t.contains(p.snapElements[u].item.ownerDocument,p.snapElements[u].item)?(p.snapElements[u].snapping&&p.options.snap.release&&p.options.snap.release.call(p.element,e,t.extend(p._uiHash(),{snapItem:p.snapElements[u].item})),p.snapElements[u].snapping=!1):("inner"!==f.snapMode&&(s=Math.abs(h-_)<=g,n=Math.abs(c-y)<=g,o=Math.abs(a-v)<=g,r=Math.abs(l-m)<=g,s&&(i.position.top=p._convertPositionTo("relative",{top:h-p.helperProportions.height,left:0}).top-p.margins.top),n&&(i.position.top=p._convertPositionTo("relative",{top:c,left:0}).top-p.margins.top),o&&(i.position.left=p._convertPositionTo("relative",{top:0,left:a-p.helperProportions.width}).left-p.margins.left),r&&(i.position.left=p._convertPositionTo("relative",{top:0,left:l}).left-p.margins.left)),d=s||n||o||r,"outer"!==f.snapMode&&(s=Math.abs(h-y)<=g,n=Math.abs(c-_)<=g,o=Math.abs(a-m)<=g,r=Math.abs(l-v)<=g,s&&(i.position.top=p._convertPositionTo("relative",{top:h,left:0}).top-p.margins.top),n&&(i.position.top=p._convertPositionTo("relative",{top:c-p.helperProportions.height,left:0}).top-p.margins.top),o&&(i.position.left=p._convertPositionTo("relative",{top:0,left:a}).left-p.margins.left),r&&(i.position.left=p._convertPositionTo("relative",{top:0,left:l-p.helperProportions.width}).left-p.margins.left)),!p.snapElements[u].snapping&&(s||n||o||r||d)&&p.options.snap.snap&&p.options.snap.snap.call(p.element,e,t.extend(p._uiHash(),{snapItem:p.snapElements[u].item})),p.snapElements[u].snapping=s||n||o||r||d)}}),t.ui.plugin.add("draggable","stack",{start:function(){var e,i=this.data("ui-draggable").options,s=t.makeArray(t(i.stack)).sort(function(e,i){return(parseInt(t(e).css("zIndex"),10)||0)-(parseInt(t(i).css("zIndex"),10)||0)});s.length&&(e=parseInt(t(s[0]).css("zIndex"),10)||0,t(s).each(function(i){t(this).css("zIndex",e+i)}),this.css("zIndex",e+s.length))}}),t.ui.plugin.add("draggable","zIndex",{start:function(e,i){var s=t(i.helper),n=t(this).data("ui-draggable").options;s.css("zIndex")&&(n._zIndex=s.css("zIndex")),s.css("zIndex",n.zIndex)},stop:function(e,i){var s=t(this).data("ui-draggable").options;s._zIndex&&t(i.helper).css("zIndex",s._zIndex)}})}(s),function(t,e){function i(t,e,i){return t>e&&t<e+i}t.widget("ui.droppable",{version:"1.10.3",widgetEventPrefix:"drop",options:{accept:"*",activeClass:!1,addClasses:!0,greedy:!1,hoverClass:!1,scope:"default",tolerance:"intersect",activate:null,deactivate:null,drop:null,out:null,over:null},_create:function(){var e=this.options,i=e.accept;this.isover=!1,this.isout=!0,this.accept=t.isFunction(i)?i:function(t){
-return t.is(i)},this.proportions={width:this.element[0].offsetWidth,height:this.element[0].offsetHeight},t.ui.ddmanager.droppables[e.scope]=t.ui.ddmanager.droppables[e.scope]||[],t.ui.ddmanager.droppables[e.scope].push(this),e.addClasses&&this.element.addClass("ui-droppable")},_destroy:function(){for(var e=0,i=t.ui.ddmanager.droppables[this.options.scope];e<i.length;e++)i[e]===this&&i.splice(e,1);this.element.removeClass("ui-droppable ui-droppable-disabled")},_setOption:function(e,i){"accept"===e&&(this.accept=t.isFunction(i)?i:function(t){return t.is(i)}),t.Widget.prototype._setOption.apply(this,arguments)},_activate:function(e){var i=t.ui.ddmanager.current;this.options.activeClass&&this.element.addClass(this.options.activeClass),i&&this._trigger("activate",e,this.ui(i))},_deactivate:function(e){var i=t.ui.ddmanager.current;this.options.activeClass&&this.element.removeClass(this.options.activeClass),i&&this._trigger("deactivate",e,this.ui(i))},_over:function(e){var i=t.ui.ddmanager.current;i&&(i.currentItem||i.element)[0]!==this.element[0]&&this.accept.call(this.element[0],i.currentItem||i.element)&&(this.options.hoverClass&&this.element.addClass(this.options.hoverClass),this._trigger("over",e,this.ui(i)))},_out:function(e){var i=t.ui.ddmanager.current;i&&(i.currentItem||i.element)[0]!==this.element[0]&&this.accept.call(this.element[0],i.currentItem||i.element)&&(this.options.hoverClass&&this.element.removeClass(this.options.hoverClass),this._trigger("out",e,this.ui(i)))},_drop:function(e,i){var s=i||t.ui.ddmanager.current,n=!1;return!(!s||(s.currentItem||s.element)[0]===this.element[0])&&(this.element.find(":data(ui-droppable)").not(".ui-draggable-dragging").each(function(){var e=t.data(this,"ui-droppable");if(e.options.greedy&&!e.options.disabled&&e.options.scope===s.options.scope&&e.accept.call(e.element[0],s.currentItem||s.element)&&t.ui.intersect(s,t.extend(e,{offset:e.element.offset()}),e.options.tolerance))return n=!0,!1}),!n&&(!!this.accept.call(this.element[0],s.currentItem||s.element)&&(this.options.activeClass&&this.element.removeClass(this.options.activeClass),this.options.hoverClass&&this.element.removeClass(this.options.hoverClass),this._trigger("drop",e,this.ui(s)),this.element)))},ui:function(t){return{draggable:t.currentItem||t.element,helper:t.helper,position:t.position,offset:t.positionAbs}}}),t.ui.intersect=function(t,e,s){if(!e.offset)return!1;var n,o,r=(t.positionAbs||t.position.absolute).left,a=r+t.helperProportions.width,l=(t.positionAbs||t.position.absolute).top,h=l+t.helperProportions.height,c=e.offset.left,u=c+e.proportions.width,d=e.offset.top,p=d+e.proportions.height;switch(s){case"fit":return c<=r&&a<=u&&d<=l&&h<=p;case"intersect":return c<r+t.helperProportions.width/2&&a-t.helperProportions.width/2<u&&d<l+t.helperProportions.height/2&&h-t.helperProportions.height/2<p;case"pointer":return n=(t.positionAbs||t.position.absolute).left+(t.clickOffset||t.offset.click).left,o=(t.positionAbs||t.position.absolute).top+(t.clickOffset||t.offset.click).top,i(o,d,e.proportions.height)&&i(n,c,e.proportions.width);case"touch":return(l>=d&&l<=p||h>=d&&h<=p||l<d&&h>p)&&(r>=c&&r<=u||a>=c&&a<=u||r<c&&a>u);default:return!1}},t.ui.ddmanager={current:null,droppables:{default:[]},prepareOffsets:function(e,i){var s,n,o=t.ui.ddmanager.droppables[e.options.scope]||[],r=i?i.type:null,a=(e.currentItem||e.element).find(":data(ui-droppable)").addBack();t:for(s=0;s<o.length;s++)if(!(o[s].options.disabled||e&&!o[s].accept.call(o[s].element[0],e.currentItem||e.element))){for(n=0;n<a.length;n++)if(a[n]===o[s].element[0]){o[s].proportions.height=0;continue t}o[s].visible="none"!==o[s].element.css("display"),o[s].visible&&("mousedown"===r&&o[s]._activate.call(o[s],i),o[s].offset=o[s].element.offset(),o[s].proportions={width:o[s].element[0].offsetWidth,height:o[s].element[0].offsetHeight})}},drop:function(e,i){var s=!1;return t.each((t.ui.ddmanager.droppables[e.options.scope]||[]).slice(),function(){this.options&&(!this.options.disabled&&this.visible&&t.ui.intersect(e,this,this.options.tolerance)&&(s=this._drop.call(this,i)||s),!this.options.disabled&&this.visible&&this.accept.call(this.element[0],e.currentItem||e.element)&&(this.isout=!0,this.isover=!1,this._deactivate.call(this,i)))}),s},dragStart:function(e,i){e.element.parentsUntil("body").bind("scroll.droppable",function(){e.options.refreshPositions||t.ui.ddmanager.prepareOffsets(e,i)})},drag:function(e,i){e.options.refreshPositions&&t.ui.ddmanager.prepareOffsets(e,i),t.each(t.ui.ddmanager.droppables[e.options.scope]||[],function(){if(!this.options.disabled&&!this.greedyChild&&this.visible){var s,n,o,r=t.ui.intersect(e,this,this.options.tolerance),a=!r&&this.isover?"isout":r&&!this.isover?"isover":null;a&&(this.options.greedy&&(n=this.options.scope,o=this.element.parents(":data(ui-droppable)").filter(function(){return t.data(this,"ui-droppable").options.scope===n}),o.length&&(s=t.data(o[0],"ui-droppable"),s.greedyChild="isover"===a)),s&&"isover"===a&&(s.isover=!1,s.isout=!0,s._out.call(s,i)),this[a]=!0,this["isout"===a?"isover":"isout"]=!1,this["isover"===a?"_over":"_out"].call(this,i),s&&"isout"===a&&(s.isout=!1,s.isover=!0,s._over.call(s,i)))}})},dragStop:function(e,i){e.element.parentsUntil("body").unbind("scroll.droppable"),e.options.refreshPositions||t.ui.ddmanager.prepareOffsets(e,i)}}}(s),function(t,e){function i(t){return parseInt(t,10)||0}function s(t){return!isNaN(parseInt(t,10))}t.widget("ui.resizable",t.ui.mouse,{version:"1.10.3",widgetEventPrefix:"resize",options:{alsoResize:!1,animate:!1,animateDuration:"slow",animateEasing:"swing",aspectRatio:!1,autoHide:!1,containment:!1,ghost:!1,grid:!1,handles:"e,s,se",helper:!1,maxHeight:null,maxWidth:null,minHeight:10,minWidth:10,zIndex:90,resize:null,start:null,stop:null},_create:function(){var e,i,s,n,o,r=this,a=this.options;if(this.element.addClass("ui-resizable"),t.extend(this,{_aspectRatio:!!a.aspectRatio,aspectRatio:a.aspectRatio,originalElement:this.element,_proportionallyResizeElements:[],_helper:a.helper||a.ghost||a.animate?a.helper||"ui-resizable-helper":null}),this.element[0].nodeName.match(/canvas|textarea|input|select|button|img/i)&&(this.element.wrap(t("<div class='ui-wrapper' style='overflow: hidden;'></div>").css({position:this.element.css("position"),width:this.element.outerWidth(),height:this.element.outerHeight(),top:this.element.css("top"),left:this.element.css("left")})),this.element=this.element.parent().data("ui-resizable",this.element.data("ui-resizable")),this.elementIsWrapper=!0,this.element.css({marginLeft:this.originalElement.css("marginLeft"),marginTop:this.originalElement.css("marginTop"),marginRight:this.originalElement.css("marginRight"),marginBottom:this.originalElement.css("marginBottom")}),this.originalElement.css({marginLeft:0,marginTop:0,marginRight:0,marginBottom:0}),this.originalResizeStyle=this.originalElement.css("resize"),this.originalElement.css("resize","none"),this._proportionallyResizeElements.push(this.originalElement.css({position:"static",zoom:1,display:"block"})),this.originalElement.css({margin:this.originalElement.css("margin")}),this._proportionallyResize()),this.handles=a.handles||(t(".ui-resizable-handle",this.element).length?{n:".ui-resizable-n",e:".ui-resizable-e",s:".ui-resizable-s",w:".ui-resizable-w",se:".ui-resizable-se",sw:".ui-resizable-sw",ne:".ui-resizable-ne",nw:".ui-resizable-nw"}:"e,s,se"),this.handles.constructor===String)for("all"===this.handles&&(this.handles="n,e,s,w,se,sw,ne,nw"),e=this.handles.split(","),this.handles={},i=0;i<e.length;i++)s=t.trim(e[i]),o="ui-resizable-"+s,n=t("<div class='ui-resizable-handle "+o+"'></div>"),n.css({zIndex:a.zIndex}),"se"===s&&n.addClass("ui-icon ui-icon-gripsmall-diagonal-se"),this.handles[s]=".ui-resizable-"+s,this.element.append(n);this._renderAxis=function(e){var i,s,n,o;e=e||this.element;for(i in this.handles)this.handles[i].constructor===String&&(this.handles[i]=t(this.handles[i],this.element).show()),this.elementIsWrapper&&this.originalElement[0].nodeName.match(/textarea|input|select|button/i)&&(s=t(this.handles[i],this.element),o=/sw|ne|nw|se|n|s/.test(i)?s.outerHeight():s.outerWidth(),n=["padding",/ne|nw|n/.test(i)?"Top":/se|sw|s/.test(i)?"Bottom":/^e$/.test(i)?"Right":"Left"].join(""),e.css(n,o),this._proportionallyResize()),t(this.handles[i]).length},this._renderAxis(this.element),this._handles=t(".ui-resizable-handle",this.element).disableSelection(),this._handles.mouseover(function(){r.resizing||(this.className&&(n=this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i)),r.axis=n&&n[1]?n[1]:"se")}),a.autoHide&&(this._handles.hide(),t(this.element).addClass("ui-resizable-autohide").mouseenter(function(){a.disabled||(t(this).removeClass("ui-resizable-autohide"),r._handles.show())}).mouseleave(function(){a.disabled||r.resizing||(t(this).addClass("ui-resizable-autohide"),r._handles.hide())})),this._mouseInit()},_destroy:function(){this._mouseDestroy();var e,i=function(e){t(e).removeClass("ui-resizable ui-resizable-disabled ui-resizable-resizing").removeData("resizable").removeData("ui-resizable").unbind(".resizable").find(".ui-resizable-handle").remove()};return this.elementIsWrapper&&(i(this.element),e=this.element,this.originalElement.css({position:e.css("position"),width:e.outerWidth(),height:e.outerHeight(),top:e.css("top"),left:e.css("left")}).insertAfter(e),e.remove()),this.originalElement.css("resize",this.originalResizeStyle),i(this.originalElement),this},_mouseCapture:function(e){var i,s,n=!1;for(i in this.handles)s=t(this.handles[i])[0],(s===e.target||t.contains(s,e.target))&&(n=!0);return!this.options.disabled&&n},_mouseStart:function(e){var s,n,o,r=this.options,a=this.element.position(),l=this.element;return this.resizing=!0,/absolute/.test(l.css("position"))?l.css({position:"absolute",top:l.css("top"),left:l.css("left")}):l.is(".ui-draggable")&&l.css({position:"absolute",top:a.top,left:a.left}),this._renderProxy(),s=i(this.helper.css("left")),n=i(this.helper.css("top")),r.containment&&(s+=t(r.containment).scrollLeft()||0,n+=t(r.containment).scrollTop()||0),this.offset=this.helper.offset(),this.position={left:s,top:n},this.size=this._helper?{width:l.outerWidth(),height:l.outerHeight()}:{width:l.width(),height:l.height()},this.originalSize=this._helper?{width:l.outerWidth(),height:l.outerHeight()}:{width:l.width(),height:l.height()},this.originalPosition={left:s,top:n},this.sizeDiff={width:l.outerWidth()-l.width(),height:l.outerHeight()-l.height()},this.originalMousePosition={left:e.pageX,top:e.pageY},this.aspectRatio="number"==typeof r.aspectRatio?r.aspectRatio:this.originalSize.width/this.originalSize.height||1,o=t(".ui-resizable-"+this.axis).css("cursor"),t("body").css("cursor","auto"===o?this.axis+"-resize":o),l.addClass("ui-resizable-resizing"),this._propagate("start",e),!0},_mouseDrag:function(e){var i,s=this.helper,n={},o=this.originalMousePosition,r=this.axis,a=this.position.top,l=this.position.left,h=this.size.width,c=this.size.height,u=e.pageX-o.left||0,d=e.pageY-o.top||0,p=this._change[r];return!!p&&(i=p.apply(this,[e,u,d]),this._updateVirtualBoundaries(e.shiftKey),(this._aspectRatio||e.shiftKey)&&(i=this._updateRatio(i,e)),i=this._respectSize(i,e),this._updateCache(i),this._propagate("resize",e),this.position.top!==a&&(n.top=this.position.top+"px"),this.position.left!==l&&(n.left=this.position.left+"px"),this.size.width!==h&&(n.width=this.size.width+"px"),this.size.height!==c&&(n.height=this.size.height+"px"),s.css(n),!this._helper&&this._proportionallyResizeElements.length&&this._proportionallyResize(),t.isEmptyObject(n)||this._trigger("resize",e,this.ui()),!1)},_mouseStop:function(e){this.resizing=!1;var i,s,n,o,r,a,l,h=this.options,c=this;return this._helper&&(i=this._proportionallyResizeElements,s=i.length&&/textarea/i.test(i[0].nodeName),n=s&&t.ui.hasScroll(i[0],"left")?0:c.sizeDiff.height,o=s?0:c.sizeDiff.width,r={width:c.helper.width()-o,height:c.helper.height()-n},a=parseInt(c.element.css("left"),10)+(c.position.left-c.originalPosition.left)||null,l=parseInt(c.element.css("top"),10)+(c.position.top-c.originalPosition.top)||null,h.animate||this.element.css(t.extend(r,{top:l,left:a})),c.helper.height(c.size.height),c.helper.width(c.size.width),this._helper&&!h.animate&&this._proportionallyResize()),t("body").css("cursor","auto"),this.element.removeClass("ui-resizable-resizing"),this._propagate("stop",e),this._helper&&this.helper.remove(),!1},_updateVirtualBoundaries:function(t){var e,i,n,o,r,a=this.options;r={minWidth:s(a.minWidth)?a.minWidth:0,maxWidth:s(a.maxWidth)?a.maxWidth:1/0,minHeight:s(a.minHeight)?a.minHeight:0,maxHeight:s(a.maxHeight)?a.maxHeight:1/0},(this._aspectRatio||t)&&(e=r.minHeight*this.aspectRatio,n=r.minWidth/this.aspectRatio,i=r.maxHeight*this.aspectRatio,o=r.maxWidth/this.aspectRatio,e>r.minWidth&&(r.minWidth=e),n>r.minHeight&&(r.minHeight=n),i<r.maxWidth&&(r.maxWidth=i),o<r.maxHeight&&(r.maxHeight=o)),this._vBoundaries=r},_updateCache:function(t){this.offset=this.helper.offset(),s(t.left)&&(this.position.left=t.left),s(t.top)&&(this.position.top=t.top),s(t.height)&&(this.size.height=t.height),s(t.width)&&(this.size.width=t.width)},_updateRatio:function(t){var e=this.position,i=this.size,n=this.axis;return s(t.height)?t.width=t.height*this.aspectRatio:s(t.width)&&(t.height=t.width/this.aspectRatio),"sw"===n&&(t.left=e.left+(i.width-t.width),t.top=null),"nw"===n&&(t.top=e.top+(i.height-t.height),t.left=e.left+(i.width-t.width)),t},_respectSize:function(t){var e=this._vBoundaries,i=this.axis,n=s(t.width)&&e.maxWidth&&e.maxWidth<t.width,o=s(t.height)&&e.maxHeight&&e.maxHeight<t.height,r=s(t.width)&&e.minWidth&&e.minWidth>t.width,a=s(t.height)&&e.minHeight&&e.minHeight>t.height,l=this.originalPosition.left+this.originalSize.width,h=this.position.top+this.size.height,c=/sw|nw|w/.test(i),u=/nw|ne|n/.test(i);return r&&(t.width=e.minWidth),a&&(t.height=e.minHeight),n&&(t.width=e.maxWidth),o&&(t.height=e.maxHeight),r&&c&&(t.left=l-e.minWidth),n&&c&&(t.left=l-e.maxWidth),a&&u&&(t.top=h-e.minHeight),o&&u&&(t.top=h-e.maxHeight),t.width||t.height||t.left||!t.top?t.width||t.height||t.top||!t.left||(t.left=null):t.top=null,t},_proportionallyResize:function(){if(this._proportionallyResizeElements.length){var t,e,i,s,n,o=this.helper||this.element;for(t=0;t<this._proportionallyResizeElements.length;t++){if(n=this._proportionallyResizeElements[t],!this.borderDif)for(this.borderDif=[],i=[n.css("borderTopWidth"),n.css("borderRightWidth"),n.css("borderBottomWidth"),n.css("borderLeftWidth")],s=[n.css("paddingTop"),n.css("paddingRight"),n.css("paddingBottom"),n.css("paddingLeft")],e=0;e<i.length;e++)this.borderDif[e]=(parseInt(i[e],10)||0)+(parseInt(s[e],10)||0);n.css({height:o.height()-this.borderDif[0]-this.borderDif[2]||0,width:o.width()-this.borderDif[1]-this.borderDif[3]||0})}}},_renderProxy:function(){var e=this.element,i=this.options;this.elementOffset=e.offset(),this._helper?(this.helper=this.helper||t("<div style='overflow:hidden;'></div>"),this.helper.addClass(this._helper).css({width:this.element.outerWidth()-1,height:this.element.outerHeight()-1,position:"absolute",left:this.elementOffset.left+"px",top:this.elementOffset.top+"px",zIndex:++i.zIndex}),this.helper.appendTo("body").disableSelection()):this.helper=this.element},_change:{e:function(t,e){return{width:this.originalSize.width+e}},w:function(t,e){var i=this.originalSize,s=this.originalPosition;return{left:s.left+e,width:i.width-e}},n:function(t,e,i){var s=this.originalSize,n=this.originalPosition;return{top:n.top+i,height:s.height-i}},s:function(t,e,i){return{height:this.originalSize.height+i}},se:function(e,i,s){return t.extend(this._change.s.apply(this,arguments),this._change.e.apply(this,[e,i,s]))},sw:function(e,i,s){return t.extend(this._change.s.apply(this,arguments),this._change.w.apply(this,[e,i,s]))},ne:function(e,i,s){return t.extend(this._change.n.apply(this,arguments),this._change.e.apply(this,[e,i,s]))},nw:function(e,i,s){return t.extend(this._change.n.apply(this,arguments),this._change.w.apply(this,[e,i,s]))}},_propagate:function(e,i){t.ui.plugin.call(this,e,[i,this.ui()]),"resize"!==e&&this._trigger(e,i,this.ui())},plugins:{},ui:function(){return{originalElement:this.originalElement,element:this.element,helper:this.helper,position:this.position,size:this.size,originalSize:this.originalSize,originalPosition:this.originalPosition}}}),t.ui.plugin.add("resizable","animate",{stop:function(e){var i=t(this).data("ui-resizable"),s=i.options,n=i._proportionallyResizeElements,o=n.length&&/textarea/i.test(n[0].nodeName),r=o&&t.ui.hasScroll(n[0],"left")?0:i.sizeDiff.height,a=o?0:i.sizeDiff.width,l={width:i.size.width-a,height:i.size.height-r},h=parseInt(i.element.css("left"),10)+(i.position.left-i.originalPosition.left)||null,c=parseInt(i.element.css("top"),10)+(i.position.top-i.originalPosition.top)||null;i.element.animate(t.extend(l,c&&h?{top:c,left:h}:{}),{duration:s.animateDuration,easing:s.animateEasing,step:function(){var s={width:parseInt(i.element.css("width"),10),height:parseInt(i.element.css("height"),10),top:parseInt(i.element.css("top"),10),left:parseInt(i.element.css("left"),10)};n&&n.length&&t(n[0]).css({width:s.width,height:s.height}),i._updateCache(s),i._propagate("resize",e)}})}}),t.ui.plugin.add("resizable","containment",{start:function(){var e,s,n,o,r,a,l,h=t(this).data("ui-resizable"),c=h.options,u=h.element,d=c.containment,p=d instanceof t?d.get(0):/parent/.test(d)?u.parent().get(0):d;p&&(h.containerElement=t(p),/document/.test(d)||d===document?(h.containerOffset={left:0,top:0},h.containerPosition={left:0,top:0},h.parentData={element:t(document),left:0,top:0,width:t(document).width(),height:t(document).height()||document.body.parentNode.scrollHeight}):(e=t(p),s=[],t(["Top","Right","Left","Bottom"]).each(function(t,n){s[t]=i(e.css("padding"+n))}),h.containerOffset=e.offset(),h.containerPosition=e.position(),h.containerSize={height:e.innerHeight()-s[3],width:e.innerWidth()-s[1]},n=h.containerOffset,o=h.containerSize.height,r=h.containerSize.width,a=t.ui.hasScroll(p,"left")?p.scrollWidth:r,l=t.ui.hasScroll(p)?p.scrollHeight:o,h.parentData={element:p,left:n.left,top:n.top,width:a,height:l}))},resize:function(e){var i,s,n,o,r=t(this).data("ui-resizable"),a=r.options,l=r.containerOffset,h=r.position,c=r._aspectRatio||e.shiftKey,u={top:0,left:0},d=r.containerElement;d[0]!==document&&/static/.test(d.css("position"))&&(u=l),h.left<(r._helper?l.left:0)&&(r.size.width=r.size.width+(r._helper?r.position.left-l.left:r.position.left-u.left),c&&(r.size.height=r.size.width/r.aspectRatio),r.position.left=a.helper?l.left:0),h.top<(r._helper?l.top:0)&&(r.size.height=r.size.height+(r._helper?r.position.top-l.top:r.position.top),c&&(r.size.width=r.size.height*r.aspectRatio),r.position.top=r._helper?l.top:0),r.offset.left=r.parentData.left+r.position.left,r.offset.top=r.parentData.top+r.position.top,i=Math.abs((r._helper?r.offset.left-u.left:r.offset.left-u.left)+r.sizeDiff.width),s=Math.abs((r._helper?r.offset.top-u.top:r.offset.top-l.top)+r.sizeDiff.height),n=r.containerElement.get(0)===r.element.parent().get(0),o=/relative|absolute/.test(r.containerElement.css("position")),n&&o&&(i-=r.parentData.left),i+r.size.width>=r.parentData.width&&(r.size.width=r.parentData.width-i,c&&(r.size.height=r.size.width/r.aspectRatio)),s+r.size.height>=r.parentData.height&&(r.size.height=r.parentData.height-s,c&&(r.size.width=r.size.height*r.aspectRatio))},stop:function(){var e=t(this).data("ui-resizable"),i=e.options,s=e.containerOffset,n=e.containerPosition,o=e.containerElement,r=t(e.helper),a=r.offset(),l=r.outerWidth()-e.sizeDiff.width,h=r.outerHeight()-e.sizeDiff.height;e._helper&&!i.animate&&/relative/.test(o.css("position"))&&t(this).css({left:a.left-n.left-s.left,width:l,height:h}),e._helper&&!i.animate&&/static/.test(o.css("position"))&&t(this).css({left:a.left-n.left-s.left,width:l,height:h})}}),t.ui.plugin.add("resizable","alsoResize",{start:function(){var e=t(this).data("ui-resizable"),i=e.options,s=function(e){t(e).each(function(){var e=t(this);e.data("ui-resizable-alsoresize",{width:parseInt(e.width(),10),height:parseInt(e.height(),10),left:parseInt(e.css("left"),10),top:parseInt(e.css("top"),10)})})};"object"!=typeof i.alsoResize||i.alsoResize.parentNode?s(i.alsoResize):i.alsoResize.length?(i.alsoResize=i.alsoResize[0],s(i.alsoResize)):t.each(i.alsoResize,function(t){s(t)})},resize:function(e,i){var s=t(this).data("ui-resizable"),n=s.options,o=s.originalSize,r=s.originalPosition,a={height:s.size.height-o.height||0,width:s.size.width-o.width||0,top:s.position.top-r.top||0,left:s.position.left-r.left||0},l=function(e,s){t(e).each(function(){var e=t(this),n=t(this).data("ui-resizable-alsoresize"),o={},r=s&&s.length?s:e.parents(i.originalElement[0]).length?["width","height"]:["width","height","top","left"];t.each(r,function(t,e){var i=(n[e]||0)+(a[e]||0);i&&i>=0&&(o[e]=i||null)}),e.css(o)})};"object"!=typeof n.alsoResize||n.alsoResize.nodeType?l(n.alsoResize):t.each(n.alsoResize,function(t,e){l(t,e)})},stop:function(){t(this).removeData("resizable-alsoresize")}}),t.ui.plugin.add("resizable","ghost",{start:function(){var e=t(this).data("ui-resizable"),i=e.options,s=e.size;e.ghost=e.originalElement.clone(),e.ghost.css({opacity:.25,display:"block",position:"relative",height:s.height,width:s.width,margin:0,left:0,top:0}).addClass("ui-resizable-ghost").addClass("string"==typeof i.ghost?i.ghost:""),e.ghost.appendTo(e.helper)},resize:function(){var e=t(this).data("ui-resizable");e.ghost&&e.ghost.css({position:"relative",height:e.size.height,width:e.size.width})},stop:function(){var e=t(this).data("ui-resizable");e.ghost&&e.helper&&e.helper.get(0).removeChild(e.ghost.get(0))}}),t.ui.plugin.add("resizable","grid",{resize:function(){var e=t(this).data("ui-resizable"),i=e.options,s=e.size,n=e.originalSize,o=e.originalPosition,r=e.axis,a="number"==typeof i.grid?[i.grid,i.grid]:i.grid,l=a[0]||1,h=a[1]||1,c=Math.round((s.width-n.width)/l)*l,u=Math.round((s.height-n.height)/h)*h,d=n.width+c,p=n.height+u,f=i.maxWidth&&i.maxWidth<d,g=i.maxHeight&&i.maxHeight<p,m=i.minWidth&&i.minWidth>d,v=i.minHeight&&i.minHeight>p;i.grid=a,m&&(d+=l),v&&(p+=h),f&&(d-=l),g&&(p-=h),/^(se|s|e)$/.test(r)?(e.size.width=d,e.size.height=p):/^(ne)$/.test(r)?(e.size.width=d,e.size.height=p,e.position.top=o.top-u):/^(sw)$/.test(r)?(e.size.width=d,e.size.height=p,e.position.left=o.left-c):(e.size.width=d,e.size.height=p,e.position.top=o.top-u,e.position.left=o.left-c)}})}(s),function(t,e){t.widget("ui.selectable",t.ui.mouse,{version:"1.10.3",options:{appendTo:"body",autoRefresh:!0,distance:0,filter:"*",tolerance:"touch",selected:null,selecting:null,start:null,stop:null,unselected:null,unselecting:null},_create:function(){var e,i=this;this.element.addClass("ui-selectable"),this.dragged=!1,this.refresh=function(){e=t(i.options.filter,i.element[0]),e.addClass("ui-selectee"),e.each(function(){var e=t(this),i=e.offset();t.data(this,"selectable-item",{element:this,$element:e,left:i.left,top:i.top,right:i.left+e.outerWidth(),bottom:i.top+e.outerHeight(),startselected:!1,selected:e.hasClass("ui-selected"),selecting:e.hasClass("ui-selecting"),unselecting:e.hasClass("ui-unselecting")})})},this.refresh(),this.selectees=e.addClass("ui-selectee"),this._mouseInit(),this.helper=t("<div class='ui-selectable-helper'></div>")},_destroy:function(){this.selectees.removeClass("ui-selectee").removeData("selectable-item"),this.element.removeClass("ui-selectable ui-selectable-disabled"),this._mouseDestroy()},_mouseStart:function(e){var i=this,s=this.options;this.opos=[e.pageX,e.pageY],this.options.disabled||(this.selectees=t(s.filter,this.element[0]),this._trigger("start",e),t(s.appendTo).append(this.helper),this.helper.css({left:e.pageX,top:e.pageY,width:0,height:0}),s.autoRefresh&&this.refresh(),this.selectees.filter(".ui-selected").each(function(){var s=t.data(this,"selectable-item");s.startselected=!0,e.metaKey||e.ctrlKey||(s.$element.removeClass("ui-selected"),s.selected=!1,s.$element.addClass("ui-unselecting"),s.unselecting=!0,i._trigger("unselecting",e,{unselecting:s.element}))}),t(e.target).parents().addBack().each(function(){var s,n=t.data(this,"selectable-item");if(n)return s=!e.metaKey&&!e.ctrlKey||!n.$element.hasClass("ui-selected"),n.$element.removeClass(s?"ui-unselecting":"ui-selected").addClass(s?"ui-selecting":"ui-unselecting"),n.unselecting=!s,n.selecting=s,n.selected=s,s?i._trigger("selecting",e,{selecting:n.element}):i._trigger("unselecting",e,{unselecting:n.element}),!1}))},_mouseDrag:function(e){if(this.dragged=!0,!this.options.disabled){var i,s=this,n=this.options,o=this.opos[0],r=this.opos[1],a=e.pageX,l=e.pageY;return o>a&&(i=a,a=o,o=i),r>l&&(i=l,l=r,r=i),this.helper.css({left:o,top:r,width:a-o,height:l-r}),this.selectees.each(function(){var i=t.data(this,"selectable-item"),h=!1;i&&i.element!==s.element[0]&&("touch"===n.tolerance?h=!(i.left>a||i.right<o||i.top>l||i.bottom<r):"fit"===n.tolerance&&(h=i.left>o&&i.right<a&&i.top>r&&i.bottom<l),h?(i.selected&&(i.$element.removeClass("ui-selected"),i.selected=!1),i.unselecting&&(i.$element.removeClass("ui-unselecting"),i.unselecting=!1),i.selecting||(i.$element.addClass("ui-selecting"),i.selecting=!0,s._trigger("selecting",e,{selecting:i.element}))):(i.selecting&&((e.metaKey||e.ctrlKey)&&i.startselected?(i.$element.removeClass("ui-selecting"),i.selecting=!1,i.$element.addClass("ui-selected"),i.selected=!0):(i.$element.removeClass("ui-selecting"),i.selecting=!1,i.startselected&&(i.$element.addClass("ui-unselecting"),i.unselecting=!0),s._trigger("unselecting",e,{unselecting:i.element}))),i.selected&&(e.metaKey||e.ctrlKey||i.startselected||(i.$element.removeClass("ui-selected"),i.selected=!1,i.$element.addClass("ui-unselecting"),i.unselecting=!0,s._trigger("unselecting",e,{unselecting:i.element})))))}),!1}},_mouseStop:function(e){var i=this;return this.dragged=!1,t(".ui-unselecting",this.element[0]).each(function(){var s=t.data(this,"selectable-item");s.$element.removeClass("ui-unselecting"),s.unselecting=!1,s.startselected=!1,i._trigger("unselected",e,{unselected:s.element})}),t(".ui-selecting",this.element[0]).each(function(){var s=t.data(this,"selectable-item");s.$element.removeClass("ui-selecting").addClass("ui-selected"),s.selecting=!1,s.selected=!0,s.startselected=!0,i._trigger("selected",e,{selected:s.element})}),this._trigger("stop",e),this.helper.remove(),!1}})}(s),function(t,e){function i(t,e,i){return t>e&&t<e+i}function s(t){return/left|right/.test(t.css("float"))||/inline|table-cell/.test(t.css("display"))}t.widget("ui.sortable",t.ui.mouse,{version:"1.10.3",widgetEventPrefix:"sort",ready:!1,options:{appendTo:"parent",axis:!1,connectWith:!1,containment:!1,cursor:"auto",cursorAt:!1,dropOnEmpty:!0,forcePlaceholderSize:!1,forceHelperSize:!1,grid:!1,handle:!1,helper:"original",items:"> *",opacity:!1,placeholder:!1,revert:!1,scroll:!0,scrollSensitivity:20,scrollSpeed:20,scope:"default",tolerance:"intersect",zIndex:1e3,activate:null,beforeStop:null,change:null,deactivate:null,out:null,over:null,receive:null,remove:null,sort:null,start:null,stop:null,update:null},_create:function(){var t=this.options;this.containerCache={},this.element.addClass("ui-sortable"),this.refresh(),this.floating=!!this.items.length&&("x"===t.axis||s(this.items[0].item)),this.offset=this.element.offset(),this._mouseInit(),this.ready=!0},_destroy:function(){this.element.removeClass("ui-sortable ui-sortable-disabled"),this._mouseDestroy();for(var t=this.items.length-1;t>=0;t--)this.items[t].item.removeData(this.widgetName+"-item");return this},_setOption:function(e,i){"disabled"===e?(this.options[e]=i,this.widget().toggleClass("ui-sortable-disabled",!!i)):t.Widget.prototype._setOption.apply(this,arguments)},_mouseCapture:function(e,i){var s=null,n=!1,o=this;return!this.reverting&&(!this.options.disabled&&"static"!==this.options.type&&(this._refreshItems(e),t(e.target).parents().each(function(){if(t.data(this,o.widgetName+"-item")===o)return s=t(this),!1}),t.data(e.target,o.widgetName+"-item")===o&&(s=t(e.target)),!!s&&(!(this.options.handle&&!i&&(t(this.options.handle,s).find("*").addBack().each(function(){this===e.target&&(n=!0)}),!n))&&(this.currentItem=s,this._removeCurrentsFromItems(),!0))))},_mouseStart:function(e,i,s){var n,o,r=this.options;if(this.currentContainer=this,this.refreshPositions(),this.helper=this._createHelper(e),this._cacheHelperProportions(),this._cacheMargins(),this.scrollParent=this.helper.scrollParent(),this.offset=this.currentItem.offset(),this.offset={top:this.offset.top-this.margins.top,left:this.offset.left-this.margins.left},t.extend(this.offset,{click:{left:e.pageX-this.offset.left,top:e.pageY-this.offset.top},parent:this._getParentOffset(),relative:this._getRelativeOffset()}),this.helper.css("position","absolute"),this.cssPosition=this.helper.css("position"),this.originalPosition=this._generatePosition(e),this.originalPageX=e.pageX,this.originalPageY=e.pageY,r.cursorAt&&this._adjustOffsetFromHelper(r.cursorAt),this.domPosition={prev:this.currentItem.prev()[0],parent:this.currentItem.parent()[0]},this.helper[0]!==this.currentItem[0]&&this.currentItem.hide(),this._createPlaceholder(),r.containment&&this._setContainment(),r.cursor&&"auto"!==r.cursor&&(o=this.document.find("body"),this.storedCursor=o.css("cursor"),o.css("cursor",r.cursor),this.storedStylesheet=t("<style>*{ cursor: "+r.cursor+" !important; }</style>").appendTo(o)),r.opacity&&(this.helper.css("opacity")&&(this._storedOpacity=this.helper.css("opacity")),this.helper.css("opacity",r.opacity)),r.zIndex&&(this.helper.css("zIndex")&&(this._storedZIndex=this.helper.css("zIndex")),this.helper.css("zIndex",r.zIndex)),this.scrollParent[0]!==document&&"HTML"!==this.scrollParent[0].tagName&&(this.overflowOffset=this.scrollParent.offset()),this._trigger("start",e,this._uiHash()),this._preserveHelperProportions||this._cacheHelperProportions(),!s)for(n=this.containers.length-1;n>=0;n--)this.containers[n]._trigger("activate",e,this._uiHash(this));return t.ui.ddmanager&&(t.ui.ddmanager.current=this),t.ui.ddmanager&&!r.dropBehaviour&&t.ui.ddmanager.prepareOffsets(this,e),this.dragging=!0,this.helper.addClass("ui-sortable-helper"),this._mouseDrag(e),!0},_mouseDrag:function(e){var i,s,n,o,r=this.options,a=!1;for(this.position=this._generatePosition(e),this.positionAbs=this._convertPositionTo("absolute"),this.lastPositionAbs||(this.lastPositionAbs=this.positionAbs),this.options.scroll&&(this.scrollParent[0]!==document&&"HTML"!==this.scrollParent[0].tagName?(this.overflowOffset.top+this.scrollParent[0].offsetHeight-e.pageY<r.scrollSensitivity?this.scrollParent[0].scrollTop=a=this.scrollParent[0].scrollTop+r.scrollSpeed:e.pageY-this.overflowOffset.top<r.scrollSensitivity&&(this.scrollParent[0].scrollTop=a=this.scrollParent[0].scrollTop-r.scrollSpeed),this.overflowOffset.left+this.scrollParent[0].offsetWidth-e.pageX<r.scrollSensitivity?this.scrollParent[0].scrollLeft=a=this.scrollParent[0].scrollLeft+r.scrollSpeed:e.pageX-this.overflowOffset.left<r.scrollSensitivity&&(this.scrollParent[0].scrollLeft=a=this.scrollParent[0].scrollLeft-r.scrollSpeed)):(e.pageY-t(document).scrollTop()<r.scrollSensitivity?a=t(document).scrollTop(t(document).scrollTop()-r.scrollSpeed):t(window).height()-(e.pageY-t(document).scrollTop())<r.scrollSensitivity&&(a=t(document).scrollTop(t(document).scrollTop()+r.scrollSpeed)),e.pageX-t(document).scrollLeft()<r.scrollSensitivity?a=t(document).scrollLeft(t(document).scrollLeft()-r.scrollSpeed):t(window).width()-(e.pageX-t(document).scrollLeft())<r.scrollSensitivity&&(a=t(document).scrollLeft(t(document).scrollLeft()+r.scrollSpeed))),a!==!1&&t.ui.ddmanager&&!r.dropBehaviour&&t.ui.ddmanager.prepareOffsets(this,e)),this.positionAbs=this._convertPositionTo("absolute"),this.options.axis&&"y"===this.options.axis||(this.helper[0].style.left=this.position.left+"px"),this.options.axis&&"x"===this.options.axis||(this.helper[0].style.top=this.position.top+"px"),i=this.items.length-1;i>=0;i--)if(s=this.items[i],n=s.item[0],
-o=this._intersectsWithPointer(s),o&&s.instance===this.currentContainer&&!(n===this.currentItem[0]||this.placeholder[1===o?"next":"prev"]()[0]===n||t.contains(this.placeholder[0],n)||"semi-dynamic"===this.options.type&&t.contains(this.element[0],n))){if(this.direction=1===o?"down":"up","pointer"!==this.options.tolerance&&!this._intersectsWithSides(s))break;this._rearrange(e,s),this._trigger("change",e,this._uiHash());break}return this._contactContainers(e),t.ui.ddmanager&&t.ui.ddmanager.drag(this,e),this._trigger("sort",e,this._uiHash()),this.lastPositionAbs=this.positionAbs,!1},_mouseStop:function(e,i){if(e){if(t.ui.ddmanager&&!this.options.dropBehaviour&&t.ui.ddmanager.drop(this,e),this.options.revert){var s=this,n=this.placeholder.offset(),o=this.options.axis,r={};o&&"x"!==o||(r.left=n.left-this.offset.parent.left-this.margins.left+(this.offsetParent[0]===document.body?0:this.offsetParent[0].scrollLeft)),o&&"y"!==o||(r.top=n.top-this.offset.parent.top-this.margins.top+(this.offsetParent[0]===document.body?0:this.offsetParent[0].scrollTop)),this.reverting=!0,t(this.helper).animate(r,parseInt(this.options.revert,10)||500,function(){s._clear(e)})}else this._clear(e,i);return!1}},cancel:function(){if(this.dragging){this._mouseUp({target:null}),"original"===this.options.helper?this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper"):this.currentItem.show();for(var e=this.containers.length-1;e>=0;e--)this.containers[e]._trigger("deactivate",null,this._uiHash(this)),this.containers[e].containerCache.over&&(this.containers[e]._trigger("out",null,this._uiHash(this)),this.containers[e].containerCache.over=0)}return this.placeholder&&(this.placeholder[0].parentNode&&this.placeholder[0].parentNode.removeChild(this.placeholder[0]),"original"!==this.options.helper&&this.helper&&this.helper[0].parentNode&&this.helper.remove(),t.extend(this,{helper:null,dragging:!1,reverting:!1,_noFinalSort:null}),this.domPosition.prev?t(this.domPosition.prev).after(this.currentItem):t(this.domPosition.parent).prepend(this.currentItem)),this},serialize:function(e){var i=this._getItemsAsjQuery(e&&e.connected),s=[];return e=e||{},t(i).each(function(){var i=(t(e.item||this).attr(e.attribute||"id")||"").match(e.expression||/(.+)[\-=_](.+)/);i&&s.push((e.key||i[1]+"[]")+"="+(e.key&&e.expression?i[1]:i[2]))}),!s.length&&e.key&&s.push(e.key+"="),s.join("&")},toArray:function(e){var i=this._getItemsAsjQuery(e&&e.connected),s=[];return e=e||{},i.each(function(){s.push(t(e.item||this).attr(e.attribute||"id")||"")}),s},_intersectsWith:function(t){var e=this.positionAbs.left,i=e+this.helperProportions.width,s=this.positionAbs.top,n=s+this.helperProportions.height,o=t.left,r=o+t.width,a=t.top,l=a+t.height,h=this.offset.click.top,c=this.offset.click.left,u="x"===this.options.axis||s+h>a&&s+h<l,d="y"===this.options.axis||e+c>o&&e+c<r,p=u&&d;return"pointer"===this.options.tolerance||this.options.forcePointerForContainers||"pointer"!==this.options.tolerance&&this.helperProportions[this.floating?"width":"height"]>t[this.floating?"width":"height"]?p:o<e+this.helperProportions.width/2&&i-this.helperProportions.width/2<r&&a<s+this.helperProportions.height/2&&n-this.helperProportions.height/2<l},_intersectsWithPointer:function(t){var e="x"===this.options.axis||i(this.positionAbs.top+this.offset.click.top,t.top,t.height),s="y"===this.options.axis||i(this.positionAbs.left+this.offset.click.left,t.left,t.width),n=e&&s,o=this._getDragVerticalDirection(),r=this._getDragHorizontalDirection();return!!n&&(this.floating?r&&"right"===r||"down"===o?2:1:o&&("down"===o?2:1))},_intersectsWithSides:function(t){var e=i(this.positionAbs.top+this.offset.click.top,t.top+t.height/2,t.height),s=i(this.positionAbs.left+this.offset.click.left,t.left+t.width/2,t.width),n=this._getDragVerticalDirection(),o=this._getDragHorizontalDirection();return this.floating&&o?"right"===o&&s||"left"===o&&!s:n&&("down"===n&&e||"up"===n&&!e)},_getDragVerticalDirection:function(){var t=this.positionAbs.top-this.lastPositionAbs.top;return 0!==t&&(t>0?"down":"up")},_getDragHorizontalDirection:function(){var t=this.positionAbs.left-this.lastPositionAbs.left;return 0!==t&&(t>0?"right":"left")},refresh:function(t){return this._refreshItems(t),this.refreshPositions(),this},_connectWith:function(){var t=this.options;return t.connectWith.constructor===String?[t.connectWith]:t.connectWith},_getItemsAsjQuery:function(e){var i,s,n,o,r=[],a=[],l=this._connectWith();if(l&&e)for(i=l.length-1;i>=0;i--)for(n=t(l[i]),s=n.length-1;s>=0;s--)o=t.data(n[s],this.widgetFullName),o&&o!==this&&!o.options.disabled&&a.push([t.isFunction(o.options.items)?o.options.items.call(o.element):t(o.options.items,o.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"),o]);for(a.push([t.isFunction(this.options.items)?this.options.items.call(this.element,null,{options:this.options,item:this.currentItem}):t(this.options.items,this.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"),this]),i=a.length-1;i>=0;i--)a[i][0].each(function(){r.push(this)});return t(r)},_removeCurrentsFromItems:function(){var e=this.currentItem.find(":data("+this.widgetName+"-item)");this.items=t.grep(this.items,function(t){for(var i=0;i<e.length;i++)if(e[i]===t.item[0])return!1;return!0})},_refreshItems:function(e){this.items=[],this.containers=[this];var i,s,n,o,r,a,l,h,c=this.items,u=[[t.isFunction(this.options.items)?this.options.items.call(this.element[0],e,{item:this.currentItem}):t(this.options.items,this.element),this]],d=this._connectWith();if(d&&this.ready)for(i=d.length-1;i>=0;i--)for(n=t(d[i]),s=n.length-1;s>=0;s--)o=t.data(n[s],this.widgetFullName),o&&o!==this&&!o.options.disabled&&(u.push([t.isFunction(o.options.items)?o.options.items.call(o.element[0],e,{item:this.currentItem}):t(o.options.items,o.element),o]),this.containers.push(o));for(i=u.length-1;i>=0;i--)for(r=u[i][1],a=u[i][0],s=0,h=a.length;s<h;s++)l=t(a[s]),l.data(this.widgetName+"-item",r),c.push({item:l,instance:r,width:0,height:0,left:0,top:0})},refreshPositions:function(e){this.offsetParent&&this.helper&&(this.offset.parent=this._getParentOffset());var i,s,n,o;for(i=this.items.length-1;i>=0;i--)s=this.items[i],s.instance!==this.currentContainer&&this.currentContainer&&s.item[0]!==this.currentItem[0]||(n=this.options.toleranceElement?t(this.options.toleranceElement,s.item):s.item,e||(s.width=n.outerWidth(),s.height=n.outerHeight()),o=n.offset(),s.left=o.left,s.top=o.top);if(this.options.custom&&this.options.custom.refreshContainers)this.options.custom.refreshContainers.call(this);else for(i=this.containers.length-1;i>=0;i--)o=this.containers[i].element.offset(),this.containers[i].containerCache.left=o.left,this.containers[i].containerCache.top=o.top,this.containers[i].containerCache.width=this.containers[i].element.outerWidth(),this.containers[i].containerCache.height=this.containers[i].element.outerHeight();return this},_createPlaceholder:function(e){e=e||this;var i,s=e.options;s.placeholder&&s.placeholder.constructor!==String||(i=s.placeholder,s.placeholder={element:function(){var s=e.currentItem[0].nodeName.toLowerCase(),n=t("<"+s+">",e.document[0]).addClass(i||e.currentItem[0].className+" ui-sortable-placeholder").removeClass("ui-sortable-helper");return"tr"===s?e.currentItem.children().each(function(){t("<td>&#160;</td>",e.document[0]).attr("colspan",t(this).attr("colspan")||1).appendTo(n)}):"img"===s&&n.attr("src",e.currentItem.attr("src")),i||n.css("visibility","hidden"),n},update:function(t,n){i&&!s.forcePlaceholderSize||(n.height()||n.height(e.currentItem.innerHeight()-parseInt(e.currentItem.css("paddingTop")||0,10)-parseInt(e.currentItem.css("paddingBottom")||0,10)),n.width()||n.width(e.currentItem.innerWidth()-parseInt(e.currentItem.css("paddingLeft")||0,10)-parseInt(e.currentItem.css("paddingRight")||0,10)))}}),e.placeholder=t(s.placeholder.element.call(e.element,e.currentItem)),e.currentItem.after(e.placeholder),s.placeholder.update(e,e.placeholder)},_contactContainers:function(e){var n,o,r,a,l,h,c,u,d,p,f=null,g=null;for(n=this.containers.length-1;n>=0;n--)if(!t.contains(this.currentItem[0],this.containers[n].element[0]))if(this._intersectsWith(this.containers[n].containerCache)){if(f&&t.contains(this.containers[n].element[0],f.element[0]))continue;f=this.containers[n],g=n}else this.containers[n].containerCache.over&&(this.containers[n]._trigger("out",e,this._uiHash(this)),this.containers[n].containerCache.over=0);if(f)if(1===this.containers.length)this.containers[g].containerCache.over||(this.containers[g]._trigger("over",e,this._uiHash(this)),this.containers[g].containerCache.over=1);else{for(r=1e4,a=null,p=f.floating||s(this.currentItem),l=p?"left":"top",h=p?"width":"height",c=this.positionAbs[l]+this.offset.click[l],o=this.items.length-1;o>=0;o--)t.contains(this.containers[g].element[0],this.items[o].item[0])&&this.items[o].item[0]!==this.currentItem[0]&&(p&&!i(this.positionAbs.top+this.offset.click.top,this.items[o].top,this.items[o].height)||(u=this.items[o].item.offset()[l],d=!1,Math.abs(u-c)>Math.abs(u+this.items[o][h]-c)&&(d=!0,u+=this.items[o][h]),Math.abs(u-c)<r&&(r=Math.abs(u-c),a=this.items[o],this.direction=d?"up":"down")));if(!a&&!this.options.dropOnEmpty)return;if(this.currentContainer===this.containers[g])return;a?this._rearrange(e,a,null,!0):this._rearrange(e,null,this.containers[g].element,!0),this._trigger("change",e,this._uiHash()),this.containers[g]._trigger("change",e,this._uiHash(this)),this.currentContainer=this.containers[g],this.options.placeholder.update(this.currentContainer,this.placeholder),this.containers[g]._trigger("over",e,this._uiHash(this)),this.containers[g].containerCache.over=1}},_createHelper:function(e){var i=this.options,s=t.isFunction(i.helper)?t(i.helper.apply(this.element[0],[e,this.currentItem])):"clone"===i.helper?this.currentItem.clone():this.currentItem;return s.parents("body").length||t("parent"!==i.appendTo?i.appendTo:this.currentItem[0].parentNode)[0].appendChild(s[0]),s[0]===this.currentItem[0]&&(this._storedCSS={width:this.currentItem[0].style.width,height:this.currentItem[0].style.height,position:this.currentItem.css("position"),top:this.currentItem.css("top"),left:this.currentItem.css("left")}),s[0].style.width&&!i.forceHelperSize||s.width(this.currentItem.width()),s[0].style.height&&!i.forceHelperSize||s.height(this.currentItem.height()),s},_adjustOffsetFromHelper:function(e){"string"==typeof e&&(e=e.split(" ")),t.isArray(e)&&(e={left:+e[0],top:+e[1]||0}),"left"in e&&(this.offset.click.left=e.left+this.margins.left),"right"in e&&(this.offset.click.left=this.helperProportions.width-e.right+this.margins.left),"top"in e&&(this.offset.click.top=e.top+this.margins.top),"bottom"in e&&(this.offset.click.top=this.helperProportions.height-e.bottom+this.margins.top)},_getParentOffset:function(){this.offsetParent=this.helper.offsetParent();var e=this.offsetParent.offset();return"absolute"===this.cssPosition&&this.scrollParent[0]!==document&&t.contains(this.scrollParent[0],this.offsetParent[0])&&(e.left+=this.scrollParent.scrollLeft(),e.top+=this.scrollParent.scrollTop()),(this.offsetParent[0]===document.body||this.offsetParent[0].tagName&&"html"===this.offsetParent[0].tagName.toLowerCase()&&t.ui.ie)&&(e={top:0,left:0}),{top:e.top+(parseInt(this.offsetParent.css("borderTopWidth"),10)||0),left:e.left+(parseInt(this.offsetParent.css("borderLeftWidth"),10)||0)}},_getRelativeOffset:function(){if("relative"===this.cssPosition){var t=this.currentItem.position();return{top:t.top-(parseInt(this.helper.css("top"),10)||0)+this.scrollParent.scrollTop(),left:t.left-(parseInt(this.helper.css("left"),10)||0)+this.scrollParent.scrollLeft()}}return{top:0,left:0}},_cacheMargins:function(){this.margins={left:parseInt(this.currentItem.css("marginLeft"),10)||0,top:parseInt(this.currentItem.css("marginTop"),10)||0}},_cacheHelperProportions:function(){this.helperProportions={width:this.helper.outerWidth(),height:this.helper.outerHeight()}},_setContainment:function(){var e,i,s,n=this.options;"parent"===n.containment&&(n.containment=this.helper[0].parentNode),"document"!==n.containment&&"window"!==n.containment||(this.containment=[0-this.offset.relative.left-this.offset.parent.left,0-this.offset.relative.top-this.offset.parent.top,t("document"===n.containment?document:window).width()-this.helperProportions.width-this.margins.left,(t("document"===n.containment?document:window).height()||document.body.parentNode.scrollHeight)-this.helperProportions.height-this.margins.top]),/^(document|window|parent)$/.test(n.containment)||(e=t(n.containment)[0],i=t(n.containment).offset(),s="hidden"!==t(e).css("overflow"),this.containment=[i.left+(parseInt(t(e).css("borderLeftWidth"),10)||0)+(parseInt(t(e).css("paddingLeft"),10)||0)-this.margins.left,i.top+(parseInt(t(e).css("borderTopWidth"),10)||0)+(parseInt(t(e).css("paddingTop"),10)||0)-this.margins.top,i.left+(s?Math.max(e.scrollWidth,e.offsetWidth):e.offsetWidth)-(parseInt(t(e).css("borderLeftWidth"),10)||0)-(parseInt(t(e).css("paddingRight"),10)||0)-this.helperProportions.width-this.margins.left,i.top+(s?Math.max(e.scrollHeight,e.offsetHeight):e.offsetHeight)-(parseInt(t(e).css("borderTopWidth"),10)||0)-(parseInt(t(e).css("paddingBottom"),10)||0)-this.helperProportions.height-this.margins.top])},_convertPositionTo:function(e,i){i||(i=this.position);var s="absolute"===e?1:-1,n="absolute"!==this.cssPosition||this.scrollParent[0]!==document&&t.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent,o=/(html|body)/i.test(n[0].tagName);return{top:i.top+this.offset.relative.top*s+this.offset.parent.top*s-("fixed"===this.cssPosition?-this.scrollParent.scrollTop():o?0:n.scrollTop())*s,left:i.left+this.offset.relative.left*s+this.offset.parent.left*s-("fixed"===this.cssPosition?-this.scrollParent.scrollLeft():o?0:n.scrollLeft())*s}},_generatePosition:function(e){var i,s,n=this.options,o=e.pageX,r=e.pageY,a="absolute"!==this.cssPosition||this.scrollParent[0]!==document&&t.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent,l=/(html|body)/i.test(a[0].tagName);return"relative"!==this.cssPosition||this.scrollParent[0]!==document&&this.scrollParent[0]!==this.offsetParent[0]||(this.offset.relative=this._getRelativeOffset()),this.originalPosition&&(this.containment&&(e.pageX-this.offset.click.left<this.containment[0]&&(o=this.containment[0]+this.offset.click.left),e.pageY-this.offset.click.top<this.containment[1]&&(r=this.containment[1]+this.offset.click.top),e.pageX-this.offset.click.left>this.containment[2]&&(o=this.containment[2]+this.offset.click.left),e.pageY-this.offset.click.top>this.containment[3]&&(r=this.containment[3]+this.offset.click.top)),n.grid&&(i=this.originalPageY+Math.round((r-this.originalPageY)/n.grid[1])*n.grid[1],r=this.containment?i-this.offset.click.top>=this.containment[1]&&i-this.offset.click.top<=this.containment[3]?i:i-this.offset.click.top>=this.containment[1]?i-n.grid[1]:i+n.grid[1]:i,s=this.originalPageX+Math.round((o-this.originalPageX)/n.grid[0])*n.grid[0],o=this.containment?s-this.offset.click.left>=this.containment[0]&&s-this.offset.click.left<=this.containment[2]?s:s-this.offset.click.left>=this.containment[0]?s-n.grid[0]:s+n.grid[0]:s)),{top:r-this.offset.click.top-this.offset.relative.top-this.offset.parent.top+("fixed"===this.cssPosition?-this.scrollParent.scrollTop():l?0:a.scrollTop()),left:o-this.offset.click.left-this.offset.relative.left-this.offset.parent.left+("fixed"===this.cssPosition?-this.scrollParent.scrollLeft():l?0:a.scrollLeft())}},_rearrange:function(t,e,i,s){i?i[0].appendChild(this.placeholder[0]):e.item[0].parentNode.insertBefore(this.placeholder[0],"down"===this.direction?e.item[0]:e.item[0].nextSibling),this.counter=this.counter?++this.counter:1;var n=this.counter;this._delay(function(){n===this.counter&&this.refreshPositions(!s)})},_clear:function(t,e){this.reverting=!1;var i,s=[];if(!this._noFinalSort&&this.currentItem.parent().length&&this.placeholder.before(this.currentItem),this._noFinalSort=null,this.helper[0]===this.currentItem[0]){for(i in this._storedCSS)"auto"!==this._storedCSS[i]&&"static"!==this._storedCSS[i]||(this._storedCSS[i]="");this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper")}else this.currentItem.show();for(this.fromOutside&&!e&&s.push(function(t){this._trigger("receive",t,this._uiHash(this.fromOutside))}),!this.fromOutside&&this.domPosition.prev===this.currentItem.prev().not(".ui-sortable-helper")[0]&&this.domPosition.parent===this.currentItem.parent()[0]||e||s.push(function(t){this._trigger("update",t,this._uiHash())}),this!==this.currentContainer&&(e||(s.push(function(t){this._trigger("remove",t,this._uiHash())}),s.push(function(t){return function(e){t._trigger("receive",e,this._uiHash(this))}}.call(this,this.currentContainer)),s.push(function(t){return function(e){t._trigger("update",e,this._uiHash(this))}}.call(this,this.currentContainer)))),i=this.containers.length-1;i>=0;i--)e||s.push(function(t){return function(e){t._trigger("deactivate",e,this._uiHash(this))}}.call(this,this.containers[i])),this.containers[i].containerCache.over&&(s.push(function(t){return function(e){t._trigger("out",e,this._uiHash(this))}}.call(this,this.containers[i])),this.containers[i].containerCache.over=0);if(this.storedCursor&&(this.document.find("body").css("cursor",this.storedCursor),this.storedStylesheet.remove()),this._storedOpacity&&this.helper.css("opacity",this._storedOpacity),this._storedZIndex&&this.helper.css("zIndex","auto"===this._storedZIndex?"":this._storedZIndex),this.dragging=!1,this.cancelHelperRemoval){if(!e){for(this._trigger("beforeStop",t,this._uiHash()),i=0;i<s.length;i++)s[i].call(this,t);this._trigger("stop",t,this._uiHash())}return this.fromOutside=!1,!1}if(e||this._trigger("beforeStop",t,this._uiHash()),this.placeholder[0].parentNode.removeChild(this.placeholder[0]),this.helper[0]!==this.currentItem[0]&&this.helper.remove(),this.helper=null,!e){for(i=0;i<s.length;i++)s[i].call(this,t);this._trigger("stop",t,this._uiHash())}return this.fromOutside=!1,!0},_trigger:function(){t.Widget.prototype._trigger.apply(this,arguments)===!1&&this.cancel()},_uiHash:function(e){var i=e||this;return{helper:i.helper,placeholder:i.placeholder||t([]),position:i.position,originalPosition:i.originalPosition,offset:i.positionAbs,item:i.currentItem,sender:e?e.element:null}}})}(s),function(t,e){var i="ui-effects-";t.effects={effect:{}},/*!
-	 * jQuery Color Animations v2.1.2
-	 * https://github.com/jquery/jquery-color
-	 *
-	 * Copyright 2013 jQuery Foundation and other contributors
-	 * Released under the MIT license.
-	 * http://jquery.org/license
-	 *
-	 * Date: Wed Jan 16 08:47:09 2013 -0600
-	 */
-function(t,e){function i(t,e,i){var s=u[e.type]||{};return null==t?i||!e.def?null:e.def:(t=s.floor?~~t:parseFloat(t),isNaN(t)?e.def:s.mod?(t+s.mod)%s.mod:0>t?0:s.max<t?s.max:t)}function s(e){var i=h(),s=i._rgba=[];return e=e.toLowerCase(),f(l,function(t,n){var o,r=n.re.exec(e),a=r&&n.parse(r),l=n.space||"rgba";if(a)return o=i[l](a),i[c[l].cache]=o[c[l].cache],s=i._rgba=o._rgba,!1}),s.length?("0,0,0,0"===s.join()&&t.extend(s,o.transparent),i):o[e]}function n(t,e,i){return i=(i+1)%1,6*i<1?t+(e-t)*i*6:2*i<1?e:3*i<2?t+(e-t)*(2/3-i)*6:t}var o,r="backgroundColor borderBottomColor borderLeftColor borderRightColor borderTopColor color columnRuleColor outlineColor textDecorationColor textEmphasisColor",a=/^([\-+])=\s*(\d+\.?\d*)/,l=[{re:/rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,parse:function(t){return[t[1],t[2],t[3],t[4]]}},{re:/rgba?\(\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,parse:function(t){return[2.55*t[1],2.55*t[2],2.55*t[3],t[4]]}},{re:/#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})/,parse:function(t){return[parseInt(t[1],16),parseInt(t[2],16),parseInt(t[3],16)]}},{re:/#([a-f0-9])([a-f0-9])([a-f0-9])/,parse:function(t){return[parseInt(t[1]+t[1],16),parseInt(t[2]+t[2],16),parseInt(t[3]+t[3],16)]}},{re:/hsla?\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d?(?:\.\d+)?)\s*)?\)/,space:"hsla",parse:function(t){return[t[1],t[2]/100,t[3]/100,t[4]]}}],h=t.Color=function(e,i,s,n){return new t.Color.fn.parse(e,i,s,n)},c={rgba:{props:{red:{idx:0,type:"byte"},green:{idx:1,type:"byte"},blue:{idx:2,type:"byte"}}},hsla:{props:{hue:{idx:0,type:"degrees"},saturation:{idx:1,type:"percent"},lightness:{idx:2,type:"percent"}}}},u={byte:{floor:!0,max:255},percent:{max:1},degrees:{mod:360,floor:!0}},d=h.support={},p=t("<p>")[0],f=t.each;p.style.cssText="background-color:rgba(1,1,1,.5)",d.rgba=p.style.backgroundColor.indexOf("rgba")>-1,f(c,function(t,e){e.cache="_"+t,e.props.alpha={idx:3,type:"percent",def:1}}),h.fn=t.extend(h.prototype,{parse:function(n,r,a,l){if(n===e)return this._rgba=[null,null,null,null],this;(n.jquery||n.nodeType)&&(n=t(n).css(r),r=e);var u=this,d=t.type(n),p=this._rgba=[];return r!==e&&(n=[n,r,a,l],d="array"),"string"===d?this.parse(s(n)||o._default):"array"===d?(f(c.rgba.props,function(t,e){p[e.idx]=i(n[e.idx],e)}),this):"object"===d?(n instanceof h?f(c,function(t,e){n[e.cache]&&(u[e.cache]=n[e.cache].slice())}):f(c,function(e,s){var o=s.cache;f(s.props,function(t,e){if(!u[o]&&s.to){if("alpha"===t||null==n[t])return;u[o]=s.to(u._rgba)}u[o][e.idx]=i(n[t],e,!0)}),u[o]&&t.inArray(null,u[o].slice(0,3))<0&&(u[o][3]=1,s.from&&(u._rgba=s.from(u[o])))}),this):void 0},is:function(t){var e=h(t),i=!0,s=this;return f(c,function(t,n){var o,r=e[n.cache];return r&&(o=s[n.cache]||n.to&&n.to(s._rgba)||[],f(n.props,function(t,e){if(null!=r[e.idx])return i=r[e.idx]===o[e.idx]})),i}),i},_space:function(){var t=[],e=this;return f(c,function(i,s){e[s.cache]&&t.push(i)}),t.pop()},transition:function(t,e){var s=h(t),n=s._space(),o=c[n],r=0===this.alpha()?h("transparent"):this,a=r[o.cache]||o.to(r._rgba),l=a.slice();return s=s[o.cache],f(o.props,function(t,n){var o=n.idx,r=a[o],h=s[o],c=u[n.type]||{};null!==h&&(null===r?l[o]=h:(c.mod&&(h-r>c.mod/2?r+=c.mod:r-h>c.mod/2&&(r-=c.mod)),l[o]=i((h-r)*e+r,n)))}),this[n](l)},blend:function(e){if(1===this._rgba[3])return this;var i=this._rgba.slice(),s=i.pop(),n=h(e)._rgba;return h(t.map(i,function(t,e){return(1-s)*n[e]+s*t}))},toRgbaString:function(){var e="rgba(",i=t.map(this._rgba,function(t,e){return null==t?e>2?1:0:t});return 1===i[3]&&(i.pop(),e="rgb("),e+i.join()+")"},toHslaString:function(){var e="hsla(",i=t.map(this.hsla(),function(t,e){return null==t&&(t=e>2?1:0),e&&e<3&&(t=Math.round(100*t)+"%"),t});return 1===i[3]&&(i.pop(),e="hsl("),e+i.join()+")"},toHexString:function(e){var i=this._rgba.slice(),s=i.pop();return e&&i.push(~~(255*s)),"#"+t.map(i,function(t){return t=(t||0).toString(16),1===t.length?"0"+t:t}).join("")},toString:function(){return 0===this._rgba[3]?"transparent":this.toRgbaString()}}),h.fn.parse.prototype=h.fn,c.hsla.to=function(t){if(null==t[0]||null==t[1]||null==t[2])return[null,null,null,t[3]];var e,i,s=t[0]/255,n=t[1]/255,o=t[2]/255,r=t[3],a=Math.max(s,n,o),l=Math.min(s,n,o),h=a-l,c=a+l,u=.5*c;return e=l===a?0:s===a?60*(n-o)/h+360:n===a?60*(o-s)/h+120:60*(s-n)/h+240,i=0===h?0:u<=.5?h/c:h/(2-c),[Math.round(e)%360,i,u,null==r?1:r]},c.hsla.from=function(t){if(null==t[0]||null==t[1]||null==t[2])return[null,null,null,t[3]];var e=t[0]/360,i=t[1],s=t[2],o=t[3],r=s<=.5?s*(1+i):s+i-s*i,a=2*s-r;return[Math.round(255*n(a,r,e+1/3)),Math.round(255*n(a,r,e)),Math.round(255*n(a,r,e-1/3)),o]},f(c,function(s,n){var o=n.props,r=n.cache,l=n.to,c=n.from;h.fn[s]=function(s){if(l&&!this[r]&&(this[r]=l(this._rgba)),s===e)return this[r].slice();var n,a=t.type(s),u="array"===a||"object"===a?s:arguments,d=this[r].slice();return f(o,function(t,e){var s=u["object"===a?t:e.idx];null==s&&(s=d[e.idx]),d[e.idx]=i(s,e)}),c?(n=h(c(d)),n[r]=d,n):h(d)},f(o,function(e,i){h.fn[e]||(h.fn[e]=function(n){var o,r=t.type(n),l="alpha"===e?this._hsla?"hsla":"rgba":s,h=this[l](),c=h[i.idx];return"undefined"===r?c:("function"===r&&(n=n.call(this,c),r=t.type(n)),null==n&&i.empty?this:("string"===r&&(o=a.exec(n),o&&(n=c+parseFloat(o[2])*("+"===o[1]?1:-1))),h[i.idx]=n,this[l](h)))})})}),h.hook=function(e){var i=e.split(" ");f(i,function(e,i){t.cssHooks[i]={set:function(e,n){var o,r,a="";if("transparent"!==n&&("string"!==t.type(n)||(o=s(n)))){if(n=h(o||n),!d.rgba&&1!==n._rgba[3]){for(r="backgroundColor"===i?e.parentNode:e;(""===a||"transparent"===a)&&r&&r.style;)try{a=t.css(r,"backgroundColor"),r=r.parentNode}catch(t){}n=n.blend(a&&"transparent"!==a?a:"_default")}n=n.toRgbaString()}try{e.style[i]=n}catch(t){}}},t.fx.step[i]=function(e){e.colorInit||(e.start=h(e.elem,i),e.end=h(e.end),e.colorInit=!0),t.cssHooks[i].set(e.elem,e.start.transition(e.end,e.pos))}})},h.hook(r),t.cssHooks.borderColor={expand:function(t){var e={};return f(["Top","Right","Bottom","Left"],function(i,s){e["border"+s+"Color"]=t}),e}},o=t.Color.names={aqua:"#00ffff",black:"#000000",blue:"#0000ff",fuchsia:"#ff00ff",gray:"#808080",green:"#008000",lime:"#00ff00",maroon:"#800000",navy:"#000080",olive:"#808000",purple:"#800080",red:"#ff0000",silver:"#c0c0c0",teal:"#008080",white:"#ffffff",yellow:"#ffff00",transparent:[null,null,null,0],_default:"#ffffff"}}(s),function(){function i(e){var i,s,n=e.ownerDocument.defaultView?e.ownerDocument.defaultView.getComputedStyle(e,null):e.currentStyle,o={};if(n&&n.length&&n[0]&&n[n[0]])for(s=n.length;s--;)i=n[s],"string"==typeof n[i]&&(o[t.camelCase(i)]=n[i]);else for(i in n)"string"==typeof n[i]&&(o[i]=n[i]);return o}function n(e,i){var s,n,o={};for(s in i)n=i[s],e[s]!==n&&(r[s]||!t.fx.step[s]&&isNaN(parseFloat(n))||(o[s]=n));return o}var o=["add","remove","toggle"],r={border:1,borderBottom:1,borderColor:1,borderLeft:1,borderRight:1,borderTop:1,borderWidth:1,margin:1,padding:1};t.each(["borderLeftStyle","borderRightStyle","borderBottomStyle","borderTopStyle"],function(e,i){t.fx.step[i]=function(t){("none"!==t.end&&!t.setAttr||1===t.pos&&!t.setAttr)&&(s.style(t.elem,i,t.end),t.setAttr=!0)}}),t.fn.addBack||(t.fn.addBack=function(t){return this.add(null==t?this.prevObject:this.prevObject.filter(t))}),t.effects.animateClass=function(e,s,r,a){var l=t.speed(s,r,a);return this.queue(function(){var s,r=t(this),a=r.attr("class")||"",h=l.children?r.find("*").addBack():r;h=h.map(function(){var e=t(this);return{el:e,start:i(this)}}),s=function(){t.each(o,function(t,i){e[i]&&r[i+"Class"](e[i])})},s(),h=h.map(function(){return this.end=i(this.el[0]),this.diff=n(this.start,this.end),this}),r.attr("class",a),h=h.map(function(){var e=this,i=t.Deferred(),s=t.extend({},l,{queue:!1,complete:function(){i.resolve(e)}});return this.el.animate(this.diff,s),i.promise()}),t.when.apply(t,h.get()).done(function(){s(),t.each(arguments,function(){var e=this.el;t.each(this.diff,function(t){e.css(t,"")})}),l.complete.call(r[0])})})},t.fn.extend({addClass:function(e){return function(i,s,n,o){return s?t.effects.animateClass.call(this,{add:i},s,n,o):e.apply(this,arguments)}}(t.fn.addClass),removeClass:function(e){return function(i,s,n,o){return arguments.length>1?t.effects.animateClass.call(this,{remove:i},s,n,o):e.apply(this,arguments)}}(t.fn.removeClass),toggleClass:function(i){return function(s,n,o,r,a){return"boolean"==typeof n||n===e?o?t.effects.animateClass.call(this,n?{add:s}:{remove:s},o,r,a):i.apply(this,arguments):t.effects.animateClass.call(this,{toggle:s},n,o,r)}}(t.fn.toggleClass),switchClass:function(e,i,s,n,o){return t.effects.animateClass.call(this,{add:i,remove:e},s,n,o)}})}(),function(){function s(e,i,s,n){return t.isPlainObject(e)&&(i=e,e=e.effect),e={effect:e},null==i&&(i={}),t.isFunction(i)&&(n=i,s=null,i={}),("number"==typeof i||t.fx.speeds[i])&&(n=s,s=i,i={}),t.isFunction(s)&&(n=s,s=null),i&&t.extend(e,i),s=s||i.duration,e.duration=t.fx.off?0:"number"==typeof s?s:s in t.fx.speeds?t.fx.speeds[s]:t.fx.speeds._default,e.complete=n||i.complete,e}function n(e){return!(e&&"number"!=typeof e&&!t.fx.speeds[e])||("string"==typeof e&&!t.effects.effect[e]||(!!t.isFunction(e)||"object"==typeof e&&!e.effect))}t.extend(t.effects,{version:"1.10.3",save:function(t,e){for(var s=0;s<e.length;s++)null!==e[s]&&t.data(i+e[s],t[0].style[e[s]])},restore:function(t,s){var n,o;for(o=0;o<s.length;o++)null!==s[o]&&(n=t.data(i+s[o]),n===e&&(n=""),t.css(s[o],n))},setMode:function(t,e){return"toggle"===e&&(e=t.is(":hidden")?"show":"hide"),e},getBaseline:function(t,e){var i,s;switch(t[0]){case"top":i=0;break;case"middle":i=.5;break;case"bottom":i=1;break;default:i=t[0]/e.height}switch(t[1]){case"left":s=0;break;case"center":s=.5;break;case"right":s=1;break;default:s=t[1]/e.width}return{x:s,y:i}},createWrapper:function(e){if(e.parent().is(".ui-effects-wrapper"))return e.parent();var i={width:e.outerWidth(!0),height:e.outerHeight(!0),float:e.css("float")},s=t("<div></div>").addClass("ui-effects-wrapper").css({fontSize:"100%",background:"transparent",border:"none",margin:0,padding:0}),n={width:e.width(),height:e.height()},o=document.activeElement;try{o.id}catch(t){o=document.body}return e.wrap(s),(e[0]===o||t.contains(e[0],o))&&t(o).focus(),s=e.parent(),"static"===e.css("position")?(s.css({position:"relative"}),e.css({position:"relative"})):(t.extend(i,{position:e.css("position"),zIndex:e.css("z-index")}),t.each(["top","left","bottom","right"],function(t,s){i[s]=e.css(s),isNaN(parseInt(i[s],10))&&(i[s]="auto")}),e.css({position:"relative",top:0,left:0,right:"auto",bottom:"auto"})),e.css(n),s.css(i).show()},removeWrapper:function(e){var i=document.activeElement;return e.parent().is(".ui-effects-wrapper")&&(e.parent().replaceWith(e),(e[0]===i||t.contains(e[0],i))&&t(i).focus()),e},setTransition:function(e,i,s,n){return n=n||{},t.each(i,function(t,i){var o=e.cssUnit(i);o[0]>0&&(n[i]=o[0]*s+o[1])}),n}}),t.fn.extend({effect:function(){function e(e){function s(){t.isFunction(o)&&o.call(n[0]),t.isFunction(e)&&e()}var n=t(this),o=i.complete,a=i.mode;(n.is(":hidden")?"hide"===a:"show"===a)?(n[a](),s()):r.call(n[0],i,s)}var i=s.apply(this,arguments),n=i.mode,o=i.queue,r=t.effects.effect[i.effect];return t.fx.off||!r?n?this[n](i.duration,i.complete):this.each(function(){i.complete&&i.complete.call(this)}):o===!1?this.each(e):this.queue(o||"fx",e)},show:function(t){return function(e){if(n(e))return t.apply(this,arguments);var i=s.apply(this,arguments);return i.mode="show",this.effect.call(this,i)}}(t.fn.show),hide:function(t){return function(e){if(n(e))return t.apply(this,arguments);var i=s.apply(this,arguments);return i.mode="hide",this.effect.call(this,i)}}(t.fn.hide),toggle:function(t){return function(e){if(n(e)||"boolean"==typeof e)return t.apply(this,arguments);var i=s.apply(this,arguments);return i.mode="toggle",this.effect.call(this,i)}}(t.fn.toggle),cssUnit:function(e){var i=this.css(e),s=[];return t.each(["em","px","%","pt"],function(t,e){i.indexOf(e)>0&&(s=[parseFloat(i),e])}),s}})}(),function(){var e={};t.each(["Quad","Cubic","Quart","Quint","Expo"],function(t,i){e[i]=function(e){return Math.pow(e,t+2)}}),t.extend(e,{Sine:function(t){return 1-Math.cos(t*Math.PI/2)},Circ:function(t){return 1-Math.sqrt(1-t*t)},Elastic:function(t){return 0===t||1===t?t:-Math.pow(2,8*(t-1))*Math.sin((80*(t-1)-7.5)*Math.PI/15)},Back:function(t){return t*t*(3*t-2)},Bounce:function(t){for(var e,i=4;t<((e=Math.pow(2,--i))-1)/11;);return 1/Math.pow(4,3-i)-7.5625*Math.pow((3*e-2)/22-t,2)}}),t.each(e,function(e,i){t.easing["easeIn"+e]=i,t.easing["easeOut"+e]=function(t){return 1-i(1-t)},t.easing["easeInOut"+e]=function(t){return t<.5?i(2*t)/2:1-i(t*-2+2)/2}})}()}(s),function(t,e){var i=0,s={},n={};s.height=s.paddingTop=s.paddingBottom=s.borderTopWidth=s.borderBottomWidth="hide",n.height=n.paddingTop=n.paddingBottom=n.borderTopWidth=n.borderBottomWidth="show",t.widget("ui.accordion",{version:"1.10.3",options:{active:0,animate:{},collapsible:!1,event:"click",header:"> li > :first-child,> :not(li):even",heightStyle:"auto",icons:{activeHeader:"ui-icon-triangle-1-s",header:"ui-icon-triangle-1-e"},activate:null,beforeActivate:null},_create:function(){var e=this.options;this.prevShow=this.prevHide=t(),this.element.addClass("ui-accordion ui-widget ui-helper-reset").attr("role","tablist"),e.collapsible||e.active!==!1&&null!=e.active||(e.active=0),this._processPanels(),e.active<0&&(e.active+=this.headers.length),this._refresh()},_getCreateEventData:function(){return{header:this.active,panel:this.active.length?this.active.next():t(),content:this.active.length?this.active.next():t()}},_createIcons:function(){var e=this.options.icons;e&&(t("<span>").addClass("ui-accordion-header-icon ui-icon "+e.header).prependTo(this.headers),this.active.children(".ui-accordion-header-icon").removeClass(e.header).addClass(e.activeHeader),this.headers.addClass("ui-accordion-icons"))},_destroyIcons:function(){this.headers.removeClass("ui-accordion-icons").children(".ui-accordion-header-icon").remove()},_destroy:function(){var t;this.element.removeClass("ui-accordion ui-widget ui-helper-reset").removeAttr("role"),this.headers.removeClass("ui-accordion-header ui-accordion-header-active ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top").removeAttr("role").removeAttr("aria-selected").removeAttr("aria-controls").removeAttr("tabIndex").each(function(){/^ui-accordion/.test(this.id)&&this.removeAttribute("id")}),this._destroyIcons(),t=this.headers.next().css("display","").removeAttr("role").removeAttr("aria-expanded").removeAttr("aria-hidden").removeAttr("aria-labelledby").removeClass("ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled").each(function(){/^ui-accordion/.test(this.id)&&this.removeAttribute("id")}),"content"!==this.options.heightStyle&&t.css("height","")},_setOption:function(t,e){return"active"===t?void this._activate(e):("event"===t&&(this.options.event&&this._off(this.headers,this.options.event),this._setupEvents(e)),this._super(t,e),"collapsible"!==t||e||this.options.active!==!1||this._activate(0),"icons"===t&&(this._destroyIcons(),e&&this._createIcons()),void("disabled"===t&&this.headers.add(this.headers.next()).toggleClass("ui-state-disabled",!!e)))},_keydown:function(e){if(!e.altKey&&!e.ctrlKey){var i=t.ui.keyCode,s=this.headers.length,n=this.headers.index(e.target),o=!1;switch(e.keyCode){case i.RIGHT:case i.DOWN:o=this.headers[(n+1)%s];break;case i.LEFT:case i.UP:o=this.headers[(n-1+s)%s];break;case i.SPACE:case i.ENTER:this._eventHandler(e);break;case i.HOME:o=this.headers[0];break;case i.END:o=this.headers[s-1]}o&&(t(e.target).attr("tabIndex",-1),t(o).attr("tabIndex",0),o.focus(),e.preventDefault())}},_panelKeyDown:function(e){e.keyCode===t.ui.keyCode.UP&&e.ctrlKey&&t(e.currentTarget).prev().focus()},refresh:function(){var e=this.options;this._processPanels(),e.active===!1&&e.collapsible===!0||!this.headers.length?(e.active=!1,this.active=t()):e.active===!1?this._activate(0):this.active.length&&!t.contains(this.element[0],this.active[0])?this.headers.length===this.headers.find(".ui-state-disabled").length?(e.active=!1,this.active=t()):this._activate(Math.max(0,e.active-1)):e.active=this.headers.index(this.active),this._destroyIcons(),this._refresh()},_processPanels:function(){this.headers=this.element.find(this.options.header).addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"),this.headers.next().addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom").filter(":not(.ui-accordion-content-active)").hide()},_refresh:function(){var e,s=this.options,n=s.heightStyle,o=this.element.parent(),r=this.accordionId="ui-accordion-"+(this.element.attr("id")||++i);this.active=this._findActive(s.active).addClass("ui-accordion-header-active ui-state-active ui-corner-top").removeClass("ui-corner-all"),this.active.next().addClass("ui-accordion-content-active").show(),this.headers.attr("role","tab").each(function(e){var i=t(this),s=i.attr("id"),n=i.next(),o=n.attr("id");s||(s=r+"-header-"+e,i.attr("id",s)),o||(o=r+"-panel-"+e,n.attr("id",o)),i.attr("aria-controls",o),n.attr("aria-labelledby",s)}).next().attr("role","tabpanel"),this.headers.not(this.active).attr({"aria-selected":"false",tabIndex:-1}).next().attr({"aria-expanded":"false","aria-hidden":"true"}).hide(),this.active.length?this.active.attr({"aria-selected":"true",tabIndex:0}).next().attr({"aria-expanded":"true","aria-hidden":"false"}):this.headers.eq(0).attr("tabIndex",0),this._createIcons(),this._setupEvents(s.event),"fill"===n?(e=o.height(),this.element.siblings(":visible").each(function(){var i=t(this),s=i.css("position");"absolute"!==s&&"fixed"!==s&&(e-=i.outerHeight(!0))}),this.headers.each(function(){e-=t(this).outerHeight(!0)}),this.headers.next().each(function(){t(this).height(Math.max(0,e-t(this).innerHeight()+t(this).height()))}).css("overflow","auto")):"auto"===n&&(e=0,this.headers.next().each(function(){e=Math.max(e,t(this).css("height","").height())}).height(e))},_activate:function(e){var i=this._findActive(e)[0];i!==this.active[0]&&(i=i||this.active[0],this._eventHandler({target:i,currentTarget:i,preventDefault:t.noop}))},_findActive:function(e){return"number"==typeof e?this.headers.eq(e):t()},_setupEvents:function(e){var i={keydown:"_keydown"};e&&t.each(e.split(" "),function(t,e){i[e]="_eventHandler"}),this._off(this.headers.add(this.headers.next())),this._on(this.headers,i),this._on(this.headers.next(),{keydown:"_panelKeyDown"}),this._hoverable(this.headers),this._focusable(this.headers)},_eventHandler:function(e){var i=this.options,s=this.active,n=t(e.currentTarget),o=n[0]===s[0],r=o&&i.collapsible,a=r?t():n.next(),l=s.next(),h={oldHeader:s,oldPanel:l,newHeader:r?t():n,newPanel:a};e.preventDefault(),o&&!i.collapsible||this._trigger("beforeActivate",e,h)===!1||(i.active=!r&&this.headers.index(n),this.active=o?t():n,this._toggle(h),s.removeClass("ui-accordion-header-active ui-state-active"),i.icons&&s.children(".ui-accordion-header-icon").removeClass(i.icons.activeHeader).addClass(i.icons.header),o||(n.removeClass("ui-corner-all").addClass("ui-accordion-header-active ui-state-active ui-corner-top"),i.icons&&n.children(".ui-accordion-header-icon").removeClass(i.icons.header).addClass(i.icons.activeHeader),n.next().addClass("ui-accordion-content-active")))},_toggle:function(e){var i=e.newPanel,s=this.prevShow.length?this.prevShow:e.oldPanel;this.prevShow.add(this.prevHide).stop(!0,!0),this.prevShow=i,this.prevHide=s,this.options.animate?this._animate(i,s,e):(s.hide(),i.show(),this._toggleComplete(e)),s.attr({"aria-expanded":"false","aria-hidden":"true"}),s.prev().attr("aria-selected","false"),i.length&&s.length?s.prev().attr("tabIndex",-1):i.length&&this.headers.filter(function(){return 0===t(this).attr("tabIndex")}).attr("tabIndex",-1),i.attr({"aria-expanded":"true","aria-hidden":"false"}).prev().attr({"aria-selected":"true",tabIndex:0})},_animate:function(t,e,i){var o,r,a,l=this,h=0,c=t.length&&(!e.length||t.index()<e.index()),u=this.options.animate||{},d=c&&u.down||u,p=function(){l._toggleComplete(i)};return"number"==typeof d&&(a=d),"string"==typeof d&&(r=d),r=r||d.easing||u.easing,a=a||d.duration||u.duration,e.length?t.length?(o=t.show().outerHeight(),e.animate(s,{duration:a,easing:r,step:function(t,e){e.now=Math.round(t)}}),void t.hide().animate(n,{duration:a,easing:r,complete:p,step:function(t,i){i.now=Math.round(t),"height"!==i.prop?h+=i.now:"content"!==l.options.heightStyle&&(i.now=Math.round(o-e.outerHeight()-h),h=0)}})):e.animate(s,a,r,p):t.animate(n,a,r,p)},_toggleComplete:function(t){var e=t.oldPanel;e.removeClass("ui-accordion-content-active").prev().removeClass("ui-corner-top").addClass("ui-corner-all"),e.length&&(e.parent()[0].className=e.parent()[0].className),this._trigger("activate",null,t)}})}(s),function(t,e){var i=0;t.widget("ui.autocomplete",{version:"1.10.3",defaultElement:"<input>",options:{appendTo:null,autoFocus:!1,delay:300,minLength:1,position:{my:"left top",at:"left bottom",collision:"none"},source:null,change:null,close:null,focus:null,open:null,response:null,search:null,select:null},pending:0,_create:function(){var e,i,s,n=this.element[0].nodeName.toLowerCase(),o="textarea"===n,r="input"===n;this.isMultiLine=!!o||!r&&this.element.prop("isContentEditable"),this.valueMethod=this.element[o||r?"val":"text"],this.isNewMenu=!0,this.element.addClass("ui-autocomplete-input").attr("autocomplete","off"),this._on(this.element,{keydown:function(n){if(this.element.prop("readOnly"))return e=!0,s=!0,void(i=!0);e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._move("previousPage",n);break;case o.PAGE_DOWN:e=!0,this._move("nextPage",n);break;case o.UP:e=!0,this._keyEvent("previous",n);break;case o.DOWN:e=!0,this._keyEvent("next",n);break;case o.ENTER:case o.NUMPAD_ENTER:this.menu.active&&(e=!0,n.preventDefault(),this.menu.select(n));break;case o.TAB:this.menu.active&&this.menu.select(n);break;case o.ESCAPE:this.menu.element.is(":visible")&&(this._value(this.term),this.close(n),n.preventDefault());break;default:i=!0,this._searchTimeout(n)}},keypress:function(s){if(e)return e=!1,void(this.isMultiLine&&!this.menu.element.is(":visible")||s.preventDefault());if(!i){var n=t.ui.keyCode;switch(s.keyCode){case n.PAGE_UP:this._move("previousPage",s);break;case n.PAGE_DOWN:this._move("nextPage",s);break;case n.UP:this._keyEvent("previous",s);break;case n.DOWN:this._keyEvent("next",s)}}},input:function(t){return s?(s=!1,void t.preventDefault()):void this._searchTimeout(t)},focus:function(){this.selectedItem=null,this.previous=this._value()},blur:function(t){return this.cancelBlur?void delete this.cancelBlur:(clearTimeout(this.searching),this.close(t),void this._change(t))}}),this._initSource(),this.menu=t("<ul>").addClass("ui-autocomplete ui-front").appendTo(this._appendTo()).menu({role:null}).hide().data("ui-menu"),this._on(this.menu.element,{mousedown:function(e){e.preventDefault(),this.cancelBlur=!0,this._delay(function(){delete this.cancelBlur});var i=this.menu.element[0];t(e.target).closest(".ui-menu-item").length||this._delay(function(){var e=this;this.document.one("mousedown",function(s){s.target===e.element[0]||s.target===i||t.contains(i,s.target)||e.close()})})},menufocus:function(e,i){if(this.isNewMenu&&(this.isNewMenu=!1,e.originalEvent&&/^mouse/.test(e.originalEvent.type)))return this.menu.blur(),void this.document.one("mousemove",function(){t(e.target).trigger(e.originalEvent)});var s=i.item.data("ui-autocomplete-item");!1!==this._trigger("focus",e,{item:s})?e.originalEvent&&/^key/.test(e.originalEvent.type)&&this._value(s.value):this.liveRegion.text(s.value)},menuselect:function(t,e){var i=e.item.data("ui-autocomplete-item"),s=this.previous;this.element[0]!==this.document[0].activeElement&&(this.element.focus(),this.previous=s,this._delay(function(){this.previous=s,this.selectedItem=i})),!1!==this._trigger("select",t,{item:i})&&this._value(i.value),this.term=this._value(),this.close(t),this.selectedItem=i}}),this.liveRegion=t("<span>",{role:"status","aria-live":"polite"}).addClass("ui-helper-hidden-accessible").insertBefore(this.element),this._on(this.window,{beforeunload:function(){this.element.removeAttr("autocomplete")}})},_destroy:function(){clearTimeout(this.searching),this.element.removeClass("ui-autocomplete-input").removeAttr("autocomplete"),this.menu.element.remove(),this.liveRegion.remove()},_setOption:function(t,e){this._super(t,e),"source"===t&&this._initSource(),"appendTo"===t&&this.menu.element.appendTo(this._appendTo()),"disabled"===t&&e&&this.xhr&&this.xhr.abort()},_appendTo:function(){var e=this.options.appendTo;return e&&(e=e.jquery||e.nodeType?t(e):this.document.find(e).eq(0)),e||(e=this.element.closest(".ui-front")),e.length||(e=this.document[0].body),e},_initSource:function(){var e,i,s=this;t.isArray(this.options.source)?(e=this.options.source,this.source=function(i,s){s(t.ui.autocomplete.filter(e,i.term))}):"string"==typeof this.options.source?(i=this.options.source,this.source=function(e,n){s.xhr&&s.xhr.abort(),s.xhr=t.ajax({url:i,data:e,dataType:"json",success:function(t){n(t)},error:function(){n([])}})}):this.source=this.options.source},_searchTimeout:function(t){clearTimeout(this.searching),this.searching=this._delay(function(){this.term!==this._value()&&(this.selectedItem=null,this.search(null,t))},this.options.delay)},search:function(t,e){return t=null!=t?t:this._value(),this.term=this._value(),t.length<this.options.minLength?this.close(e):this._trigger("search",e)!==!1?this._search(t):void 0},_search:function(t){this.pending++,this.element.addClass("ui-autocomplete-loading"),this.cancelSearch=!1,this.source({term:t},this._response())},_response:function(){var t=this,e=++i;return function(s){e===i&&t.__response(s),t.pending--,t.pending||t.element.removeClass("ui-autocomplete-loading")}},__response:function(t){t&&(t=this._normalize(t)),this._trigger("response",null,{content:t}),!this.options.disabled&&t&&t.length&&!this.cancelSearch?(this._suggest(t),this._trigger("open")):this._close()},close:function(t){this.cancelSearch=!0,this._close(t)},_close:function(t){this.menu.element.is(":visible")&&(this.menu.element.hide(),this.menu.blur(),this.isNewMenu=!0,this._trigger("close",t))},_change:function(t){this.previous!==this._value()&&this._trigger("change",t,{item:this.selectedItem})},_normalize:function(e){return e.length&&e[0].label&&e[0].value?e:t.map(e,function(e){return"string"==typeof e?{label:e,value:e}:t.extend({label:e.label||e.value,value:e.value||e.label},e)})},_suggest:function(e){var i=this.menu.element.empty();this._renderMenu(i,e),this.isNewMenu=!0,this.menu.refresh(),i.show(),this._resizeMenu(),i.position(t.extend({of:this.element},this.options.position)),this.options.autoFocus&&this.menu.next()},_resizeMenu:function(){var t=this.menu.element;t.outerWidth(Math.max(t.width("").outerWidth()+1,this.element.outerWidth()))},_renderMenu:function(e,i){var s=this;t.each(i,function(t,i){s._renderItemData(e,i)})},_renderItemData:function(t,e){return this._renderItem(t,e).data("ui-autocomplete-item",e)},_renderItem:function(e,i){return t("<li>").append(t("<a>").text(i.label)).appendTo(e)},_move:function(t,e){return this.menu.element.is(":visible")?this.menu.isFirstItem()&&/^previous/.test(t)||this.menu.isLastItem()&&/^next/.test(t)?(this._value(this.term),void this.menu.blur()):void this.menu[t](e):void this.search(null,e)},widget:function(){return this.menu.element},_value:function(){return this.valueMethod.apply(this.element,arguments)},_keyEvent:function(t,e){this.isMultiLine&&!this.menu.element.is(":visible")||(this._move(t,e),e.preventDefault())}}),t.extend(t.ui.autocomplete,{escapeRegex:function(t){return t.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&")},filter:function(e,i){var s=new RegExp(t.ui.autocomplete.escapeRegex(i),"i");return t.grep(e,function(t){return s.test(t.label||t.value||t)})}}),t.widget("ui.autocomplete",t.ui.autocomplete,{options:{messages:{noResults:"No search results.",results:function(t){return t+(t>1?" results are":" result is")+" available, use up and down arrow keys to navigate."}}},__response:function(t){var e;this._superApply(arguments),this.options.disabled||this.cancelSearch||(e=t&&t.length?this.options.messages.results(t.length):this.options.messages.noResults,this.liveRegion.text(e))}})}(s),function(t,e){var i,s,n,o,r="ui-button ui-widget ui-state-default ui-corner-all",a="ui-state-hover ui-state-active ",l="ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",h=function(){var e=t(this);setTimeout(function(){e.find(":ui-button").button("refresh")},1)},c=function(e){var i=e.name,s=e.form,n=t([]);return i&&(i=i.replace(/'/g,"\\'"),n=s?t(s).find("[name='"+i+"']"):t("[name='"+i+"']",e.ownerDocument).filter(function(){return!this.form})),n};t.widget("ui.button",{version:"1.10.3",defaultElement:"<button>",options:{disabled:null,text:!0,label:null,icons:{primary:null,secondary:null}},_create:function(){this.element.closest("form").unbind("reset"+this.eventNamespace).bind("reset"+this.eventNamespace,h),"boolean"!=typeof this.options.disabled?this.options.disabled=!!this.element.prop("disabled"):this.element.prop("disabled",this.options.disabled),this._determineButtonType(),this.hasTitle=!!this.buttonElement.attr("title");var e=this,a=this.options,l="checkbox"===this.type||"radio"===this.type,u=l?"":"ui-state-active",d="ui-state-focus";null===a.label&&(a.label="input"===this.type?this.buttonElement.val():this.buttonElement.html()),this._hoverable(this.buttonElement),this.buttonElement.addClass(r).attr("role","button").bind("mouseenter"+this.eventNamespace,function(){a.disabled||this===i&&t(this).addClass("ui-state-active")}).bind("mouseleave"+this.eventNamespace,function(){a.disabled||t(this).removeClass(u)}).bind("click"+this.eventNamespace,function(t){a.disabled&&(t.preventDefault(),t.stopImmediatePropagation())}),this.element.bind("focus"+this.eventNamespace,function(){e.buttonElement.addClass(d)}).bind("blur"+this.eventNamespace,function(){e.buttonElement.removeClass(d)}),l&&(this.element.bind("change"+this.eventNamespace,function(){o||e.refresh()}),this.buttonElement.bind("mousedown"+this.eventNamespace,function(t){a.disabled||(o=!1,s=t.pageX,n=t.pageY)}).bind("mouseup"+this.eventNamespace,function(t){a.disabled||s===t.pageX&&n===t.pageY||(o=!0)})),"checkbox"===this.type?this.buttonElement.bind("click"+this.eventNamespace,function(){if(a.disabled||o)return!1}):"radio"===this.type?this.buttonElement.bind("click"+this.eventNamespace,function(){if(a.disabled||o)return!1;t(this).addClass("ui-state-active"),e.buttonElement.attr("aria-pressed","true");var i=e.element[0];c(i).not(i).map(function(){return t(this).button("widget")[0]}).removeClass("ui-state-active").attr("aria-pressed","false")}):(this.buttonElement.bind("mousedown"+this.eventNamespace,function(){return!a.disabled&&(t(this).addClass("ui-state-active"),i=this,void e.document.one("mouseup",function(){i=null}))}).bind("mouseup"+this.eventNamespace,function(){return!a.disabled&&void t(this).removeClass("ui-state-active")}).bind("keydown"+this.eventNamespace,function(e){return!a.disabled&&void(e.keyCode!==t.ui.keyCode.SPACE&&e.keyCode!==t.ui.keyCode.ENTER||t(this).addClass("ui-state-active"))}).bind("keyup"+this.eventNamespace+" blur"+this.eventNamespace,function(){t(this).removeClass("ui-state-active")}),this.buttonElement.is("a")&&this.buttonElement.keyup(function(e){e.keyCode===t.ui.keyCode.SPACE&&t(this).click()})),this._setOption("disabled",a.disabled),this._resetButton()},_determineButtonType:function(){var t,e,i;this.element.is("[type=checkbox]")?this.type="checkbox":this.element.is("[type=radio]")?this.type="radio":this.element.is("input")?this.type="input":this.type="button",
-"checkbox"===this.type||"radio"===this.type?(t=this.element.parents().last(),e="label[for='"+this.element.attr("id")+"']",this.buttonElement=t.find(e),this.buttonElement.length||(t=t.length?t.siblings():this.element.siblings(),this.buttonElement=t.filter(e),this.buttonElement.length||(this.buttonElement=t.find(e))),this.element.addClass("ui-helper-hidden-accessible"),i=this.element.is(":checked"),i&&this.buttonElement.addClass("ui-state-active"),this.buttonElement.prop("aria-pressed",i)):this.buttonElement=this.element},widget:function(){return this.buttonElement},_destroy:function(){this.element.removeClass("ui-helper-hidden-accessible"),this.buttonElement.removeClass(r+" "+a+" "+l).removeAttr("role").removeAttr("aria-pressed").html(this.buttonElement.find(".ui-button-text").html()),this.hasTitle||this.buttonElement.removeAttr("title")},_setOption:function(t,e){return this._super(t,e),"disabled"===t?void(e?this.element.prop("disabled",!0):this.element.prop("disabled",!1)):void this._resetButton()},refresh:function(){var e=this.element.is("input, button")?this.element.is(":disabled"):this.element.hasClass("ui-button-disabled");e!==this.options.disabled&&this._setOption("disabled",e),"radio"===this.type?c(this.element[0]).each(function(){t(this).is(":checked")?t(this).button("widget").addClass("ui-state-active").attr("aria-pressed","true"):t(this).button("widget").removeClass("ui-state-active").attr("aria-pressed","false")}):"checkbox"===this.type&&(this.element.is(":checked")?this.buttonElement.addClass("ui-state-active").attr("aria-pressed","true"):this.buttonElement.removeClass("ui-state-active").attr("aria-pressed","false"))},_resetButton:function(){if("input"===this.type)return void(this.options.label&&this.element.val(this.options.label));var e=this.buttonElement.removeClass(l),i=t("<span></span>",this.document[0]).addClass("ui-button-text").html(this.options.label).appendTo(e.empty()).text(),s=this.options.icons,n=s.primary&&s.secondary,o=[];s.primary||s.secondary?(this.options.text&&o.push("ui-button-text-icon"+(n?"s":s.primary?"-primary":"-secondary")),s.primary&&e.prepend("<span class='ui-button-icon-primary ui-icon "+s.primary+"'></span>"),s.secondary&&e.append("<span class='ui-button-icon-secondary ui-icon "+s.secondary+"'></span>"),this.options.text||(o.push(n?"ui-button-icons-only":"ui-button-icon-only"),this.hasTitle||e.attr("title",t.trim(i)))):o.push("ui-button-text-only"),e.addClass(o.join(" "))}}),t.widget("ui.buttonset",{version:"1.10.3",options:{items:"button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(ui-button)"},_create:function(){this.element.addClass("ui-buttonset")},_init:function(){this.refresh()},_setOption:function(t,e){"disabled"===t&&this.buttons.button("option",t,e),this._super(t,e)},refresh:function(){var e="rtl"===this.element.css("direction");this.buttons=this.element.find(this.options.items).filter(":ui-button").button("refresh").end().not(":ui-button").button().end().map(function(){return t(this).button("widget")[0]}).removeClass("ui-corner-all ui-corner-left ui-corner-right").filter(":first").addClass(e?"ui-corner-right":"ui-corner-left").end().filter(":last").addClass(e?"ui-corner-left":"ui-corner-right").end().end()},_destroy:function(){this.element.removeClass("ui-buttonset"),this.buttons.map(function(){return t(this).button("widget")[0]}).removeClass("ui-corner-left ui-corner-right").end().button("destroy")}})}(s),function(t,e){function i(){this._curInst=null,this._keyEvent=!1,this._disabledInputs=[],this._datepickerShowing=!1,this._inDialog=!1,this._mainDivId="ui-datepicker-div",this._inlineClass="ui-datepicker-inline",this._appendClass="ui-datepicker-append",this._triggerClass="ui-datepicker-trigger",this._dialogClass="ui-datepicker-dialog",this._disableClass="ui-datepicker-disabled",this._unselectableClass="ui-datepicker-unselectable",this._currentClass="ui-datepicker-current-day",this._dayOverClass="ui-datepicker-days-cell-over",this.regional=[],this.regional[""]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"mm/dd/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},this._defaults={showOn:"focus",showAnim:"fadeIn",showOptions:{},defaultDate:null,appendText:"",buttonText:"...",buttonImage:"",buttonImageOnly:!1,hideIfNoPrevNext:!1,navigationAsDateFormat:!1,gotoCurrent:!1,changeMonth:!1,changeYear:!1,yearRange:"c-10:c+10",showOtherMonths:!1,selectOtherMonths:!1,showWeek:!1,calculateWeek:this.iso8601Week,shortYearCutoff:"+10",minDate:null,maxDate:null,duration:"fast",beforeShowDay:null,beforeShow:null,onSelect:null,onChangeMonthYear:null,onClose:null,numberOfMonths:1,showCurrentAtPos:0,stepMonths:1,stepBigMonths:12,altField:"",altFormat:"",constrainInput:!0,showButtonPanel:!1,autoSize:!1,disabled:!1},t.extend(this._defaults,this.regional[""]),this.dpDiv=s(t("<div id='"+this._mainDivId+"' class='ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all'></div>"))}function s(e){var i="button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";return e.delegate(i,"mouseout",function(){t(this).removeClass("ui-state-hover"),this.className.indexOf("ui-datepicker-prev")!==-1&&t(this).removeClass("ui-datepicker-prev-hover"),this.className.indexOf("ui-datepicker-next")!==-1&&t(this).removeClass("ui-datepicker-next-hover")}).delegate(i,"mouseover",function(){t.datepicker._isDisabledDatepicker(o.inline?e.parent()[0]:o.input[0])||(t(this).parents(".ui-datepicker-calendar").find("a").removeClass("ui-state-hover"),t(this).addClass("ui-state-hover"),this.className.indexOf("ui-datepicker-prev")!==-1&&t(this).addClass("ui-datepicker-prev-hover"),this.className.indexOf("ui-datepicker-next")!==-1&&t(this).addClass("ui-datepicker-next-hover"))})}function n(e,i){t.extend(e,i);for(var s in i)null==i[s]&&(e[s]=i[s]);return e}t.extend(t.ui,{datepicker:{version:"1.10.3"}});var o,r="datepicker";t.extend(i.prototype,{markerClassName:"hasDatepicker",maxRows:4,_widgetDatepicker:function(){return this.dpDiv},setDefaults:function(t){return n(this._defaults,t||{}),this},_attachDatepicker:function(e,i){var s,n,o;s=e.nodeName.toLowerCase(),n="div"===s||"span"===s,e.id||(this.uuid+=1,e.id="dp"+this.uuid),o=this._newInst(t(e),n),o.settings=t.extend({},i||{}),"input"===s?this._connectDatepicker(e,o):n&&this._inlineDatepicker(e,o)},_newInst:function(e,i){var n=e[0].id.replace(/([^A-Za-z0-9_\-])/g,"\\\\$1");return{id:n,input:e,selectedDay:0,selectedMonth:0,selectedYear:0,drawMonth:0,drawYear:0,inline:i,dpDiv:i?s(t("<div class='"+this._inlineClass+" ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all'></div>")):this.dpDiv}},_connectDatepicker:function(e,i){var s=t(e);i.append=t([]),i.trigger=t([]),s.hasClass(this.markerClassName)||(this._attachments(s,i),s.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress).keyup(this._doKeyUp),this._autoSize(i),t.data(e,r,i),i.settings.disabled&&this._disableDatepicker(e))},_attachments:function(e,i){var s,n,o,r=this._get(i,"appendText"),a=this._get(i,"isRTL");i.append&&i.append.remove(),r&&(i.append=t("<span class='"+this._appendClass+"'>"+r+"</span>"),e[a?"before":"after"](i.append)),e.unbind("focus",this._showDatepicker),i.trigger&&i.trigger.remove(),s=this._get(i,"showOn"),"focus"!==s&&"both"!==s||e.focus(this._showDatepicker),"button"!==s&&"both"!==s||(n=this._get(i,"buttonText"),o=this._get(i,"buttonImage"),i.trigger=t(this._get(i,"buttonImageOnly")?t("<img/>").addClass(this._triggerClass).attr({src:o,alt:n,title:n}):t("<button type='button'></button>").addClass(this._triggerClass).html(o?t("<img/>").attr({src:o,alt:n,title:n}):n)),e[a?"before":"after"](i.trigger),i.trigger.click(function(){return t.datepicker._datepickerShowing&&t.datepicker._lastInput===e[0]?t.datepicker._hideDatepicker():t.datepicker._datepickerShowing&&t.datepicker._lastInput!==e[0]?(t.datepicker._hideDatepicker(),t.datepicker._showDatepicker(e[0])):t.datepicker._showDatepicker(e[0]),!1}))},_autoSize:function(t){if(this._get(t,"autoSize")&&!t.inline){var e,i,s,n,o=new Date(2009,11,20),r=this._get(t,"dateFormat");r.match(/[DM]/)&&(e=function(t){for(i=0,s=0,n=0;n<t.length;n++)t[n].length>i&&(i=t[n].length,s=n);return s},o.setMonth(e(this._get(t,r.match(/MM/)?"monthNames":"monthNamesShort"))),o.setDate(e(this._get(t,r.match(/DD/)?"dayNames":"dayNamesShort"))+20-o.getDay())),t.input.attr("size",this._formatDate(t,o).length)}},_inlineDatepicker:function(e,i){var s=t(e);s.hasClass(this.markerClassName)||(s.addClass(this.markerClassName).append(i.dpDiv),t.data(e,r,i),this._setDate(i,this._getDefaultDate(i),!0),this._updateDatepicker(i),this._updateAlternate(i),i.settings.disabled&&this._disableDatepicker(e),i.dpDiv.css("display","block"))},_dialogDatepicker:function(e,i,s,o,a){var l,h,c,u,d,p=this._dialogInst;return p||(this.uuid+=1,l="dp"+this.uuid,this._dialogInput=t("<input type='text' id='"+l+"' style='position: absolute; top: -100px; width: 0px;'/>"),this._dialogInput.keydown(this._doKeyDown),t("body").append(this._dialogInput),p=this._dialogInst=this._newInst(this._dialogInput,!1),p.settings={},t.data(this._dialogInput[0],r,p)),n(p.settings,o||{}),i=i&&i.constructor===Date?this._formatDate(p,i):i,this._dialogInput.val(i),this._pos=a?a.length?a:[a.pageX,a.pageY]:null,this._pos||(h=document.documentElement.clientWidth,c=document.documentElement.clientHeight,u=document.documentElement.scrollLeft||document.body.scrollLeft,d=document.documentElement.scrollTop||document.body.scrollTop,this._pos=[h/2-100+u,c/2-150+d]),this._dialogInput.css("left",this._pos[0]+20+"px").css("top",this._pos[1]+"px"),p.settings.onSelect=s,this._inDialog=!0,this.dpDiv.addClass(this._dialogClass),this._showDatepicker(this._dialogInput[0]),t.blockUI&&t.blockUI(this.dpDiv),t.data(this._dialogInput[0],r,p),this},_destroyDatepicker:function(e){var i,s=t(e),n=t.data(e,r);s.hasClass(this.markerClassName)&&(i=e.nodeName.toLowerCase(),t.removeData(e,r),"input"===i?(n.append.remove(),n.trigger.remove(),s.removeClass(this.markerClassName).unbind("focus",this._showDatepicker).unbind("keydown",this._doKeyDown).unbind("keypress",this._doKeyPress).unbind("keyup",this._doKeyUp)):"div"!==i&&"span"!==i||s.removeClass(this.markerClassName).empty())},_enableDatepicker:function(e){var i,s,n=t(e),o=t.data(e,r);n.hasClass(this.markerClassName)&&(i=e.nodeName.toLowerCase(),"input"===i?(e.disabled=!1,o.trigger.filter("button").each(function(){this.disabled=!1}).end().filter("img").css({opacity:"1.0",cursor:""})):"div"!==i&&"span"!==i||(s=n.children("."+this._inlineClass),s.children().removeClass("ui-state-disabled"),s.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled",!1)),this._disabledInputs=t.map(this._disabledInputs,function(t){return t===e?null:t}))},_disableDatepicker:function(e){var i,s,n=t(e),o=t.data(e,r);n.hasClass(this.markerClassName)&&(i=e.nodeName.toLowerCase(),"input"===i?(e.disabled=!0,o.trigger.filter("button").each(function(){this.disabled=!0}).end().filter("img").css({opacity:"0.5",cursor:"default"})):"div"!==i&&"span"!==i||(s=n.children("."+this._inlineClass),s.children().addClass("ui-state-disabled"),s.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled",!0)),this._disabledInputs=t.map(this._disabledInputs,function(t){return t===e?null:t}),this._disabledInputs[this._disabledInputs.length]=e)},_isDisabledDatepicker:function(t){if(!t)return!1;for(var e=0;e<this._disabledInputs.length;e++)if(this._disabledInputs[e]===t)return!0;return!1},_getInst:function(e){try{return t.data(e,r)}catch(t){throw"Missing instance data for this datepicker"}},_optionDatepicker:function(i,s,o){var r,a,l,h,c=this._getInst(i);return 2===arguments.length&&"string"==typeof s?"defaults"===s?t.extend({},t.datepicker._defaults):c?"all"===s?t.extend({},c.settings):this._get(c,s):null:(r=s||{},"string"==typeof s&&(r={},r[s]=o),void(c&&(this._curInst===c&&this._hideDatepicker(),a=this._getDateDatepicker(i,!0),l=this._getMinMaxDate(c,"min"),h=this._getMinMaxDate(c,"max"),n(c.settings,r),null!==l&&r.dateFormat!==e&&r.minDate===e&&(c.settings.minDate=this._formatDate(c,l)),null!==h&&r.dateFormat!==e&&r.maxDate===e&&(c.settings.maxDate=this._formatDate(c,h)),"disabled"in r&&(r.disabled?this._disableDatepicker(i):this._enableDatepicker(i)),this._attachments(t(i),c),this._autoSize(c),this._setDate(c,a),this._updateAlternate(c),this._updateDatepicker(c))))},_changeDatepicker:function(t,e,i){this._optionDatepicker(t,e,i)},_refreshDatepicker:function(t){var e=this._getInst(t);e&&this._updateDatepicker(e)},_setDateDatepicker:function(t,e){var i=this._getInst(t);i&&(this._setDate(i,e),this._updateDatepicker(i),this._updateAlternate(i))},_getDateDatepicker:function(t,e){var i=this._getInst(t);return i&&!i.inline&&this._setDateFromField(i,e),i?this._getDate(i):null},_doKeyDown:function(e){var i,s,n,o=t.datepicker._getInst(e.target),r=!0,a=o.dpDiv.is(".ui-datepicker-rtl");if(o._keyEvent=!0,t.datepicker._datepickerShowing)switch(e.keyCode){case 9:t.datepicker._hideDatepicker(),r=!1;break;case 13:return n=t("td."+t.datepicker._dayOverClass+":not(."+t.datepicker._currentClass+")",o.dpDiv),n[0]&&t.datepicker._selectDay(e.target,o.selectedMonth,o.selectedYear,n[0]),i=t.datepicker._get(o,"onSelect"),i?(s=t.datepicker._formatDate(o),i.apply(o.input?o.input[0]:null,[s,o])):t.datepicker._hideDatepicker(),!1;case 27:t.datepicker._hideDatepicker();break;case 33:t.datepicker._adjustDate(e.target,e.ctrlKey?-t.datepicker._get(o,"stepBigMonths"):-t.datepicker._get(o,"stepMonths"),"M");break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"stepBigMonths"):+t.datepicker._get(o,"stepMonths"),"M");break;case 35:(e.ctrlKey||e.metaKey)&&t.datepicker._clearDate(e.target),r=e.ctrlKey||e.metaKey;break;case 36:(e.ctrlKey||e.metaKey)&&t.datepicker._gotoToday(e.target),r=e.ctrlKey||e.metaKey;break;case 37:(e.ctrlKey||e.metaKey)&&t.datepicker._adjustDate(e.target,a?1:-1,"D"),r=e.ctrlKey||e.metaKey,e.originalEvent.altKey&&t.datepicker._adjustDate(e.target,e.ctrlKey?-t.datepicker._get(o,"stepBigMonths"):-t.datepicker._get(o,"stepMonths"),"M");break;case 38:(e.ctrlKey||e.metaKey)&&t.datepicker._adjustDate(e.target,-7,"D"),r=e.ctrlKey||e.metaKey;break;case 39:(e.ctrlKey||e.metaKey)&&t.datepicker._adjustDate(e.target,a?-1:1,"D"),r=e.ctrlKey||e.metaKey,e.originalEvent.altKey&&t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"stepBigMonths"):+t.datepicker._get(o,"stepMonths"),"M");break;case 40:(e.ctrlKey||e.metaKey)&&t.datepicker._adjustDate(e.target,7,"D"),r=e.ctrlKey||e.metaKey;break;default:r=!1}else 36===e.keyCode&&e.ctrlKey?t.datepicker._showDatepicker(this):r=!1;r&&(e.preventDefault(),e.stopPropagation())},_doKeyPress:function(e){var i,s,n=t.datepicker._getInst(e.target);if(t.datepicker._get(n,"constrainInput"))return i=t.datepicker._possibleChars(t.datepicker._get(n,"dateFormat")),s=String.fromCharCode(null==e.charCode?e.keyCode:e.charCode),e.ctrlKey||e.metaKey||s<" "||!i||i.indexOf(s)>-1},_doKeyUp:function(e){var i,s=t.datepicker._getInst(e.target);if(s.input.val()!==s.lastVal)try{i=t.datepicker.parseDate(t.datepicker._get(s,"dateFormat"),s.input?s.input.val():null,t.datepicker._getFormatConfig(s)),i&&(t.datepicker._setDateFromField(s),t.datepicker._updateAlternate(s),t.datepicker._updateDatepicker(s))}catch(t){}return!0},_showDatepicker:function(e){if(e=e.target||e,"input"!==e.nodeName.toLowerCase()&&(e=t("input",e.parentNode)[0]),!t.datepicker._isDisabledDatepicker(e)&&t.datepicker._lastInput!==e){var i,s,o,r,a,l,h;i=t.datepicker._getInst(e),t.datepicker._curInst&&t.datepicker._curInst!==i&&(t.datepicker._curInst.dpDiv.stop(!0,!0),i&&t.datepicker._datepickerShowing&&t.datepicker._hideDatepicker(t.datepicker._curInst.input[0])),s=t.datepicker._get(i,"beforeShow"),o=s?s.apply(e,[e,i]):{},o!==!1&&(n(i.settings,o),i.lastVal=null,t.datepicker._lastInput=e,t.datepicker._setDateFromField(i),t.datepicker._inDialog&&(e.value=""),t.datepicker._pos||(t.datepicker._pos=t.datepicker._findPos(e),t.datepicker._pos[1]+=e.offsetHeight),r=!1,t(e).parents().each(function(){return r|="fixed"===t(this).css("position"),!r}),a={left:t.datepicker._pos[0],top:t.datepicker._pos[1]},t.datepicker._pos=null,i.dpDiv.empty(),i.dpDiv.css({position:"absolute",display:"block",top:"-1000px"}),t.datepicker._updateDatepicker(i),a=t.datepicker._checkOffset(i,a,r),i.dpDiv.css({position:t.datepicker._inDialog&&t.blockUI?"static":r?"fixed":"absolute",display:"none",left:a.left+"px",top:a.top+"px"}),i.inline||(l=t.datepicker._get(i,"showAnim"),h=t.datepicker._get(i,"duration"),i.dpDiv.zIndex(t(e).zIndex()+1),t.datepicker._datepickerShowing=!0,t.effects&&t.effects.effect[l]?i.dpDiv.show(l,t.datepicker._get(i,"showOptions"),h):i.dpDiv[l||"show"](l?h:null),t.datepicker._shouldFocusInput(i)&&i.input.focus(),t.datepicker._curInst=i))}},_updateDatepicker:function(e){this.maxRows=4,o=e,e.dpDiv.empty().append(this._generateHTML(e)),this._attachHandlers(e),e.dpDiv.find("."+this._dayOverClass+" a").mouseover();var i,s=this._getNumberOfMonths(e),n=s[1],r=17;e.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").width(""),n>1&&e.dpDiv.addClass("ui-datepicker-multi-"+n).css("width",r*n+"em"),e.dpDiv[(1!==s[0]||1!==s[1]?"add":"remove")+"Class"]("ui-datepicker-multi"),e.dpDiv[(this._get(e,"isRTL")?"add":"remove")+"Class"]("ui-datepicker-rtl"),e===t.datepicker._curInst&&t.datepicker._datepickerShowing&&t.datepicker._shouldFocusInput(e)&&e.input.focus(),e.yearshtml&&(i=e.yearshtml,setTimeout(function(){i===e.yearshtml&&e.yearshtml&&e.dpDiv.find("select.ui-datepicker-year:first").replaceWith(e.yearshtml),i=e.yearshtml=null},0))},_shouldFocusInput:function(t){return t.input&&t.input.is(":visible")&&!t.input.is(":disabled")&&!t.input.is(":focus")},_checkOffset:function(e,i,s){var n=e.dpDiv.outerWidth(),o=e.dpDiv.outerHeight(),r=e.input?e.input.outerWidth():0,a=e.input?e.input.outerHeight():0,l=document.documentElement.clientWidth+(s?0:t(document).scrollLeft()),h=document.documentElement.clientHeight+(s?0:t(document).scrollTop());return i.left-=this._get(e,"isRTL")?n-r:0,i.left-=s&&i.left===e.input.offset().left?t(document).scrollLeft():0,i.top-=s&&i.top===e.input.offset().top+a?t(document).scrollTop():0,i.left-=Math.min(i.left,i.left+n>l&&l>n?Math.abs(i.left+n-l):0),i.top-=Math.min(i.top,i.top+o>h&&h>o?Math.abs(o+a):0),i},_findPos:function(e){for(var i,s=this._getInst(e),n=this._get(s,"isRTL");e&&("hidden"===e.type||1!==e.nodeType||t.expr.filters.hidden(e));)e=e[n?"previousSibling":"nextSibling"];return i=t(e).offset(),[i.left,i.top]},_hideDatepicker:function(e){var i,s,n,o,a=this._curInst;!a||e&&a!==t.data(e,r)||this._datepickerShowing&&(i=this._get(a,"showAnim"),s=this._get(a,"duration"),n=function(){t.datepicker._tidyDialog(a)},t.effects&&(t.effects.effect[i]||t.effects[i])?a.dpDiv.hide(i,t.datepicker._get(a,"showOptions"),s,n):a.dpDiv["slideDown"===i?"slideUp":"fadeIn"===i?"fadeOut":"hide"](i?s:null,n),i||n(),this._datepickerShowing=!1,o=this._get(a,"onClose"),o&&o.apply(a.input?a.input[0]:null,[a.input?a.input.val():"",a]),this._lastInput=null,this._inDialog&&(this._dialogInput.css({position:"absolute",left:"0",top:"-100px"}),t.blockUI&&(t.unblockUI(),t("body").append(this.dpDiv))),this._inDialog=!1)},_tidyDialog:function(t){t.dpDiv.removeClass(this._dialogClass).unbind(".ui-datepicker-calendar")},_checkExternalClick:function(e){if(t.datepicker._curInst){var i=t(e.target),s=t.datepicker._getInst(i[0]);(i[0].id===t.datepicker._mainDivId||0!==i.parents("#"+t.datepicker._mainDivId).length||i.hasClass(t.datepicker.markerClassName)||i.closest("."+t.datepicker._triggerClass).length||!t.datepicker._datepickerShowing||t.datepicker._inDialog&&t.blockUI)&&(!i.hasClass(t.datepicker.markerClassName)||t.datepicker._curInst===s)||t.datepicker._hideDatepicker()}},_adjustDate:function(e,i,s){var n=t(e),o=this._getInst(n[0]);this._isDisabledDatepicker(n[0])||(this._adjustInstDate(o,i+("M"===s?this._get(o,"showCurrentAtPos"):0),s),this._updateDatepicker(o))},_gotoToday:function(e){var i,s=t(e),n=this._getInst(s[0]);this._get(n,"gotoCurrent")&&n.currentDay?(n.selectedDay=n.currentDay,n.drawMonth=n.selectedMonth=n.currentMonth,n.drawYear=n.selectedYear=n.currentYear):(i=new Date,n.selectedDay=i.getDate(),n.drawMonth=n.selectedMonth=i.getMonth(),n.drawYear=n.selectedYear=i.getFullYear()),this._notifyChange(n),this._adjustDate(s)},_selectMonthYear:function(e,i,s){var n=t(e),o=this._getInst(n[0]);o["selected"+("M"===s?"Month":"Year")]=o["draw"+("M"===s?"Month":"Year")]=parseInt(i.options[i.selectedIndex].value,10),this._notifyChange(o),this._adjustDate(n)},_selectDay:function(e,i,s,n){var o,r=t(e);t(n).hasClass(this._unselectableClass)||this._isDisabledDatepicker(r[0])||(o=this._getInst(r[0]),o.selectedDay=o.currentDay=t("a",n).html(),o.selectedMonth=o.currentMonth=i,o.selectedYear=o.currentYear=s,this._selectDate(e,this._formatDate(o,o.currentDay,o.currentMonth,o.currentYear)))},_clearDate:function(e){var i=t(e);this._selectDate(i,"")},_selectDate:function(e,i){var s,n=t(e),o=this._getInst(n[0]);i=null!=i?i:this._formatDate(o),o.input&&o.input.val(i),this._updateAlternate(o),s=this._get(o,"onSelect"),s?s.apply(o.input?o.input[0]:null,[i,o]):o.input&&o.input.trigger("change"),o.inline?this._updateDatepicker(o):(this._hideDatepicker(),this._lastInput=o.input[0],"object"!=typeof o.input[0]&&o.input.focus(),this._lastInput=null)},_updateAlternate:function(e){var i,s,n,o=this._get(e,"altField");o&&(i=this._get(e,"altFormat")||this._get(e,"dateFormat"),s=this._getDate(e),n=this.formatDate(i,s,this._getFormatConfig(e)),t(o).each(function(){t(this).val(n)}))},noWeekends:function(t){var e=t.getDay();return[e>0&&e<6,""]},iso8601Week:function(t){var e,i=new Date(t.getTime());return i.setDate(i.getDate()+4-(i.getDay()||7)),e=i.getTime(),i.setMonth(0),i.setDate(1),Math.floor(Math.round((e-i)/864e5)/7)+1},parseDate:function(e,i,s){if(null==e||null==i)throw"Invalid arguments";if(i="object"==typeof i?i.toString():i+"",""===i)return null;var n,o,r,a,l=0,h=(s?s.shortYearCutoff:null)||this._defaults.shortYearCutoff,c="string"!=typeof h?h:(new Date).getFullYear()%100+parseInt(h,10),u=(s?s.dayNamesShort:null)||this._defaults.dayNamesShort,d=(s?s.dayNames:null)||this._defaults.dayNames,p=(s?s.monthNamesShort:null)||this._defaults.monthNamesShort,f=(s?s.monthNames:null)||this._defaults.monthNames,g=-1,m=-1,v=-1,y=-1,_=!1,b=function(t){var i=n+1<e.length&&e.charAt(n+1)===t;return i&&n++,i},w=function(t){var e=b(t),s="@"===t?14:"!"===t?20:"y"===t&&e?4:"o"===t?3:2,n=new RegExp("^\\d{1,"+s+"}"),o=i.substring(l).match(n);if(!o)throw"Missing number at position "+l;return l+=o[0].length,parseInt(o[0],10)},C=function(e,s,n){var o=-1,r=t.map(b(e)?n:s,function(t,e){return[[e,t]]}).sort(function(t,e){return-(t[1].length-e[1].length)});if(t.each(r,function(t,e){var s=e[1];if(i.substr(l,s.length).toLowerCase()===s.toLowerCase())return o=e[0],l+=s.length,!1}),o!==-1)return o+1;throw"Unknown name at position "+l},k=function(){if(i.charAt(l)!==e.charAt(n))throw"Unexpected literal at position "+l;l++};for(n=0;n<e.length;n++)if(_)"'"!==e.charAt(n)||b("'")?k():_=!1;else switch(e.charAt(n)){case"d":v=w("d");break;case"D":C("D",u,d);break;case"o":y=w("o");break;case"m":m=w("m");break;case"M":m=C("M",p,f);break;case"y":g=w("y");break;case"@":a=new Date(w("@")),g=a.getFullYear(),m=a.getMonth()+1,v=a.getDate();break;case"!":a=new Date((w("!")-this._ticksTo1970)/1e4),g=a.getFullYear(),m=a.getMonth()+1,v=a.getDate();break;case"'":b("'")?k():_=!0;break;default:k()}if(l<i.length&&(r=i.substr(l),!/^\s+/.test(r)))throw"Extra/unparsed characters found in date: "+r;if(g===-1?g=(new Date).getFullYear():g<100&&(g+=(new Date).getFullYear()-(new Date).getFullYear()%100+(g<=c?0:-100)),y>-1)for(m=1,v=y;;){if(o=this._getDaysInMonth(g,m-1),v<=o)break;m++,v-=o}if(a=this._daylightSavingAdjust(new Date(g,m-1,v)),a.getFullYear()!==g||a.getMonth()+1!==m||a.getDate()!==v)throw"Invalid date";return a},ATOM:"yy-mm-dd",COOKIE:"D, dd M yy",ISO_8601:"yy-mm-dd",RFC_822:"D, d M y",RFC_850:"DD, dd-M-y",RFC_1036:"D, d M y",RFC_1123:"D, d M yy",RFC_2822:"D, d M yy",RSS:"D, d M y",TICKS:"!",TIMESTAMP:"@",W3C:"yy-mm-dd",_ticksTo1970:24*(718685+Math.floor(492.5)-Math.floor(19.7)+Math.floor(4.925))*60*60*1e7,formatDate:function(t,e,i){if(!e)return"";var s,n=(i?i.dayNamesShort:null)||this._defaults.dayNamesShort,o=(i?i.dayNames:null)||this._defaults.dayNames,r=(i?i.monthNamesShort:null)||this._defaults.monthNamesShort,a=(i?i.monthNames:null)||this._defaults.monthNames,l=function(e){var i=s+1<t.length&&t.charAt(s+1)===e;return i&&s++,i},h=function(t,e,i){var s=""+e;if(l(t))for(;s.length<i;)s="0"+s;return s},c=function(t,e,i,s){return l(t)?s[e]:i[e]},u="",d=!1;if(e)for(s=0;s<t.length;s++)if(d)"'"!==t.charAt(s)||l("'")?u+=t.charAt(s):d=!1;else switch(t.charAt(s)){case"d":u+=h("d",e.getDate(),2);break;case"D":u+=c("D",e.getDay(),n,o);break;case"o":u+=h("o",Math.round((new Date(e.getFullYear(),e.getMonth(),e.getDate()).getTime()-new Date(e.getFullYear(),0,0).getTime())/864e5),3);break;case"m":u+=h("m",e.getMonth()+1,2);break;case"M":u+=c("M",e.getMonth(),r,a);break;case"y":u+=l("y")?e.getFullYear():(e.getYear()%100<10?"0":"")+e.getYear()%100;break;case"@":u+=e.getTime();break;case"!":u+=1e4*e.getTime()+this._ticksTo1970;break;case"'":l("'")?u+="'":d=!0;break;default:u+=t.charAt(s)}return u},_possibleChars:function(t){var e,i="",s=!1,n=function(i){var s=e+1<t.length&&t.charAt(e+1)===i;return s&&e++,s};for(e=0;e<t.length;e++)if(s)"'"!==t.charAt(e)||n("'")?i+=t.charAt(e):s=!1;else switch(t.charAt(e)){case"d":case"m":case"y":case"@":i+="0123456789";break;case"D":case"M":return null;case"'":n("'")?i+="'":s=!0;break;default:i+=t.charAt(e)}return i},_get:function(t,i){return t.settings[i]!==e?t.settings[i]:this._defaults[i]},_setDateFromField:function(t,e){if(t.input.val()!==t.lastVal){var i=this._get(t,"dateFormat"),s=t.lastVal=t.input?t.input.val():null,n=this._getDefaultDate(t),o=n,r=this._getFormatConfig(t);try{o=this.parseDate(i,s,r)||n}catch(t){s=e?"":s}t.selectedDay=o.getDate(),t.drawMonth=t.selectedMonth=o.getMonth(),t.drawYear=t.selectedYear=o.getFullYear(),t.currentDay=s?o.getDate():0,t.currentMonth=s?o.getMonth():0,t.currentYear=s?o.getFullYear():0,this._adjustInstDate(t)}},_getDefaultDate:function(t){return this._restrictMinMax(t,this._determineDate(t,this._get(t,"defaultDate"),new Date))},_determineDate:function(e,i,s){var n=function(t){var e=new Date;return e.setDate(e.getDate()+t),e},o=function(i){try{return t.datepicker.parseDate(t.datepicker._get(e,"dateFormat"),i,t.datepicker._getFormatConfig(e))}catch(t){}for(var s=(i.toLowerCase().match(/^c/)?t.datepicker._getDate(e):null)||new Date,n=s.getFullYear(),o=s.getMonth(),r=s.getDate(),a=/([+\-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g,l=a.exec(i);l;){switch(l[2]||"d"){case"d":case"D":r+=parseInt(l[1],10);break;case"w":case"W":r+=7*parseInt(l[1],10);break;case"m":case"M":o+=parseInt(l[1],10),r=Math.min(r,t.datepicker._getDaysInMonth(n,o));break;case"y":case"Y":n+=parseInt(l[1],10),r=Math.min(r,t.datepicker._getDaysInMonth(n,o))}l=a.exec(i)}return new Date(n,o,r)},r=null==i||""===i?s:"string"==typeof i?o(i):"number"==typeof i?isNaN(i)?s:n(i):new Date(i.getTime());return r=r&&"Invalid Date"===r.toString()?s:r,r&&(r.setHours(0),r.setMinutes(0),r.setSeconds(0),r.setMilliseconds(0)),this._daylightSavingAdjust(r)},_daylightSavingAdjust:function(t){return t?(t.setHours(t.getHours()>12?t.getHours()+2:0),t):null},_setDate:function(t,e,i){var s=!e,n=t.selectedMonth,o=t.selectedYear,r=this._restrictMinMax(t,this._determineDate(t,e,new Date));t.selectedDay=t.currentDay=r.getDate(),t.drawMonth=t.selectedMonth=t.currentMonth=r.getMonth(),t.drawYear=t.selectedYear=t.currentYear=r.getFullYear(),n===t.selectedMonth&&o===t.selectedYear||i||this._notifyChange(t),this._adjustInstDate(t),t.input&&t.input.val(s?"":this._formatDate(t))},_getDate:function(t){var e=!t.currentYear||t.input&&""===t.input.val()?null:this._daylightSavingAdjust(new Date(t.currentYear,t.currentMonth,t.currentDay));return e},_attachHandlers:function(e){var i=this._get(e,"stepMonths"),s="#"+e.id.replace(/\\\\/g,"\\");e.dpDiv.find("[data-handler]").map(function(){var e={prev:function(){t.datepicker._adjustDate(s,-i,"M")},next:function(){t.datepicker._adjustDate(s,+i,"M")},hide:function(){t.datepicker._hideDatepicker()},today:function(){t.datepicker._gotoToday(s)},selectDay:function(){return t.datepicker._selectDay(s,+this.getAttribute("data-month"),+this.getAttribute("data-year"),this),!1},selectMonth:function(){return t.datepicker._selectMonthYear(s,this,"M"),!1},selectYear:function(){return t.datepicker._selectMonthYear(s,this,"Y"),!1}};t(this).bind(this.getAttribute("data-event"),e[this.getAttribute("data-handler")])})},_generateHTML:function(t){var e,i,s,n,o,r,a,l,h,c,u,d,p,f,g,m,v,y,_,b,w,C,k,x,P,D,I,S,M,O,T,L,F,E,A,z,H,j,N,W=new Date,R=this._daylightSavingAdjust(new Date(W.getFullYear(),W.getMonth(),W.getDate())),B=this._get(t,"isRTL"),V=this._get(t,"showButtonPanel"),$=this._get(t,"hideIfNoPrevNext"),Y=this._get(t,"navigationAsDateFormat"),q=this._getNumberOfMonths(t),G=this._get(t,"showCurrentAtPos"),K=this._get(t,"stepMonths"),U=1!==q[0]||1!==q[1],Z=this._daylightSavingAdjust(t.currentDay?new Date(t.currentYear,t.currentMonth,t.currentDay):new Date(9999,9,9)),X=this._getMinMaxDate(t,"min"),J=this._getMinMaxDate(t,"max"),Q=t.drawMonth-G,tt=t.drawYear;if(Q<0&&(Q+=12,tt--),J)for(e=this._daylightSavingAdjust(new Date(J.getFullYear(),J.getMonth()-q[0]*q[1]+1,J.getDate())),e=X&&e<X?X:e;this._daylightSavingAdjust(new Date(tt,Q,1))>e;)Q--,Q<0&&(Q=11,tt--);for(t.drawMonth=Q,t.drawYear=tt,i=this._get(t,"prevText"),i=Y?this.formatDate(i,this._daylightSavingAdjust(new Date(tt,Q-K,1)),this._getFormatConfig(t)):i,s=this._canAdjustMonth(t,-1,tt,Q)?"<a class='ui-datepicker-prev ui-corner-all' data-handler='prev' data-event='click' title='"+i+"'><span class='ui-icon ui-icon-circle-triangle-"+(B?"e":"w")+"'>"+i+"</span></a>":$?"":"<a class='ui-datepicker-prev ui-corner-all ui-state-disabled' title='"+i+"'><span class='ui-icon ui-icon-circle-triangle-"+(B?"e":"w")+"'>"+i+"</span></a>",n=this._get(t,"nextText"),n=Y?this.formatDate(n,this._daylightSavingAdjust(new Date(tt,Q+K,1)),this._getFormatConfig(t)):n,o=this._canAdjustMonth(t,1,tt,Q)?"<a class='ui-datepicker-next ui-corner-all' data-handler='next' data-event='click' title='"+n+"'><span class='ui-icon ui-icon-circle-triangle-"+(B?"w":"e")+"'>"+n+"</span></a>":$?"":"<a class='ui-datepicker-next ui-corner-all ui-state-disabled' title='"+n+"'><span class='ui-icon ui-icon-circle-triangle-"+(B?"w":"e")+"'>"+n+"</span></a>",r=this._get(t,"currentText"),a=this._get(t,"gotoCurrent")&&t.currentDay?Z:R,r=Y?this.formatDate(r,a,this._getFormatConfig(t)):r,l=t.inline?"":"<button type='button' class='ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all' data-handler='hide' data-event='click'>"+this._get(t,"closeText")+"</button>",h=V?"<div class='ui-datepicker-buttonpane ui-widget-content'>"+(B?l:"")+(this._isInRange(t,a)?"<button type='button' class='ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all' data-handler='today' data-event='click'>"+r+"</button>":"")+(B?"":l)+"</div>":"",c=parseInt(this._get(t,"firstDay"),10),c=isNaN(c)?0:c,u=this._get(t,"showWeek"),d=this._get(t,"dayNames"),p=this._get(t,"dayNamesMin"),f=this._get(t,"monthNames"),g=this._get(t,"monthNamesShort"),m=this._get(t,"beforeShowDay"),v=this._get(t,"showOtherMonths"),
-y=this._get(t,"selectOtherMonths"),_=this._getDefaultDate(t),b="",C=0;C<q[0];C++){for(k="",this.maxRows=4,x=0;x<q[1];x++){if(P=this._daylightSavingAdjust(new Date(tt,Q,t.selectedDay)),D=" ui-corner-all",I="",U){if(I+="<div class='ui-datepicker-group",q[1]>1)switch(x){case 0:I+=" ui-datepicker-group-first",D=" ui-corner-"+(B?"right":"left");break;case q[1]-1:I+=" ui-datepicker-group-last",D=" ui-corner-"+(B?"left":"right");break;default:I+=" ui-datepicker-group-middle",D=""}I+="'>"}for(I+="<div class='ui-datepicker-header ui-widget-header ui-helper-clearfix"+D+"'>"+(/all|left/.test(D)&&0===C?B?o:s:"")+(/all|right/.test(D)&&0===C?B?s:o:"")+this._generateMonthYearHeader(t,Q,tt,X,J,C>0||x>0,f,g)+"</div><table class='ui-datepicker-calendar'><thead><tr>",S=u?"<th class='ui-datepicker-week-col'>"+this._get(t,"weekHeader")+"</th>":"",w=0;w<7;w++)M=(w+c)%7,S+="<th"+((w+c+6)%7>=5?" class='ui-datepicker-week-end'":"")+"><span title='"+d[M]+"'>"+p[M]+"</span></th>";for(I+=S+"</tr></thead><tbody>",O=this._getDaysInMonth(tt,Q),tt===t.selectedYear&&Q===t.selectedMonth&&(t.selectedDay=Math.min(t.selectedDay,O)),T=(this._getFirstDayOfMonth(tt,Q)-c+7)%7,L=Math.ceil((T+O)/7),F=U&&this.maxRows>L?this.maxRows:L,this.maxRows=F,E=this._daylightSavingAdjust(new Date(tt,Q,1-T)),A=0;A<F;A++){for(I+="<tr>",z=u?"<td class='ui-datepicker-week-col'>"+this._get(t,"calculateWeek")(E)+"</td>":"",w=0;w<7;w++)H=m?m.apply(t.input?t.input[0]:null,[E]):[!0,""],j=E.getMonth()!==Q,N=j&&!y||!H[0]||X&&E<X||J&&E>J,z+="<td class='"+((w+c+6)%7>=5?" ui-datepicker-week-end":"")+(j?" ui-datepicker-other-month":"")+(E.getTime()===P.getTime()&&Q===t.selectedMonth&&t._keyEvent||_.getTime()===E.getTime()&&_.getTime()===P.getTime()?" "+this._dayOverClass:"")+(N?" "+this._unselectableClass+" ui-state-disabled":"")+(j&&!v?"":" "+H[1]+(E.getTime()===Z.getTime()?" "+this._currentClass:"")+(E.getTime()===R.getTime()?" ui-datepicker-today":""))+"'"+(j&&!v||!H[2]?"":" title='"+H[2].replace(/'/g,"&#39;")+"'")+(N?"":" data-handler='selectDay' data-event='click' data-month='"+E.getMonth()+"' data-year='"+E.getFullYear()+"'")+">"+(j&&!v?"&#xa0;":N?"<span class='ui-state-default'>"+E.getDate()+"</span>":"<a class='ui-state-default"+(E.getTime()===R.getTime()?" ui-state-highlight":"")+(E.getTime()===Z.getTime()?" ui-state-active":"")+(j?" ui-priority-secondary":"")+"' href='#'>"+E.getDate()+"</a>")+"</td>",E.setDate(E.getDate()+1),E=this._daylightSavingAdjust(E);I+=z+"</tr>"}Q++,Q>11&&(Q=0,tt++),I+="</tbody></table>"+(U?"</div>"+(q[0]>0&&x===q[1]-1?"<div class='ui-datepicker-row-break'></div>":""):""),k+=I}b+=k}return b+=h,t._keyEvent=!1,b},_generateMonthYearHeader:function(t,e,i,s,n,o,r,a){var l,h,c,u,d,p,f,g,m=this._get(t,"changeMonth"),v=this._get(t,"changeYear"),y=this._get(t,"showMonthAfterYear"),_="<div class='ui-datepicker-title'>",b="";if(o||!m)b+="<span class='ui-datepicker-month'>"+r[e]+"</span>";else{for(l=s&&s.getFullYear()===i,h=n&&n.getFullYear()===i,b+="<select class='ui-datepicker-month' data-handler='selectMonth' data-event='change'>",c=0;c<12;c++)(!l||c>=s.getMonth())&&(!h||c<=n.getMonth())&&(b+="<option value='"+c+"'"+(c===e?" selected='selected'":"")+">"+a[c]+"</option>");b+="</select>"}if(y||(_+=b+(!o&&m&&v?"":"&#xa0;")),!t.yearshtml)if(t.yearshtml="",o||!v)_+="<span class='ui-datepicker-year'>"+i+"</span>";else{for(u=this._get(t,"yearRange").split(":"),d=(new Date).getFullYear(),p=function(t){var e=t.match(/c[+\-].*/)?i+parseInt(t.substring(1),10):t.match(/[+\-].*/)?d+parseInt(t,10):parseInt(t,10);return isNaN(e)?d:e},f=p(u[0]),g=Math.max(f,p(u[1]||"")),f=s?Math.max(f,s.getFullYear()):f,g=n?Math.min(g,n.getFullYear()):g,t.yearshtml+="<select class='ui-datepicker-year' data-handler='selectYear' data-event='change'>";f<=g;f++)t.yearshtml+="<option value='"+f+"'"+(f===i?" selected='selected'":"")+">"+f+"</option>";t.yearshtml+="</select>",_+=t.yearshtml,t.yearshtml=null}return _+=this._get(t,"yearSuffix"),y&&(_+=(!o&&m&&v?"":"&#xa0;")+b),_+="</div>"},_adjustInstDate:function(t,e,i){var s=t.drawYear+("Y"===i?e:0),n=t.drawMonth+("M"===i?e:0),o=Math.min(t.selectedDay,this._getDaysInMonth(s,n))+("D"===i?e:0),r=this._restrictMinMax(t,this._daylightSavingAdjust(new Date(s,n,o)));t.selectedDay=r.getDate(),t.drawMonth=t.selectedMonth=r.getMonth(),t.drawYear=t.selectedYear=r.getFullYear(),"M"!==i&&"Y"!==i||this._notifyChange(t)},_restrictMinMax:function(t,e){var i=this._getMinMaxDate(t,"min"),s=this._getMinMaxDate(t,"max"),n=i&&e<i?i:e;return s&&n>s?s:n},_notifyChange:function(t){var e=this._get(t,"onChangeMonthYear");e&&e.apply(t.input?t.input[0]:null,[t.selectedYear,t.selectedMonth+1,t])},_getNumberOfMonths:function(t){var e=this._get(t,"numberOfMonths");return null==e?[1,1]:"number"==typeof e?[1,e]:e},_getMinMaxDate:function(t,e){return this._determineDate(t,this._get(t,e+"Date"),null)},_getDaysInMonth:function(t,e){return 32-this._daylightSavingAdjust(new Date(t,e,32)).getDate()},_getFirstDayOfMonth:function(t,e){return new Date(t,e,1).getDay()},_canAdjustMonth:function(t,e,i,s){var n=this._getNumberOfMonths(t),o=this._daylightSavingAdjust(new Date(i,s+(e<0?e:n[0]*n[1]),1));return e<0&&o.setDate(this._getDaysInMonth(o.getFullYear(),o.getMonth())),this._isInRange(t,o)},_isInRange:function(t,e){var i,s,n=this._getMinMaxDate(t,"min"),o=this._getMinMaxDate(t,"max"),r=null,a=null,l=this._get(t,"yearRange");return l&&(i=l.split(":"),s=(new Date).getFullYear(),r=parseInt(i[0],10),a=parseInt(i[1],10),i[0].match(/[+\-].*/)&&(r+=s),i[1].match(/[+\-].*/)&&(a+=s)),(!n||e.getTime()>=n.getTime())&&(!o||e.getTime()<=o.getTime())&&(!r||e.getFullYear()>=r)&&(!a||e.getFullYear()<=a)},_getFormatConfig:function(t){var e=this._get(t,"shortYearCutoff");return e="string"!=typeof e?e:(new Date).getFullYear()%100+parseInt(e,10),{shortYearCutoff:e,dayNamesShort:this._get(t,"dayNamesShort"),dayNames:this._get(t,"dayNames"),monthNamesShort:this._get(t,"monthNamesShort"),monthNames:this._get(t,"monthNames")}},_formatDate:function(t,e,i,s){e||(t.currentDay=t.selectedDay,t.currentMonth=t.selectedMonth,t.currentYear=t.selectedYear);var n=e?"object"==typeof e?e:this._daylightSavingAdjust(new Date(s,i,e)):this._daylightSavingAdjust(new Date(t.currentYear,t.currentMonth,t.currentDay));return this.formatDate(this._get(t,"dateFormat"),n,this._getFormatConfig(t))}}),t.fn.datepicker=function(e){if(!this.length)return this;t.datepicker.initialized||(t(document).mousedown(t.datepicker._checkExternalClick),t.datepicker.initialized=!0),0===t("#"+t.datepicker._mainDivId).length&&t("body").append(t.datepicker.dpDiv);var i=Array.prototype.slice.call(arguments,1);return"string"!=typeof e||"isDisabled"!==e&&"getDate"!==e&&"widget"!==e?"option"===e&&2===arguments.length&&"string"==typeof arguments[1]?t.datepicker["_"+e+"Datepicker"].apply(t.datepicker,[this[0]].concat(i)):this.each(function(){"string"==typeof e?t.datepicker["_"+e+"Datepicker"].apply(t.datepicker,[this].concat(i)):t.datepicker._attachDatepicker(this,e)}):t.datepicker["_"+e+"Datepicker"].apply(t.datepicker,[this[0]].concat(i))},t.datepicker=new i,t.datepicker.initialized=!1,t.datepicker.uuid=(new Date).getTime(),t.datepicker.version="1.10.3"}(s),function(t,e){var i={buttons:!0,height:!0,maxHeight:!0,maxWidth:!0,minHeight:!0,minWidth:!0,width:!0},s={maxHeight:!0,maxWidth:!0,minHeight:!0,minWidth:!0};t.widget("ui.dialog",{version:"1.10.3",options:{appendTo:"body",autoOpen:!0,buttons:[],closeOnEscape:!0,closeText:"close",dialogClass:"",draggable:!0,hide:null,height:"auto",maxHeight:null,maxWidth:null,minHeight:150,minWidth:150,modal:!1,position:{my:"center",at:"center",of:window,collision:"fit",using:function(e){var i=t(this).css(e).offset().top;i<0&&t(this).css("top",e.top-i)}},resizable:!0,show:null,title:null,width:300,beforeClose:null,close:null,drag:null,dragStart:null,dragStop:null,focus:null,open:null,resize:null,resizeStart:null,resizeStop:null},_create:function(){this.originalCss={display:this.element[0].style.display,width:this.element[0].style.width,minHeight:this.element[0].style.minHeight,maxHeight:this.element[0].style.maxHeight,height:this.element[0].style.height},this.originalPosition={parent:this.element.parent(),index:this.element.parent().children().index(this.element)},this.originalTitle=this.element.attr("title"),this.options.title=this.options.title||this.originalTitle,this._createWrapper(),this.element.show().removeAttr("title").addClass("ui-dialog-content ui-widget-content").appendTo(this.uiDialog),this._createTitlebar(),this._createButtonPane(),this.options.draggable&&t.fn.draggable&&this._makeDraggable(),this.options.resizable&&t.fn.resizable&&this._makeResizable(),this._isOpen=!1},_init:function(){this.options.autoOpen&&this.open()},_appendTo:function(){var e=this.options.appendTo;return e&&(e.jquery||e.nodeType)?t(e):this.document.find(e||"body").eq(0)},_destroy:function(){var t,e=this.originalPosition;this._destroyOverlay(),this.element.removeUniqueId().removeClass("ui-dialog-content ui-widget-content").css(this.originalCss).detach(),this.uiDialog.stop(!0,!0).remove(),this.originalTitle&&this.element.attr("title",this.originalTitle),t=e.parent.children().eq(e.index),t.length&&t[0]!==this.element[0]?t.before(this.element):e.parent.append(this.element)},widget:function(){return this.uiDialog},disable:t.noop,enable:t.noop,close:function(e){var i=this;this._isOpen&&this._trigger("beforeClose",e)!==!1&&(this._isOpen=!1,this._destroyOverlay(),this.opener.filter(":focusable").focus().length||t(this.document[0].activeElement).blur(),this._hide(this.uiDialog,this.options.hide,function(){i._trigger("close",e)}))},isOpen:function(){return this._isOpen},moveToTop:function(){this._moveToTop()},_moveToTop:function(t,e){var i=!!this.uiDialog.nextAll(":visible").insertBefore(this.uiDialog).length;return i&&!e&&this._trigger("focus",t),i},open:function(){var e=this;return this._isOpen?void(this._moveToTop()&&this._focusTabbable()):(this._isOpen=!0,this.opener=t(this.document[0].activeElement),this._size(),this._position(),this._createOverlay(),this._moveToTop(null,!0),this._show(this.uiDialog,this.options.show,function(){e._focusTabbable(),e._trigger("focus")}),void this._trigger("open"))},_focusTabbable:function(){var t=this.element.find("[autofocus]");t.length||(t=this.element.find(":tabbable")),t.length||(t=this.uiDialogButtonPane.find(":tabbable")),t.length||(t=this.uiDialogTitlebarClose.filter(":tabbable")),t.length||(t=this.uiDialog),t.eq(0).focus()},_keepFocus:function(e){function i(){var e=this.document[0].activeElement,i=this.uiDialog[0]===e||t.contains(this.uiDialog[0],e);i||this._focusTabbable()}e.preventDefault(),i.call(this),this._delay(i)},_createWrapper:function(){this.uiDialog=t("<div>").addClass("ui-dialog ui-widget ui-widget-content ui-corner-all ui-front "+this.options.dialogClass).hide().attr({tabIndex:-1,role:"dialog"}).appendTo(this._appendTo()),this._on(this.uiDialog,{keydown:function(e){if(this.options.closeOnEscape&&!e.isDefaultPrevented()&&e.keyCode&&e.keyCode===t.ui.keyCode.ESCAPE)return e.preventDefault(),void this.close(e);if(e.keyCode===t.ui.keyCode.TAB){var i=this.uiDialog.find(":tabbable"),s=i.filter(":first"),n=i.filter(":last");e.target!==n[0]&&e.target!==this.uiDialog[0]||e.shiftKey?e.target!==s[0]&&e.target!==this.uiDialog[0]||!e.shiftKey||(n.focus(1),e.preventDefault()):(s.focus(1),e.preventDefault())}},mousedown:function(t){this._moveToTop(t)&&this._focusTabbable()}}),this.element.find("[aria-describedby]").length||this.uiDialog.attr({"aria-describedby":this.element.uniqueId().attr("id")})},_createTitlebar:function(){var e;this.uiDialogTitlebar=t("<div>").addClass("ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").prependTo(this.uiDialog),this._on(this.uiDialogTitlebar,{mousedown:function(e){t(e.target).closest(".ui-dialog-titlebar-close")||this.uiDialog.focus()}}),this.uiDialogTitlebarClose=t("<button></button>").button({label:this.options.closeText,icons:{primary:"ui-icon-closethick"},text:!1}).addClass("ui-dialog-titlebar-close").appendTo(this.uiDialogTitlebar),this._on(this.uiDialogTitlebarClose,{click:function(t){t.preventDefault(),this.close(t)}}),e=t("<span>").uniqueId().addClass("ui-dialog-title").prependTo(this.uiDialogTitlebar),this._title(e),this.uiDialog.attr({"aria-labelledby":e.attr("id")})},_title:function(t){this.options.title||t.html("&#160;"),t.text(this.options.title)},_createButtonPane:function(){this.uiDialogButtonPane=t("<div>").addClass("ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"),this.uiButtonSet=t("<div>").addClass("ui-dialog-buttonset").appendTo(this.uiDialogButtonPane),this._createButtons()},_createButtons:function(){var e=this,i=this.options.buttons;return this.uiDialogButtonPane.remove(),this.uiButtonSet.empty(),t.isEmptyObject(i)||t.isArray(i)&&!i.length?void this.uiDialog.removeClass("ui-dialog-buttons"):(t.each(i,function(i,s){var n,o;s=t.isFunction(s)?{click:s,text:i}:s,s=t.extend({type:"button"},s),n=s.click,s.click=function(){n.apply(e.element[0],arguments)},o={icons:s.icons,text:s.showText},delete s.icons,delete s.showText,t("<button></button>",s).button(o).appendTo(e.uiButtonSet)}),this.uiDialog.addClass("ui-dialog-buttons"),void this.uiDialogButtonPane.appendTo(this.uiDialog))},_makeDraggable:function(){function e(t){return{position:t.position,offset:t.offset}}var i=this,s=this.options;this.uiDialog.draggable({cancel:".ui-dialog-content, .ui-dialog-titlebar-close",handle:".ui-dialog-titlebar",containment:"document",start:function(s,n){t(this).addClass("ui-dialog-dragging"),i._blockFrames(),i._trigger("dragStart",s,e(n))},drag:function(t,s){i._trigger("drag",t,e(s))},stop:function(n,o){s.position=[o.position.left-i.document.scrollLeft(),o.position.top-i.document.scrollTop()],t(this).removeClass("ui-dialog-dragging"),i._unblockFrames(),i._trigger("dragStop",n,e(o))}})},_makeResizable:function(){function e(t){return{originalPosition:t.originalPosition,originalSize:t.originalSize,position:t.position,size:t.size}}var i=this,s=this.options,n=s.resizable,o=this.uiDialog.css("position"),r="string"==typeof n?n:"n,e,s,w,se,sw,ne,nw";this.uiDialog.resizable({cancel:".ui-dialog-content",containment:"document",alsoResize:this.element,maxWidth:s.maxWidth,maxHeight:s.maxHeight,minWidth:s.minWidth,minHeight:this._minHeight(),handles:r,start:function(s,n){t(this).addClass("ui-dialog-resizing"),i._blockFrames(),i._trigger("resizeStart",s,e(n))},resize:function(t,s){i._trigger("resize",t,e(s))},stop:function(n,o){s.height=t(this).height(),s.width=t(this).width(),t(this).removeClass("ui-dialog-resizing"),i._unblockFrames(),i._trigger("resizeStop",n,e(o))}}).css("position",o)},_minHeight:function(){var t=this.options;return"auto"===t.height?t.minHeight:Math.min(t.minHeight,t.height)},_position:function(){var t=this.uiDialog.is(":visible");t||this.uiDialog.show(),this.uiDialog.position(this.options.position),t||this.uiDialog.hide()},_setOptions:function(e){var n=this,o=!1,r={};t.each(e,function(t,e){n._setOption(t,e),t in i&&(o=!0),t in s&&(r[t]=e)}),o&&(this._size(),this._position()),this.uiDialog.is(":data(ui-resizable)")&&this.uiDialog.resizable("option",r)},_setOption:function(t,e){var i,s,n=this.uiDialog;"dialogClass"===t&&n.removeClass(this.options.dialogClass).addClass(e),"disabled"!==t&&(this._super(t,e),"appendTo"===t&&this.uiDialog.appendTo(this._appendTo()),"buttons"===t&&this._createButtons(),"closeText"===t&&this.uiDialogTitlebarClose.button({label:""+e}),"draggable"===t&&(i=n.is(":data(ui-draggable)"),i&&!e&&n.draggable("destroy"),!i&&e&&this._makeDraggable()),"position"===t&&this._position(),"resizable"===t&&(s=n.is(":data(ui-resizable)"),s&&!e&&n.resizable("destroy"),s&&"string"==typeof e&&n.resizable("option","handles",e),s||e===!1||this._makeResizable()),"title"===t&&this._title(this.uiDialogTitlebar.find(".ui-dialog-title")))},_size:function(){var t,e,i,s=this.options;this.element.show().css({width:"auto",minHeight:0,maxHeight:"none",height:0}),s.minWidth>s.width&&(s.width=s.minWidth),t=this.uiDialog.css({height:"auto",width:s.width}).outerHeight(),e=Math.max(0,s.minHeight-t),i="number"==typeof s.maxHeight?Math.max(0,s.maxHeight-t):"none","auto"===s.height?this.element.css({minHeight:e,maxHeight:i,height:"auto"}):this.element.height(Math.max(0,s.height-t)),this.uiDialog.is(":data(ui-resizable)")&&this.uiDialog.resizable("option","minHeight",this._minHeight())},_blockFrames:function(){this.iframeBlocks=this.document.find("iframe").map(function(){var e=t(this);return t("<div>").css({position:"absolute",width:e.outerWidth(),height:e.outerHeight()}).appendTo(e.parent()).offset(e.offset())[0]})},_unblockFrames:function(){this.iframeBlocks&&(this.iframeBlocks.remove(),delete this.iframeBlocks)},_allowInteraction:function(e){return!!t(e.target).closest(".ui-dialog").length||!!t(e.target).closest(".ui-datepicker").length},_createOverlay:function(){if(this.options.modal){var e=this,i=this.widgetFullName;t.ui.dialog.overlayInstances||this._delay(function(){t.ui.dialog.overlayInstances&&this.document.bind("focusin.dialog",function(s){e._allowInteraction(s)||(s.preventDefault(),t(".ui-dialog:visible:last .ui-dialog-content").data(i)._focusTabbable())})}),this.overlay=t("<div>").addClass("ui-widget-overlay ui-front").appendTo(this._appendTo()),this._on(this.overlay,{mousedown:"_keepFocus"}),t.ui.dialog.overlayInstances++}},_destroyOverlay:function(){this.options.modal&&this.overlay&&(t.ui.dialog.overlayInstances--,t.ui.dialog.overlayInstances||this.document.unbind("focusin.dialog"),this.overlay.remove(),this.overlay=null)}}),t.ui.dialog.overlayInstances=0,t.uiBackCompat!==!1&&t.widget("ui.dialog",t.ui.dialog,{_position:function(){var e,i=this.options.position,s=[],n=[0,0];i?(("string"==typeof i||"object"==typeof i&&"0"in i)&&(s=i.split?i.split(" "):[i[0],i[1]],1===s.length&&(s[1]=s[0]),t.each(["left","top"],function(t,e){+s[t]===s[t]&&(n[t]=s[t],s[t]=e)}),i={my:s[0]+(n[0]<0?n[0]:"+"+n[0])+" "+s[1]+(n[1]<0?n[1]:"+"+n[1]),at:s.join(" ")}),i=t.extend({},t.ui.dialog.prototype.options.position,i)):i=t.ui.dialog.prototype.options.position,e=this.uiDialog.is(":visible"),e||this.uiDialog.show(),this.uiDialog.position(i),e||this.uiDialog.hide()}})}(s),function(t,e){var i=/up|down|vertical/,s=/up|left|vertical|horizontal/;t.effects.effect.blind=function(e,n){var o,r,a,l=t(this),h=["position","top","bottom","left","right","height","width"],c=t.effects.setMode(l,e.mode||"hide"),u=e.direction||"up",d=i.test(u),p=d?"height":"width",f=d?"top":"left",g=s.test(u),m={},v="show"===c;l.parent().is(".ui-effects-wrapper")?t.effects.save(l.parent(),h):t.effects.save(l,h),l.show(),o=t.effects.createWrapper(l).css({overflow:"hidden"}),r=o[p](),a=parseFloat(o.css(f))||0,m[p]=v?r:0,g||(l.css(d?"bottom":"right",0).css(d?"top":"left","auto").css({position:"absolute"}),m[f]=v?a:r+a),v&&(o.css(p,0),g||o.css(f,a+r)),o.animate(m,{duration:e.duration,easing:e.easing,queue:!1,complete:function(){"hide"===c&&l.hide(),t.effects.restore(l,h),t.effects.removeWrapper(l),n()}})}}(s),function(t,e){t.effects.effect.bounce=function(e,i){var s,n,o,r=t(this),a=["position","top","bottom","left","right","height","width"],l=t.effects.setMode(r,e.mode||"effect"),h="hide"===l,c="show"===l,u=e.direction||"up",d=e.distance,p=e.times||5,f=2*p+(c||h?1:0),g=e.duration/f,m=e.easing,v="up"===u||"down"===u?"top":"left",y="up"===u||"left"===u,_=r.queue(),b=_.length;for((c||h)&&a.push("opacity"),t.effects.save(r,a),r.show(),t.effects.createWrapper(r),d||(d=r["top"===v?"outerHeight":"outerWidth"]()/3),c&&(o={opacity:1},o[v]=0,r.css("opacity",0).css(v,y?2*-d:2*d).animate(o,g,m)),h&&(d/=Math.pow(2,p-1)),o={},o[v]=0,s=0;s<p;s++)n={},n[v]=(y?"-=":"+=")+d,r.animate(n,g,m).animate(o,g,m),d=h?2*d:d/2;h&&(n={opacity:0},n[v]=(y?"-=":"+=")+d,r.animate(n,g,m)),r.queue(function(){h&&r.hide(),t.effects.restore(r,a),t.effects.removeWrapper(r),i()}),b>1&&_.splice.apply(_,[1,0].concat(_.splice(b,f+1))),r.dequeue()}}(s),function(t,e){t.effects.effect.clip=function(e,i){var s,n,o,r=t(this),a=["position","top","bottom","left","right","height","width"],l=t.effects.setMode(r,e.mode||"hide"),h="show"===l,c=e.direction||"vertical",u="vertical"===c,d=u?"height":"width",p=u?"top":"left",f={};t.effects.save(r,a),r.show(),s=t.effects.createWrapper(r).css({overflow:"hidden"}),n="IMG"===r[0].tagName?s:r,o=n[d](),h&&(n.css(d,0),n.css(p,o/2)),f[d]=h?o:0,f[p]=h?0:o/2,n.animate(f,{queue:!1,duration:e.duration,easing:e.easing,complete:function(){h||r.hide(),t.effects.restore(r,a),t.effects.removeWrapper(r),i()}})}}(s),function(t,e){t.effects.effect.drop=function(e,i){var s,n=t(this),o=["position","top","bottom","left","right","opacity","height","width"],r=t.effects.setMode(n,e.mode||"hide"),a="show"===r,l=e.direction||"left",h="up"===l||"down"===l?"top":"left",c="up"===l||"left"===l?"pos":"neg",u={opacity:a?1:0};t.effects.save(n,o),n.show(),t.effects.createWrapper(n),s=e.distance||n["top"===h?"outerHeight":"outerWidth"](!0)/2,a&&n.css("opacity",0).css(h,"pos"===c?-s:s),u[h]=(a?"pos"===c?"+=":"-=":"pos"===c?"-=":"+=")+s,n.animate(u,{queue:!1,duration:e.duration,easing:e.easing,complete:function(){"hide"===r&&n.hide(),t.effects.restore(n,o),t.effects.removeWrapper(n),i()}})}}(s),function(t,e){t.effects.effect.explode=function(e,i){function s(){_.push(this),_.length===u*d&&n()}function n(){p.css({visibility:"visible"}),t(_).remove(),g||p.hide(),i()}var o,r,a,l,h,c,u=e.pieces?Math.round(Math.sqrt(e.pieces)):3,d=u,p=t(this),f=t.effects.setMode(p,e.mode||"hide"),g="show"===f,m=p.show().css("visibility","hidden").offset(),v=Math.ceil(p.outerWidth()/d),y=Math.ceil(p.outerHeight()/u),_=[];for(o=0;o<u;o++)for(l=m.top+o*y,c=o-(u-1)/2,r=0;r<d;r++)a=m.left+r*v,h=r-(d-1)/2,p.clone().appendTo("body").wrap("<div></div>").css({position:"absolute",visibility:"visible",left:-r*v,top:-o*y}).parent().addClass("ui-effects-explode").css({position:"absolute",overflow:"hidden",width:v,height:y,left:a+(g?h*v:0),top:l+(g?c*y:0),opacity:g?0:1}).animate({left:a+(g?0:h*v),top:l+(g?0:c*y),opacity:g?1:0},e.duration||500,e.easing,s)}}(s),function(t,e){t.effects.effect.fade=function(e,i){var s=t(this),n=t.effects.setMode(s,e.mode||"toggle");s.animate({opacity:n},{queue:!1,duration:e.duration,easing:e.easing,complete:i})}}(s),function(t,e){t.effects.effect.fold=function(e,i){var s,n,o=t(this),r=["position","top","bottom","left","right","height","width"],a=t.effects.setMode(o,e.mode||"hide"),l="show"===a,h="hide"===a,c=e.size||15,u=/([0-9]+)%/.exec(c),d=!!e.horizFirst,p=l!==d,f=p?["width","height"]:["height","width"],g=e.duration/2,m={},v={};t.effects.save(o,r),o.show(),s=t.effects.createWrapper(o).css({overflow:"hidden"}),n=p?[s.width(),s.height()]:[s.height(),s.width()],u&&(c=parseInt(u[1],10)/100*n[h?0:1]),l&&s.css(d?{height:0,width:c}:{height:c,width:0}),m[f[0]]=l?n[0]:c,v[f[1]]=l?n[1]:0,s.animate(m,g,e.easing).animate(v,g,e.easing,function(){h&&o.hide(),t.effects.restore(o,r),t.effects.removeWrapper(o),i()})}}(s),function(t,e){t.effects.effect.highlight=function(e,i){var s=t(this),n=["backgroundImage","backgroundColor","opacity"],o=t.effects.setMode(s,e.mode||"show"),r={backgroundColor:s.css("backgroundColor")};"hide"===o&&(r.opacity=0),t.effects.save(s,n),s.show().css({backgroundImage:"none",backgroundColor:e.color||"#ffff99"}).animate(r,{queue:!1,duration:e.duration,easing:e.easing,complete:function(){"hide"===o&&s.hide(),t.effects.restore(s,n),i()}})}}(s),function(t,e){t.effects.effect.pulsate=function(e,i){var s,n=t(this),o=t.effects.setMode(n,e.mode||"show"),r="show"===o,a="hide"===o,l=r||"hide"===o,h=2*(e.times||5)+(l?1:0),c=e.duration/h,u=0,d=n.queue(),p=d.length;for(!r&&n.is(":visible")||(n.css("opacity",0).show(),u=1),s=1;s<h;s++)n.animate({opacity:u},c,e.easing),u=1-u;n.animate({opacity:u},c,e.easing),n.queue(function(){a&&n.hide(),i()}),p>1&&d.splice.apply(d,[1,0].concat(d.splice(p,h+1))),n.dequeue()}}(s),function(t,e){t.effects.effect.puff=function(e,i){var s=t(this),n=t.effects.setMode(s,e.mode||"hide"),o="hide"===n,r=parseInt(e.percent,10)||150,a=r/100,l={height:s.height(),width:s.width(),outerHeight:s.outerHeight(),outerWidth:s.outerWidth()};t.extend(e,{effect:"scale",queue:!1,fade:!0,mode:n,complete:i,percent:o?r:100,from:o?l:{height:l.height*a,width:l.width*a,outerHeight:l.outerHeight*a,outerWidth:l.outerWidth*a}}),s.effect(e)},t.effects.effect.scale=function(e,i){var s=t(this),n=t.extend(!0,{},e),o=t.effects.setMode(s,e.mode||"effect"),r=parseInt(e.percent,10)||(0===parseInt(e.percent,10)?0:"hide"===o?0:100),a=e.direction||"both",l=e.origin,h={height:s.height(),width:s.width(),outerHeight:s.outerHeight(),outerWidth:s.outerWidth()},c={y:"horizontal"!==a?r/100:1,x:"vertical"!==a?r/100:1};n.effect="size",n.queue=!1,n.complete=i,"effect"!==o&&(n.origin=l||["middle","center"],n.restore=!0),n.from=e.from||("show"===o?{height:0,width:0,outerHeight:0,outerWidth:0}:h),n.to={height:h.height*c.y,width:h.width*c.x,outerHeight:h.outerHeight*c.y,outerWidth:h.outerWidth*c.x},n.fade&&("show"===o&&(n.from.opacity=0,n.to.opacity=1),"hide"===o&&(n.from.opacity=1,n.to.opacity=0)),s.effect(n)},t.effects.effect.size=function(e,i){var s,n,o,r=t(this),a=["position","top","bottom","left","right","width","height","overflow","opacity"],l=["position","top","bottom","left","right","overflow","opacity"],h=["width","height","overflow"],c=["fontSize"],u=["borderTopWidth","borderBottomWidth","paddingTop","paddingBottom"],d=["borderLeftWidth","borderRightWidth","paddingLeft","paddingRight"],p=t.effects.setMode(r,e.mode||"effect"),f=e.restore||"effect"!==p,g=e.scale||"both",m=e.origin||["middle","center"],v=r.css("position"),y=f?a:l,_={height:0,width:0,outerHeight:0,outerWidth:0};"show"===p&&r.show(),s={height:r.height(),width:r.width(),outerHeight:r.outerHeight(),outerWidth:r.outerWidth()},"toggle"===e.mode&&"show"===p?(r.from=e.to||_,r.to=e.from||s):(r.from=e.from||("show"===p?_:s),r.to=e.to||("hide"===p?_:s)),o={from:{y:r.from.height/s.height,x:r.from.width/s.width},to:{y:r.to.height/s.height,x:r.to.width/s.width}},"box"!==g&&"both"!==g||(o.from.y!==o.to.y&&(y=y.concat(u),r.from=t.effects.setTransition(r,u,o.from.y,r.from),r.to=t.effects.setTransition(r,u,o.to.y,r.to)),o.from.x!==o.to.x&&(y=y.concat(d),r.from=t.effects.setTransition(r,d,o.from.x,r.from),r.to=t.effects.setTransition(r,d,o.to.x,r.to))),"content"!==g&&"both"!==g||o.from.y!==o.to.y&&(y=y.concat(c).concat(h),r.from=t.effects.setTransition(r,c,o.from.y,r.from),r.to=t.effects.setTransition(r,c,o.to.y,r.to)),t.effects.save(r,y),r.show(),t.effects.createWrapper(r),r.css("overflow","hidden").css(r.from),m&&(n=t.effects.getBaseline(m,s),r.from.top=(s.outerHeight-r.outerHeight())*n.y,r.from.left=(s.outerWidth-r.outerWidth())*n.x,r.to.top=(s.outerHeight-r.to.outerHeight)*n.y,r.to.left=(s.outerWidth-r.to.outerWidth)*n.x),r.css(r.from),"content"!==g&&"both"!==g||(u=u.concat(["marginTop","marginBottom"]).concat(c),d=d.concat(["marginLeft","marginRight"]),h=a.concat(u).concat(d),r.find("*[width]").each(function(){var i=t(this),s={height:i.height(),width:i.width(),outerHeight:i.outerHeight(),outerWidth:i.outerWidth()};f&&t.effects.save(i,h),i.from={height:s.height*o.from.y,width:s.width*o.from.x,outerHeight:s.outerHeight*o.from.y,outerWidth:s.outerWidth*o.from.x},i.to={height:s.height*o.to.y,width:s.width*o.to.x,outerHeight:s.height*o.to.y,outerWidth:s.width*o.to.x},o.from.y!==o.to.y&&(i.from=t.effects.setTransition(i,u,o.from.y,i.from),i.to=t.effects.setTransition(i,u,o.to.y,i.to)),o.from.x!==o.to.x&&(i.from=t.effects.setTransition(i,d,o.from.x,i.from),i.to=t.effects.setTransition(i,d,o.to.x,i.to)),i.css(i.from),i.animate(i.to,e.duration,e.easing,function(){f&&t.effects.restore(i,h)})})),r.animate(r.to,{queue:!1,duration:e.duration,easing:e.easing,complete:function(){0===r.to.opacity&&r.css("opacity",r.from.opacity),"hide"===p&&r.hide(),t.effects.restore(r,y),f||("static"===v?r.css({position:"relative",top:r.to.top,left:r.to.left}):t.each(["top","left"],function(t,e){r.css(e,function(e,i){var s=parseInt(i,10),n=t?r.to.left:r.to.top;return"auto"===i?n+"px":s+n+"px"})})),t.effects.removeWrapper(r),i()}})}}(s),function(t,e){t.effects.effect.shake=function(e,i){var s,n=t(this),o=["position","top","bottom","left","right","height","width"],r=t.effects.setMode(n,e.mode||"effect"),a=e.direction||"left",l=e.distance||20,h=e.times||3,c=2*h+1,u=Math.round(e.duration/c),d="up"===a||"down"===a?"top":"left",p="up"===a||"left"===a,f={},g={},m={},v=n.queue(),y=v.length;for(t.effects.save(n,o),n.show(),t.effects.createWrapper(n),f[d]=(p?"-=":"+=")+l,g[d]=(p?"+=":"-=")+2*l,m[d]=(p?"-=":"+=")+2*l,n.animate(f,u,e.easing),s=1;s<h;s++)n.animate(g,u,e.easing).animate(m,u,e.easing);n.animate(g,u,e.easing).animate(f,u/2,e.easing).queue(function(){"hide"===r&&n.hide(),t.effects.restore(n,o),t.effects.removeWrapper(n),i()}),y>1&&v.splice.apply(v,[1,0].concat(v.splice(y,c+1))),n.dequeue()}}(s),function(t,e){t.effects.effect.slide=function(e,i){var s,n=t(this),o=["position","top","bottom","left","right","width","height"],r=t.effects.setMode(n,e.mode||"show"),a="show"===r,l=e.direction||"left",h="up"===l||"down"===l?"top":"left",c="up"===l||"left"===l,u={};t.effects.save(n,o),n.show(),s=e.distance||n["top"===h?"outerHeight":"outerWidth"](!0),t.effects.createWrapper(n).css({overflow:"hidden"}),a&&n.css(h,c?isNaN(s)?"-"+s:-s:s),u[h]=(a?c?"+=":"-=":c?"-=":"+=")+s,n.animate(u,{queue:!1,duration:e.duration,easing:e.easing,complete:function(){"hide"===r&&n.hide(),t.effects.restore(n,o),t.effects.removeWrapper(n),i()}})}}(s),function(t,e){t.effects.effect.transfer=function(e,i){var s=t(this),n=t(e.to),o="fixed"===n.css("position"),r=t("body"),a=o?r.scrollTop():0,l=o?r.scrollLeft():0,h=n.offset(),c={top:h.top-a,left:h.left-l,height:n.innerHeight(),width:n.innerWidth()},u=s.offset(),d=t("<div class='ui-effects-transfer'></div>").appendTo(document.body).addClass(e.className).css({top:u.top-a,left:u.left-l,height:s.innerHeight(),width:s.innerWidth(),position:o?"fixed":"absolute"}).animate(c,e.duration,e.easing,function(){d.remove(),i()})}}(s),function(t,e){t.widget("ui.menu",{version:"1.10.3",defaultElement:"<ul>",delay:300,options:{icons:{submenu:"ui-icon-carat-1-e"},menus:"ul",position:{my:"left top",at:"right top"},role:"menu",blur:null,focus:null,select:null},_create:function(){this.activeMenu=this.element,this.mouseHandled=!1,this.element.uniqueId().addClass("ui-menu ui-widget ui-widget-content ui-corner-all").toggleClass("ui-menu-icons",!!this.element.find(".ui-icon").length).attr({role:this.options.role,tabIndex:0}).bind("click"+this.eventNamespace,t.proxy(function(t){this.options.disabled&&t.preventDefault()},this)),this.options.disabled&&this.element.addClass("ui-state-disabled").attr("aria-disabled","true"),this._on({"mousedown .ui-menu-item > a":function(t){t.preventDefault()},"click .ui-state-disabled > a":function(t){t.preventDefault()},"click .ui-menu-item:has(a)":function(e){var i=t(e.target).closest(".ui-menu-item");!this.mouseHandled&&i.not(".ui-state-disabled").length&&(this.mouseHandled=!0,this.select(e),i.has(".ui-menu").length?this.expand(e):this.element.is(":focus")||(this.element.trigger("focus",[!0]),this.active&&1===this.active.parents(".ui-menu").length&&clearTimeout(this.timer)))},"mouseenter .ui-menu-item":function(e){var i=t(e.currentTarget);i.siblings().children(".ui-state-active").removeClass("ui-state-active"),this.focus(e,i)},mouseleave:"collapseAll","mouseleave .ui-menu":"collapseAll",focus:function(t,e){var i=this.active||this.element.children(".ui-menu-item").eq(0);e||this.focus(t,i)},blur:function(e){this._delay(function(){t.contains(this.element[0],this.document[0].activeElement)||this.collapseAll(e)})},keydown:"_keydown"}),this.refresh(),this._on(this.document,{click:function(e){t(e.target).closest(".ui-menu").length||this.collapseAll(e),this.mouseHandled=!1}})},_destroy:function(){this.element.removeAttr("aria-activedescendant").find(".ui-menu").addBack().removeClass("ui-menu ui-widget ui-widget-content ui-corner-all ui-menu-icons").removeAttr("role").removeAttr("tabIndex").removeAttr("aria-labelledby").removeAttr("aria-expanded").removeAttr("aria-hidden").removeAttr("aria-disabled").removeUniqueId().show(),
-this.element.find(".ui-menu-item").removeClass("ui-menu-item").removeAttr("role").removeAttr("aria-disabled").children("a").removeUniqueId().removeClass("ui-corner-all ui-state-hover").removeAttr("tabIndex").removeAttr("role").removeAttr("aria-haspopup").children().each(function(){var e=t(this);e.data("ui-menu-submenu-carat")&&e.remove()}),this.element.find(".ui-menu-divider").removeClass("ui-menu-divider ui-widget-content")},_keydown:function(e){function i(t){return t.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&")}var s,n,o,r,a,l=!0;switch(e.keyCode){case t.ui.keyCode.PAGE_UP:this.previousPage(e);break;case t.ui.keyCode.PAGE_DOWN:this.nextPage(e);break;case t.ui.keyCode.HOME:this._move("first","first",e);break;case t.ui.keyCode.END:this._move("last","last",e);break;case t.ui.keyCode.UP:this.previous(e);break;case t.ui.keyCode.DOWN:this.next(e);break;case t.ui.keyCode.LEFT:this.collapse(e);break;case t.ui.keyCode.RIGHT:this.active&&!this.active.is(".ui-state-disabled")&&this.expand(e);break;case t.ui.keyCode.ENTER:case t.ui.keyCode.SPACE:this._activate(e);break;case t.ui.keyCode.ESCAPE:this.collapse(e);break;default:l=!1,n=this.previousFilter||"",o=String.fromCharCode(e.keyCode),r=!1,clearTimeout(this.filterTimer),o===n?r=!0:o=n+o,a=new RegExp("^"+i(o),"i"),s=this.activeMenu.children(".ui-menu-item").filter(function(){return a.test(t(this).children("a").text())}),s=r&&s.index(this.active.next())!==-1?this.active.nextAll(".ui-menu-item"):s,s.length||(o=String.fromCharCode(e.keyCode),a=new RegExp("^"+i(o),"i"),s=this.activeMenu.children(".ui-menu-item").filter(function(){return a.test(t(this).children("a").text())})),s.length?(this.focus(e,s),s.length>1?(this.previousFilter=o,this.filterTimer=this._delay(function(){delete this.previousFilter},1e3)):delete this.previousFilter):delete this.previousFilter}l&&e.preventDefault()},_activate:function(t){this.active.is(".ui-state-disabled")||(this.active.children("a[aria-haspopup='true']").length?this.expand(t):this.select(t))},refresh:function(){var e,i=this.options.icons.submenu,s=this.element.find(this.options.menus);s.filter(":not(.ui-menu)").addClass("ui-menu ui-widget ui-widget-content ui-corner-all").hide().attr({role:this.options.role,"aria-hidden":"true","aria-expanded":"false"}).each(function(){var e=t(this),s=e.prev("a"),n=t("<span>").addClass("ui-menu-icon ui-icon "+i).data("ui-menu-submenu-carat",!0);s.attr("aria-haspopup","true").prepend(n),e.attr("aria-labelledby",s.attr("id"))}),e=s.add(this.element),e.children(":not(.ui-menu-item):has(a)").addClass("ui-menu-item").attr("role","presentation").children("a").uniqueId().addClass("ui-corner-all").attr({tabIndex:-1,role:this._itemRole()}),e.children(":not(.ui-menu-item)").each(function(){var e=t(this);/[^\-\u2014\u2013\s]/.test(e.text())||e.addClass("ui-widget-content ui-menu-divider")}),e.children(".ui-state-disabled").attr("aria-disabled","true"),this.active&&!t.contains(this.element[0],this.active[0])&&this.blur()},_itemRole:function(){return{menu:"menuitem",listbox:"option"}[this.options.role]},_setOption:function(t,e){"icons"===t&&this.element.find(".ui-menu-icon").removeClass(this.options.icons.submenu).addClass(e.submenu),this._super(t,e)},focus:function(t,e){var i,s;this.blur(t,t&&"focus"===t.type),this._scrollIntoView(e),this.active=e.first(),s=this.active.children("a").addClass("ui-state-focus"),this.options.role&&this.element.attr("aria-activedescendant",s.attr("id")),this.active.parent().closest(".ui-menu-item").children("a:first").addClass("ui-state-active"),t&&"keydown"===t.type?this._close():this.timer=this._delay(function(){this._close()},this.delay),i=e.children(".ui-menu"),i.length&&/^mouse/.test(t.type)&&this._startOpening(i),this.activeMenu=e.parent(),this._trigger("focus",t,{item:e})},_scrollIntoView:function(e){var i,s,n,o,r,a;this._hasScroll()&&(i=parseFloat(t.css(this.activeMenu[0],"borderTopWidth"))||0,s=parseFloat(t.css(this.activeMenu[0],"paddingTop"))||0,n=e.offset().top-this.activeMenu.offset().top-i-s,o=this.activeMenu.scrollTop(),r=this.activeMenu.height(),a=e.height(),n<0?this.activeMenu.scrollTop(o+n):n+a>r&&this.activeMenu.scrollTop(o+n-r+a))},blur:function(t,e){e||clearTimeout(this.timer),this.active&&(this.active.children("a").removeClass("ui-state-focus"),this.active=null,this._trigger("blur",t,{item:this.active}))},_startOpening:function(t){clearTimeout(this.timer),"true"===t.attr("aria-hidden")&&(this.timer=this._delay(function(){this._close(),this._open(t)},this.delay))},_open:function(e){var i=t.extend({of:this.active},this.options.position);clearTimeout(this.timer),this.element.find(".ui-menu").not(e.parents(".ui-menu")).hide().attr("aria-hidden","true"),e.show().removeAttr("aria-hidden").attr("aria-expanded","true").position(i)},collapseAll:function(e,i){clearTimeout(this.timer),this.timer=this._delay(function(){var s=i?this.element:t(e&&e.target).closest(this.element.find(".ui-menu"));s.length||(s=this.element),this._close(s),this.blur(e),this.activeMenu=s},this.delay)},_close:function(t){t||(t=this.active?this.active.parent():this.element),t.find(".ui-menu").hide().attr("aria-hidden","true").attr("aria-expanded","false").end().find("a.ui-state-active").removeClass("ui-state-active")},collapse:function(t){var e=this.active&&this.active.parent().closest(".ui-menu-item",this.element);e&&e.length&&(this._close(),this.focus(t,e))},expand:function(t){var e=this.active&&this.active.children(".ui-menu ").children(".ui-menu-item").first();e&&e.length&&(this._open(e.parent()),this._delay(function(){this.focus(t,e)}))},next:function(t){this._move("next","first",t)},previous:function(t){this._move("prev","last",t)},isFirstItem:function(){return this.active&&!this.active.prevAll(".ui-menu-item").length},isLastItem:function(){return this.active&&!this.active.nextAll(".ui-menu-item").length},_move:function(t,e,i){var s;this.active&&(s="first"===t||"last"===t?this.active["first"===t?"prevAll":"nextAll"](".ui-menu-item").eq(-1):this.active[t+"All"](".ui-menu-item").eq(0)),s&&s.length&&this.active||(s=this.activeMenu.children(".ui-menu-item")[e]()),this.focus(i,s)},nextPage:function(e){var i,s,n;return this.active?void(this.isLastItem()||(this._hasScroll()?(s=this.active.offset().top,n=this.element.height(),this.active.nextAll(".ui-menu-item").each(function(){return i=t(this),i.offset().top-s-n<0}),this.focus(e,i)):this.focus(e,this.activeMenu.children(".ui-menu-item")[this.active?"last":"first"]()))):void this.next(e)},previousPage:function(e){var i,s,n;return this.active?void(this.isFirstItem()||(this._hasScroll()?(s=this.active.offset().top,n=this.element.height(),this.active.prevAll(".ui-menu-item").each(function(){return i=t(this),i.offset().top-s+n>0}),this.focus(e,i)):this.focus(e,this.activeMenu.children(".ui-menu-item").first()))):void this.next(e)},_hasScroll:function(){return this.element.outerHeight()<this.element.prop("scrollHeight")},select:function(e){this.active=this.active||t(e.target).closest(".ui-menu-item");var i={item:this.active};this.active.has(".ui-menu").length||this.collapseAll(e,!0),this._trigger("select",e,i)}})}(s),function(t,e){function i(t,e,i){return[parseFloat(t[0])*(p.test(t[0])?e/100:1),parseFloat(t[1])*(p.test(t[1])?i/100:1)]}function s(e,i){return parseInt(t.css(e,i),10)||0}function n(e){var i=e[0];return 9===i.nodeType?{width:e.width(),height:e.height(),offset:{top:0,left:0}}:t.isWindow(i)?{width:e.width(),height:e.height(),offset:{top:e.scrollTop(),left:e.scrollLeft()}}:i.preventDefault?{width:0,height:0,offset:{top:i.pageY,left:i.pageX}}:{width:e.outerWidth(),height:e.outerHeight(),offset:e.offset()}}t.ui=t.ui||{};var o,r=Math.max,a=Math.abs,l=Math.round,h=/left|center|right/,c=/top|center|bottom/,u=/[\+\-]\d+(\.[\d]+)?%?/,d=/^\w+/,p=/%$/,f=t.fn.position;t.position={scrollbarWidth:function(){if(o!==e)return o;var i,s,n=t("<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>"),r=n.children()[0];return t("body").append(n),i=r.offsetWidth,n.css("overflow","scroll"),s=r.offsetWidth,i===s&&(s=n[0].clientWidth),n.remove(),o=i-s},getScrollInfo:function(e){var i=e.isWindow?"":e.element.css("overflow-x"),s=e.isWindow?"":e.element.css("overflow-y"),n="scroll"===i||"auto"===i&&e.width<e.element[0].scrollWidth,o="scroll"===s||"auto"===s&&e.height<e.element[0].scrollHeight;return{width:o?t.position.scrollbarWidth():0,height:n?t.position.scrollbarWidth():0}},getWithinInfo:function(e){var i=t(e||window),s=t.isWindow(i[0]);return{element:i,isWindow:s,offset:i.offset()||{left:0,top:0},scrollLeft:i.scrollLeft(),scrollTop:i.scrollTop(),width:s?i.width():i.outerWidth(),height:s?i.height():i.outerHeight()}}},t.fn.position=function(e){if(!e||!e.of)return f.apply(this,arguments);e=t.extend({},e);var o,p,g,m,v,y,_=t(e.of),b=t.position.getWithinInfo(e.within),w=t.position.getScrollInfo(b),C=(e.collision||"flip").split(" "),k={};return y=n(_),_[0].preventDefault&&(e.at="left top"),p=y.width,g=y.height,m=y.offset,v=t.extend({},m),t.each(["my","at"],function(){var t,i,s=(e[this]||"").split(" ");1===s.length&&(s=h.test(s[0])?s.concat(["center"]):c.test(s[0])?["center"].concat(s):["center","center"]),s[0]=h.test(s[0])?s[0]:"center",s[1]=c.test(s[1])?s[1]:"center",t=u.exec(s[0]),i=u.exec(s[1]),k[this]=[t?t[0]:0,i?i[0]:0],e[this]=[d.exec(s[0])[0],d.exec(s[1])[0]]}),1===C.length&&(C[1]=C[0]),"right"===e.at[0]?v.left+=p:"center"===e.at[0]&&(v.left+=p/2),"bottom"===e.at[1]?v.top+=g:"center"===e.at[1]&&(v.top+=g/2),o=i(k.at,p,g),v.left+=o[0],v.top+=o[1],this.each(function(){var n,h,c=t(this),u=c.outerWidth(),d=c.outerHeight(),f=s(this,"marginLeft"),y=s(this,"marginTop"),x=u+f+s(this,"marginRight")+w.width,P=d+y+s(this,"marginBottom")+w.height,D=t.extend({},v),I=i(k.my,c.outerWidth(),c.outerHeight());"right"===e.my[0]?D.left-=u:"center"===e.my[0]&&(D.left-=u/2),"bottom"===e.my[1]?D.top-=d:"center"===e.my[1]&&(D.top-=d/2),D.left+=I[0],D.top+=I[1],t.support.offsetFractions||(D.left=l(D.left),D.top=l(D.top)),n={marginLeft:f,marginTop:y},t.each(["left","top"],function(i,s){t.ui.position[C[i]]&&t.ui.position[C[i]][s](D,{targetWidth:p,targetHeight:g,elemWidth:u,elemHeight:d,collisionPosition:n,collisionWidth:x,collisionHeight:P,offset:[o[0]+I[0],o[1]+I[1]],my:e.my,at:e.at,within:b,elem:c})}),e.using&&(h=function(t){var i=m.left-D.left,s=i+p-u,n=m.top-D.top,o=n+g-d,l={target:{element:_,left:m.left,top:m.top,width:p,height:g},element:{element:c,left:D.left,top:D.top,width:u,height:d},horizontal:s<0?"left":i>0?"right":"center",vertical:o<0?"top":n>0?"bottom":"middle"};p<u&&a(i+s)<p&&(l.horizontal="center"),g<d&&a(n+o)<g&&(l.vertical="middle"),r(a(i),a(s))>r(a(n),a(o))?l.important="horizontal":l.important="vertical",e.using.call(this,t,l)}),c.offset(t.extend(D,{using:h}))})},t.ui.position={fit:{left:function(t,e){var i,s=e.within,n=s.isWindow?s.scrollLeft:s.offset.left,o=s.width,a=t.left-e.collisionPosition.marginLeft,l=n-a,h=a+e.collisionWidth-o-n;e.collisionWidth>o?l>0&&h<=0?(i=t.left+l+e.collisionWidth-o-n,t.left+=l-i):h>0&&l<=0?t.left=n:l>h?t.left=n+o-e.collisionWidth:t.left=n:l>0?t.left+=l:h>0?t.left-=h:t.left=r(t.left-a,t.left)},top:function(t,e){var i,s=e.within,n=s.isWindow?s.scrollTop:s.offset.top,o=e.within.height,a=t.top-e.collisionPosition.marginTop,l=n-a,h=a+e.collisionHeight-o-n;e.collisionHeight>o?l>0&&h<=0?(i=t.top+l+e.collisionHeight-o-n,t.top+=l-i):h>0&&l<=0?t.top=n:l>h?t.top=n+o-e.collisionHeight:t.top=n:l>0?t.top+=l:h>0?t.top-=h:t.top=r(t.top-a,t.top)}},flip:{left:function(t,e){var i,s,n=e.within,o=n.offset.left+n.scrollLeft,r=n.width,l=n.isWindow?n.scrollLeft:n.offset.left,h=t.left-e.collisionPosition.marginLeft,c=h-l,u=h+e.collisionWidth-r-l,d="left"===e.my[0]?-e.elemWidth:"right"===e.my[0]?e.elemWidth:0,p="left"===e.at[0]?e.targetWidth:"right"===e.at[0]?-e.targetWidth:0,f=-2*e.offset[0];c<0?(i=t.left+d+p+f+e.collisionWidth-r-o,(i<0||i<a(c))&&(t.left+=d+p+f)):u>0&&(s=t.left-e.collisionPosition.marginLeft+d+p+f-l,(s>0||a(s)<u)&&(t.left+=d+p+f))},top:function(t,e){var i,s,n=e.within,o=n.offset.top+n.scrollTop,r=n.height,l=n.isWindow?n.scrollTop:n.offset.top,h=t.top-e.collisionPosition.marginTop,c=h-l,u=h+e.collisionHeight-r-l,d="top"===e.my[1],p=d?-e.elemHeight:"bottom"===e.my[1]?e.elemHeight:0,f="top"===e.at[1]?e.targetHeight:"bottom"===e.at[1]?-e.targetHeight:0,g=-2*e.offset[1];c<0?(s=t.top+p+f+g+e.collisionHeight-r-o,t.top+p+f+g>c&&(s<0||s<a(c))&&(t.top+=p+f+g)):u>0&&(i=t.top-e.collisionPosition.marginTop+p+f+g-l,t.top+p+f+g>u&&(i>0||a(i)<u)&&(t.top+=p+f+g))}},flipfit:{left:function(){t.ui.position.flip.left.apply(this,arguments),t.ui.position.fit.left.apply(this,arguments)},top:function(){t.ui.position.flip.top.apply(this,arguments),t.ui.position.fit.top.apply(this,arguments)}}},function(){var e,i,s,n,o,r=document.getElementsByTagName("body")[0],a=document.createElement("div");e=document.createElement(r?"div":"body"),s={visibility:"hidden",width:0,height:0,border:0,margin:0,background:"none"},r&&t.extend(s,{position:"absolute",left:"-1000px",top:"-1000px"});for(o in s)e.style[o]=s[o];e.appendChild(a),i=r||document.documentElement,i.insertBefore(e,i.firstChild),a.style.cssText="position: absolute; left: 10.7432222px;",n=t(a).offset().left,t.support.offsetFractions=n>10&&n<11,e.innerHTML="",i.removeChild(e)}()}(s),function(t,e){t.widget("ui.progressbar",{version:"1.10.3",options:{max:100,value:0,change:null,complete:null},min:0,_create:function(){this.oldValue=this.options.value=this._constrainedValue(),this.element.addClass("ui-progressbar ui-widget ui-widget-content ui-corner-all").attr({role:"progressbar","aria-valuemin":this.min}),this.valueDiv=t("<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>").appendTo(this.element),this._refreshValue()},_destroy:function(){this.element.removeClass("ui-progressbar ui-widget ui-widget-content ui-corner-all").removeAttr("role").removeAttr("aria-valuemin").removeAttr("aria-valuemax").removeAttr("aria-valuenow"),this.valueDiv.remove()},value:function(t){return t===e?this.options.value:(this.options.value=this._constrainedValue(t),void this._refreshValue())},_constrainedValue:function(t){return t===e&&(t=this.options.value),this.indeterminate=t===!1,"number"!=typeof t&&(t=0),!this.indeterminate&&Math.min(this.options.max,Math.max(this.min,t))},_setOptions:function(t){var e=t.value;delete t.value,this._super(t),this.options.value=this._constrainedValue(e),this._refreshValue()},_setOption:function(t,e){"max"===t&&(e=Math.max(this.min,e)),this._super(t,e)},_percentage:function(){return this.indeterminate?100:100*(this.options.value-this.min)/(this.options.max-this.min)},_refreshValue:function(){var e=this.options.value,i=this._percentage();this.valueDiv.toggle(this.indeterminate||e>this.min).toggleClass("ui-corner-right",e===this.options.max).width(i.toFixed(0)+"%"),this.element.toggleClass("ui-progressbar-indeterminate",this.indeterminate),this.indeterminate?(this.element.removeAttr("aria-valuenow"),this.overlayDiv||(this.overlayDiv=t("<div class='ui-progressbar-overlay'></div>").appendTo(this.valueDiv))):(this.element.attr({"aria-valuemax":this.options.max,"aria-valuenow":e}),this.overlayDiv&&(this.overlayDiv.remove(),this.overlayDiv=null)),this.oldValue!==e&&(this.oldValue=e,this._trigger("change")),e===this.options.max&&this._trigger("complete")}})}(s),function(t,e){var i=5;t.widget("ui.slider",t.ui.mouse,{version:"1.10.3",widgetEventPrefix:"slide",options:{animate:!1,distance:0,max:100,min:0,orientation:"horizontal",range:!1,step:1,value:0,values:null,change:null,slide:null,start:null,stop:null},_create:function(){this._keySliding=!1,this._mouseSliding=!1,this._animateOff=!0,this._handleIndex=null,this._detectOrientation(),this._mouseInit(),this.element.addClass("ui-slider ui-slider-"+this.orientation+" ui-widget ui-widget-content ui-corner-all"),this._refresh(),this._setOption("disabled",this.options.disabled),this._animateOff=!1},_refresh:function(){this._createRange(),this._createHandles(),this._setupEvents(),this._refreshValue()},_createHandles:function(){var e,i,s=this.options,n=this.element.find(".ui-slider-handle").addClass("ui-state-default ui-corner-all"),o="<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",r=[];for(i=s.values&&s.values.length||1,n.length>i&&(n.slice(i).remove(),n=n.slice(0,i)),e=n.length;e<i;e++)r.push(o);this.handles=n.add(t(r.join("")).appendTo(this.element)),this.handle=this.handles.eq(0),this.handles.each(function(e){t(this).data("ui-slider-handle-index",e)})},_createRange:function(){var e=this.options,i="";e.range?(e.range===!0&&(e.values?e.values.length&&2!==e.values.length?e.values=[e.values[0],e.values[0]]:t.isArray(e.values)&&(e.values=e.values.slice(0)):e.values=[this._valueMin(),this._valueMin()]),this.range&&this.range.length?this.range.removeClass("ui-slider-range-min ui-slider-range-max").css({left:"",bottom:""}):(this.range=t("<div></div>").appendTo(this.element),i="ui-slider-range ui-widget-header ui-corner-all"),this.range.addClass(i+("min"===e.range||"max"===e.range?" ui-slider-range-"+e.range:""))):this.range=t([])},_setupEvents:function(){var t=this.handles.add(this.range).filter("a");this._off(t),this._on(t,this._handleEvents),this._hoverable(t),this._focusable(t)},_destroy:function(){this.handles.remove(),this.range.remove(),this.element.removeClass("ui-slider ui-slider-horizontal ui-slider-vertical ui-widget ui-widget-content ui-corner-all"),this._mouseDestroy()},_mouseCapture:function(e){var i,s,n,o,r,a,l,h,c=this,u=this.options;return!u.disabled&&(this.elementSize={width:this.element.outerWidth(),height:this.element.outerHeight()},this.elementOffset=this.element.offset(),i={x:e.pageX,y:e.pageY},s=this._normValueFromMouse(i),n=this._valueMax()-this._valueMin()+1,this.handles.each(function(e){var i=Math.abs(s-c.values(e));(n>i||n===i&&(e===c._lastChangedValue||c.values(e)===u.min))&&(n=i,o=t(this),r=e)}),a=this._start(e,r),a!==!1&&(this._mouseSliding=!0,this._handleIndex=r,o.addClass("ui-state-active").focus(),l=o.offset(),h=!t(e.target).parents().addBack().is(".ui-slider-handle"),this._clickOffset=h?{left:0,top:0}:{left:e.pageX-l.left-o.width()/2,top:e.pageY-l.top-o.height()/2-(parseInt(o.css("borderTopWidth"),10)||0)-(parseInt(o.css("borderBottomWidth"),10)||0)+(parseInt(o.css("marginTop"),10)||0)},this.handles.hasClass("ui-state-hover")||this._slide(e,r,s),this._animateOff=!0,!0))},_mouseStart:function(){return!0},_mouseDrag:function(t){var e={x:t.pageX,y:t.pageY},i=this._normValueFromMouse(e);return this._slide(t,this._handleIndex,i),!1},_mouseStop:function(t){return this.handles.removeClass("ui-state-active"),this._mouseSliding=!1,this._stop(t,this._handleIndex),this._change(t,this._handleIndex),this._handleIndex=null,this._clickOffset=null,this._animateOff=!1,!1},_detectOrientation:function(){this.orientation="vertical"===this.options.orientation?"vertical":"horizontal"},_normValueFromMouse:function(t){var e,i,s,n,o;return"horizontal"===this.orientation?(e=this.elementSize.width,i=t.x-this.elementOffset.left-(this._clickOffset?this._clickOffset.left:0)):(e=this.elementSize.height,i=t.y-this.elementOffset.top-(this._clickOffset?this._clickOffset.top:0)),s=i/e,s>1&&(s=1),s<0&&(s=0),"vertical"===this.orientation&&(s=1-s),n=this._valueMax()-this._valueMin(),o=this._valueMin()+s*n,this._trimAlignValue(o)},_start:function(t,e){var i={handle:this.handles[e],value:this.value()};return this.options.values&&this.options.values.length&&(i.value=this.values(e),i.values=this.values()),this._trigger("start",t,i)},_slide:function(t,e,i){var s,n,o;this.options.values&&this.options.values.length?(s=this.values(e?0:1),2===this.options.values.length&&this.options.range===!0&&(0===e&&i>s||1===e&&i<s)&&(i=s),i!==this.values(e)&&(n=this.values(),n[e]=i,o=this._trigger("slide",t,{handle:this.handles[e],value:i,values:n}),s=this.values(e?0:1),o!==!1&&this.values(e,i,!0))):i!==this.value()&&(o=this._trigger("slide",t,{handle:this.handles[e],value:i}),o!==!1&&this.value(i))},_stop:function(t,e){var i={handle:this.handles[e],value:this.value()};this.options.values&&this.options.values.length&&(i.value=this.values(e),i.values=this.values()),this._trigger("stop",t,i)},_change:function(t,e){if(!this._keySliding&&!this._mouseSliding){var i={handle:this.handles[e],value:this.value()};this.options.values&&this.options.values.length&&(i.value=this.values(e),i.values=this.values()),this._lastChangedValue=e,this._trigger("change",t,i)}},value:function(t){return arguments.length?(this.options.value=this._trimAlignValue(t),this._refreshValue(),void this._change(null,0)):this._value()},values:function(e,i){var s,n,o;if(arguments.length>1)return this.options.values[e]=this._trimAlignValue(i),this._refreshValue(),void this._change(null,e);if(!arguments.length)return this._values();if(!t.isArray(arguments[0]))return this.options.values&&this.options.values.length?this._values(e):this.value();for(s=this.options.values,n=arguments[0],o=0;o<s.length;o+=1)s[o]=this._trimAlignValue(n[o]),this._change(null,o);this._refreshValue()},_setOption:function(e,i){var s,n=0;switch("range"===e&&this.options.range===!0&&("min"===i?(this.options.value=this._values(0),this.options.values=null):"max"===i&&(this.options.value=this._values(this.options.values.length-1),this.options.values=null)),t.isArray(this.options.values)&&(n=this.options.values.length),t.Widget.prototype._setOption.apply(this,arguments),e){case"orientation":this._detectOrientation(),this.element.removeClass("ui-slider-horizontal ui-slider-vertical").addClass("ui-slider-"+this.orientation),this._refreshValue();break;case"value":this._animateOff=!0,this._refreshValue(),this._change(null,0),this._animateOff=!1;break;case"values":for(this._animateOff=!0,this._refreshValue(),s=0;s<n;s+=1)this._change(null,s);this._animateOff=!1;break;case"min":case"max":this._animateOff=!0,this._refreshValue(),this._animateOff=!1;break;case"range":this._animateOff=!0,this._refresh(),this._animateOff=!1}},_value:function(){var t=this.options.value;return t=this._trimAlignValue(t)},_values:function(t){var e,i,s;if(arguments.length)return e=this.options.values[t],e=this._trimAlignValue(e);if(this.options.values&&this.options.values.length){for(i=this.options.values.slice(),s=0;s<i.length;s+=1)i[s]=this._trimAlignValue(i[s]);return i}return[]},_trimAlignValue:function(t){if(t<=this._valueMin())return this._valueMin();if(t>=this._valueMax())return this._valueMax();var e=this.options.step>0?this.options.step:1,i=(t-this._valueMin())%e,s=t-i;return 2*Math.abs(i)>=e&&(s+=i>0?e:-e),parseFloat(s.toFixed(5))},_valueMin:function(){return this.options.min},_valueMax:function(){return this.options.max},_refreshValue:function(){var e,i,s,n,o,r=this.options.range,a=this.options,l=this,h=!this._animateOff&&a.animate,c={};this.options.values&&this.options.values.length?this.handles.each(function(s){i=(l.values(s)-l._valueMin())/(l._valueMax()-l._valueMin())*100,c["horizontal"===l.orientation?"left":"bottom"]=i+"%",t(this).stop(1,1)[h?"animate":"css"](c,a.animate),l.options.range===!0&&("horizontal"===l.orientation?(0===s&&l.range.stop(1,1)[h?"animate":"css"]({left:i+"%"},a.animate),1===s&&l.range[h?"animate":"css"]({width:i-e+"%"},{queue:!1,duration:a.animate})):(0===s&&l.range.stop(1,1)[h?"animate":"css"]({bottom:i+"%"},a.animate),1===s&&l.range[h?"animate":"css"]({height:i-e+"%"},{queue:!1,duration:a.animate}))),e=i}):(s=this.value(),n=this._valueMin(),o=this._valueMax(),i=o!==n?(s-n)/(o-n)*100:0,c["horizontal"===this.orientation?"left":"bottom"]=i+"%",this.handle.stop(1,1)[h?"animate":"css"](c,a.animate),"min"===r&&"horizontal"===this.orientation&&this.range.stop(1,1)[h?"animate":"css"]({width:i+"%"},a.animate),"max"===r&&"horizontal"===this.orientation&&this.range[h?"animate":"css"]({width:100-i+"%"},{queue:!1,duration:a.animate}),"min"===r&&"vertical"===this.orientation&&this.range.stop(1,1)[h?"animate":"css"]({height:i+"%"},a.animate),"max"===r&&"vertical"===this.orientation&&this.range[h?"animate":"css"]({height:100-i+"%"},{queue:!1,duration:a.animate}))},_handleEvents:{keydown:function(e){var s,n,o,r,a=t(e.target).data("ui-slider-handle-index");switch(e.keyCode){case t.ui.keyCode.HOME:case t.ui.keyCode.END:case t.ui.keyCode.PAGE_UP:case t.ui.keyCode.PAGE_DOWN:case t.ui.keyCode.UP:case t.ui.keyCode.RIGHT:case t.ui.keyCode.DOWN:case t.ui.keyCode.LEFT:if(e.preventDefault(),!this._keySliding&&(this._keySliding=!0,t(e.target).addClass("ui-state-active"),s=this._start(e,a),s===!1))return}switch(r=this.options.step,n=o=this.options.values&&this.options.values.length?this.values(a):this.value(),e.keyCode){case t.ui.keyCode.HOME:o=this._valueMin();break;case t.ui.keyCode.END:o=this._valueMax();break;case t.ui.keyCode.PAGE_UP:o=this._trimAlignValue(n+(this._valueMax()-this._valueMin())/i);break;case t.ui.keyCode.PAGE_DOWN:o=this._trimAlignValue(n-(this._valueMax()-this._valueMin())/i);break;case t.ui.keyCode.UP:case t.ui.keyCode.RIGHT:if(n===this._valueMax())return;o=this._trimAlignValue(n+r);break;case t.ui.keyCode.DOWN:case t.ui.keyCode.LEFT:if(n===this._valueMin())return;o=this._trimAlignValue(n-r)}this._slide(e,a,o)},click:function(t){t.preventDefault()},keyup:function(e){var i=t(e.target).data("ui-slider-handle-index");this._keySliding&&(this._keySliding=!1,this._stop(e,i),this._change(e,i),t(e.target).removeClass("ui-state-active"))}}})}(s),function(t){function e(t){return function(){var e=this.element.val();t.apply(this,arguments),this._refresh(),e!==this.element.val()&&this._trigger("change")}}t.widget("ui.spinner",{version:"1.10.3",defaultElement:"<input>",widgetEventPrefix:"spin",options:{culture:null,icons:{down:"ui-icon-triangle-1-s",up:"ui-icon-triangle-1-n"},incremental:!0,max:null,min:null,numberFormat:null,page:10,step:1,change:null,spin:null,start:null,stop:null},_create:function(){this._setOption("max",this.options.max),this._setOption("min",this.options.min),this._setOption("step",this.options.step),this._value(this.element.val(),!0),this._draw(),this._on(this._events),this._refresh(),this._on(this.window,{beforeunload:function(){this.element.removeAttr("autocomplete")}})},_getCreateOptions:function(){var e={},i=this.element;return t.each(["min","max","step"],function(t,s){var n=i.attr(s);void 0!==n&&n.length&&(e[s]=n)}),e},_events:{keydown:function(t){this._start(t)&&this._keydown(t)&&t.preventDefault()},keyup:"_stop",focus:function(){this.previous=this.element.val()},blur:function(t){return this.cancelBlur?void delete this.cancelBlur:(this._stop(),this._refresh(),void(this.previous!==this.element.val()&&this._trigger("change",t)))},mousewheel:function(t,e){if(e){if(!this.spinning&&!this._start(t))return!1;this._spin((e>0?1:-1)*this.options.step,t),clearTimeout(this.mousewheelTimer),this.mousewheelTimer=this._delay(function(){this.spinning&&this._stop(t)},100),t.preventDefault()}},"mousedown .ui-spinner-button":function(e){function i(){var t=this.element[0]===this.document[0].activeElement;t||(this.element.focus(),this.previous=s,this._delay(function(){this.previous=s}))}var s;s=this.element[0]===this.document[0].activeElement?this.previous:this.element.val(),e.preventDefault(),i.call(this),this.cancelBlur=!0,this._delay(function(){delete this.cancelBlur,i.call(this)}),this._start(e)!==!1&&this._repeat(null,t(e.currentTarget).hasClass("ui-spinner-up")?1:-1,e)},"mouseup .ui-spinner-button":"_stop","mouseenter .ui-spinner-button":function(e){if(t(e.currentTarget).hasClass("ui-state-active"))return this._start(e)!==!1&&void this._repeat(null,t(e.currentTarget).hasClass("ui-spinner-up")?1:-1,e)},"mouseleave .ui-spinner-button":"_stop"},_draw:function(){var t=this.uiSpinner=this.element.addClass("ui-spinner-input").attr("autocomplete","off").wrap(this._uiSpinnerHtml()).parent().append(this._buttonHtml());this.element.attr("role","spinbutton"),this.buttons=t.find(".ui-spinner-button").attr("tabIndex",-1).button().removeClass("ui-corner-all"),this.buttons.height()>Math.ceil(.5*t.height())&&t.height()>0&&t.height(t.height()),this.options.disabled&&this.disable()},_keydown:function(e){var i=this.options,s=t.ui.keyCode;switch(e.keyCode){case s.UP:return this._repeat(null,1,e),!0;case s.DOWN:return this._repeat(null,-1,e),!0;case s.PAGE_UP:return this._repeat(null,i.page,e),!0;case s.PAGE_DOWN:return this._repeat(null,-i.page,e),!0}return!1},_uiSpinnerHtml:function(){return"<span class='ui-spinner ui-widget ui-widget-content ui-corner-all'></span>"},_buttonHtml:function(){return"<a class='ui-spinner-button ui-spinner-up ui-corner-tr'><span class='ui-icon "+this.options.icons.up+"'>&#9650;</span></a><a class='ui-spinner-button ui-spinner-down ui-corner-br'><span class='ui-icon "+this.options.icons.down+"'>&#9660;</span></a>"},_start:function(t){return!(!this.spinning&&this._trigger("start",t)===!1)&&(this.counter||(this.counter=1),this.spinning=!0,!0)},_repeat:function(t,e,i){t=t||500,clearTimeout(this.timer),this.timer=this._delay(function(){this._repeat(40,e,i)},t),this._spin(e*this.options.step,i)},_spin:function(t,e){var i=this.value()||0;this.counter||(this.counter=1),i=this._adjustValue(i+t*this._increment(this.counter)),this.spinning&&this._trigger("spin",e,{value:i})===!1||(this._value(i),this.counter++)},_increment:function(e){var i=this.options.incremental;return i?t.isFunction(i)?i(e):Math.floor(e*e*e/5e4-e*e/500+17*e/200+1):1},_precision:function(){var t=this._precisionOf(this.options.step);return null!==this.options.min&&(t=Math.max(t,this._precisionOf(this.options.min))),t},_precisionOf:function(t){var e=t.toString(),i=e.indexOf(".");return i===-1?0:e.length-i-1},_adjustValue:function(t){var e,i,s=this.options;return e=null!==s.min?s.min:0,i=t-e,i=Math.round(i/s.step)*s.step,t=e+i,t=parseFloat(t.toFixed(this._precision())),null!==s.max&&t>s.max?s.max:null!==s.min&&t<s.min?s.min:t},_stop:function(t){this.spinning&&(clearTimeout(this.timer),clearTimeout(this.mousewheelTimer),this.counter=0,this.spinning=!1,this._trigger("stop",t))},_setOption:function(t,e){if("culture"===t||"numberFormat"===t){var i=this._parse(this.element.val());return this.options[t]=e,void this.element.val(this._format(i))}"max"!==t&&"min"!==t&&"step"!==t||"string"==typeof e&&(e=this._parse(e)),"icons"===t&&(this.buttons.first().find(".ui-icon").removeClass(this.options.icons.up).addClass(e.up),this.buttons.last().find(".ui-icon").removeClass(this.options.icons.down).addClass(e.down)),this._super(t,e),"disabled"===t&&(e?(this.element.prop("disabled",!0),this.buttons.button("disable")):(this.element.prop("disabled",!1),this.buttons.button("enable")))},_setOptions:e(function(t){this._super(t),this._value(this.element.val())}),_parse:function(t){return"string"==typeof t&&""!==t&&(t=window.Globalize&&this.options.numberFormat?Globalize.parseFloat(t,10,this.options.culture):+t),""===t||isNaN(t)?null:t},_format:function(t){return""===t?"":window.Globalize&&this.options.numberFormat?Globalize.format(t,this.options.numberFormat,this.options.culture):t},_refresh:function(){this.element.attr({"aria-valuemin":this.options.min,"aria-valuemax":this.options.max,"aria-valuenow":this._parse(this.element.val())})},_value:function(t,e){var i;""!==t&&(i=this._parse(t),null!==i&&(e||(i=this._adjustValue(i)),t=this._format(i))),this.element.val(t),this._refresh()},_destroy:function(){this.element.removeClass("ui-spinner-input").prop("disabled",!1).removeAttr("autocomplete").removeAttr("role").removeAttr("aria-valuemin").removeAttr("aria-valuemax").removeAttr("aria-valuenow"),this.uiSpinner.replaceWith(this.element)},stepUp:e(function(t){this._stepUp(t)}),_stepUp:function(t){this._start()&&(this._spin((t||1)*this.options.step),this._stop())},stepDown:e(function(t){this._stepDown(t)}),_stepDown:function(t){this._start()&&(this._spin((t||1)*-this.options.step),this._stop())},pageUp:e(function(t){this._stepUp((t||1)*this.options.page)}),pageDown:e(function(t){this._stepDown((t||1)*this.options.page)}),value:function(t){return arguments.length?void e(this._value).call(this,t):this._parse(this.element.val());
-},widget:function(){return this.uiSpinner}})}(s),function(t,e){function i(){return++n}function s(t){return t.hash.length>1&&decodeURIComponent(t.href.replace(o,""))===decodeURIComponent(location.href.replace(o,""))}var n=0,o=/#.*$/;t.widget("ui.tabs",{version:"1.10.3",delay:300,options:{active:null,collapsible:!1,event:"click",heightStyle:"content",hide:null,show:null,activate:null,beforeActivate:null,beforeLoad:null,load:null},_create:function(){var e=this,i=this.options;this.running=!1,this.element.addClass("ui-tabs ui-widget ui-widget-content ui-corner-all").toggleClass("ui-tabs-collapsible",i.collapsible).delegate(".ui-tabs-nav > li","mousedown"+this.eventNamespace,function(e){t(this).is(".ui-state-disabled")&&e.preventDefault()}).delegate(".ui-tabs-anchor","focus"+this.eventNamespace,function(){t(this).closest("li").is(".ui-state-disabled")&&this.blur()}),this._processTabs(),i.active=this._initialActive(),t.isArray(i.disabled)&&(i.disabled=t.unique(i.disabled.concat(t.map(this.tabs.filter(".ui-state-disabled"),function(t){return e.tabs.index(t)}))).sort()),this.options.active!==!1&&this.anchors.length?this.active=this._findActive(i.active):this.active=t(),this._refresh(),this.active.length&&this.load(i.active)},_initialActive:function(){var e=this.options.active,i=this.options.collapsible,s=location.hash.substring(1);return null===e&&(s&&this.tabs.each(function(i,n){if(t(n).attr("aria-controls")===s)return e=i,!1}),null===e&&(e=this.tabs.index(this.tabs.filter(".ui-tabs-active"))),null!==e&&e!==-1||(e=!!this.tabs.length&&0)),e!==!1&&(e=this.tabs.index(this.tabs.eq(e)),e===-1&&(e=!i&&0)),!i&&e===!1&&this.anchors.length&&(e=0),e},_getCreateEventData:function(){return{tab:this.active,panel:this.active.length?this._getPanelForTab(this.active):t()}},_tabKeydown:function(e){var i=t(this.document[0].activeElement).closest("li"),s=this.tabs.index(i),n=!0;if(!this._handlePageNav(e)){switch(e.keyCode){case t.ui.keyCode.RIGHT:case t.ui.keyCode.DOWN:s++;break;case t.ui.keyCode.UP:case t.ui.keyCode.LEFT:n=!1,s--;break;case t.ui.keyCode.END:s=this.anchors.length-1;break;case t.ui.keyCode.HOME:s=0;break;case t.ui.keyCode.SPACE:return e.preventDefault(),clearTimeout(this.activating),void this._activate(s);case t.ui.keyCode.ENTER:return e.preventDefault(),clearTimeout(this.activating),void this._activate(s!==this.options.active&&s);default:return}e.preventDefault(),clearTimeout(this.activating),s=this._focusNextTab(s,n),e.ctrlKey||(i.attr("aria-selected","false"),this.tabs.eq(s).attr("aria-selected","true"),this.activating=this._delay(function(){this.option("active",s)},this.delay))}},_panelKeydown:function(e){this._handlePageNav(e)||e.ctrlKey&&e.keyCode===t.ui.keyCode.UP&&(e.preventDefault(),this.active.focus())},_handlePageNav:function(e){return e.altKey&&e.keyCode===t.ui.keyCode.PAGE_UP?(this._activate(this._focusNextTab(this.options.active-1,!1)),!0):e.altKey&&e.keyCode===t.ui.keyCode.PAGE_DOWN?(this._activate(this._focusNextTab(this.options.active+1,!0)),!0):void 0},_findNextTab:function(e,i){function s(){return e>n&&(e=0),e<0&&(e=n),e}for(var n=this.tabs.length-1;t.inArray(s(),this.options.disabled)!==-1;)e=i?e+1:e-1;return e},_focusNextTab:function(t,e){return t=this._findNextTab(t,e),this.tabs.eq(t).focus(),t},_setOption:function(t,e){return"active"===t?void this._activate(e):"disabled"===t?void this._setupDisabled(e):(this._super(t,e),"collapsible"===t&&(this.element.toggleClass("ui-tabs-collapsible",e),e||this.options.active!==!1||this._activate(0)),"event"===t&&this._setupEvents(e),void("heightStyle"===t&&this._setupHeightStyle(e)))},_tabId:function(t){return t.attr("aria-controls")||"ui-tabs-"+i()},_sanitizeSelector:function(t){return t?t.replace(/[!"$%&'()*+,.\/:;<=>?@\[\]\^`{|}~]/g,"\\$&"):""},refresh:function(){var e=this.options,i=this.tablist.children(":has(a[href])");e.disabled=t.map(i.filter(".ui-state-disabled"),function(t){return i.index(t)}),this._processTabs(),e.active!==!1&&this.anchors.length?this.active.length&&!t.contains(this.tablist[0],this.active[0])?this.tabs.length===e.disabled.length?(e.active=!1,this.active=t()):this._activate(this._findNextTab(Math.max(0,e.active-1),!1)):e.active=this.tabs.index(this.active):(e.active=!1,this.active=t()),this._refresh()},_refresh:function(){this._setupDisabled(this.options.disabled),this._setupEvents(this.options.event),this._setupHeightStyle(this.options.heightStyle),this.tabs.not(this.active).attr({"aria-selected":"false",tabIndex:-1}),this.panels.not(this._getPanelForTab(this.active)).hide().attr({"aria-expanded":"false","aria-hidden":"true"}),this.active.length?(this.active.addClass("ui-tabs-active ui-state-active").attr({"aria-selected":"true",tabIndex:0}),this._getPanelForTab(this.active).show().attr({"aria-expanded":"true","aria-hidden":"false"})):this.tabs.eq(0).attr("tabIndex",0)},_processTabs:function(){var e=this;this.tablist=this._getList().addClass("ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all").attr("role","tablist"),this.tabs=this.tablist.find("> li:has(a[href])").addClass("ui-state-default ui-corner-top").attr({role:"tab",tabIndex:-1}),this.anchors=this.tabs.map(function(){return t("a",this)[0]}).addClass("ui-tabs-anchor").attr({role:"presentation",tabIndex:-1}),this.panels=t(),this.anchors.each(function(i,n){var o,r,a,l=t(n).uniqueId().attr("id"),h=t(n).closest("li"),c=h.attr("aria-controls");s(n)?(o=n.hash,r=e.element.find(e._sanitizeSelector(o))):(a=e._tabId(h),o="#"+a,r=e.element.find(o),r.length||(r=e._createPanel(a),r.insertAfter(e.panels[i-1]||e.tablist)),r.attr("aria-live","polite")),r.length&&(e.panels=e.panels.add(r)),c&&h.data("ui-tabs-aria-controls",c),h.attr({"aria-controls":o.substring(1),"aria-labelledby":l}),r.attr("aria-labelledby",l)}),this.panels.addClass("ui-tabs-panel ui-widget-content ui-corner-bottom").attr("role","tabpanel")},_getList:function(){return this.element.find("ol,ul").eq(0)},_createPanel:function(e){return t("<div>").attr("id",e).addClass("ui-tabs-panel ui-widget-content ui-corner-bottom").data("ui-tabs-destroy",!0)},_setupDisabled:function(e){t.isArray(e)&&(e.length?e.length===this.anchors.length&&(e=!0):e=!1);for(var i,s=0;i=this.tabs[s];s++)e===!0||t.inArray(s,e)!==-1?t(i).addClass("ui-state-disabled").attr("aria-disabled","true"):t(i).removeClass("ui-state-disabled").removeAttr("aria-disabled");this.options.disabled=e},_setupEvents:function(e){var i={click:function(t){t.preventDefault()}};e&&t.each(e.split(" "),function(t,e){i[e]="_eventHandler"}),this._off(this.anchors.add(this.tabs).add(this.panels)),this._on(this.anchors,i),this._on(this.tabs,{keydown:"_tabKeydown"}),this._on(this.panels,{keydown:"_panelKeydown"}),this._focusable(this.tabs),this._hoverable(this.tabs)},_setupHeightStyle:function(e){var i,s=this.element.parent();"fill"===e?(i=s.height(),i-=this.element.outerHeight()-this.element.height(),this.element.siblings(":visible").each(function(){var e=t(this),s=e.css("position");"absolute"!==s&&"fixed"!==s&&(i-=e.outerHeight(!0))}),this.element.children().not(this.panels).each(function(){i-=t(this).outerHeight(!0)}),this.panels.each(function(){t(this).height(Math.max(0,i-t(this).innerHeight()+t(this).height()))}).css("overflow","auto")):"auto"===e&&(i=0,this.panels.each(function(){i=Math.max(i,t(this).height("").height())}).height(i))},_eventHandler:function(e){var i=this.options,s=this.active,n=t(e.currentTarget),o=n.closest("li"),r=o[0]===s[0],a=r&&i.collapsible,l=a?t():this._getPanelForTab(o),h=s.length?this._getPanelForTab(s):t(),c={oldTab:s,oldPanel:h,newTab:a?t():o,newPanel:l};e.preventDefault(),o.hasClass("ui-state-disabled")||o.hasClass("ui-tabs-loading")||this.running||r&&!i.collapsible||this._trigger("beforeActivate",e,c)===!1||(i.active=!a&&this.tabs.index(o),this.active=r?t():o,this.xhr&&this.xhr.abort(),h.length||l.length||t.error("jQuery UI Tabs: Mismatching fragment identifier."),l.length&&this.load(this.tabs.index(o),e),this._toggle(e,c))},_toggle:function(e,i){function s(){o.running=!1,o._trigger("activate",e,i)}function n(){i.newTab.closest("li").addClass("ui-tabs-active ui-state-active"),r.length&&o.options.show?o._show(r,o.options.show,s):(r.show(),s())}var o=this,r=i.newPanel,a=i.oldPanel;this.running=!0,a.length&&this.options.hide?this._hide(a,this.options.hide,function(){i.oldTab.closest("li").removeClass("ui-tabs-active ui-state-active"),n()}):(i.oldTab.closest("li").removeClass("ui-tabs-active ui-state-active"),a.hide(),n()),a.attr({"aria-expanded":"false","aria-hidden":"true"}),i.oldTab.attr("aria-selected","false"),r.length&&a.length?i.oldTab.attr("tabIndex",-1):r.length&&this.tabs.filter(function(){return 0===t(this).attr("tabIndex")}).attr("tabIndex",-1),r.attr({"aria-expanded":"true","aria-hidden":"false"}),i.newTab.attr({"aria-selected":"true",tabIndex:0})},_activate:function(e){var i,s=this._findActive(e);s[0]!==this.active[0]&&(s.length||(s=this.active),i=s.find(".ui-tabs-anchor")[0],this._eventHandler({target:i,currentTarget:i,preventDefault:t.noop}))},_findActive:function(e){return e===!1?t():this.tabs.eq(e)},_getIndex:function(t){return"string"==typeof t&&(t=this.anchors.index(this.anchors.filter("[href$='"+t+"']"))),t},_destroy:function(){this.xhr&&this.xhr.abort(),this.element.removeClass("ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible"),this.tablist.removeClass("ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all").removeAttr("role"),this.anchors.removeClass("ui-tabs-anchor").removeAttr("role").removeAttr("tabIndex").removeUniqueId(),this.tabs.add(this.panels).each(function(){t.data(this,"ui-tabs-destroy")?t(this).remove():t(this).removeClass("ui-state-default ui-state-active ui-state-disabled ui-corner-top ui-corner-bottom ui-widget-content ui-tabs-active ui-tabs-panel").removeAttr("tabIndex").removeAttr("aria-live").removeAttr("aria-busy").removeAttr("aria-selected").removeAttr("aria-labelledby").removeAttr("aria-hidden").removeAttr("aria-expanded").removeAttr("role")}),this.tabs.each(function(){var e=t(this),i=e.data("ui-tabs-aria-controls");i?e.attr("aria-controls",i).removeData("ui-tabs-aria-controls"):e.removeAttr("aria-controls")}),this.panels.show(),"content"!==this.options.heightStyle&&this.panels.css("height","")},enable:function(i){var s=this.options.disabled;s!==!1&&(i===e?s=!1:(i=this._getIndex(i),s=t.isArray(s)?t.map(s,function(t){return t!==i?t:null}):t.map(this.tabs,function(t,e){return e!==i?e:null})),this._setupDisabled(s))},disable:function(i){var s=this.options.disabled;if(s!==!0){if(i===e)s=!0;else{if(i=this._getIndex(i),t.inArray(i,s)!==-1)return;s=t.isArray(s)?t.merge([i],s).sort():[i]}this._setupDisabled(s)}},load:function(e,i){e=this._getIndex(e);var n=this,o=this.tabs.eq(e),r=o.find(".ui-tabs-anchor"),a=this._getPanelForTab(o),l={tab:o,panel:a};s(r[0])||(this.xhr=t.ajax(this._ajaxSettings(r,i,l)),this.xhr&&"canceled"!==this.xhr.statusText&&(o.addClass("ui-tabs-loading"),a.attr("aria-busy","true"),this.xhr.success(function(t){setTimeout(function(){a.html(t),n._trigger("load",i,l)},1)}).complete(function(t,e){setTimeout(function(){"abort"===e&&n.panels.stop(!1,!0),o.removeClass("ui-tabs-loading"),a.removeAttr("aria-busy"),t===n.xhr&&delete n.xhr},1)})))},_ajaxSettings:function(e,i,s){var n=this;return{url:e.attr("href"),beforeSend:function(e,o){return n._trigger("beforeLoad",i,t.extend({jqXHR:e,ajaxSettings:o},s))}}},_getPanelForTab:function(e){var i=t(e).attr("aria-controls");return this.element.find(this._sanitizeSelector("#"+i))}})}(s),function(t){function e(e,i){var s=(e.attr("aria-describedby")||"").split(/\s+/);s.push(i),e.data("ui-tooltip-id",i).attr("aria-describedby",t.trim(s.join(" ")))}function i(e){var i=e.data("ui-tooltip-id"),s=(e.attr("aria-describedby")||"").split(/\s+/),n=t.inArray(i,s);n!==-1&&s.splice(n,1),e.removeData("ui-tooltip-id"),s=t.trim(s.join(" ")),s?e.attr("aria-describedby",s):e.removeAttr("aria-describedby")}var s=0;t.widget("ui.tooltip",{version:"1.10.3",options:{content:function(){var e=t(this).attr("title")||"";return t("<a>").text(e).html()},hide:!0,items:"[title]:not([disabled])",position:{my:"left top+15",at:"left bottom",collision:"flipfit flip"},show:!0,tooltipClass:null,track:!1,close:null,open:null},_create:function(){this._on({mouseover:"open",focusin:"open"}),this.tooltips={},this.parents={},this.options.disabled&&this._disable()},_setOption:function(e,i){var s=this;return"disabled"===e?(this[i?"_disable":"_enable"](),void(this.options[e]=i)):(this._super(e,i),void("content"===e&&t.each(this.tooltips,function(t,e){s._updateContent(e)})))},_disable:function(){var e=this;t.each(this.tooltips,function(i,s){var n=t.Event("blur");n.target=n.currentTarget=s[0],e.close(n,!0)}),this.element.find(this.options.items).addBack().each(function(){var e=t(this);e.is("[title]")&&e.data("ui-tooltip-title",e.attr("title")).attr("title","")})},_enable:function(){this.element.find(this.options.items).addBack().each(function(){var e=t(this);e.data("ui-tooltip-title")&&e.attr("title",e.data("ui-tooltip-title"))})},open:function(e){var i=this,s=t(e?e.target:this.element).closest(this.options.items);s.length&&!s.data("ui-tooltip-id")&&(s.attr("title")&&s.data("ui-tooltip-title",s.attr("title")),s.data("ui-tooltip-open",!0),e&&"mouseover"===e.type&&s.parents().each(function(){var e,s=t(this);s.data("ui-tooltip-open")&&(e=t.Event("blur"),e.target=e.currentTarget=this,i.close(e,!0)),s.attr("title")&&(s.uniqueId(),i.parents[this.id]={element:this,title:s.attr("title")},s.attr("title",""))}),this._updateContent(s,e))},_updateContent:function(t,e){var i,s=this.options.content,n=this,o=e?e.type:null;return"string"==typeof s?this._open(e,t,s):(i=s.call(t[0],function(i){t.data("ui-tooltip-open")&&n._delay(function(){e&&(e.type=o),this._open(e,t,i)})}),void(i&&this._open(e,t,i)))},_open:function(i,s,n){function o(t){h.of=t,r.is(":hidden")||r.position(h)}var r,a,l,h=t.extend({},this.options.position);if(n){if(r=this._find(s),r.length)return void r.find(".ui-tooltip-content").html(n);s.is("[title]")&&(i&&"mouseover"===i.type?s.attr("title",""):s.removeAttr("title")),r=this._tooltip(s),e(s,r.attr("id")),r.find(".ui-tooltip-content").html(n),this.options.track&&i&&/^mouse/.test(i.type)?(this._on(this.document,{mousemove:o}),o(i)):r.position(t.extend({of:s},this.options.position)),r.hide(),this._show(r,this.options.show),this.options.show&&this.options.show.delay&&(l=this.delayedShow=setInterval(function(){r.is(":visible")&&(o(h.of),clearInterval(l))},t.fx.interval)),this._trigger("open",i,{tooltip:r}),a={keyup:function(e){if(e.keyCode===t.ui.keyCode.ESCAPE){var i=t.Event(e);i.currentTarget=s[0],this.close(i,!0)}},remove:function(){this._removeTooltip(r)}},i&&"mouseover"!==i.type||(a.mouseleave="close"),i&&"focusin"!==i.type||(a.focusout="close"),this._on(!0,s,a)}},close:function(e){var s=this,n=t(e?e.currentTarget:this.element),o=this._find(n);this.closing||(clearInterval(this.delayedShow),n.data("ui-tooltip-title")&&n.attr("title",n.data("ui-tooltip-title")),i(n),o.stop(!0),this._hide(o,this.options.hide,function(){s._removeTooltip(t(this))}),n.removeData("ui-tooltip-open"),this._off(n,"mouseleave focusout keyup"),n[0]!==this.element[0]&&this._off(n,"remove"),this._off(this.document,"mousemove"),e&&"mouseleave"===e.type&&t.each(this.parents,function(e,i){t(i.element).attr("title",i.title),delete s.parents[e]}),this.closing=!0,this._trigger("close",e,{tooltip:o}),this.closing=!1)},_tooltip:function(e){var i="ui-tooltip-"+s++,n=t("<div>").attr({id:i,role:"tooltip"}).addClass("ui-tooltip ui-widget ui-corner-all ui-widget-content "+(this.options.tooltipClass||""));return t("<div>").addClass("ui-tooltip-content").appendTo(n),n.appendTo(this.document[0].body),this.tooltips[i]=e,n},_find:function(e){var i=e.data("ui-tooltip-id");return i?t("#"+i):t()},_removeTooltip:function(t){t.remove(),delete this.tooltips[t.attr("id")]},_destroy:function(){var e=this;t.each(this.tooltips,function(i,s){var n=t.Event("blur");n.target=n.currentTarget=s[0],e.close(n,!0),t("#"+i).remove(),s.data("ui-tooltip-title")&&(s.attr("title",s.data("ui-tooltip-title")),s.removeData("ui-tooltip-title"))})}})}(s)},function(t,e,i){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s=i(46),n=i(1),o=i(5),r=i(2),a=n.default("layers"),l=function(){function t(t,e){if(void 0===e&&(e={}),e=e||{},"string"!=typeof t)throw"Invalid URL";this._url=t,this._params="object"==typeof e.params?e.params:{},this._legendCollapse="boolean"==typeof e.legendCollapse&&e.legendCollapse,this._legendCheckbox="boolean"!=typeof e.legendCheckbox||e.legendCheckbox,this.id=e.id||o.default(),this._name=e.name||"Unnamed Layer",this.animate=!1,this._opacity="number"==typeof e.opacity?e.opacity:1,this._opacity>1?this._opacity=1:this._opacity<0&&(this._opacity=0),this._visible="boolean"!=typeof e.visible||e.visible,this._source=void 0,this._olLayer=void 0,this._loaded=!1,this._maxResolution=s.zoomToResolution(e.minZoom),"undefined"!=typeof this._maxResolution&&(this._maxResolution+=1e-5),this._minResolution=s.zoomToResolution(e.maxZoom),this._minZoom="number"==typeof e.minZoom?e.minZoom:void 0,this._maxZoom="number"==typeof e.maxZoom?e.maxZoom:void 0,this._zIndex="number"==typeof e.zIndex?e.zIndex:0,this.loadCallback="function"==typeof e.loadCallback?e.loadCallback:function(){},this._legendContent="",this._legendCheckbox?(this._legendContent+='<input type="checkbox" '+(this.visible?"checked":"")+" "+('class="legend-check" id="'+this.id+'-legend-layer-check"><span></span>'),this._legendContent+='<label for="'+this.id+'-legend-layer-check" class="legend-layer-name">'+this.name+"</label>"):this._legendContent+='<label class="legend-layer-name">'+this.name+"</label>",this._$legendDiv=null,this._applyCollapseCalled=!1,this._addLegendContent("string"==typeof e.legendContent?e.legendContent:void 0)}return t.prototype._load=function(){return 1==this.loaded||(this._loaded=!0,!1)},t.prototype.getLegendDiv=function(){return'<div class="legend-layer-div" id="'+this.id+'-legend-layer-div">'+this._legendContent+"</div>"},t.prototype._addLegendContent=function(t){void 0===t&&(t="");var e=t.indexOf("<ul>")>-1;e&&(t='<span class="legend-items-expander" title="Expand/Collapse">&#9660;</span>'+t),this._legendContent+=t,this._$legendDiv=r("#"+this.id+"-legend-layer-div"),this._$legendDiv.length>0&&(this._$legendDiv.append(t),this.applyCollapse())},t.prototype.addLegendContent=function(t){this._addLegendContent(t)},t.prototype.applyCollapse=function(){if(this._applyCollapseCalled)return void console.log("collapse already applied");if(this._$legendDiv=r("#"+this.id+"-legend-layer-div"),this._$legendDiv.length>0){var t=this._$legendDiv.find(".legend-items-expander");t.length>0&&(this._applyCollapseCalled=!0,t.click(function(){var t=r(this);t.siblings("ul").slideToggle(),t.hasClass("legend-layer-group-collapsed")?(t.removeClass("legend-layer-group-collapsed"),t.html("&#9660;")):(t.addClass("legend-layer-group-collapsed"),t.html("&#9654;"))}),this._legendCollapse&&t.trigger("click"))}},t.prototype.refresh=function(){this.source&&this.source.refresh()},Object.defineProperty(t.prototype,"id",{get:function(){return this._id},set:function(t){this._id=t},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"animate",{get:function(){return this._animate},set:function(t){this._animate=t},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"legendContent",{get:function(){return this._legendContent},set:function(t){this._legendContent=t},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"params",{get:function(){return this._params},set:function(t){this._params=t},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"minResolution",{get:function(){return this._minResolution},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"maxResolution",{get:function(){return this._maxResolution},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"minZoom",{get:function(){return this._minZoom},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"maxZoom",{get:function(){return this._maxZoom},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"url",{get:function(){return this._url},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"visible",{get:function(){return this._visible},set:function(t){this.setVisible(t)},enumerable:!0,configurable:!0}),t.prototype.setVisible=function(t){this._visible=t,this.olLayer&&(this.olLayer.setVisible(this._visible),t&&!this._loaded&&this._load())},Object.defineProperty(t.prototype,"opacity",{get:function(){return this._opacity},set:function(t){this._opacity=t,this.olLayer&&this.olLayer.setOpacity(this._opacity)},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"name",{get:function(){return this._name},set:function(t){this._name=t},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"loaded",{get:function(){return this._loaded},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"source",{get:function(){return this.getSource()},enumerable:!0,configurable:!0}),t.prototype.getSource=function(){return this._source},Object.defineProperty(t.prototype,"zIndex",{get:function(){return this._zIndex},set:function(t){this._zIndex=t},enumerable:!0,configurable:!0}),t.prototype.setZIndex=function(t){},Object.defineProperty(t.prototype,"olLayer",{get:function(){return this.getOlLayer()},enumerable:!0,configurable:!0}),t.prototype.getOlLayer=function(){return this._olLayer},t}();e.LayerBase=l,a.LayerBase=l,e.default=l},function(t,e,i){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s=i(1),n=s.default("olHelpers"),o=function(){function t(t){this._map=null,this._initialized=!1,this._subtype=t}return t.prototype.init=function(t){this._initialized||(this._map=t,this._initialized=!0)},Object.defineProperty(t.prototype,"map",{get:function(){return this._map},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"initialized",{get:function(){return this._initialized},enumerable:!0,configurable:!0}),t.prototype._checkInit=function(){if(!this.initialized){var t=this._subtype+" object not initialized";throw alert(t),console.log(t),t}},t.prototype.checkInit=function(){this._checkInit()},t}();e.MapInteractionBase=o,n.MapInteractionBase=o,e.default=o},function(t,e,i){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var s=i(43);e.mapMove=new s.default,e.default=e.mapMove},function(t,e,i){"use strict";function s(t){var e=n.quickMapBase(t);return r.default.init(e),a.default.init(e),e}Object.defineProperty(e,"__esModule",{value:!0});var n=i(45),o=i(1),r=i(22),a=i(4),l=o.default("olHelpers");e.quickMap=s,l.quickMap=s,e.default=s},function(t,e,i){"use strict";function s(t){return"undefined"==typeof t||null===t}function n(t){return!s(t)}Object.defineProperty(e,"__esModule",{value:!0});var o=i(1),r=o.default("util.checkDefined");e.undefinedOrNull=s,r.undefinedOrNull=s,e.definedAndNotNull=n,r.definedAndNotNull=n},function(t,e,i){"use strict";function s(t){for(var e=[],i=0,s=Object.keys(t);i<s.length;i++){var n=s[i];e.push({key:n,value:t[n]})}return e.sort(function(t,e){return t>e?1:-1}),e}Object.defineProperty(e,"__esModule",{value:!0});var n=i(1),o=n.default("util");e.keyValPairs=s,o.keyValPairs=s},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(16),o=i(23),r=i(4),a=i(5),l=i(1),h=i(29),c=i(28),u=i(2);i(19);var d=l.default("ssa"),p=function(t){function e(e,i,s){var n=t.call(this,e)||this;n.$mainContainer.prepend('<div class="ssa-map-sidebar"></div>'),n.mainMap=o.default({divId:n.mapId,minZoom:6,zoom:6,fullScreen:!0}),n.mainMapPopup=r.default,n.$sideBar=n.$mainContainer.find(".ssa-map-sidebar");var l=function(){n._afterChange()};n.pickerCollection=new h.default(n.$sideBar,n.mainMap);var u=a.default();return n.$sideBar.append('<div id="'+u+'"></div>'),n.corridorCollection=new c.default(n.$sideBar,n.mainMap,i,l,s),n.pickerCollection.corridorCollection=n.corridorCollection,n.corridorCollection.loadExistingCorridors(),n}return s(e,t),e.prototype._afterChange=function(){var t=this;this.corridorCollection.$innerContainer.find(".corridor-zoom").click(function(){var e=u(this).attr("data-corridor"),i=t.corridorCollection.getCorridorById(e);t.mainMap.getView().fit(i.extent,t.mainMap.getSize())}),this.corridorCollection.$innerContainer.find(".corridor-delete").click(function(){var e=u(this).attr("data-corridor");t.corridorCollection.removeCorridor(e)}),this.corridorCollection.$innerContainer.find(".corridor-edit").click(function(){t.pickerCollection.$createCorridorButton.prop("disabled",!0);var e=u(this).attr("data-corridor"),i=t.corridorCollection.getCorridorById(e);t.pickerCollection.startPicker(i),u(this).closest(".corridor-tr").addClass("corridor-tr-selected")})},e}(n.default);e.SsaMapCreate=p,d.SsaMapCreate=p,window.SsaMapCreate=p,Object.defineProperty(e,"__esModule",{value:!0}),e.default=p},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(16),o=i(23),r=i(4),a=i(1),l=i(18),h=i(10),c=i(7),u=i(14),d=i(31),p=i(32),f=i(30),g=i(8),m=i(6),v=i(2),y=a.default("ssa"),_=function(t){var e=c.mmPopupContent(t);return e+=d.default.getCrashSummary(t.pdpId)},b=function(t){function e(e,i,s){var n=t.call(this,e)||this;n._ssaId=parseInt(v("#hidden-ssa-id").val()),n._snap=parseInt(v("#hidden-snapshot-id").val()),n.mainMap=o.default({divId:n.mapId,minZoom:6,zoom:6,fullScreen:!0});var a='<div class="segment-index-summary">';a+='<div class="segment-index-summary-toggles">',a+='<span class="segment-index-summary-toggle segment-index-summary-zoom" title="Zoom To Initial Extent">&#8634;</span>',a+='<span class="segment-index-summary-toggle segment-index-summary-close" title="Hide Legend">&#8598;</span>',a+='<span class="segment-index-summary-toggle segment-index-summary-open" title="Show Legend">&#8600;</span>',a+="</div>",a+='<h4 style="color: '+g.mmFlagColor+'">Metamanager Flags</h4>',a+='<ul id="'+g.mmFlagListId+'"></ul>',a+='<h4 style="color: '+g.controllingCriteriaColor+'">Controlling Criteria</h4>',a+='<ul id="'+g.ccListId+'"></ul>',a+="</div>",n.$mapDiv.append(a);var c=n.$mapDiv.find(".segment-index-summary"),u=c.find(".segment-index-summary-close"),d=c.find(".segment-index-summary-open"),y=c.find(".segment-index-summary-zoom");d.hide();var b=!1,w=c.width(),C=c.css("min-height"),k=c.css("padding");u.click(function(){b||(b=!0,c.find("ul, h3, h4, h5").fadeOut(100,function(){c.css("padding","2px"),c.width("auto"),c.css("min-height","auto"),u.hide(),d.show(),b=!1}))}),d.click(function(){b||(b=!0,c.css("padding",k),c.width(w),c.css("min-height",C),c.find("ul, h3, h4, h5").fadeIn(100,function(){u.show(),d.hide(),b=!1}))}),y.click(function(){n._fitExtent()}),n.mainMapPopup=r.default,i="string"==typeof i?i:"corridor-data",s="string"==typeof s?s:"ssa-corridor-info-anchor",i="."+i,v(n.mainMap.getTargetElement()).append('<div class="crashes-loaded-msg">Crashes Loaded</div>');var x=[];n._corridorArray=[],v(i).each(function(t,e){x.push(new l.default(e))}),n.createdCorridorsLength=x.length,n.loadedCorridorsLength=0;var P={},D=[];return m.default.getCcGeom(n._ssaId,n._snap,function(t){for(var e=0,i=t.features;e<i.length;e++){var o=i[e],r=o.properties.corridorId.toFixed();P[r]||(D.push(r),P[r]={crs:t.crs,type:t.type,features:[]}),P[r].features.push(o)}for(var a="",l=0;l<D.length;l++){var c=x[l];a+=c.bootstrapHtml(l);var u=new h.default(c.startPdp,c.endPdp,c.startRp,c.endRp,c.startCounty,c.endCounty,c.hgwy,c.routeId,{color:"black",jsonFeatures:P[l.toFixed()]});p.default.addCorridor(u),f.default.addCorridor(u),n._corridorArray.push(u),n.mainMap.addLayer(u.olLayer),n.mainMap.addLayer(u.nodeLayer.olLayer),n.mainMapPopup.addVectorPopup(u.layer,_)}n._afterCorridorLoad(),v("#"+s).after(a)}),p.default.init(n.mainMap),f.default.init(n.mainMap),n}return s(e,t),e.prototype._afterCorridorLoad=function(){this._fitExtent(),d.default.init(this.mainMap,this._ssaId,this._snap),p.default.afterLoad(),f.default.afterLoad()},e.prototype._fitExtent=function(){for(var t=[],e=0,i=this._corridorArray;e<i.length;e++){var s=i[e];t.push(s.layer)}t.length>0&&u.fitToMap(t,this.mainMap)},e}(n.default);e.SsaMapView=b,y.SsaMapView=b,window.SsaMapView=b,Object.defineProperty(e,"__esModule",{value:!0}),e.default=b},function(t,e,i){"use strict";function s(t){void 0===t&&(t=""),t="string"==typeof t?t:"";var e="<table>";return e+="<tr>",e+="<th></th>",e+="<th>Corridors</th>",e+="<th></th>",e+="</tr>",e+=t,e+="</table>"}function n(t,e){return t.substring(0,7)+" - "+e.substring(0,7)}var o=i(1),r=i(4),a=i(14),l=i(5),h=i(18),c=i(10),u=i(2),d=i(7),p=o.default("ssa"),f=function(){function t(t,e,i,n,o){var r=this;this._dataClass=o||"corridor-data",this._afterChange=n;var a=u("."+i+", #"+i);if(0==a.length)throw"data container not found";this.$corridorDataContainer=u(a[0]),this.$corridorDataContainer.addClass("corridor-data-container"),this._map=e;var h=l.default();t.append('<div id="'+h+'"></div>'),this.$containerEl=u("#"+h).addClass("corridor-collection-container");var c='<div class="corridor-collection">';c+=s(),c+="</div>",this.$containerEl.append(c),this.$innerContainer=this.$containerEl.find(".corridor-collection"),this._visible=!0,this._inCreateModifyOperation=!1,this._showPopups=!0,this._corridorArray=[],this._coridorLookup={},this._popupStyle=function(t){return!!r.showPopups&&d.mmPopupContent(t)}}return t.prototype.addCorridorCreate=function(t,e){void 0===e&&(e=!0),this._corridorArray.push(t),this._coridorLookup[t.clientId]=t,this._map.addLayer(t.olLayer),this._map.addLayer(t.nodeLayer.olLayer),t.layer.name=n(t.rpFrom,t.rpTo),r.default.addVectorPopup(t.layer,this._popupStyle),e&&this.refreshHtmlCreate()},t.prototype.removeCorridor=function(t){if(confirm("Confirm Delete Corridor?")){"string"==typeof t&&(t=this._coridorLookup[t]);var e=this._corridorArray.indexOf(t);r.default.removeVectorPopup(t.layer),this._map.removeLayer(t.olLayer),this._map.removeLayer(t.nodeLayer.olLayer),this._corridorArray.splice(e,1),delete this._coridorLookup[t.clientId],this._map.getView().setZoom(this._map.getView().getZoom()-1),this._map.getView().setZoom(this._map.getView().getZoom()+1),this.refreshHtmlCreate()}},t.prototype.refreshHtmlCreate=function(){this.$innerContainer.html("");for(var t="",e=0,i=this._corridorArray;e<i.length;e++){var n=i[e];t+=n.tableHtmlCreate}this.$innerContainer.append(s(t)),this.$corridorDataContainer.html("");for(var o=0;o<this._corridorArray.length;o++){var r=this._corridorArray[o];this.$corridorDataContainer.append(r.getDataHtml(o))}this._afterChange()},Object.defineProperty(t.prototype,"visible",{get:function(){return this._visible},set:function(t){t!=this.visible&&(this._visible=t,this.visible?this.$containerEl.show():this.$containerEl.hide())},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"fullExtent",{get:function(){for(var t=[],e=0,i=this._corridorArray;e<i.length;e++){var s=i[e];t.push(s.layer)}return a.calculateExtent(t)},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"inCreateModifyOperation",{get:function(){return this._inCreateModifyOperation},set:function(t){this._inCreateModifyOperation=t,this.inCreateModifyOperation?this.$innerContainer.addClass("corridor-collection-create-modify"):this.$innerContainer.removeClass("corridor-collection-create-modify")},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"showPopups",{get:function(){return this._showPopups},set:function(t){this._showPopups=t},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"corridorCount",{get:function(){return this._corridorArray.length},enumerable:!0,configurable:!0}),t.prototype.getCorridorById=function(t){
-return this._coridorLookup[t]},t.prototype.loadExistingCorridors=function(){for(var t=this,e=0,i=document.getElementsByClassName(this._dataClass),s=0;s<i.length;s++){var n=i[s],o=new h.default(n),r=new c.default(o.startPdp,o.endPdp,o.startRp,o.endRp,o.startCounty,o.endCounty,o.hgwy,o.routeId,{loadedCallback:function(){if(e++,t.corridorCount==e){var i=t.fullExtent;i&&t._map.getView().fit(i,t._map.getSize()),t.refreshHtmlCreate()}}});r.setDbValues(o),0==s&&(u("#primaryCounty").val(r.countyStart),u("#primaryRdwyRteId").val(r.routeId)),this.addCorridorCreate(r,!1)}},t}();e.CorridorCollection=f,p.CorridorCollection=f,Object.defineProperty(e,"__esModule",{value:!0}),e.default=f},function(t,e,i){"use strict";var s=i(38),n=i(39),o=i(37),r=i(10),a=i(1),l=i(7),h=i(4),c=i(5),u=i(41),d=i(2);i(19);var p=a.default("ssa"),f=function(){function t(t,e){this._map=e,t.append('<div><input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor"><input type="button" value="Zoom to Extent" class="btn btn-default picker-zoom-extent"></div>'),this.$createCorridorButton=t.find(".picker-create-corridor"),this.$zoomExtentButton=t.find(".picker-zoom-extent");var i=c.default();t.append('<div id="'+i+'"></div>'),this.$containerEl=d("#"+i).addClass("picker-collection-container"),this.$containerEl.append('<div class="picker-collection"><span class="corridor-picker-help" title="Show Help"></span></div>'),this.$containerEl.append('<input type="button" value="Preview" class="btn btn-default picker-preview">'),this.$containerEl.append('<input type="button" value="Add" class="btn btn-default picker-add" disabled="disabled">'),this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" disabled="disabled" style="display: none;">'),this.$containerEl.append('<input type="button" value="Cancel" class="btn btn-default picker-cancel">'),this.$innerContainer=this.$containerEl.find(".picker-collection"),this._dummyCorridor=new r.default(1,1,"","",1,1,"h",-1,{cancelLoad:!0,color:l.corridorPreviewColor}),this._dummyCorridor.layer.zIndex=10,this._map.addLayer(this._dummyCorridor.olLayer),this._addModifyEnabled=!1,this._modifyCorridor=void 0,this.$btnPickerPreview=this.$containerEl.find(".picker-preview"),this.$btnPickerAdd=this.$containerEl.find(".picker-add"),this.$btnPickerModify=this.$containerEl.find(".picker-modify"),this.$btnPickerCancel=this.$containerEl.find(".picker-cancel"),this.countyStartSelect=new s.default(this.$innerContainer,"Start County"),this.countyEndSelect=new s.default(this.$innerContainer,"End County"),this.highwaySelect=new n.default(this.$innerContainer),this._metamanagerSegmentsLayer=new u.default("http://transportal.cee.wisc.edu/applications/arcgis2/rest/services/MetaManager/MM_All_Segments/MapServer",{minZoom:7,visible:!1,name:"Metamanager Segments",opacity:.4}),this._map.addLayer(this._metamanagerSegmentsLayer.olLayer),this.segmentPickerFrom=new o.default(this,!0),this.segmentPickerTo=new o.default(this,!1),this._map.addLayer(this.segmentPickerFrom.segmentLayer.olLayer),this._map.addLayer(this.segmentPickerTo.segmentLayer.olLayer),this._map.addLayer(this.segmentPickerFrom.selectionLayer.olLayer),this._map.addLayer(this.segmentPickerTo.selectionLayer.olLayer),this.corridorCollection=void 0,this._addHandlers(),this._helpDialogInit()}return t.prototype._addHandlers=function(){var t=this;this.$createCorridorButton.click(function(){t.startPicker(),t.$createCorridorButton.prop("disabled",!0)}),this.$zoomExtentButton.click(function(){var e=t.corridorCollection.fullExtent;e&&t._map.getView().fit(e,t._map.getSize())}),this.$btnPickerCancel.click(function(){t.stopPicker()}),this.$btnPickerPreview.click(function(){t.previewCorridor()}),this.$btnPickerAdd.click(function(){t.addCorridor()}),this.$btnPickerModify.click(function(){t.modifyCorridor()}),this.countyStartSelect.addChangeListener(function(e){t.highwaySelect.setStartEndCounty(e,t.countyEndSelect.selectedValue),t.addModifyButtonEnabled=!1,t.segmentPickerTo.segmentLayer.visible=!t.startEndCountySame}),this.countyEndSelect.addChangeListener(function(e){t.highwaySelect.setStartEndCounty(t.countyStartSelect.selectedValue,e),t.addModifyButtonEnabled=!1,t.segmentPickerTo.segmentLayer.visible=!t.startEndCountySame}),this.highwaySelect.addChangeListener(function(e){t.segmentPickerFrom.setCountyAndRoute(t.countyStartSelect.selectedValue,e),t.segmentPickerTo.setCountyAndRoute(t.countyEndSelect.selectedValue,e),t.addModifyButtonEnabled=!1}),this.segmentPickerFrom.addChangeListener(function(){t.addModifyButtonEnabled=!1}),this.segmentPickerTo.addChangeListener(function(){t.addModifyButtonEnabled=!1})},t.prototype._helpDialogInit=function(){var t=this,e="Corridors are defined by selecting in sequence the start county, highway, and end county ";e+="The reference points are then populated and can be selected either by using the combo box or ",e+="by clicking a segment in the map and clicking select in the resulting popup ",e+="Corridors are defined visually in the pickers as the start segment (green) and end segment (red) ",e+="inclusive of the corridor extents",d("body").append('<div class="corridor-picker-help-dialog" title="Corridor Selection Help">'+('<p style="text-align: justify">'+e+"</p></div>")),this.helpDialog=d(".corridor-picker-help-dialog"),this.helpDialog.dialog({modal:!0,autoOpen:!1,height:450,width:650,buttons:[{text:"OK",click:function(){d(this).dialog("close")}}]}),this.$containerEl.find(".corridor-picker-help").click(function(){t.helpDialog.dialog("open")})},t.prototype.previewCorridor=function(){var t=this;return this.segmentPickerFrom.selectedPdpId&&this.segmentPickerTo.selectedPdpId?(this._map.removeLayer(this._dummyCorridor.layer.olLayer),this._map.removeLayer(this._dummyCorridor.nodeLayer.olLayer),this._dummyCorridor=new r.default(this.segmentPickerFrom.selectedPdpId,this.segmentPickerTo.selectedPdpId,this.segmentPickerFrom.selectedText,this.segmentPickerTo.selectedText,this.countyStartSelect.selectedValue,this.countyEndSelect.selectedValue,this.highwaySelect.selectedText,this.highwaySelect.selectedValue,{cancelLoad:!0,color:l.corridorPreviewColor}),this._dummyCorridor.layer.zIndex=10,this._map.addLayer(this._dummyCorridor.layer.olLayer),this._map.addLayer(this._dummyCorridor.nodeLayer.olLayer),void this._dummyCorridor.load(function(e){t._map.getView().fit(e.extent,t._map.getSize()),t.addModifyButtonEnabled=!0})):void alert("Select From and To Reference Points")},t.prototype.addCorridor=function(){var t=this._dummyCorridor.clone();this.corridorCollection.addCorridorCreate(t),this.segmentPickerTo.segmentLayer.visible=!this.startEndCountySame,this.stopPicker()},t.prototype.modifyCorridor=function(){this._modifyCorridor.updateCorridor(this._dummyCorridor),this.corridorCollection.refreshHtmlCreate(),this.stopPicker()},t.prototype.startPicker=function(t){if(this.corridorCollection.inCreateModifyOperation=!0,this.$containerEl.show(),this.segmentPickerFrom.layersVisible=!0,this.segmentPickerTo.layersVisible=!0,this._metamanagerSegmentsLayer.visible=!0,this.corridorCollection.showPopups=!1,t)this.$btnPickerAdd.hide(),this.$btnPickerModify.show(),this.countyStartSelect.box.val(t.countyStart),this.countyEndSelect.box.val(t.countyEnd),this.highwaySelect.setStartEndCounty(t.countyStart,t.countyEnd,t.routeId),this.segmentPickerFrom.setCountyAndRoute(t.countyStart,t.routeId,t.pdpFrom),this.segmentPickerTo.setCountyAndRoute(t.countyEnd,t.routeId,t.pdpTo),this._modifyCorridor=t,this._dummyCorridor.updateCorridor(t),this._map.getView().fit(this._dummyCorridor.extent,this._map.getSize());else{var e=d("#primaryCounty"),i=d("#primaryRdwyRteId"),s=void 0,n=void 0;e.length>0&&(s=e.val().length>0?parseInt(e.val()):void 0),i.length>0&&(n=i.val().length>0?parseInt(i.val()):void 0),s&&(this.countyStartSelect.box.val(s),this.countyEndSelect.box.val(s),this.highwaySelect.setStartEndCounty(s,s,n,!0)),this.$btnPickerAdd.show(),this.$btnPickerModify.hide()}},t.prototype.stopPicker=function(){this.corridorCollection.showPopups=!0,this.$btnPickerAdd.show(),this.$btnPickerModify.hide(),this.$btnPickerModify.prop("disabled",!0),this.$containerEl.hide(),this.$createCorridorButton.prop("disabled",!1),this.corridorCollection.visible=!0,this._dummyCorridor.layer.clear(),this._modifyCorridor=void 0,this._dummyCorridor.nodeLayer.olLayer.getSource().clear(),this.addModifyButtonEnabled=!1,this.corridorCollection.inCreateModifyOperation=!1,d(".corridor-tr-selected").removeClass("corridor-tr-selected"),this.segmentPickerFrom.layersVisible=!1,this.segmentPickerTo.layersVisible=!1,this._metamanagerSegmentsLayer.visible=!1,h.default.closePopup()},Object.defineProperty(t.prototype,"addModifyButtonEnabled",{get:function(){return this._addModifyEnabled},set:function(t){this._addModifyEnabled=t,this.$btnPickerAdd.prop("disabled",!this.addModifyButtonEnabled),this.$btnPickerModify.prop("disabled",!this.addModifyButtonEnabled)},enumerable:!0,configurable:!0}),Object.defineProperty(t.prototype,"startEndCountySame",{get:function(){var t=this.countyStartSelect.selectedValue==this.countyEndSelect.selectedValue;return this.segmentPickerFrom.segmentLayer.name=t?"Start/End Segments":"Start Segment",t},enumerable:!0,configurable:!0}),t}();p.PickerCollection=f,Object.defineProperty(e,"__esModule",{value:!0}),e.default=f},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(34),o=i(4),r=i(8),a=i(17),l=i(3),h=i(25),c=function(t){for(var e=t.getProperties(),i=!1,s=0,o=n.default.allValues;s<o.length;s++){var a=o[s];if(e[a]&&n.default.valIsOn(a)){i=!0;break}}var h=function(){return new l.style.Text({text:e.ccId,scale:1.5,stroke:new l.style.Stroke({color:"black",width:2}),fill:new l.style.Fill({color:r.controllingCriteriaColor})})};return i?[new l.style.Style({stroke:new l.style.Stroke({color:r.controllingCriteriaColor,width:6}),text:h()})]:null},u=function(t){function e(){return t.call(this,"Geometric Deficiencies",c,201,r.ccListId)||this}return s(e,t),e.prototype.init=function(e){var i=this;t.prototype.init.call(this,e),n.default.addChangeCallback(function(){i.deficiencyLayer.refresh()}),o.default.addVectorPopup(this.deficiencyLayer,function(t){var e="";e+="<ul>";for(var i=0,s=h.keyValPairs(r.controllingCriteriaProps);i<s.length;i++){var n=s[i];if(t[n.key]){e+="<li>",e+=n.value;var o=t[n.key].split("::");e+="<ul>";for(var a=0,l=o;a<l.length;a++){var c=l[a];e+="<li>"+c+"</li>"}e+="</ul>",e+="</li>"}}return e+="</ul>"})},e.prototype.addCorridor=function(t){for(var e=t.layer.source.getFeatures(),i=0,s=e;i<s.length;i++){for(var n=s[i],o=n.getProperties(),a=[],l=0,c=h.keyValPairs(r.controllingCriteriaProps);l<c.length;l++){var u=c[l],d=o[u.key];d&&a.push(u.value)}if(a.length>0){this.deficiencyLayer.source.addFeature(n),n.setProperties({ccId:""+o.pdpId});var p="<b>"+o.pdpId+"</b>:&nbsp;";p+=a.join(", "),this.$summaryList.append("<li "+r.pdpDataAttr+'="'+o.pdpId+'">'+p+"</li>")}}},e}(a.default);u.propNames=["ccDesignSpeed","ccLaneWidth","ccShoulderWidth","ccHorizontalCurve","ccSuperelevation","ccMaximumGrade","ccStoppingSight","ccCrossSlope","ccVerticalClearance","ccDesignLoading"],e.ControllingCriteria=u,Object.defineProperty(e,"__esModule",{value:!0}),e.default=new u},function(t,e,i){"use strict";function s(t){var e={K:"rgb(255,0,0)",A:"rgb(255,165,0)",B:"rgb(255,255,0)",C:"rgb(153,255,153)",P:"rgb(141,227,230)"}[t];return e||"rgba(255,255,255,0)"}function n(t){return null==t||"undefined"==typeof t?"":t}function o(t){t.sort(function(t,e){var i=new Date(t.dte+" "+t.time).getTime(),s=new Date(e.dte+" "+e.time).getTime();return i==s?0:i>s?-1:1});var e="";e+='<ul class="crash-list">';for(var i={},n=0,o=t;n<o.length;n++){var r=o[n];"undefined"==typeof i[r.injSvr]?i[r.injSvr]=1:i[r.injSvr]++,e+='<li style="background-color: '+s(r.injSvr)+';">',e+=r.accDate?r.accDate:"",r.mnrColl&&(e+=", "+r.mnrColl),r.injSvr&&(e+=", "+r.injSvr),e+="</li>"}e+="</ul>";var a={K:"Fatal",A:"Incapacitating",B:"Non-incapacitating",C:"Possible Injury",P:"Property Damage"},l='<table class="crash-summary-table">';if(l+='<tr><th colspan="2">Crash Summary</th></tr>',l+="<tr><td>Total</td><td>"+t.length+"</td></tr>",t.length>0)for(var h=0,c=["K","A","B","C","P"];h<c.length;h++){var u=c[h];"undefined"!=typeof i[u]&&(l+="<tr><td>"+a[u]+"</td><td>"+i[u]+"</td></tr>")}return l+="</table>",e=l+e}var r=i(6),a=i(25),l=i(9),h=i(35),c=i(47),u=i(15),d=i(4),p=i(3),f=i(2),g=["doctnmbr","accDate","ntfyHour","county","municipality","munitype","onHwyRp","onHwyDir","onStr","athHwy","atStr","intDir","intDis","accdSvr","injSvr","totFatl","toInj","accdType","mnrColl","accdLoc","hwyClass","roadCond","wthrCond","consZone","alcFlag","bikeFlag","cyclFlag","pedFlag","totVeh","lon","lat"],m=function(t){var e=t.getProperties(),i=h.default.getCrashColor(e.injSvr);if(!i)return null;var s=c.rgbToRgba(i,.6);return[new p.style.Style({image:new p.style.Circle({radius:6,fill:new p.style.Fill({color:s}),stroke:new p.style.Stroke({color:i,width:2})})})]},v=function(){function t(){this._crashHtmlLookup={},this._crashArrayLookup={},this.pointCrashes=new l.default("",{name:"Crash Points",zIndex:204,minZoom:10,renderOrder:function(t,e){var i=["P","C","B","A","K"],s=t.getProperties().injSvr,n=e.getProperties().injSvr,o=i.indexOf(s),r=i.indexOf(n);return o==r?0:o>r?1:-1}}),this.pointCrashes.style=m}return t.prototype.init=function(t,e,i){var s=this;d.default.addVectorPopup(this.pointCrashes,function(t){for(var e='<table class="crash-popup-table">',i=0,s=g;i<s.length;i++){var o=s[i];e+="<tr><td>"+o+"</td><td>"+n(t[o])+"</td></tr>"}return e+="</table>"}),h.default.addChangeCallback(function(){s.pointCrashes.refresh()}),r.default.getCrashes(e,i,function(t){s._processCrashData(t)}),t.addLayer(this.pointCrashes.olLayer)},t.prototype._processCrashData=function(t){for(var e=0,i=a.keyValPairs(t);e<i.length;e++){var s=i[e],n=s.value;this._crashHtmlLookup[s.key]=o(n),this._crashArrayLookup[s.key]=n;for(var r=0,l=n;r<l.length;r++){var h=l[r];if(h.lon&&h.lat){var c=new p.geom.Point([h.lon,h.lat]);c.transform(u.proj4326,u.proj3857);var d=new p.Feature(c);h.injSvr=h.injSvr||"O",d.setProperties(h),this.pointCrashes.source.addFeature(d)}}}var g=f(".crashes-loaded-msg");g?(g.fadeIn(),setTimeout(function(){g.fadeOut()},4e3)):console.log("get crashes message element not found")},t.prototype.getCrashSummary=function(t){var e=this._crashHtmlLookup[t.toString()];return e||""},t}();e.CrashData=v,Object.defineProperty(e,"__esModule",{value:!0}),e.default=new v},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(36),o=i(4),r=i(8),a=i(17),l=i(3),h=function(t){var e=t.getProperties(),i=function(){return new l.style.Text({text:e.mmId,scale:1.5,stroke:new l.style.Stroke({color:"black",width:2}),fill:new l.style.Fill({color:r.mmFlagColor})})};return e.rateFlag>=1&&n.default.mmRateFlagOn||e.kabCrshFlag>=1&&n.default.mmKabFlagOn?[new l.style.Style({stroke:new l.style.Stroke({color:r.mmFlagColor,width:6}),text:i()})]:null},c=function(t){function e(){return t.call(this,"Safety Flags",h,200,r.mmFlagListId)||this}return s(e,t),e.prototype.init=function(e){var i=this;t.prototype.init.call(this,e),n.default.addChangeCallback(function(){i.deficiencyLayer.refresh()}),o.default.addVectorPopup(this.deficiencyLayer,function(t){var e=[];return null!=t.rateFlag&&e.push("Rate Flag: "+t.rateFlag.toFixed(4)),null!=t.kabCrshFlag&&e.push("KAB Flag: "+t.kabCrshFlag.toFixed(4)),"MM ID: "+t.mmId+"<br/>"+e.join("<br>")})},e.prototype.addCorridor=function(t){for(var e=t.layer.source.getFeatures(),i=0,s=e;i<s.length;i++){var n=s[i],o=n.getProperties(),a=o.rateFlag>=1,l=o.kabCrshFlag>=1;if(o.rateFlag>=1||o.kabCrshFlag>=1){this.deficiencyLayer.source.addFeature(n),n.setProperties({mmId:""+o.pdpId});var h="<b>"+o.pdpId+"</b>:&nbsp;",c=[];a&&c.push("Crash Rate"),l&&c.push("KAB"),h+=c.join(", "),this.$summaryList.append("<li "+r.pdpDataAttr+'="'+o.pdpId+'">'+h+"</li>")}}},e}(a.default);e.MmFlags=c,Object.defineProperty(e,"__esModule",{value:!0}),e.default=new c},function(t,e,i){"use strict";function s(t){return"number"==typeof t&&(t=t.toFixed()),e.countyLookup[t]}var n=i(1),o=n.default("ssa");e.countyLookup={1:"Adams",2:"Ashland",3:"Barron",4:"Bayfield",5:"Brown",6:"Buffalo",7:"Burnett",8:"Calumet",9:"Chippewa",10:"Clark",11:"Columbia",12:"Crawford",13:"Dane",14:"Dodge",15:"Door",16:"Douglas",17:"Dunn",18:"Eau Claire",19:"Florence",20:"Fond du Lac",21:"Forest",22:"Grant",23:"Green",24:"Green Lake",25:"Iowa",26:"Iron",27:"Jackson",28:"Jefferson",29:"Juneau",30:"Kenosha",31:"Kewaunee",32:"La Crosse",33:"Lafayette",34:"Langlade",35:"Lincoln",36:"Manitowoc",37:"Marathon",38:"Marinette",39:"Marquette",40:"Milwaukee",41:"Monroe",42:"Oconto",43:"Oneida",44:"Outagamie",45:"Ozaukee",46:"Pepin",47:"Pierce",48:"Polk",49:"Portage",50:"Price",51:"Racine",52:"Richland",53:"Rock",54:"Rusk",55:"Saint Croix",56:"Sauk",57:"Sawyer",58:"Shawano",59:"Sheboygan",60:"Taylor",61:"Trempealeau",62:"Vernon",63:"Vilas",64:"Walworth",65:"Washburn",66:"Washington",67:"Waukesha",68:"Waupaca",69:"Waushara",70:"Winnebago",71:"Wood",73:"Menominee"},o.countyLookup=e.countyLookup,e.getCountyById=s,o.getCountyById=s},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(11),o=function(t){function e(){return t.call(this,"filter-controlling-criteria","filter-controlling-criteria-sub",!0)||this}return s(e,t),Object.defineProperty(e.prototype,"ccDesignSpeedOn",{get:function(){return this.valIsOn("ccDesignSpeed")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccLaneWidthOn",{get:function(){return this.valIsOn("ccLaneWidth")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccShoulderWidthOn",{get:function(){return this.valIsOn("ccShoulderWidth")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccHorizontalCurveOn",{get:function(){return this.valIsOn("ccHorizontalCurve")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccSuperelevationOn",{get:function(){return this.valIsOn("ccSuperelevation")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccMaximumGradeOn",{get:function(){return this.valIsOn("ccMaximumGrade")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccStoppingSightOn",{get:function(){return this.valIsOn("ccStoppingSight")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccCrossSlopeOn",{get:function(){return this.valIsOn("ccCrossSlope")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccVerticalClearanceOn",{get:function(){return this.valIsOn("ccVerticalClearance")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"ccDesignLoadingOn",{get:function(){return this.valIsOn("ccDesignLoading")},enumerable:!0,configurable:!0}),e}(n.default);e.FilterControllingCriteria=o,Object.defineProperty(e,"__esModule",{value:!0}),e.default=new o},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(11),o=function(t){function e(){return t.call(this,"filter-crash","filter-crash-sub",!1)||this}return s(e,t),e.prototype.getCrashColor=function(e){var i=t.prototype.valIsOn.call(this,e);if(!i)return null;var s={K:"rgb(255,0,0)",A:"rgb(255,165,0)",B:"rgb(255,255,0)",C:"rgb(153,255,153)",P:"rgb(0,0,255)"}[e];return s||"rgb(128,128,128)"},e}(n.default);e.FilterCrash=o,Object.defineProperty(e,"__esModule",{value:!0}),e.default=new o},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(11),o=function(t){function e(){return t.call(this,"mm-flags","mm-flags-sub",!0)||this}return s(e,t),Object.defineProperty(e.prototype,"mmRateFlagOn",{get:function(){return this.valIsOn("rateFlag")},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"mmKabFlagOn",{get:function(){return this.valIsOn("kabCrshFlag")},enumerable:!0,configurable:!0}),e}(n.default);e.FilterMmFlag=o,Object.defineProperty(e,"__esModule",{value:!0}),e.default=new o},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(1),o=i(13),r=i(9),a=i(4),l=i(12),h=i(6),c=i(7),u=i(3),d=i(2),p=n.default("ssa.select"),f=function(t){function e(e,i){function s(t){var e="";return e+='<div style="position: relative;" class="select-picker-map-container">',e+='<select id="'+t+'"></select>',e+="</div>"}var n=this;return n=t.call(this,e.$innerContainer,i?"Ref. Point #1":"Ref. Point #2",s)||this,n._isFrom=i,n._pickerColl=e,n._selectedPdpId=void 0,n.addChangeListener(function(t){n.selectedPdpId=parseInt(t)}),n._box.keyup(function(){n.selectedPdpId!=parseInt(n.selectedValue.toString())&&n._box.trigger("change")}),n._sortedFeatures=void 0,n._segmentLayer=new r.default("",{minZoom:6,name:n._isFrom?"Start Segment":"End Segment",transform:{dataProjection:"EPSG:3857",featureProjection:"EPSG:3857"},style:c.segmentLayer,visible:!1}),n._segNodeLayer=new r.default("",{style:c.segNodeStyle,minZoom:11,visible:!1}),n._segmentSelectionLayer=new r.default("",{style:new u.style.Style({stroke:new u.style.Stroke({color:n._isFrom?c.fromSelectionColor:c.toSelectionColor,width:8})}),minZoom:6,visible:!1,zIndex:n._isFrom?100:101}),n._selectBtnClass=n._isFrom?"select-seg-btn-from":"select-seg-btn-to",n._selectBtnClassTo="select-seg-btn-to",a.default.addVectorPopup(n._segmentLayer,function(t){var e='<table class="mm-popup-table">';return e+="<tr><td>PdpId</td><td>"+t.pdpId+"</td>;",e+='<td rowspan="5">',n._pickerColl.startEndCountySame?(e+='<input type="button" id=\''+t.pdpId+"' class=\""+n._selectBtnClass+'" value="Select Start"/>',e+='<input type="button" id=\''+t.pdpId+"' class=\""+n._selectBtnClassTo+'" value="Select End"/>'):e+='<input type="button" id=\''+t.pdpId+"' class=\""+n._selectBtnClass+'" value="Select"/>',e+="</td></tr>",e+="<tr><td>Hwy</td><td>"+t.hwyDir+"</td></tr>",e+="<tr><td>DivUnd</td><td>"+t.divUnd+"</td></tr>",e+="<tr><td>From</td><td>"+t.pdpFrom+"</td></tr>",e+="<tr><td>To</td><td>"+t.pdpTo+"</td></tr>",e+="</table>"}),a.default.addPopupChangedFunction(function(){var t=d("."+n._selectBtnClass);if(t.length>0){var e=n;t.click(function(){e.selectedPdpId=this.id})}}),n._enabled=!1,n._layersVisible=!1,n._box.click(function(t){t.stopPropagation()}),n._box.parent("div").click(function(){if(null!=n._sortedFeatures){var t=n._sortedFeatures.getFeature(n.selectedPdpId);null!=t&&(a.default.map.getView().fit(t.getGeometry().getExtent(),a.default.map.getSize()),a.default.map.getView().setZoom(a.default.map.getView().getZoom()-2))}}),n}return s(e,t),e.prototype._processAjaxResult=function(t){var e=this;t.sort(function(t,i){var s=e._isFrom?t.properties.startRp:t.properties.endRp,n=e._isFrom?i.properties.startRp:i.properties.endRp;return s==n?0:s<n?-1:1});for(var i=0,s=t;i<s.length;i++){var n=s[i],o=n.properties;this._isFrom?this._box.append('<option value="'+o.pdpId+'">'+o.startRp+"</option>"):this._box.append('<option value="'+o.pdpId+'">'+o.endRp+"</option>")}},e.prototype.setCountyAndRoute=function(t,e,i){var s=this;return i="number"==typeof i?i:void 0,this.selectedPdpId=void 0,this._box.html(""),this._box.addClass("refresh").removeClass("refresh"),a.default&&a.default.closePopup(),"string"==typeof t&&(t=parseInt(t)),null==e?void(this.enabled=!1):("string"==typeof e&&(e=parseInt(e)),void h.default.getSegments(t,e,function(t){if(s._segmentLayer.clear(),s._segNodeLayer.clear(),s._processAjaxResult(t.features),console.log(t),t.features.length>0){s.enabled=!0,s._segmentLayer.addFeatures(t);var e=s._segmentLayer.source.getFeatures();s._sortedFeatures=new o.default(e,"pdpId"),s._setExtent(),"number"==typeof i?s.selectedPdpId=i:s._box.trigger("change");for(var n=0;n<e.length;n++){var r=e[n].getGeometry().getCoordinates();if(r.length>0){var a=new u.geom.Point(r[0]),l=new u.geom.Point(r[r.length-1]);s._segNodeLayer.source.addFeature(new u.Feature(a)),s._segNodeLayer.source.addFeature(new u.Feature(l))}}}else s.enabled=!1}))},e.prototype._setExtent=function(){},Object.defineProperty(e.prototype,"enabled",{get:function(){return this._enabled},set:function(t){this._enabled=t,this._box.prop("disabled",!t)},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"layersVisible",{get:function(){return this._layersVisible},set:function(t){this._layersVisible=t,this._isFrom?(this.segmentLayer.visible=this.layersVisible,this._segNodeLayer.visible=this.layersVisible):(this.segmentLayer.visible=this.layersVisible&&!this._pickerColl.startEndCountySame,this._segNodeLayer.visible=this.layersVisible&&!this._pickerColl.startEndCountySame),this.selectionLayer.visible=this.layersVisible},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"selectedPdpId",{get:function(){return this._selectedPdpId},set:function(t){if(a.default&&a.default.closePopup(),"string"==typeof t&&(t=parseInt(t)),t!=this._selectedPdpId&&(this._selectedPdpId=t,this.selectionLayer.source.clear(),void 0!=this._selectedPdpId)){this._box.val(this.selectedPdpId);var e=this._sortedFeatures.getFeature(this.selectedPdpId);this.selectionLayer.source.addFeature(e)}},enumerable:!0,configurable:!0}),e.prototype.clear=function(){this._box.html(""),this.selectedPdpId=void 0},Object.defineProperty(e.prototype,"segmentLayer",{get:function(){return this._segmentLayer},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"selectionLayer",{get:function(){return this._segmentSelectionLayer},enumerable:!0,configurable:!0}),e}(l.default);e.SegmentPicker=f,p.SegmentPicker=f,Object.defineProperty(e,"__esModule",{value:!0}),e.default=f},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(12),o=i(6),r=i(1),a=r.default("ssa.select"),l=function(t){function e(e,i){var s=t.call(this,e,i)||this;return o.default.getAllCounties(function(t){for(var e=0,i=t;e<i.length;e++){var n=i[e];s.box.append('<option value="'+n.id+'" '+(n.primary?"selected":"")+">"+n.name+"</option>")}s.box.trigger("change")}),s}return s(e,t),e}(n.default);e.SelectCounty=l,a.SelectStartCounty=l,Object.defineProperty(e,"__esModule",{value:!0}),e.default=l},function(t,e,i){"use strict";var s=this&&this.__extends||function(t,e){function i(){this.constructor=t}for(var s in e)e.hasOwnProperty(s)&&(t[s]=e[s]);t.prototype=null===e?Object.create(e):(i.prototype=e.prototype,new i)},n=i(12),o=i(6),r=i(1),a=r.default("ssa.select"),l=function(t){function e(e){return t.call(this,e,"Highway")||this}return s(e,t),e.prototype.setStartEndCounty=function(t,e,i,s){var n=this;void 0===s&&(s=!1),s="boolean"==typeof s&&s,null!=t&&void 0!=t&&null!=e&&("number"==typeof i&&(i=i.toFixed()),this.box.html(""),this.box.addClass("refresh").removeClass("refresh"),"string"==typeof t&&(t=parseInt(t)),"string"==typeof e&&(e=parseInt(e)),"string"==typeof i&&(i=parseInt(i)),o.default.getHwyByStartEndCounty(t,e,function(t){if(t.length>0){t.sort(function(t,e){var i=t.name,s=e.name;return i==s?0:i>s?1:-1});for(var e=0,o=t;e<o.length;e++){var r=o[e];n.box.append('<option value="'+r.id+'" '+(r.primary?"selected":"")+">"+r.name+"</option>")}i&&n.box.val(i.toFixed()),i&&!s||n.box.trigger("change"),n.box.prop("disabled",!1)}else n.box.prop("disabled",!0),n.box.trigger("change")}))},e}(n.default);e.SelectHighway=l,a.SelectHighway=l,Object.defineProperty(e,"__esModule",{value:!0}),e.default=l},function(t,e,i){"use strict";var s=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)e.hasOwnProperty(i)&&(t[i]=e[i])};return function(e,i){function s(){this.constructor=e}t(e,i),e.prototype=null===i?Object.create(i):(s.prototype=i.prototype,new s)}}();Object.defineProperty(e,"__esModule",{value:!0});var n=i(20),o=i(22),r=i(1),a=i(3),l=i(2),h=r.default("layers"),c=function(t){function e(e,i){void 0===i&&(i={});var s=t.call(this,e,i)||this;return i=i,""==s.url.trim()&&(s._loaded=!0),s._style="undefined"==typeof i.style?void 0:i.style,s.visible?s._autoLoad=!0:s._autoLoad="boolean"==typeof i.autoLoad&&i.autoLoad,s._onDemand="boolean"==typeof i.onDemand&&i.onDemand,s._onDemandDelay="number"==typeof i.onDemandDelay?i.onDemandDelay:300,i.mapMoveObj?s._mapMove=i.mapMoveObj:s._mapMove=s._onDemand?o.default:void 0,s._mapMoveMakeGetParams="function"==typeof i.mapMoveMakeGetParams?i.mapMoveMakeGetParams:function(){return{}},s._onDemand&&(s._loaded=!0,s._mapMoveParams={},s._mapMove.checkInit(),s._mapMove.addVectorLayer(s)),s._source=new a.source.Vector,s._olLayer=new a.layer.Vector({source:s._source,visible:s.visible,style:s.style,minResolution:s._minResolution,maxResolution:s._maxResolution,renderOrder:i.renderOrder}),s.olLayer.setZIndex(s._zIndex),s._projectionMap=null,s._projection4326=new a.proj.Projection({code:"EPSG:4326"}),s}return s(e,t),e.prototype.addFeatures=function(t){console.log("Layer vector base addFeatures is a placeholder and does nothing")},e.prototype.mapMoveBefore=function(t,e){return!(void 0!==this.minZoom&&t<this.minZoom)&&(!(void 0!==this.maxZoom&&t>this.maxZoom)&&this.visible)},e.prototype.mapMoveMakeGetParams=function(t,e){this._mapMoveParams={},l.extend(this._mapMoveParams,this.params),l.extend(this._mapMoveParams,this._mapMoveMakeGetParams(this,t,e))},e.prototype.mapMoveCallback=function(t){this.source&&this._source.clear()},e.prototype.clear=function(){this._source&&this._source.clear()},Object.defineProperty(e.prototype,"onDemandDelay",{get:function(){return this._onDemandDelay},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"autoLoad",{get:function(){return this._autoLoad},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"style",{get:function(){return this._style},set:function(t){this._style=t,this.olLayer.setStyle(this._style)},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"mapCrs",{get:function(){return null==this.mapProj?null:this.mapProj.getCode()},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"mapProj",{get:function(){return null!=this._projectionMap?this._projectionMap:this._mapMove?(this._projectionMap=this._mapMove.map.getView().getProjection(),this._projectionMap):null},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"mapMove",{get:function(){return this._mapMove},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"mapMoveParams",{get:function(){return this._mapMoveParams},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"visible",{get:function(){return this._visible},set:function(e){t.prototype.setVisible.call(this,e),this._onDemand&&this.mapMove.triggerLyrLoad(this)},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"source",{get:function(){return this.getSource()},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"features",{get:function(){return this.source.getFeatures()},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"olLayer",{get:function(){return t.prototype.getOlLayer.call(this)},enumerable:!0,configurable:!0}),e.prototype.setZIndex=function(t){this.olLayer.setZIndex(t)},e}(n.LayerBase);
-e.LayerBaseVector=c,h.LayerBaseVector=c,e.default=c},function(t,e,i){"use strict";var s=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)e.hasOwnProperty(i)&&(t[i]=e[i])};return function(e,i){function s(){this.constructor=e}t(e,i),e.prototype=null===i?Object.create(i):(s.prototype=i.prototype,new s)}}();Object.defineProperty(e,"__esModule",{value:!0});var n=i(20),o=i(42),r=i(4),a=i(1),l=i(3),h=i(2),c=a.default("layers"),u=function(t){function e(e,i){void 0===i&&(i={});var s=t.call(this,e,i)||this;return s._source=new l.source.TileArcGISRest({url:""==s.url?void 0:s.url,params:"undefined"==typeof i.showLayers?void 0:{layers:"show:"+i.showLayers.join(",")}}),s._olLayer=new l.layer.Tile({source:s._source,visible:s.visible,opacity:s.opacity,minResolution:s._minResolution,maxResolution:s._maxResolution}),s._olLayer.setZIndex(s._zIndex),i.addPopup="boolean"==typeof i.addPopup&&i.addPopup,s._esriFormat=new l.format.EsriJSON,s._popupRequest=null,s.addLegendContent(),i.addPopup&&r.default.addMapServicePopup(s),s}return s(e,t),e.prototype.addLegendContent=function(e){var i=this,s=this.url;"/"!==s[s.length-1]&&(s+="/"),s+="legend?f=pjson&callback=?",h.get(s,{},function(e){var s=o.makeMapServiceLegend(e);t.prototype.addLegendContent.call(i,s)},"json")},e.prototype.getPopupInfo=function(t){if(this.visible){var e=this.url;"/"!=e[e.length-1]&&(e+="/"),e+="identify?callback=?";var i=this;null!=this._popupRequest&&this._popupRequest.abort(),this._popupRequest=h.get(e,t,function(t){for(var e=0,s=t.results;e<s.length;e++){var n=s[e],o='<table class="esri-popup-table">';for(var a in n.attributes)if(n.attributes.hasOwnProperty(a)){var l=n.attributes[a];if(null==l||"null"==l.toString().toLowerCase())continue;var h=a;h.length>14&&(h=h.slice(0,11)+"..."),o+="<tr><td>"+h+"</td><td>"+l+"</td></tr>"}o+="</table>",r.default.addMapServicePopupContent(i._esriFormat.readFeature(n),i,o,n.layerName)}},"json"),this._popupRequest.always(function(){i._popupRequest=null})}},Object.defineProperty(e.prototype,"source",{get:function(){return t.prototype.getSource.call(this)},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"olLayer",{get:function(){return t.prototype.getOlLayer.call(this)},enumerable:!0,configurable:!0}),e}(n.LayerBase);e.LayerEsriMapServer=u,c.LayerEsriMapServer=u,e.default=u},function(t,e,i){"use strict";function s(t,e){return"rgba("+t[0]+","+t[1]+","+t[2]+","+e+")"}function n(t){return String(t).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}function o(t){var e=t.drawingInfo.renderer,i=null;switch(e.type){case"simple":switch(t.geometryType){case"esriGeometryPoint":i=new v(t,p);break;case"esriGeometryPolyline":i=new v(t,f);break;case"esriGeometryPolygon":i=new v(t,g);break;default:console.log(t),alert(t.geometryType+" not handled")}break;case"uniqueValue":switch(t.geometryType){case"esriGeometryPoint":i=new y(t,p);break;case"esriGeometryPolyline":i=new y(t,f);break;case"esriGeometryPolygon":i=new y(t,g);break;default:console.log(t),alert(t.geometryType+" not handled")}break;default:alert("not handled renderer type: "+e.type)}return null==i?{style:void 0,legend:""}:{style:i.olStyle,legend:i.legendHtml}}function r(t,e){void 0===e&&(e=!1),e="boolean"==typeof e&&e;var i=t.layerName,s=t.legend,o="";if(e||(o+='<span class="legend-layer-subitem">'+i+"</span>"),1==s.length)o='<img class="legend-layer-icon" height="17" src="data:image/png;base64,'+s[0].imageData+'">';else{e||(o+='<span class="legend-items-expander" title="Expand/Collapse">&#9660;</span>'),o+="<ul>";for(var r=0;r<s.length;r++)o+="<li>",o+='<span class="legend-layer-subitem">'+n(s[r].label)+"</span>",o+='<img class="legend-layer-icon" height="17" src="data:image/png;base64,'+s[r].imageData+'">',o+="</li>";o+="</ul>"}return e||(o='<span class="legend-layer-subitem">'+i+"</span>"+o),o}function a(t){var e="",i=t.layers;if(1==i.length)e+=r(i[0],!0);else{e+="<ul>";for(var s=0;s<i.length;s++)e+="<li>"+r(i[s])+"</li>";e+="</ul>"}return e}var l=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)e.hasOwnProperty(i)&&(t[i]=e[i])};return function(e,i){function s(){this.constructor=e}t(e,i),e.prototype=null===i?Object.create(i):(s.prototype=i.prototype,new s)}}();Object.defineProperty(e,"__esModule",{value:!0});var h=i(1),c=i(3),u=h.default("olHelpers.esriToOlStyle");u.htmlEscape=n;var d=function(){function t(t,e){this.symbolObj=t,this.opacity=e,this.olStyle=void 0,this.legendHtml=""}return t}(),p=function(t){function e(e,i){var n=t.call(this,e,i)||this;switch(n.symbolObj.type){case"esriSMS":var o=s(n.symbolObj.color,n.opacity),r=s(n.symbolObj.outline.color,n.opacity),a=n.symbolObj.outline.width,l=n.symbolObj.size;n.olStyle=new c.style.Style({image:new c.style.Circle({radius:l,fill:new c.style.Fill({color:o}),stroke:new c.style.Stroke({color:r,width:a})})}),n.legendHtml='<span class="legend-layer-icon" style="color: '+o+'">&#9679;</span>';break;case"esriPMS":n.olStyle=new c.style.Style({image:new c.style.Icon({src:"data:image/png;base64,"+n.symbolObj.imageData})}),n.legendHtml='<img class="legend-layer-icon" height="17" src="data:image/png;base64,'+n.symbolObj.imageData+'">';break;default:console.log(n.symbolObj),alert("Point symbol does not handle symbol type: "+n.symbolObj.type)}return n}return l(e,t),e}(d),f=function(t){function e(e,i){var n=t.call(this,e,i)||this;switch(n.symbolObj.type){case"esriSLS":var o=s(n.symbolObj.color,n.opacity),r=n.symbolObj.width;n.olStyle=new c.style.Style({stroke:new c.style.Stroke({color:o,width:r})}),n.legendHtml='<span class="legend-layer-icon" ',n.legendHtml+='style="',n.legendHtml+="background-color: "+o+";",n.legendHtml+="width: 40px;",n.legendHtml+="height: 4px;",n.legendHtml+="position: relative;",n.legendHtml+="display: inline-block;",n.legendHtml+="top: -1px;",n.legendHtml+='"></span>';break;default:console.log(n.symbolObj),alert("Line symbol does not handle symbol type: "+n.symbolObj.type)}return n}return l(e,t),e}(d),g=function(t){function e(e,i){var n=t.call(this,e,i)||this;switch(n.symbolObj.type){case"esriSFS":var o=s(n.symbolObj.color,n.opacity),r=s(n.symbolObj.outline.color,n.opacity),a=n.symbolObj.outline.width;n.olStyle=new c.style.Style({stroke:new c.style.Stroke({color:r,width:a}),fill:new c.style.Fill({color:o})}),n.legendHtml='<span class="legend-layer-icon" ',n.legendHtml+='style="',n.legendHtml+="background-color: "+o+";",n.legendHtml+="border: solid "+r+" 1px;",n.legendHtml+="width: 40px;",n.legendHtml+="height: 9px;",n.legendHtml+="position: relative;",n.legendHtml+="display: inline-block;",n.legendHtml+="top: 2px;",n.legendHtml+='"></span>';break;default:console.log(n.symbolObj),alert("Polygon symbol does handle symbol type: "+n.symbolObj.type)}return n}return l(e,t),e}(d),m=function(){function t(t){this.opacity=(100-(t.drawingInfo.transparency||0))/100,this.renderer=t.drawingInfo.renderer,this.olStyle=void 0,this.legendHtml=""}return t}(),v=function(t){function e(e,i){var s=t.call(this,e)||this;s.symbol=s.renderer.symbol;var n=new i(s.symbol,s.opacity);return s.olStyle=n.olStyle,s.legendHtml=n.legendHtml,s}return l(e,t),e}(m),y=function(t){function e(e,i){var s=t.call(this,e)||this;if(s.uniqueValueInfos=s.renderer.uniqueValueInfos,s.propertyName=s.renderer.field1,s.defaultSymbol=s.renderer.defaultSymbol,s.defaultSymbol){var o=new i(s.defaultSymbol,s.opacity);s.defaultStyle=o.olStyle,s.defaultLabelHtml='<span class="legend-layer-subitem">'+n(s.renderer.defaultLabel)+"</span>"+o.legendHtml}else s.defaultStyle=void 0,s.defaultLabelHtml="other";s.valueArray=[],s.labelArray=[],s.legendArray=[],s.propertyStyleLookup={};for(var r=0,a=s.uniqueValueInfos;r<a.length;r++){var l=a[r];s.labelArray.push(l.label),s.valueArray.push(l.value);var h=new i(l.symbol,s.opacity);s.legendArray.push('<span class="legend-layer-subitem">'+n(l.label)+"</span>"+h.legendHtml),s.propertyStyleLookup[l.value]=h.olStyle}s.olStyle=function(t){var e,i=t.getProperties(),n=i[s.propertyName];return e=void 0!==s.propertyStyleLookup[n]?[s.propertyStyleLookup[n]]:[s.defaultStyle]},null!==s.defaultLabelHtml&&s.legendArray.push(s.defaultLabelHtml),s.legendHtml="<ul>";for(var c=0,u=s.legendArray;c<u.length;c++){var d=u[c];s.legendHtml+="<li>"+d+"</li>"}return s.legendHtml+="</ul>",s}return l(e,t),e}(m);e.makeFeatureServiceLegendAndSymbol=o,u.makeFeatureServiceLegendAndSymbol=o,e.makeMapServiceLegend=a,u.makeMapServiceLegend=a},function(t,e,i){"use strict";var s=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)e.hasOwnProperty(i)&&(t[i]=e[i])};return function(e,i){function s(){this.constructor=e}t(e,i),e.prototype=null===i?Object.create(i):(s.prototype=i.prototype,new s)}}();Object.defineProperty(e,"__esModule",{value:!0});var n=i(21),o=i(24),r=i(1),a=i(5),l=i(2),h=r.default("olHelpers"),c=function(t){function e(){var e=t.call(this,"map move")||this;return e._arrLyrRequest=[],e._arrLyrTimeout=[],e._arrLayer=[],e._lookupLayer={},e._mapMoveCallbacks=[],e._mapMoveCallbacksLookup={},e._mapMoveCallbackDelays=[],e._mapMoveCallbackContext=[],e._mapMoveCallbackTimeout=[],e._mapExtent=void 0,e._zoomLevel=void 0,e}return s(e,t),e.prototype.init=function(e){var i=this;t.prototype.init.call(this,e),this.map.getView().on(["change:center","change:resolution"],function(t){i._updateMapExtent();for(var e=0;e<i._arrLayer.length;e++)i.triggerLyrLoad(i._arrLayer[e],e,t.type);for(var e=0;e<i._mapMoveCallbacks.length;e++)i.triggerMoveCallback(e,t.type)})},e.prototype._updateMapExtent=function(){var t=this.map.getView();this._zoomLevel=t.getZoom();var e=t.calculateExtent(this.map.getSize());this._mapExtent={minX:e[0],minY:e[1],maxX:e[2],maxY:e[3]}},Object.defineProperty(e.prototype,"mapExtent",{get:function(){return this._mapExtent||this._updateMapExtent(),this._mapExtent},enumerable:!0,configurable:!0}),e.prototype.triggerLyrLoad=function(t,e,i){if(o.undefinedOrNull(t)&&o.undefinedOrNull(e))throw"need to define lyr or index";o.definedAndNotNull(t)&&o.undefinedOrNull(e)?e=this._arrLayer.indexOf(t):o.undefinedOrNull(t)&&o.definedAndNotNull(e)&&(t=this._arrLayer[e]),null!=this._arrLyrTimeout[e]&&(clearTimeout(this._arrLyrTimeout[e]),this._arrLyrTimeout[e]=null),null!=this._arrLyrRequest[e]&&4!=this._arrLyrRequest[e]&&(this._arrLyrRequest[e].abort(),this._arrLyrRequest[e]=null);var s=function(){};if(t.mapMoveBefore(this._zoomLevel,i)){t.mapMoveMakeGetParams(this._mapExtent,this._zoomLevel);var n=this;s=function(){function i(t,e){var i=this;this._arrLyrRequest[e]=l.get(t.url,t.mapMoveParams,function(e){t.mapMoveCallback(e),t.loadCallback()},"json").fail(function(e){"abort"!=e.statusText&&(console.log("failed"),console.log(t.url),console.log(t.mapMoveParams))}).always(function(){i._arrLyrTimeout[e]=null,i._arrLyrRequest[e]=null})}i.call(n,t,e)}}else t.clear();this._arrLyrTimeout[e]=setTimeout(s,t.onDemandDelay)},e.prototype.triggerMoveCallback=function(t,e,i){if("undefined"==typeof t&&"undefined"==typeof i)throw"either the function index or the id must be defined";if("number"!=typeof t&&(t=this._mapMoveCallbacks.indexOf(this._mapMoveCallbacksLookup[i])),t<0)return void console.log("function not found");null!=this._mapMoveCallbackTimeout[t]&&(clearTimeout(this._mapMoveCallbackTimeout[t]),this._mapMoveCallbackTimeout[t]=null);var s=this._mapMoveCallbackContext[t],n=this._mapMoveCallbacks[t],o=this,r=function(){null!==s?n.call(s,o._mapExtent,o._zoomLevel,e):n(o._mapExtent,o._zoomLevel,e)};this._mapMoveCallbackTimeout[t]=setTimeout(r,this._mapMoveCallbackDelays[t])},e.prototype.addVectorLayer=function(t,e){return void 0===e&&(e=!0),this._arrLayer.indexOf(t)>-1?void console.log("already added "+t.name+" to map move"):(this._checkInit(),this._arrLyrRequest.push(null),this._arrLyrTimeout.push(null),this._arrLayer.push(t),this._lookupLayer[t.id]=t,e="boolean"!=typeof e||e,void(e&&(void 0===this._mapExtent&&this._updateMapExtent(),this.triggerLyrLoad(t,this._arrLayer.length-1))))},e.prototype.addCallback=function(t,e,i,s,n){return this._mapMoveCallbacks.indexOf(t)>-1?void console.log("this function already added to map move"):(this._checkInit(),n||(n=a.default()),this._mapMoveCallbacks.push(t),this._mapMoveCallbacksLookup[n]=n,this._mapMoveCallbackDelays.push("number"==typeof i?i:50),this._mapMoveCallbackContext.push(o.definedAndNotNull(e)?e:null),this._mapMoveCallbackTimeout.push(null),s="boolean"!=typeof s||s,void(s&&(void 0===this._mapExtent&&this._updateMapExtent(),this.triggerMoveCallback(this._mapMoveCallbacks.length-1))))},e}(n.default);e.MapMoveCls=c,h.MapMoveCls=c,e.default=c},function(t,e,i){"use strict";var s=this&&this.__extends||function(){var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)e.hasOwnProperty(i)&&(t[i]=e[i])};return function(e,i){function s(){this.constructor=e}t(e,i),e.prototype=null===i?Object.create(i):(s.prototype=i.prototype,new s)}}();Object.defineProperty(e,"__esModule",{value:!0});var n=i(21),o=i(1),r=i(3),a=i(2),l=o.default("olHelpers"),h=function(){function t(t,e,i,s,n){this.feature=t,this.layer=e,this.layerIndex=i,this.selectionLayer=s,this.popupContent="",this.esriLayerName="string"==typeof n?n:void 0}return Object.defineProperty(t.prototype,"layerName",{get:function(){return"string"==typeof this.esriLayerName?this.esriLayerName:this.layer.name},enumerable:!0,configurable:!0}),t}();e.FeatureLayerProperties=h;var c=function(t){function e(){var e=t.call(this,"map popup")||this;return e._arrPopupLayerIds=[],e._arrPopupLayerNames=[],e._arrPopupLayers=[],e._arrPopupOlLayers=[],e._arrPopupContentFunction=[],e._$popupContainer=void 0,e._$popupContent=void 0,e._$popupCloser=void 0,e._popupOverlay=void 0,e._selectionLayers=[],e._selectionLayerLookup={},e._mapClickFunctions=[],e._popupChangedFunctions=[],e._esriMapServiceLayers=[],e._popupOpen=!1,e._popupCoordinate=null,e._passThroughLayerFeatureArray=[],e._currentPopupIndex=-1,e._popupContentLength=0,e}return s(e,t),e.prototype.init=function(e){var i=this;t.prototype.init.call(this,e);var s,n=this.map.getTarget();s=a("string"==typeof n?"#"+n:n),s.append('<div class="ol-popup"><span class="ol-popup-closer">X</span><div class="popup-content"></div></div>'),this._$popupContainer=s.find(".ol-popup"),this._$popupContent=s.find(".popup-content"),this._$popupCloser=s.find(".ol-popup-closer");var o=function(t){return r.easing.inAndOut(t)};return this._popupOverlay=new r.Overlay({element:this._$popupContainer[0],autoPan:!0,autoPanAnimation:{duration:250,source:e.getView().getCenter(),easing:o}}),this._map.addOverlay(this._popupOverlay),this._$popupCloser.click(function(t){i.closePopup()}),this._map.on("singleclick",function(t){if(i.closePopup(),i._popupCoordinate=t.coordinate,i._esriMapServiceLayers.length>0)for(var e={geometry:t.coordinate.join(","),geometryType:"esriGeometryPoint",layers:"all",sr:i._map.getView().getProjection().getCode().split(":")[1],mapExtent:i._map.getView().calculateExtent(i._map.getSize()).join(","),imageDisplay:i._map.getSize().join(",")+",96",returnGeometry:!0,tolerance:15,f:"pjson"},s=0,n=i._esriMapServiceLayers;s<n.length;s++){var o=n[s];o.getPopupInfo(e)}var r=i._featuresAtPixel(t.pixel);i._passThroughLayerFeatureArray=[],i._currentPopupIndex=-1;for(var a=0;a<r.length;a++){var l=r[a],h=l.feature.getProperties(),c=i._arrPopupContentFunction[l.layerIndex](h,i._$popupContent);c===!1||("string"==typeof c?(l.popupContent=c,i._passThroughLayerFeatureArray.push(l)):l.selectionLayer.getSource().addFeature(l.feature))}i._popupContentLength=i._passThroughLayerFeatureArray.length,i._currentPopupIndex=-1;var u='<div class="ol-popup-nav">';u+='<span class="previous-popup ol-popup-nav-arrow">&#9664;</span>',u+='<span class="next-popup ol-popup-nav-arrow">&#9654;</span>',u+='<span class="current-popup-item-number" style="font-weight: bold;"></span>',u+="<span>&nbsp;of&nbsp;</span>",u+='<span class="popup-content-length" style="font-weight: bold;">'+i._popupContentLength+"</span>",u+="<span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>",u+='<span class="current-popup-layer-name"></span>',u+="</div>",u+='<div class="ol-popup-inner">',u+="</div>",i._$popupContent.html(u),i._$popupContent.find(".previous-popup").click(function(){1!=i._popupContentLength&&(0==i._currentPopupIndex?i._currentPopupIndex=i._popupContentLength-1:i._currentPopupIndex--,i._triggerFeatSelect())});var d=i._$popupContent.find(".next-popup");d.click(function(){1==i._popupContentLength&&i._currentPopupIndex>-1||(i._currentPopupIndex==i._popupContentLength-1?i._currentPopupIndex=0:i._currentPopupIndex++,i._triggerFeatSelect())}),i._popupContentLength>0&&(d.trigger("click"),i._popupOverlay.setPosition(i._popupCoordinate),i._$popupContent.scrollTop(0),i._popupOpen=!0)}),this._map.on("pointermove",function(t){if(!t.dragging){var e=i.map.getEventPixel(t.originalEvent),s=i.map.hasFeatureAtPixel(e,function(t){for(var e=0,s=i._arrPopupOlLayers;e<s.length;e++){var n=s[e];if(t==n)return!0}return!1}),n=i.map.getTargetElement();n.style.cursor=s?"pointer":""}}),!0},e.prototype._triggerFeatSelect=function(){var t=this._$popupContent.find(".current-popup-item-number"),e=this._$popupContent.find(".ol-popup-inner"),i=this._$popupContent.find(".current-popup-layer-name");this.clearSelection();var s=this._passThroughLayerFeatureArray[this._currentPopupIndex];t.html((this._currentPopupIndex+1).toFixed()),i.html(s.layerName),e.html(s.popupContent),s.selectionLayer.getSource().addFeature(s.feature);for(var n=0,o=this._popupChangedFunctions;n<o.length;n++){var r=o[n];r(this._$popupContent)}},e.prototype.addMapServicePopupContent=function(t,e,i,s){var n=new h(t,e,this._popupContentLength,this._selectionLayerLookup[e.id],s);n.popupContent=i,this._passThroughLayerFeatureArray.push(n),this._popupContentLength++,a(".popup-content-length").html(this._popupContentLength.toFixed()),this._popupOpen||(this._$popupContent.find(".next-popup").trigger("click"),this._popupOverlay.setPosition(this._popupCoordinate),this._$popupContent.scrollTop(0),this._popupOpen=!0)},e.prototype._featuresAtPixel=function(t){var e=this,i=[];return this.map.forEachFeatureAtPixel(t,function(t,s){var n=e._arrPopupOlLayers.indexOf(s);n>-1&&i.push(new h(t,e._arrPopupLayers[n],n,e._selectionLayers[n]))}),i},e.prototype.closePopup=function(){return this._checkInit(),this._popupOpen=!1,this._popupOverlay.setPosition(void 0),this._$popupCloser[0].blur(),this.clearSelection(),this._$popupContent.html(""),!1},e.prototype.addPopupChangedFunction=function(t){this._popupChangedFunctions.push(t)},e.prototype._addPopupLayer=function(t,e){this._checkInit(),e=e||{},e.color=e.color||"rgba(255,170,0,0.5)",e.width=e.width||10;var i;i=e.olStyle?e.olStyle:new r.style.Style({stroke:new r.style.Stroke({color:e.color,width:e.width}),image:new r.style.Circle({radius:7,fill:new r.style.Fill({color:e.color}),stroke:new r.style.Stroke({color:e.color,width:1})}),fill:new r.style.Fill({color:e.color})});var s=new r.layer.Vector({source:new r.source.Vector,style:i});return s.setZIndex(100),this._selectionLayers.push(s),this._selectionLayerLookup[t.id]=s,this.map.addLayer(s),s},e.prototype.addVectorPopup=function(t,e,i){var s=this._addPopupLayer(t,i);return this._arrPopupLayerIds.push(t.id),this._arrPopupLayerNames.push(t.name),this._arrPopupLayers.push(t),this._arrPopupOlLayers.push(t.olLayer),this._arrPopupContentFunction.push(e),s},e.prototype.removeVectorPopup=function(t){var e=this._arrPopupLayerIds.indexOf(t.id);e>-1&&(this._arrPopupLayerIds.splice(e,1),this._arrPopupLayerNames.splice(e,1),this._arrPopupLayers.splice(e,1),this._arrPopupOlLayers.splice(e,1),this._arrPopupContentFunction.splice(e,1),this._selectionLayers.splice(e,1),delete this._selectionLayerLookup[t.id])},e.prototype.addMapServicePopup=function(t,e){var i=this._addPopupLayer(t,e);return this._esriMapServiceLayers.push(t),i},e.prototype.clearSelection=function(){this._checkInit();for(var t=0;t<this._selectionLayers.length;t++)this._selectionLayers[t].getSource().clear();for(var e=0,i=this._mapClickFunctions;e<i.length;e++){var s=i[e];s()}},e.prototype.addMapClickFunction=function(t){this._mapClickFunctions.push(t)},e}(n.default);e.MapPopupCls=c,l.MapPopupCls=c,e.default=c},function(t,e,i){"use strict";function s(t){t=t||{},t.divId=t.divId||"map",t.center=t.center||{x:-10018378,y:5574910},t.zoom="number"==typeof t.zoom?t.zoom:7,t.baseSwitcher="boolean"!=typeof t.baseSwitcher||t.baseSwitcher,t.fullScreen="boolean"==typeof t.fullScreen&&t.fullScreen;var e=r("#"+t.divId);e.css("position","relative");var i=new o.layer.Tile({source:new o.source.OSM});if(t.baseSwitcher,t.zoom<0||t.zoom>28)throw"zoom out of range";if(t.center.x>=-180&&t.center.x<=180&&t.center.y>=-90&&t.center.y<=90){var s=new o.geom.Point([t.center.x,t.center.y]);new o.proj.Projection({code:"EPSG:4326"}),s.transform(new o.proj.Projection({code:"EPSG:4326"}),new o.proj.Projection({code:"EPSG:3857"}));var n=s.getCoordinates();t.center.x=n[0],t.center.y=n[1]}var a=o.control.defaults({attributionOptions:{collapsible:!1}}),l=new o.View({center:[t.center.x,t.center.y],zoom:t.zoom,minZoom:t.minZoom,maxZoom:t.maxZoom}),h=new o.Map({layers:[i],target:t.divId,controls:a,view:l});return t.fullScreen&&h.addControl(new o.control.FullScreen({})),h}Object.defineProperty(e,"__esModule",{value:!0});var n=i(1),o=i(3),r=i(2),a=n.default("olHelpers");e.quickMapBase=s,a.quickMapBase=s,e.default=s},function(t,e,i){"use strict";function s(t){return"number"==typeof t?t%1===0&&t>=0&&t<=28?a[t]:void console.log("invalid zoom level provided: "+t):void 0}function n(t){for(var e=0;e<a.length;e++)if(t>=a[e])return e;return 0}Object.defineProperty(e,"__esModule",{value:!0});var o=i(1),r=o.default("olHelpers.zoomResolutionConvert"),a=[156543.03392804097,78271.51696402048,39135.75848201024,19567.87924100512,9783.93962050256,4891.96981025128,2445.98490512564,1222.99245256282,611.49622628141,305.748113140705,152.8740565703525,76.43702828517625,38.21851414258813,19.109257071294063,9.554628535647032,4.777314267823516,2.388657133911758,1.194328566955879,.5971642834779395,.29858214173896974,.14929107086948487,.07464553543474244,.03732276771737122,.01866138385868561,.009330691929342804,.004665345964671402,.002332672982335701,.0011663364911678506,.0005831682455839253];e.zoomToResolution=s,r.zoomToResolution=s,e.resolutionToZoom=n,r.resolutionToZoom=n},function(t,e,i){"use strict";function s(t){var e=["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"];return isNaN(t)?"00":e[(t-t%16)/16]+e[t%16]}function n(t){var e=t.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);return("#"+s(e[1])+s(e[2])+s(e[3])).toUpperCase()}function o(t,e){t="#"==t.charAt(0)?t.substring(1,7):t;var i=parseInt(t.substring(0,2),16).toString()||"0",s=parseInt(t.substring(2,4),16).toString()||"0",n=parseInt(t.substring(4,6),16).toString()||"0";return e?"rgba("+i+","+s+","+n+","+e+")":"rgba("+i+","+s+","+n+")"}function r(t,e){var i=t.split(",");return i[0]=i[0].replace("rgb","rgba"),i[2]=i[2].replace(")",""),i.push(" "+e.toFixed(1)+")"),i.join(",")}function a(t,e,i){return"boolean"!=typeof i&&(i=!1),function(s){var n,o,r,a;if(c.undefinedOrNull(s))return"rgb(100,100,100)";var l=(s-t)/(e-t);return 1==i&&(l=1-l),l>=1?(n=255,o=0,r=0):l<=0?(n=0,o=0,r=255):l<.25?(n=0,o=Math.floor(255*l/.25),r=255):l<.5?(a=(l-.25)/.25,n=0,o=255,r=255-Math.floor(255*a)):l<.75?(a=(l-.5)/.25,n=Math.floor(255*a),o=255,r=0):(a=(l-.75)/.25,n=255,o=255-Math.floor(255*a),r=0),n=n.toFixed(),o=o.toFixed(),r=r.toFixed(),"rgb("+n+","+o+","+r+")"}}function l(t,e,i){var s=a(-2.5,2.5,i);return function(i){var n;return n=null==i?null:(i-t)/e,s(n)}}Object.defineProperty(e,"__esModule",{value:!0});var h=i(1),c=i(24),u=h.default("util.colors");e.rgb2hex=n,u.rgb2hex=n,e.hexAlphaToRgbOrRgba=o,u.hexAlphaToRgbOrRgba=o,e.rgbToRgba=r,u.rgbToRgba=r,e.makeBlueGreenRedGradient=a,u.makeBlueGreenRedGradient=a,e.makeBlueGreenRedGradientZScore=l,u.makeBlueGreenRedGradientZScore=l}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 47);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 12/10/2015.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * create a namespace on the gv object
+ * @param {string} namespace to create
+ * @returns {object} object representing the namespace
+ */
+function provide(namespace) {
+    "use strict";
+    if (typeof window['gv'] == 'undefined') {
+        window['gv'] = {};
+    }
+    var parts = namespace.split('.');
+    var nameSpace = window['gv'];
+    for (var i = 0; i < parts.length; i++) {
+        var newObject = nameSpace[parts[i]];
+        if (typeof newObject == 'undefined') {
+            nameSpace[parts[i]] = {};
+        }
+        nameSpace = nameSpace[parts[i]];
+    }
+    return nameSpace;
+}
+provide('util');
+window['gv'].util.provide = provide;
+exports.default = provide;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = $;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+module.exports = ol;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 11/3/2015.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var mapPopupCls_1 = __webpack_require__(43);
+/**
+ * The single popup object catch is that it is common to multimap pages
+ * @type {MapPopupCls}
+ */
+exports.mapPopup = new mapPopupCls_1.default();
+exports.default = exports.mapPopup;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 11/3/2015.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('util');
+/**
+ * guids are used to uniquely identify groups and features
+ * @returns {string} a new guid
+ */
+function makeGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+        .replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : r & 0x3 | 0x8;
+        return v.toString(16);
+    });
+}
+nm.makeGuid = makeGuid;
+exports.default = makeGuid;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/12/2016.
+ */
+
+var provide_1 = __webpack_require__(0);
+var $ = __webpack_require__(1);
+var home = $('#site-root').val();
+if (window.location.port == '5001') {
+    home = 'http://localhost:5004/';
+}
+var getStartCountiesUrl = home + 'getStartCounties';
+var getHighwaysUrl = home + 'getHighways';
+var getEndCountiesUrl = home + 'getEndCounties';
+var getSegmentsUrl = home + 'getSegments';
+var getCorridorUrl = home + 'getCorridor';
+var getCrashesUrl = home + 'getCrashes';
+var getAllCountiesUrl = home + 'getAllCounties';
+var getAllHighwaysForStartEndCountyUrl = home + 'getAllHighwaysForStartEndCounty';
+var getCcGeomUrl = home + 'getCcGeom';
+var nm = provide_1.default('ssa');
+/**
+ * inner function to help ajax
+ * @param {string} url - resource url
+ * @param {object} [params={}] - get params
+ * @param {ajaxCallback} callback - callback function
+ */
+function _ajaxInner(url, params, callback) {
+    "use strict";
+    $.get(url, params, callback, 'json').fail(function () {
+        var msg = "error getting: " + url + JSON.stringify(params);
+        console.warn(msg);
+    });
+}
+/**
+ * outer function to help ajax
+ * @param {string} url - resource url
+ * @param {ajaxCallback} callback - callback function
+ * @param {object} [params={}] get params
+ * @param {ajaxCallback} [calbackHelper=undefined] - callback helper
+ */
+function _ajaxHelper(url, callback, params, calbackHelper) {
+    "use strict";
+    if (params === void 0) { params = {}; }
+    params[(Math.random() * 1000000).toFixed()] = (Math.random() * 1000000).toFixed();
+    if (typeof calbackHelper == 'function') {
+        var newCallback = function (d) {
+            d = calbackHelper(d);
+            callback(d);
+        };
+        _ajaxInner(url, params, newCallback);
+    }
+    else {
+        _ajaxInner(url, params, callback);
+    }
+}
+/**
+ * sort function for counties
+ * @param {Array<object>} d - county object
+ * @returns {Array<object>} sorted array of county key val pair objects
+ */
+var _countySort = function (d) {
+    d.sort(function (a, b) {
+        if (a['name'] == b['name']) {
+            return 0;
+        }
+        else {
+            return a['name'] < b['name'] ? -1 : 1;
+        }
+    });
+    return d;
+};
+/**
+ * static methods to make ajax requests
+ */
+var AjaxGetters = (function () {
+    /**
+     * Do not instantiate this class - only static methods
+     */
+    function AjaxGetters() {
+        throw 'this class should not be instantiated';
+    }
+    /**
+     * @static
+     * @param {ajaxCallback} callback - callback function
+     */
+    AjaxGetters.getStartCounties = function (callback) {
+        "use strict";
+        _ajaxHelper(getStartCountiesUrl, callback, {}, _countySort);
+    };
+    /**
+     * Get the highways based on the start county
+     * @param {number} startCountyId - start county id
+     * @param {ajaxCallback} callback - callback function
+     */
+    AjaxGetters.getHighways = function (startCountyId, callback) {
+        "use strict";
+        var params = { "startCountyId": startCountyId };
+        _ajaxHelper(getHighwaysUrl, callback, params);
+    };
+    /**
+     * Get the highways based on the start county
+     * @param {string} highwayName - highway name
+     * @param {ajaxCallback} callback - callback function
+     */
+    AjaxGetters.getEndCounties = function (highwayName, callback) {
+        "use strict";
+        var params = { "highwayName": highwayName };
+        _ajaxHelper(getEndCountiesUrl, callback, params, _countySort);
+    };
+    /**
+     * get the segments based on county and route id
+     * @param {number} county - county id
+     * @param {number} routeId - route id
+     * @param {ajaxCallback} callback - callback function
+     */
+    AjaxGetters.getSegments = function (county, routeId, callback) {
+        "use strict";
+        var routeIdNum;
+        if (typeof routeId == 'string') {
+            routeIdNum = parseInt(routeId);
+        }
+        else {
+            routeIdNum = routeId;
+        }
+        var params = { "routeid": routeIdNum, "county": county };
+        var $mm = $('#hidden-mm-version');
+        if ($mm.length > 0) {
+            params['mm'] = $mm.val();
+        }
+        _ajaxHelper(getSegmentsUrl, callback, params);
+    };
+    /**
+     * get corridor based on start and end pdp id
+     * @param {number} startPdp - start pdp id
+     * @param {number} endPdp - end pdp id
+     * @param {ajaxCallback} callback - callback function
+     */
+    AjaxGetters.getCorridor = function (startPdp, endPdp, callback) {
+        "use strict";
+        var params = { "from": startPdp, "to": endPdp };
+        var $mm = $('#hidden-mm-version');
+        if ($mm.length > 0) {
+            params['mm'] = $mm.val();
+        }
+        _ajaxHelper(getCorridorUrl, callback, params);
+    };
+    /**
+     * Get the crash data
+     * @param {number} ssaId
+     * @param {number} snapshot
+     * @param {ajaxCallback} callback - callback function
+     */
+    AjaxGetters.getCrashes = function (ssaId, snapshot, callback) {
+        "use strict";
+        var params = {
+            'ssaId': ssaId,
+            'snapshot': snapshot
+        };
+        _ajaxHelper(getCrashesUrl, callback, params);
+    };
+    /**
+     * Get all counties as an array
+     * @param {ajaxCallback} callback - callback function
+     */
+    AjaxGetters.getAllCounties = function (callback) {
+        "use strict";
+        var params = {};
+        _ajaxHelper(getAllCountiesUrl, callback, params);
+    };
+    /**
+     * Get highways based on start and end counties
+     * @param {number} startCountyId - start county id
+     * @param {number} endCountyId - end county id
+     * @param {ajaxCallback} callback - callback function
+     *
+     */
+    AjaxGetters.getHwyByStartEndCounty = function (startCountyId, endCountyId, callback) {
+        "use strict";
+        var params = {
+            'startCountyId': startCountyId,
+            'endCountyId': endCountyId
+        };
+        _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
+    };
+    AjaxGetters.getCcGeom = function (ssaId, snapshot, callback) {
+        "use strict";
+        var params = {
+            'ssaId': ssaId,
+            'snapshot': snapshot
+        };
+        _ajaxHelper(getCcGeomUrl, callback, params);
+    };
+    return AjaxGetters;
+}());
+exports.AjaxGetters = AjaxGetters;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = AjaxGetters;
+nm.AjaxGetters = AjaxGetters;
+//# sourceMappingURL=ajaxGetters.js.map
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/13/2016.
+ */
+
+var ol = __webpack_require__(2);
+var projections_1 = __webpack_require__(9);
+exports.segmentLayer = new ol.style.Style({
+    stroke: new ol.style.Stroke({ color: 'darkblue', width: 5 })
+});
+exports.fromSelectionColor = '#48FD14';
+exports.toSelectionColor = '#EE0071';
+exports.corridorPreviewColor = 'black';
+/**
+ *
+ * @type {Array<string>}
+ */
+var returnedColors = [];
+var colorOptions = ['#FF00FF', '#7FFF00', '#FA8072',
+    '#FF6347', '#40E0D0', '#ADFF2F', '#6495ED',
+    '#FF8C00', '#7FFFD4', '#DA70D6'];
+/**
+ * return a random color for styling
+ * @returns {string}
+ */
+function randomColor() {
+    "use strict";
+    if (returnedColors.length == colorOptions.length) {
+        returnedColors = [];
+    }
+    while (true) {
+        var c = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+        if (returnedColors.indexOf(c) < 0) {
+            returnedColors.push(c);
+            return c;
+        }
+    }
+}
+exports.randomColor = randomColor;
+/**
+ *
+ * @param name
+ * @param color
+ * @param visible
+ * @returns {{minZoom: number, name: *, transform: {dataProjection: string, featureProjection: string}, style: ol.style.Style, visible: *}}
+ */
+function layerConfigHelper(name, color, visible) {
+    "use strict";
+    return {
+        minZoom: 4,
+        name: name,
+        transform: { dataProjection: projections_1.proj3857, featureProjection: projections_1.proj3857 },
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: color,
+                width: 6
+            })
+        }),
+        visible: visible
+    };
+}
+exports.layerConfigHelper = layerConfigHelper;
+exports.mmPopupContent = function (props) {
+    var returnHtml = '<table class="mm-popup-table">';
+    returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td></tr>";
+    returnHtml += "<tr><td>Highway</td><td>" + props['stdName'] + "</td></tr>";
+    returnHtml += "<tr><td>Description</td><td>" + (props['rpDesc'] ? props['rpDesc'] : '-') + "</td></tr>";
+    returnHtml += "<tr><td>Divided</td><td>" + props['divUnd'] + "</td></tr>";
+    returnHtml += "<tr><td>From RP</td><td>" + props['startRp'] + "</td></tr>";
+    returnHtml += "<tr><td>To RP</td><td>" + props['endRp'] + "</td></tr>";
+    returnHtml += '</table>';
+    return returnHtml;
+};
+exports.segNodeStyle = new ol.style.Style({
+    image: new ol.style.RegularShape({
+        radius: 6,
+        points: 4,
+        fill: new ol.style.Fill({
+            color: 'rgb(0, 0, 0)'
+        }),
+        stroke: new ol.style.Stroke({ color: 'rgb(0, 0, 0', width: 2 })
+    })
+});
+//# sourceMappingURL=layerStyles.js.map
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 8/17/2016.
+ */
+
+exports.mmFlagListId = 'mm-deficiency-list';
+exports.ccListId = 'cc-deficiency-list';
+exports.pdpDataAttr = 'data-pdp-id';
+exports.mmFlagColor = '#00FF00';
+exports.controllingCriteriaColor = '#FFC632';
+// export const contollingCriteriaLookup = {
+//     'ccDesignSpeed': 'Design Speed',
+//     'Grade': 'Grade',
+//     'Lane Width': 'Lane Width',
+//     'Stopping Sight Distance': 'Stopping Sight Distance',
+//     'Shoulder Width': 'Shoulder Width',
+//     'Pavement Cross Slope': 'Pavement Cross Slope',
+//     'Horizontal Alignment': 'Horizontal Alignment',
+//     'Vertical Clearance': 'Vertical Clearance',
+//     'Superelevation': 'Superelevation',
+//     'Structural Capacity': 'Structural Capacity'
+// };
+exports.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
+    'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
+exports.propValues = ['Design Speed', 'Lane Width', 'Shoulder Width', 'Horizontal Alignment', 'Superelevation',
+    'Grade', 'Stopping Sight Distance', 'Pavement Cross Slope', 'Vertical Clearance', 'Structural Capacity'];
+exports.controllingCriteriaProps = {};
+for (var i = 0; i < exports.propNames.length; i++) {
+    exports.controllingCriteriaProps[exports.propNames[i]] = exports.propValues[i];
+}
+//# sourceMappingURL=constants.js.map
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 11/2/2015.
+ */
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var LayerBaseVector_1 = __webpack_require__(39);
+var provide_1 = __webpack_require__(0);
+var ol = __webpack_require__(2);
+var $ = __webpack_require__(1);
+var proj = __webpack_require__(9);
+var projections_1 = __webpack_require__(9);
+var nm = provide_1.default('layers');
+/**
+ * The Vector GeoJson Layer
+ * @augments LayerBaseVector
+ */
+var LayerBaseVectorGeoJson = (function (_super) {
+    __extends(LayerBaseVectorGeoJson, _super);
+    /**
+     * @param {string|null} url - resource url, set to '' to make blank layer
+     * @param {object} options - config
+     * @param {string} [options.id] - layer id
+     * @param {string} [options.name=Unnamed Layer] - layer name
+     * @param {number} [options.opacity=1] - opacity
+     * @param {boolean} [options.visible=true] - default visible
+     * @param {number} [options.minZoom=undefined] - min zoom level, 0 - 28
+     * @param {number} [options.maxZoom=undefined] - max zoom level, 0 - 28
+     * @param {object} [options.params={}] the get parameters to include to retrieve the layer
+     * @param {number} [options.zIndex=0] the z index for the layer
+     * @param {function} [options.loadCallback] function to call on load, context this is the layer object
+     * @param {boolean} [options.legendCollapse=false] if the legend item should be initially collapsed
+     * @param {boolean} [options.legendCheckbox=true] if the legend item should have a checkbox for visibility
+     * @param {boolean} [options.legendContent] additional content to add to the legend
+     *
+     * @param {boolean} [options.autoLoad=false] if the layer should auto load if not visible
+     * @param {object} [options.style=undefined] the layer style, use openlayers default style if not defined
+     * @param {boolean} [options.onDemand=false] if the layer should be loaded by extent on map move
+     * @param {number} [options.onDemandDelay=300] delay before the map move callback should be called
+     *
+     * @param {object} [options.transform={}] SR transform, set as false for no transform
+     * @param {string} options.transform.dataProjection=EPSG:4326 the data CRS
+     * @param {string} options.transform.featureProjection=EPSG:3857 the feature/map CRS
+     * @param {mapMoveMakeGetParams} [options.mapMoveMakeGetParams=function(lyr, extent, zoomLevel){}] function to create additional map move params
+     * @param {MapMoveCls} [options.mapMoveObj=mapMove] alternate map move object for use with multi map pages
+     */
+    function LayerBaseVectorGeoJson(url, options) {
+        if (options === void 0) { options = {}; }
+        var _this = this;
+        url = typeof url == 'string' ? url : '';
+        _this = _super.call(this, url, options) || this;
+        _this._geoJsonFormat = new ol.format.GeoJSON();
+        _this._transform = options.transform || {};
+        _this._transform.dataProjection = _this._transform.dataProjection || proj.proj4326;
+        _this._transform.featureProjection = _this._transform.featureProjection || projections_1.proj3857;
+        if (_this.autoLoad || _this.visible) {
+            _this._load();
+        }
+        return _this;
+    }
+    /**
+     * add feature collection
+     * @param {object} featureCollection - as geojson object
+     */
+    LayerBaseVectorGeoJson.prototype.addFeatures = function (featureCollection) {
+        this.source.addFeatures(this._geoJsonFormat.readFeatures(featureCollection));
+    };
+    /**
+     * trigger load features
+     * @protected
+     * @returns {boolean} if already loaded
+     */
+    LayerBaseVectorGeoJson.prototype._load = function () {
+        var _this = this;
+        if (_super.prototype._load.call(this)) {
+            return true;
+        }
+        $.get(this._url, this._params, function (d) {
+            _this.addFeatures(d);
+            _this.loadCallback(_this);
+        }, 'json').fail(function () {
+            this._loaded = false;
+        });
+        return false;
+    };
+    /**
+     * callback function on map move
+     * @param {object} d the json response
+     * @override
+     */
+    LayerBaseVectorGeoJson.prototype.mapMoveCallback = function (d) {
+        _super.prototype.mapMoveCallback.call(this, d);
+        this._source.addFeatures(this._geoJsonFormat.readFeatures(d, { featureProjection: this._transform.featureProjection, dataProjection: this._transform.dataProjection }));
+    };
+    return LayerBaseVectorGeoJson;
+}(LayerBaseVector_1.LayerBaseVector));
+exports.LayerBaseVectorGeoJson = LayerBaseVectorGeoJson;
+nm.LayerBaseVectorGeoJson = LayerBaseVectorGeoJson;
+exports.default = LayerBaseVectorGeoJson;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 10/3/2016.
+ */
+var ol = __webpack_require__(2);
+exports.proj4326 = new ol.proj.Projection({ code: 'EPSG:4326' });
+exports.proj3857 = new ol.proj.Projection({ code: 'EPSG:3857' });
+exports.proj3070 = new ol.proj.Projection({ code: 'EPSG:3070' });
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/11/2016.
+ */
+
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
+var makeGuid_1 = __webpack_require__(4);
+var provide_1 = __webpack_require__(0);
+var layerStyles_1 = __webpack_require__(6);
+var ajaxGetters_1 = __webpack_require__(5);
+var SortedFeatures_1 = __webpack_require__(13);
+var layerStyles = __webpack_require__(6);
+var ext = __webpack_require__(14);
+var ol = __webpack_require__(2);
+var nm = provide_1.default('ssa');
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': '&quot;',
+            "'": '&#39;',
+            "/": '&#x2F;'
+        }[s];
+    });
+}
+/**
+ *
+ * @param {string} fromRp - from reference point
+ * @param {string} toRp - to reference point
+ * @returns {string} string with abbreviated reference point identifiers separated by a hyphen
+ * @private
+ */
+function corridorName(fromRp, toRp) {
+    "use strict";
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
+}
+var Corridor = (function () {
+    /**
+     *
+     * @param {number} pdpFrom - from segment id
+     * @param {number} pdpTo - to segment id
+     * @param {string} rpFrom - from reference point
+     * @param {string} rpTo - to reference point
+     * @param {number|string} countyStart - start county
+     * @param {number} countyEnd - end county
+     * @param {string} highway - highway text
+     * @param {number} routeId - route Id
+     * @param {object} [options={}] options
+     * @param {corridorLoaded} [options.loadedCallback=function(c){}] function to call on load
+     * @param {number|string|undefined|*} [options.databaseId=undefined] - id in the database
+     * @param {string} [options.color=randomColor()] - color for this corridor
+     * @param {Array<ol.Feature>|undefined} [options.features=undefined] - pre existing features
+     * @param {boolean} [options.cancelLoad=false] - don't load in init
+     */
+    function Corridor(pdpFrom, pdpTo, rpFrom, rpTo, countyStart, countyEnd, highway, routeId, options) {
+        if (options === void 0) { options = {}; }
+        this.ssaId = -1;
+        this.snapshotVersion = -1;
+        this.corridorId = -1;
+        options.features = options.features ? options.features : undefined;
+        options.cancelLoad = typeof options.cancelLoad == 'boolean' ? options.cancelLoad : false;
+        this.clientId = makeGuid_1.default();
+        if (options.color) {
+            this._color = options.color;
+        }
+        else {
+            this._color = layerStyles_1.randomColor();
+        }
+        this.databaseId = options.databaseId || undefined;
+        this._valid = false;
+        this._error = '';
+        this._loaded = false;
+        /**
+         *
+         * @type {SortedFeatures|null}
+         */
+        this.sortedFeatures = null;
+        this.pdpFrom = pdpFrom;
+        this.pdpTo = pdpTo;
+        if (typeof countyStart == 'string') {
+            this.countyStart = parseInt(countyStart);
+        }
+        else {
+            this.countyStart = countyStart;
+        }
+        if (typeof countyEnd == 'string') {
+            this.countyEnd = parseInt(countyEnd);
+        }
+        else {
+            this.countyEnd = countyEnd;
+        }
+        if (typeof routeId == 'string') {
+            this.routeId = parseInt(routeId);
+        }
+        else {
+            this.routeId = routeId;
+        }
+        this.highway = highway;
+        this.rpFrom = rpFrom;
+        this.rpTo = rpTo;
+        if (typeof routeId != 'number') {
+            throw 'route id is not number';
+        }
+        this._corridorLayer = new LayerBaseVectorGeoJson_1.LayerBaseVectorGeoJson('', layerStyles_1.layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true));
+        this.nodeLayer = new LayerBaseVectorGeoJson_1.LayerBaseVectorGeoJson('', {
+            style: layerStyles.segNodeStyle,
+            minZoom: 11,
+            zIndex: 3
+        });
+        if (options.features) {
+            this._corridorLayer.source.addFeatures(options.features);
+        }
+        else if (options.jsonFeatures) {
+            this._corridorLayer.addFeatures(options.jsonFeatures);
+            this._loaded = true;
+            this.sortedFeatures = new SortedFeatures_1.default(this.olLayer.getSource().getFeatures(), 'pdpId');
+            this.buildNodes();
+        }
+        else if (!options.cancelLoad) {
+            this.load(options.loadedCallback);
+        }
+    }
+    Corridor.prototype.setDbValues = function (corConfig) {
+        this.ssaId = corConfig.ssaId;
+        this.snapshotVersion = corConfig.snapshotVersion;
+        this.corridorId = corConfig.corridorId;
+    };
+    /**
+     *
+     * @param {corridorLoaded} [loadedCallback=function(c){}] - function to call on load
+     */
+    Corridor.prototype.load = function (loadedCallback) {
+        var _this = this;
+        loadedCallback = typeof loadedCallback == 'function' ? loadedCallback : function () {
+        };
+        this._valid = false;
+        this._error = '';
+        ajaxGetters_1.default.getCorridor(this.pdpFrom, this.pdpTo, function (d) {
+            _this._corridorLayer.addFeatures(d);
+            if (typeof d['error'] == 'undefined') {
+                _this._valid = true;
+            }
+            else {
+                _this._error = d['error'];
+            }
+            _this._loaded = true;
+            _this.sortedFeatures = new SortedFeatures_1.default(_this.olLayer.getSource().getFeatures(), 'pdpId');
+            _this.buildNodes();
+            loadedCallback(_this);
+        });
+    };
+    Corridor.prototype.buildNodes = function () {
+        this.nodeLayer.clear();
+        var features = this._corridorLayer.olLayer.getSource().getFeatures();
+        for (var i = 0; i < features.length; i++) {
+            var coords = features[i].getGeometry()['getCoordinates']();
+            if (coords && coords.length > 0) {
+                var startPoint = new ol.geom.Point(coords[0]);
+                var endPoint = new ol.geom.Point(coords[coords.length - 1]);
+                this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(startPoint));
+                this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(endPoint));
+            }
+        }
+    };
+    /**
+     *
+     * @returns {Corridor} a copy of the corridor
+     */
+    Corridor.prototype.clone = function () {
+        var c = new Corridor(this.pdpFrom, this.pdpTo, this.rpFrom, this.rpTo, this.countyStart, this.countyEnd, this.highway, this.routeId, { features: this.features });
+        c.buildNodes();
+        return c;
+    };
+    /**
+     *
+     * @param {Corridor} corridor -  the corridor used for updating
+     */
+    Corridor.prototype.updateCorridor = function (corridor) {
+        this.pdpFrom = corridor.pdpFrom;
+        this.pdpTo = corridor.pdpTo;
+        this.countyStart = corridor.countyStart;
+        this.countyEnd = corridor.countyEnd;
+        this.highway = corridor.highway;
+        this.rpFrom = corridor.rpFrom;
+        this.rpTo = corridor.rpTo;
+        this.routeId = corridor.routeId;
+        this.layer.name = corridorName(this.rpFrom, this.rpTo);
+        this.layer.clear();
+        this.layer.olLayer.getSource().addFeatures(corridor.features);
+        this.buildNodes();
+    };
+    Object.defineProperty(Corridor.prototype, "color", {
+        get: function () {
+            return this._color;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "valid", {
+        /**
+         *
+         * @returns {boolean} if the corridor is loaded, no error on ajax
+         */
+        get: function () {
+            return this._valid;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "error", {
+        /**
+         *
+         * @returns {string|*} - error message
+         */
+        get: function () {
+            return this._error;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "tableHtmlCreate", {
+        /**
+         * get the html string to build the corridor table row with zoom, edit, and delete buttons
+         * @returns {string} - html for the corridor zoom, edit, and delete buttons
+         */
+        get: function () {
+            var outString = "<tr class=\"corridor-tr\">";
+            outString += "<td style=\"background-color: " + this._color + "\"></td>";
+            outString += "<td>" + corridorName(this.rpFrom, this.rpTo) + "</td>";
+            outString += "<td>";
+            outString += "<span title=\"Zoom To\" class=\"corridor-zoom\" data-corridor=\"" + this.clientId + "\"></span>";
+            outString += "<span title=\"Edit Corridor\"  class=\"corridor-edit\" data-corridor=\"" + this.clientId + "\"></span>";
+            outString += "<span title=\"Remove Corridor\"  class=\"corridor-delete\" data-corridor=\"" + this.clientId + "\"></span>";
+            outString += "</td>";
+            outString += '</tr>';
+            return outString;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Corridor.prototype.getDataHtml = function (i) {
+        var outString = '<div class="corridor-data">';
+        outString += "<label>Ssa Id</label>";
+        outString += "<input type=\"text\" readonly class=\"corridor-data-ssa-id\" name=\"corridors[" + i + "].id.ssaId\" value=\"" + this.ssaId + "\"><br>";
+        outString += "<label>Snapshot version</label>";
+        outString += "<input type=\"text\" readonly class=\"corridor-data-snapshot\" name=\"corridors[" + i + "].id.snapshotVersion\" value=\"" + this.snapshotVersion + "\"><br>";
+        outString += "<label>Corridor Id</label>";
+        outString += "<input type=\"text\" readonly class=\"corridor-data-corridor-id\" name=\"corridors[" + i + "].id.corridorId\" value=\"" + this.corridorId + "\"><br>";
+        outString += "<label>Start County</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-start-county\" readonly name=\"corridors[" + i + "].startCounty\" value=\"" + this.countyStart + "\"/><br>";
+        outString += "<label>End County</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-end-county\" readonly name=\"corridors[" + i + "].endCounty\" value=\"" + this.countyEnd + "\"/><br>";
+        outString += "<label>Highway</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-highway\" readonly name=\"corridors[" + i + "].stdhighway\" value=\"" + this.highway + "\"/><br>";
+        outString += "<label>Start Rp</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-from-rp\" readonly name=\"corridors[" + i + "].startRp\" value=\"" + this.rpFrom + "\"/><br>";
+        outString += "<label>End Rp</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-to-rp\" readonly name=\"corridors[" + i + "].endRp\" value=\"" + this.rpTo + "\"/><br>";
+        outString += "<label>Route Id</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-route-id\" readonly name=\"corridors[" + i + "].rdwyRteId\" value=\"" + this.routeId + "\"/><br>";
+        outString += "<label>Start Pdp</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-from-pdp\" readonly value=\"" + this.pdpFrom + "\"/><br>";
+        outString += "<label>End Pdp</label>";
+        outString += "<input type=\"text\" class=\"corridor-data-to-pdp\" readonly value=\"" + this.pdpTo + "\"/><br>";
+        outString += "</div>";
+        return outString;
+    };
+    Corridor.prototype.getDataHtmlDisp = function (i) {
+        var returnString = this.getDataHtml(i);
+        returnString = escapeHtml(returnString);
+        returnString = returnString.replace(/&quot;&#x2F;&gt;/g, '&quot;&#x2F;&gt;<br>');
+        returnString = returnString.replace(/corridor-data&quot;&gt;/g, 'corridor-data&quot;&gt;<br>');
+        return returnString + '<br>';
+    };
+    Object.defineProperty(Corridor.prototype, "olLayer", {
+        /**
+         *
+         * @returns {ol.layer.Vector|ol.layer.Base} - the OL Vector Layer
+         */
+        get: function () {
+            return this._corridorLayer.olLayer;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "layer", {
+        /**
+         *
+         * @returns {LayerBaseVectorGeoJson} geojson layer
+         */
+        get: function () {
+            return this._corridorLayer;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "visible", {
+        /**
+         * Getter
+         * @returns {boolean} if corridor layer is visible
+         */
+        get: function () {
+            return this._corridorLayer.visible;
+        },
+        /**
+         * Setter
+         * @param {boolean} vis if corridor layer is visible
+         *
+         */
+        set: function (vis) {
+            this._corridorLayer.visible = vis;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "features", {
+        /**
+         *
+         * @returns {Array.<ol.Feature>} an array of ol features
+         */
+        get: function () {
+            return this._corridorLayer.features;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "extent", {
+        /**
+         *
+         * @returns {ol.Extent|undefined} layer extent
+         */
+        get: function () {
+            return ext.calculateExtent([this.layer]);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Corridor.prototype, "loaded", {
+        get: function () {
+            return this._loaded;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Corridor;
+}());
+nm.Corridor = Corridor;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Corridor;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 7/13/2016.
+ */
+
+var provide_1 = __webpack_require__(0);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('ssa');
+var FilterBase = (function () {
+    /**
+     *
+     * @param {string} topCheckId - top checkbox id
+     * @param {string} otherChecksClass - other checkbox class identifier
+     * @param {boolean} defaultOn - is on by default
+     */
+    function FilterBase(topCheckId, otherChecksClass, defaultOn) {
+        var _this = this;
+        this._topCheck = $('#' + topCheckId);
+        this._subChecks = $('.' + otherChecksClass);
+        /**
+         *
+         * @type {Array<function>}
+         * @private
+         */
+        this._changeCallbacks = [];
+        /**
+         *
+         * @type {Array<string>}
+         */
+        this._onValues = [];
+        /**
+         *
+         * @type {Array<string>}
+         */
+        this._allValues = [];
+        this._subChecks.each(function (ix, /** @type {HTMLElement} */ el) {
+            _this._allValues.push($(el).val());
+        });
+        this._topCheck.prop('checked', defaultOn);
+        this._setAllOnOff(defaultOn);
+        this._topCheck.change(function () {
+            _this._setAllOnOff(_this._topCheck.prop('checked'));
+        });
+        var __this = this;
+        this._subChecks.change(function () {
+            var $el = $(this);
+            var theVal = $el.val();
+            var isChecked = $el.prop('checked');
+            var ix = __this._onValues.indexOf(theVal);
+            if (isChecked && ix == -1) {
+                __this._onValues.push(theVal);
+            }
+            else if (!isChecked && ix != -1) {
+                __this._onValues.splice(ix, 1);
+            }
+            __this._topCheck.prop('checked', __this._onValues.length == __this._allValues.length);
+            __this._fireCallbacks();
+        });
+    }
+    /**
+     *
+     * @param {function} f - function to call on change
+     */
+    FilterBase.prototype.addChangeCallback = function (f) {
+        this._changeCallbacks.push(f);
+    };
+    /**
+     *
+     * @param {string} val - the value to check
+     * @returns {boolean} - if the property is on
+     */
+    FilterBase.prototype.valIsOn = function (val) {
+        return this._onValues.indexOf(val) > -1;
+    };
+    /**
+     *
+     * @param {boolean} isOn - if all are on of off
+     * @param {boolean} [fire=true] - if the callbacks should be fired
+     * @private
+     */
+    FilterBase.prototype._setAllOnOff = function (isOn, fire) {
+        if (fire === void 0) { fire = true; }
+        this._subChecks.prop('checked', isOn);
+        this._onValues = [];
+        if (isOn) {
+            for (var _i = 0, _a = this._allValues; _i < _a.length; _i++) {
+                var v = _a[_i];
+                this._onValues.push(v);
+            }
+        }
+        if (fire) {
+            this._fireCallbacks();
+        }
+    };
+    FilterBase.prototype._fireCallbacks = function () {
+        for (var _i = 0, _a = this._changeCallbacks; _i < _a.length; _i++) {
+            var f = _a[_i];
+            f();
+        }
+    };
+    Object.defineProperty(FilterBase.prototype, "allValues", {
+        /**
+         * array of all values
+         * @returns {Array<string>} all values available in the filter
+         */
+        get: function () {
+            var outArray = [];
+            for (var _i = 0, _a = this._allValues; _i < _a.length; _i++) {
+                var v = _a[_i];
+                outArray.push(v);
+            }
+            return outArray;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FilterBase;
+}());
+nm.FilterBase = FilterBase;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = FilterBase;
+//# sourceMappingURL=FilterBase.js.map
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/13/2016.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var makeGuid_1 = __webpack_require__(4);
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('domUtil');
+var SelectBoxBase = (function () {
+    /**
+     *
+     * @param {jQuery} parent - parent container
+     * @param {string} labelContent
+     * @param {contentGenerator} [contentGen=undefined]
+     */
+    function SelectBoxBase(parent, labelContent, contentGen) {
+        var _this = this;
+        var guidTop = makeGuid_1.default();
+        var guid = makeGuid_1.default();
+        var htmlString = "<div id=\"" + guidTop + "\">";
+        htmlString += "<label for=\"" + guid + "\">" + labelContent + "</label>";
+        if (contentGen) {
+            htmlString += contentGen(guid);
+        }
+        else {
+            htmlString += "<select id=\"" + guid + "\"></select>";
+        }
+        htmlString += '</div>';
+        parent.append(htmlString);
+        this._$container = parent.find('#' + guidTop);
+        this.$label = this._$container.find('label');
+        /**
+         *
+         * @type {Array<selectChangeCallback>}
+         * @private
+         */
+        this._changeListeners = [];
+        this._box = parent.find("#" + guid);
+        if (!this._box) {
+            throw 'the select box was not found';
+        }
+        this._box.change(function () {
+            _this.changed();
+        });
+    }
+    Object.defineProperty(SelectBoxBase.prototype, "box", {
+        /**
+         *
+         * @returns {jQuery}
+         */
+        get: function () {
+            return this._box;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SelectBoxBase.prototype.changed = function () {
+        var v = this._box.val();
+        for (var _i = 0, _a = this._changeListeners; _i < _a.length; _i++) {
+            var f = _a[_i];
+            f(v);
+        }
+    };
+    /**
+     *
+     * @param {selectChangeCallback} func
+     */
+    SelectBoxBase.prototype.addChangeListener = function (func) {
+        this._changeListeners.push(func);
+    };
+    Object.defineProperty(SelectBoxBase.prototype, "selectedValue", {
+        get: function () {
+            var theVal = this.box.val();
+            if (theVal == null || typeof theVal == 'undefined') {
+                return null;
+            }
+            else if (isNaN(theVal)) {
+                return theVal;
+            }
+            else {
+                if (theVal.indexOf('.') > -1) {
+                    return parseFloat(theVal);
+                }
+                else {
+                    return parseInt(theVal);
+                }
+            }
+        },
+        /**
+         *
+         * @param {string|number} v
+         */
+        set: function (v) {
+            this.box.val(v);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SelectBoxBase.prototype, "selectedText", {
+        get: function () {
+            return this.box.find('option:selected').text();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return SelectBoxBase;
+}());
+exports.SelectBoxBase = SelectBoxBase;
+nm.SelectBoxBase = SelectBoxBase;
+exports.default = SelectBoxBase;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 12/23/2015.
+ */
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('olHelpers');
+/**
+ * take an array of features and sort by a given property name
+ */
+var SortedFeatures = (function () {
+    /**
+     *
+     * @param {Array<ol.Feature>} features array of ol features
+     * @param {string} propertyName - the property name to use for lookup
+     */
+    function SortedFeatures(features, propertyName) {
+        this.sortedFeatures = features;
+        this.propertyName = propertyName;
+        if (this.sortedFeatures.length > 0) {
+            this._propertyType = typeof this.sortedFeatures[0].getProperties()[this.propertyName];
+            var __this_1 = this;
+            this.sortedFeatures.sort(function (a, b) {
+                if (__this_1._propertyType == 'number') {
+                    var aMinusB = a['getProperties']()[__this_1.propertyName] - b['getProperties']()[__this_1.propertyName];
+                    if (aMinusB == 0) {
+                        return 0;
+                    }
+                    else {
+                        return aMinusB > 0 ? 1 : -1;
+                    }
+                }
+                else if (__this_1._propertyType == 'string') {
+                    var propA = a['getProperties']()[__this_1.propertyName] || '';
+                    var propB = b['getProperties']()[__this_1.propertyName] || '';
+                    propA = propA.toString().trim();
+                    propB = propB.toString().trim();
+                    if (propA == propB) {
+                        return 0;
+                    }
+                    else {
+                        return propA > propB ? 1 : 0;
+                    }
+                }
+            });
+        }
+    }
+    /**
+     * recursive search to find the value
+     * @param {number|string} propertyValue - the property value to search for
+     * @param {boolean} [exactMatch=false] if only an exact match should be returned
+     * @param {Array} [sortedFeatures=this.sortedFeatures] - the candidate features
+     * @returns {ol.Feature|undefined} the feature matching the lookup
+     */
+    SortedFeatures.prototype.getFeature = function (propertyValue, exactMatch, sortedFeatures) {
+        if (exactMatch === void 0) { exactMatch = false; }
+        if (typeof sortedFeatures == 'undefined') {
+            sortedFeatures = this.sortedFeatures;
+        }
+        if (sortedFeatures.length == 0) {
+            return undefined;
+        }
+        if (sortedFeatures.length == 1) {
+            if (exactMatch) {
+                if (sortedFeatures[0].getProperties()[this.propertyName] == propertyValue) {
+                    return sortedFeatures[0];
+                }
+                else {
+                    return undefined;
+                }
+            }
+            else {
+                return sortedFeatures[0];
+            }
+        }
+        var lowProp = sortedFeatures[0].getProperties()[this.propertyName];
+        var highProp = sortedFeatures[sortedFeatures.length - 1].getProperties()[this.propertyName];
+        if (exactMatch) {
+            if (lowProp == propertyValue) {
+                return sortedFeatures[0];
+            }
+            else if (propertyValue < lowProp) {
+                return undefined;
+            }
+            else if (highProp == propertyValue) {
+                return sortedFeatures[sortedFeatures.length - 1];
+            }
+            else if (propertyValue > highProp) {
+                return undefined;
+            }
+        }
+        else {
+            if (propertyValue <= lowProp) {
+                return sortedFeatures[0];
+            }
+            else if (propertyValue >= highProp) {
+                return sortedFeatures[sortedFeatures.length - 1];
+            }
+        }
+        var midIndex = Math.floor(sortedFeatures.length / 2);
+        var midFeature = sortedFeatures[midIndex];
+        var midProperty = midFeature.getProperties()[this.propertyName];
+        if (midProperty === propertyValue) {
+            return midFeature;
+        }
+        if (propertyValue < midProperty) {
+            return this.getFeature(propertyValue, exactMatch, sortedFeatures.slice(0, midIndex));
+        }
+        else {
+            return this.getFeature(propertyValue, exactMatch, sortedFeatures.slice(midIndex));
+        }
+    };
+    return SortedFeatures;
+}());
+nm.SortedFeatures = SortedFeatures;
+exports.default = SortedFeatures;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 7/18/2016.
+ */
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('util');
+/**
+ *
+ * @param {Array<LayerBaseVector>|Array<ol.layer.Vector>|LayerBaseVector|ol.layer.Vector|*} layers - array of layers or single
+ * @returns {ol.Extent|Array<number>|*} - collective extent
+ */
+function calculateExtent(layers) {
+    "use strict";
+    var hasExtent = false;
+    var minX = 10E100;
+    var minY = 10E100;
+    var maxX = -10E100;
+    var maxY = -10E100;
+    for (var _i = 0, layers_1 = layers; _i < layers_1.length; _i++) {
+        var lyr = layers_1[_i];
+        /**
+         *
+         * @type {ol.layer.Vector}
+         */
+        var olLayer = lyr['olLayer'] || lyr;
+        if (olLayer.getSource().getFeatures().length > 0) {
+            hasExtent = true;
+            var ext = olLayer.getSource().getExtent();
+            minX = ext[0] < minX ? ext[0] : minX;
+            minY = ext[1] < minY ? ext[1] : minY;
+            maxX = ext[2] > maxX ? ext[2] : maxX;
+            maxY = ext[3] > maxY ? ext[3] : maxY;
+        }
+    }
+    if (hasExtent) {
+        return [minX, minY, maxX, maxY];
+    }
+    else {
+        return undefined;
+    }
+}
+exports.calculateExtent = calculateExtent;
+nm.calculateExtent = calculateExtent;
+/**
+ * given one or an array of layers, fit to the map
+ * @param layers - array of layers or single
+ * @param  mp - the map to fit
+ * @param [zoomOut=undefined] - levels to zoom out after fit
+ */
+function fitToMap(layers, mp, zoomOut) {
+    "use strict";
+    var ext = calculateExtent(layers);
+    if (typeof ext == 'undefined') {
+        return;
+    }
+    mp.getView().fit(ext, mp.getSize());
+    if (typeof zoomOut == 'number') {
+        mp.getView().setZoom(mp.getView().getZoom() - zoomOut);
+    }
+}
+exports.fitToMap = fitToMap;
+nm.calculateExtent = calculateExtent;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/13/2016.
+ */
+
+var makeGuid_1 = __webpack_require__(4);
+var provide_1 = __webpack_require__(0);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('ssa');
+var SsaMapBase = (function () {
+    function SsaMapBase(divId) {
+        /**
+         * @type {JQuery|*|jQuery|HTMLElement}
+         */
+        this.$mainContainer = $('#' + divId);
+        this.$mainContainer.addClass('ssa-map-container');
+        /**
+         *
+         * @type {string}
+         * @protected
+         */
+        this._mapId = makeGuid_1.default();
+        this.$mainContainer.append("<div id=\"" + this._mapId + "\" class=\"ssa-main-map\"></div>");
+        $('.ol-zoom-out').html('&#8211;');
+        /**
+         *
+         * @type {MapPopupCls|undefined}
+         */
+        this.mainMapMove = undefined;
+        /**
+         *
+         * @type {MapPopupCls|undefined}
+         */
+        this.mainMapPopup = undefined;
+    }
+    Object.defineProperty(SsaMapBase.prototype, "mapId", {
+        get: function () {
+            return this._mapId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SsaMapBase.prototype, "$mapDiv", {
+        /**
+         *
+         * @returns {JQuery|jQuery|HTMLElement}
+         * @protected
+         */
+        get: function () {
+            return $("#" + this.mapId);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return SsaMapBase;
+}());
+exports.SsaMapBase = SsaMapBase;
+nm.SsaMapBase = SsaMapBase;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SsaMapBase;
+//# sourceMappingURL=SsaMapBase.js.map
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Created by gavorhes on 7/15/2016.
+ */
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
+var SortedFeatures_1 = __webpack_require__(13);
+var constants = __webpack_require__(7);
+var $ = __webpack_require__(1);
+var DeficiencyBase = (function () {
+    /**
+     *
+     * @param {string} layerName - layer name
+     * @param {function|object} layerStyle - layer style
+     * @param {number} z - z index
+     * @param {string} summaryListId - summaryListId
+     */
+    function DeficiencyBase(layerName, layerStyle, z, summaryListId) {
+        this.deficiencyLayer = new LayerBaseVectorGeoJson_1.default('', {
+            zIndex: z,
+            name: layerName
+        });
+        this.deficiencyLayer.style = layerStyle;
+        /**
+         *
+         * @type {SortedFeatures|undefined}
+         * @private
+         */
+        this._sortedFeatures = undefined;
+        /**
+         *
+         * @type {ol.Map|undefined}
+         * @private
+         */
+        this._map = undefined;
+        this._summaryListId = summaryListId;
+        /**
+         *
+         * @type {jQuery|undefined}
+         * @private
+         */
+        this.$summaryList = undefined;
+    }
+    /**
+     * initialize with the map
+     * @param {ol.Map} m - the ol map
+     * @abstract
+     */
+    DeficiencyBase.prototype.init = function (m) {
+        this._map = m;
+        m.addLayer(this.deficiencyLayer.olLayer);
+        this.$summaryList = $("#" + this._summaryListId);
+    };
+    /**
+     *
+     * @param {Corridor} c - the corridor to be added
+     * @abstract
+     */
+    DeficiencyBase.prototype.addCorridor = function (c) {
+        // let feats = c.layer.source.getFeatures();
+        //
+        // let $mmDeficiencyList = $(`#${constants.mmFlagListId}`);
+        //
+        // for (let f of feats) {
+        //     // f.setProperties()
+        //     let props = f.getProperties();
+        //     let rate = props['rateFlag'];
+        //     let kab = props['kabFlag'];
+        //
+        //     let triggerRateFlag = typeof rate == 'number' && rate > 1;
+        //     let triggerKabFlag = typeof kab == 'number' && kab > 1;
+        //
+        //     if (triggerRateFlag || triggerKabFlag) {
+        //         this.deficiencyLayer.source.addFeature(f);
+        //         mmFlagIndex++;
+        //
+        //         f.setProperties({mmId: 'MM' + mmFlagIndex.toFixed()});
+        //         let appendHtml = `<b>MM${mmFlagIndex.toFixed()}</b>:&nbsp;`;
+        //         let flags = [];
+        //         if (triggerRateFlag) {
+        //             flags.push('Crash Rate');
+        //         }
+        //         if (triggerKabFlag) {
+        //             flags.push('KAB');
+        //         }
+        //
+        //         appendHtml += flags.join(', ');
+        //         $mmDeficiencyList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
+        //     }
+        // }
+    };
+    /**
+     *
+     * @param pdpId
+     * @returns {ol.Feature|undefined}
+     */
+    DeficiencyBase.prototype.getFeatureById = function (pdpId) {
+        return this._sortedFeatures.getFeature(pdpId);
+    };
+    /**
+     * @abstract
+     */
+    DeficiencyBase.prototype.afterLoad = function () {
+        this._sortedFeatures = new SortedFeatures_1.default(this.deficiencyLayer.features, 'pdpId');
+        var _this = this;
+        this.$summaryList.find('li').click(function () {
+            var $this = $(this);
+            var theFeature = _this.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
+            _this._map.getView().fit(theFeature.getGeometry().getExtent(), _this._map.getSize());
+            _this._map.getView().setZoom(_this._map.getView().getZoom() - 1);
+        });
+    };
+    return DeficiencyBase;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = DeficiencyBase;
+//# sourceMappingURL=_DeficiencyBase.js.map
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/17/2016.
+ */
+
+var countyLookup_1 = __webpack_require__(32);
+var $ = __webpack_require__(1);
+function labelValueHelper(label, val) {
+    "use strict";
+    var outHtml = '<div class="col-xs-2">';
+    outHtml += "<label>" + label + "</label>";
+    outHtml += "<input class=\"form-control\" type=\"text\" readonly=\"\" value=\"" + val + "\">";
+    outHtml += "</div>";
+    return outHtml;
+}
+var CorridorConfig = (function () {
+    /**
+     *
+     * @param {jQuery|HTMLDivElement|*} inputElement
+     */
+    function CorridorConfig(inputElement) {
+        if (!inputElement.val) {
+            inputElement = $(inputElement);
+        }
+        this.ssaId = parseInt(inputElement.find('.corridor-data-ssa-id').val());
+        this.snapshotVersion = parseInt(inputElement.find('.corridor-data-snapshot').val());
+        this.corridorId = parseInt(inputElement.find('.corridor-data-corridor-id').val());
+        this.startCounty = parseInt(inputElement.find('.corridor-data-start-county').val());
+        this.endCounty = parseInt(inputElement.find('.corridor-data-end-county').val());
+        this.hgwy = inputElement.find('.corridor-data-highway').val();
+        this.startRp = inputElement.find('.corridor-data-from-rp').val();
+        this.endRp = inputElement.find('.corridor-data-to-rp').val();
+        this.startPdp = parseInt(inputElement.find('.corridor-data-from-pdp').val());
+        this.endPdp = parseInt(inputElement.find('.corridor-data-to-pdp').val());
+        this.routeId = parseInt(inputElement.find('.corridor-data-route-id').val());
+    }
+    /**
+     * @returns {string} bootstrap formatted corridor description
+     */
+    CorridorConfig.prototype.bootstrapHtml = function (index) {
+        index++;
+        var outHtml = '<div class="row ssa-corridor-info-row">';
+        outHtml += '<div class="col-xs-2">';
+        outHtml += "<label>Corridor #" + index + "</label>";
+        outHtml += '</div>';
+        outHtml += labelValueHelper('Highway', this.hgwy);
+        outHtml += labelValueHelper('Start County', countyLookup_1.getCountyById(this.startCounty));
+        outHtml += labelValueHelper('End County', countyLookup_1.getCountyById(this.endCounty));
+        outHtml += labelValueHelper('Start RP', this.startRp);
+        outHtml += labelValueHelper('End RP', this.endRp);
+        outHtml += '</div>';
+        return outHtml;
+    };
+    CorridorConfig.prototype.toString = function () {
+        return "CorId " + this.corridorId + " " + this.startRp + " - " + this.endRp;
+    };
+    return CorridorConfig;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = CorridorConfig;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var zoomResolutionConvert = __webpack_require__(45);
+var provide_1 = __webpack_require__(0);
+var makeGuid_1 = __webpack_require__(4);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('layers');
+/**
+ * The base layer class
+ * @abstract
+ */
+var LayerBase = (function () {
+    /**
+     * The base layer for all others
+     * @param {string} url - url for source
+     * @param {object} options - config
+     * @param {string} [options.id=makeGuid()] - layer id
+     * @param {string} [options.name=Unnamed Layer] - layer name
+     * @param {number} [options.opacity=1] - opacity
+     * @param {boolean} [options.visible=true] - default visible
+     * @param {number} [options.minZoom=undefined] - min zoom level, 0 - 28
+     * @param {number} [options.maxZoom=undefined] - max zoom level, 0 - 28
+     * @param {object} [options.params={}] - the get parameters to include to retrieve the layer
+     * @param {number} [options.zIndex=0] - the z index for the layer
+     * @param {function} [options.loadCallback] - function to call on load, context this is the layer object
+     * @param {boolean} [options.legendCollapse=false] - if the legend item should be initially collapsed
+     * @param {boolean} [options.legendCheckbox=true] - if the legend item should have a checkbox for visibility
+     * @param {boolean} [options.legendContent=undefined] - additional content to add to the legend
+     */
+    function LayerBase(url, options) {
+        if (options === void 0) { options = {}; }
+        options = options || {};
+        if (typeof url !== 'string') {
+            throw 'Invalid URL';
+        }
+        this._url = url;
+        this._params = typeof options.params == 'object' ? options.params : {};
+        this._legendCollapse = typeof options.legendCollapse == 'boolean' ? options.legendCollapse : false;
+        this._legendCheckbox = typeof options.legendCheckbox == 'boolean' ? options.legendCheckbox : true;
+        this.id = options.id || makeGuid_1.default();
+        this._name = options.name || 'Unnamed Layer';
+        this.animate = false;
+        this._opacity = typeof options.opacity == 'number' ? options.opacity : 1;
+        if (this._opacity > 1) {
+            this._opacity = 1;
+        }
+        else if (this._opacity < 0) {
+            this._opacity = 0;
+        }
+        this._visible = typeof options.visible === 'boolean' ? options.visible : true;
+        this._source = undefined;
+        /**
+         *
+         * @protected
+         */
+        this._olLayer = undefined;
+        this._loaded = false;
+        this._maxResolution = zoomResolutionConvert.zoomToResolution(options.minZoom);
+        if (typeof this._maxResolution !== 'undefined') {
+            this._maxResolution += 0.00001;
+        }
+        this._minResolution = zoomResolutionConvert.zoomToResolution(options.maxZoom);
+        this._minZoom = typeof options.minZoom == 'number' ? options.minZoom : undefined;
+        this._maxZoom = typeof options.maxZoom == 'number' ? options.maxZoom : undefined;
+        this._zIndex = typeof options.zIndex == 'number' ? options.zIndex : 0;
+        this.loadCallback = typeof options.loadCallback == 'function' ? options.loadCallback : function () {
+        };
+        this._legendContent = '';
+        if (this._legendCheckbox) {
+            this._legendContent += "<input type=\"checkbox\" " + (this.visible ? 'checked' : '') + " " +
+                ("class=\"legend-check\" id=\"" + this.id + "-legend-layer-check\"><span></span>");
+            this._legendContent += "<label for=\"" + this.id + "-legend-layer-check\" class=\"legend-layer-name\">" + this.name + "</label>";
+        }
+        else {
+            this._legendContent += "<label class=\"legend-layer-name\">" + this.name + "</label>";
+        }
+        this._$legendDiv = null;
+        this._applyCollapseCalled = false;
+        this._addLegendContent(typeof options.legendContent === 'string' ? options.legendContent : undefined);
+    }
+    /**
+     * base load function, sets _loaded = true if it is not already
+     * @protected
+     * @returns {boolean} if already loaded
+     */
+    LayerBase.prototype._load = function () {
+        if (this.loaded == true) {
+            return true;
+        }
+        else {
+            this._loaded = true;
+            return false;
+        }
+    };
+    /**
+     * Get the legend html, be sure to only add to the DOM once
+     * @returns {string} html for layer wrapped in a div
+     */
+    LayerBase.prototype.getLegendDiv = function () {
+        return "<div class=\"legend-layer-div\" id=\"" + this.id + "-legend-layer-div\">" + this._legendContent + "</div>";
+    };
+    /**
+     *
+     * @param additionalContent - additional content to add to legend
+     * @private
+     */
+    LayerBase.prototype._addLegendContent = function (additionalContent) {
+        if (additionalContent === void 0) { additionalContent = ''; }
+        var addCollapse = additionalContent.indexOf('<ul>') > -1;
+        if (addCollapse) {
+            additionalContent = '<span class="legend-items-expander" title="Expand/Collapse">&#9660;</span>' + additionalContent;
+        }
+        this._legendContent += additionalContent;
+        this._$legendDiv = $("#" + this.id + "-legend-layer-div");
+        if (this._$legendDiv.length > 0) {
+            this._$legendDiv.append(additionalContent);
+            this.applyCollapse();
+        }
+    };
+    /**
+     * add additional content to the legend
+     * @param {string} [additionalContent=] - additonal content to add
+     */
+    LayerBase.prototype.addLegendContent = function (additionalContent) {
+        this._addLegendContent(additionalContent);
+    };
+    LayerBase.prototype.applyCollapse = function () {
+        if (this._applyCollapseCalled) {
+            console.log('collapse already applied');
+            return undefined;
+        }
+        this._$legendDiv = $("#" + this.id + "-legend-layer-div");
+        if (this._$legendDiv.length > 0) {
+            var $expander = this._$legendDiv.find('.legend-items-expander');
+            if ($expander.length > 0) {
+                this._applyCollapseCalled = true;
+                $expander.click(function () {
+                    var $this = $(this);
+                    $this.siblings('ul').slideToggle();
+                    if ($this.hasClass('legend-layer-group-collapsed')) {
+                        $this.removeClass('legend-layer-group-collapsed');
+                        $this.html('&#9660;');
+                    }
+                    else {
+                        $this.addClass('legend-layer-group-collapsed');
+                        $this.html('&#9654;');
+                    }
+                });
+                if (this._legendCollapse) {
+                    $expander.trigger('click');
+                }
+            }
+        }
+    };
+    /**
+     * trick to refresh the layer
+     */
+    LayerBase.prototype.refresh = function () {
+        if (this.source) {
+            this.source.refresh();
+        }
+    };
+    Object.defineProperty(LayerBase.prototype, "id", {
+        get: function () {
+            return this._id;
+        },
+        set: function (newId) {
+            this._id = newId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "animate", {
+        get: function () {
+            return this._animate;
+        },
+        set: function (animate) {
+            this._animate = animate;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "legendContent", {
+        /**
+         * get the legend content
+         * @type {string}
+         */
+        get: function () {
+            return this._legendContent;
+        },
+        /**
+         * set the legend content directly
+         * @param {string} newVal - new content
+         * @protected
+         */
+        set: function (newVal) {
+            this._legendContent = newVal;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "params", {
+        /**
+         * get the map get params
+         * @type {object}
+         */
+        get: function () {
+            return this._params;
+        },
+        /**
+         * set the map get params
+         * @param {object} newParams - new get params
+         * @protected
+         */
+        set: function (newParams) {
+            this._params = newParams;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "minResolution", {
+        /**
+         * get the minimum resolution
+         * @type {number|*}
+         */
+        get: function () {
+            return this._minResolution;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "maxResolution", {
+        /**
+         * get the maximum resolution
+         * @type {number|*}
+         */
+        get: function () {
+            return this._maxResolution;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "minZoom", {
+        /**
+         * get min zoom
+         * @type {number|*}
+         */
+        get: function () {
+            return this._minZoom;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "maxZoom", {
+        /**
+         * get max zoom
+         * @type {number|*}
+         */
+        get: function () {
+            return this._maxZoom;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "url", {
+        /**
+         * get the url
+         * @type {string}
+         */
+        get: function () {
+            return this._url;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "visible", {
+        /**
+         * Get the layer visibility
+         * @type {boolean}
+         */
+        get: function () {
+            return this._visible;
+        },
+        /**
+         * set the visibility
+         * @param visibility
+         */
+        set: function (visibility) {
+            this.setVisible(visibility);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    LayerBase.prototype.setVisible = function (visibility) {
+        this._visible = visibility;
+        if (this.olLayer) {
+            this.olLayer.setVisible(this._visible);
+            if (visibility && !this._loaded) {
+                this._load();
+            }
+        }
+    };
+    Object.defineProperty(LayerBase.prototype, "opacity", {
+        /**
+         * Get the layer opacity
+         * @type {number}
+         */
+        get: function () {
+            return this._opacity;
+        },
+        /**
+         * Set the layer opacity
+         * @param {number} opacity - layer opacity
+         */
+        set: function (opacity) {
+            this._opacity = opacity;
+            if (this.olLayer) {
+                this.olLayer.setOpacity(this._opacity);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "name", {
+        /**
+         * Get the layer name
+         * @type {string}
+         */
+        get: function () {
+            return this._name;
+        },
+        /**
+         * set the layer name
+         * @param {string} newName - the new name
+         */
+        set: function (newName) {
+            this._name = newName;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "loaded", {
+        /**
+         * Check if the layer is loaded
+         * @type {boolean}
+         */
+        get: function () {
+            return this._loaded;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBase.prototype, "source", {
+        /**
+         * get the layer source
+         * @type {*}
+         */
+        get: function () {
+            return this.getSource();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    LayerBase.prototype.getSource = function () {
+        return this._source;
+    };
+    Object.defineProperty(LayerBase.prototype, "zIndex", {
+        /**
+         * get the z index
+         */
+        get: function () {
+            return this._zIndex;
+        },
+        /**
+         * set the z index
+         */
+        set: function (newZ) {
+            this._zIndex = newZ;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    LayerBase.prototype.setZIndex = function (newZ) {
+    };
+    Object.defineProperty(LayerBase.prototype, "olLayer", {
+        /**
+         * the the ol layer
+         */
+        get: function () {
+            return this.getOlLayer();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    LayerBase.prototype.getOlLayer = function () {
+        return this._olLayer;
+    };
+    return LayerBase;
+}());
+exports.LayerBase = LayerBase;
+nm.LayerBase = LayerBase;
+exports.default = LayerBase;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 12/8/2015.
+ */
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('olHelpers');
+/**
+ * base interaction
+ */
+var MapInteractionBase = (function () {
+    /**
+     * map interaction base
+     * @param subtype - the interaction subtype
+     */
+    function MapInteractionBase(subtype) {
+        this._map = null;
+        this._initialized = false;
+        this._subtype = subtype;
+    }
+    /**
+     * base initializer, returns true for already initialized
+     * @param theMap - the ol Map
+     * @returns true for already initialized
+     */
+    MapInteractionBase.prototype.init = function (theMap) {
+        if (!this._initialized) {
+            this._map = theMap;
+            this._initialized = true;
+        }
+    };
+    Object.defineProperty(MapInteractionBase.prototype, "map", {
+        /**
+         * get reference to the ol map object
+         * @returns {ol.Map} the map object
+         */
+        get: function () {
+            return this._map;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MapInteractionBase.prototype, "initialized", {
+        /**
+         * get if is initialized
+         * @returns {boolean} is initialized
+         */
+        get: function () {
+            return this._initialized;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Check the initialization status and throw exception if not valid yet
+     * @protected
+     */
+    MapInteractionBase.prototype._checkInit = function () {
+        if (!this.initialized) {
+            var msg = this._subtype + " object not initialized";
+            alert(msg);
+            console.log(msg);
+            throw msg;
+        }
+    };
+    /**
+     * Check the initialization status and throw exception if not valid yet
+     */
+    MapInteractionBase.prototype.checkInit = function () {
+        this._checkInit();
+    };
+    return MapInteractionBase;
+}());
+exports.MapInteractionBase = MapInteractionBase;
+nm.MapInteractionBase = MapInteractionBase;
+exports.default = MapInteractionBase;
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 11/3/2015.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var mapMoveCls_1 = __webpack_require__(42);
+/**
+ * The single map move object catch is that it is common to multimap pages
+ * @type {MapMoveCls}
+ */
+exports.mapMove = new mapMoveCls_1.default();
+exports.default = exports.mapMove;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 12/15/2015.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var quickMapBase_1 = __webpack_require__(44);
+var provide_1 = __webpack_require__(0);
+var mapMove_1 = __webpack_require__(20);
+var mapPopup_1 = __webpack_require__(3);
+var nm = provide_1.default('olHelpers');
+/**
+ * Sets up a map with some default parameters and initializes
+ * mapMove and mapPopup
+ *
+ * @param {object} [options={}] config options
+ * @param {string} [options.divId=map] map div id
+ * @param {object} [options.center={}] center config object
+ * @param {number} [options.center.x=-10018378] center x, web mercator x or lon
+ * @param {number} [options.center.y=5574910] center y, web mercator y or lat
+ * @param {number} [options.zoom=7] zoom level
+ * @param {number} [options.minZoom=undefined] min zoom
+ * @param {number} [options.maxZoom=undefined] max zoom
+ * @param {boolean} [options.baseSwitcher=true] if add base map switcher
+ * @param {boolean} [options.fullScreen=false] if add base map switcher
+ * @returns {ol.Map} the ol map
+ */
+function quickMap(options) {
+    var m = quickMapBase_1.quickMapBase(options);
+    mapMove_1.default.init(m);
+    mapPopup_1.default.init(m);
+    return m;
+}
+exports.quickMap = quickMap;
+nm.quickMap = quickMap;
+exports.default = quickMap;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('util.checkDefined');
+/**
+ * check if the input is undefined or null
+ * @param input - input pointer
+ * @returns true undefined or null
+ */
+function undefinedOrNull(input) {
+    "use strict";
+    return (typeof input === 'undefined' || input === null);
+}
+exports.undefinedOrNull = undefinedOrNull;
+nm.undefinedOrNull = undefinedOrNull;
+/**
+ * check if the input is defined and not null
+ * @param input - input pointer
+ * @returns true defined and not null
+ */
+function definedAndNotNull(input) {
+    "use strict";
+    return !(undefinedOrNull(input));
+}
+exports.definedAndNotNull = definedAndNotNull;
+nm.definedAndNotNull = definedAndNotNull;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 6/7/2016.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('util');
+/**
+ * iterate over the key value pairs of an object
+ * @param {object} obj - the input object
+ * @returns {Array<keyValuePair>} - array of key value pairs
+ */
+function keyValPairs(obj) {
+    var outArray = [];
+    for (var _i = 0, _a = Object.keys(obj); _i < _a.length; _i++) {
+        var key = _a[_i];
+        outArray.push({ 'key': key, 'value': obj[key] });
+    }
+    outArray.sort(function (a, b) {
+        "use strict";
+        return a > b ? 1 : -1;
+    });
+    return outArray;
+}
+exports.keyValPairs = keyValPairs;
+nm.keyValPairs = keyValPairs;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = jquery-ui;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/13/2016.
+ */
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var SsaMapBase_1 = __webpack_require__(15);
+var quickMap_1 = __webpack_require__(21);
+var mapPopup_1 = __webpack_require__(3);
+var makeGuid_1 = __webpack_require__(4);
+var provide_1 = __webpack_require__(0);
+var PickerCollection_1 = __webpack_require__(28);
+var CorridorCollection_1 = __webpack_require__(27);
+var $ = __webpack_require__(1);
+__webpack_require__(24);
+var nm = provide_1.default('ssa');
+var SsaMapCreate = (function (_super) {
+    __extends(SsaMapCreate, _super);
+    /**
+     *
+     * @param {string} divId
+     * @param {string} corridorDataContainer
+     * @param {string} [dataClass=corridor-data] - class selector for the corridor data elements
+     */
+    function SsaMapCreate(divId, corridorDataContainer, dataClass) {
+        var _this = _super.call(this, divId) || this;
+        _this.$mainContainer.prepend("<div class=\"ssa-map-sidebar\"></div>");
+        _this.mainMap = quickMap_1.default({
+            divId: _this.mapId,
+            minZoom: 6,
+            zoom: 6,
+            fullScreen: true
+        });
+        /**
+         * @type {MapPopupCls}
+         */
+        _this.mainMapPopup = mapPopup_1.default;
+        _this.$sideBar = _this.$mainContainer.find('.ssa-map-sidebar');
+        var afterChange = function () {
+            _this._afterChange();
+        };
+        _this.pickerCollection = new PickerCollection_1.default(_this.$sideBar, _this.mainMap);
+        var corridorsGuid = makeGuid_1.default();
+        _this.$sideBar.append("<div id=\"" + corridorsGuid + "\"></div>");
+        _this.corridorCollection = new CorridorCollection_1.default(_this.$sideBar, _this.mainMap, corridorDataContainer, afterChange, dataClass);
+        _this.pickerCollection.corridorCollection = _this.corridorCollection;
+        _this.corridorCollection.loadExistingCorridors();
+        return _this;
+    }
+    SsaMapCreate.prototype._afterChange = function () {
+        var __this = this;
+        this.corridorCollection.$innerContainer.find('.corridor-zoom').click(function () {
+            var corridorId = $(this).attr('data-corridor');
+            var cor = __this.corridorCollection.getCorridorById(corridorId);
+            __this.mainMap.getView().fit(cor.extent, __this.mainMap.getSize());
+        });
+        this.corridorCollection.$innerContainer.find('.corridor-delete').click(function () {
+            var corridorId = $(this).attr('data-corridor');
+            __this.corridorCollection.removeCorridor(corridorId);
+        });
+        this.corridorCollection.$innerContainer.find('.corridor-edit').click(function () {
+            __this.pickerCollection.$createCorridorButton.prop('disabled', true);
+            var corridorId = $(this).attr('data-corridor');
+            var cor = __this.corridorCollection.getCorridorById(corridorId);
+            __this.pickerCollection.startPicker(cor);
+            $(this).closest('.corridor-tr').addClass('corridor-tr-selected');
+        });
+    };
+    return SsaMapCreate;
+}(SsaMapBase_1.default));
+exports.SsaMapCreate = SsaMapCreate;
+nm.SsaMapCreate = SsaMapCreate;
+window['SsaMapCreate'] = SsaMapCreate;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SsaMapCreate;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/13/2016.
+ */
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var SsaMapBase_1 = __webpack_require__(15);
+var quickMap_1 = __webpack_require__(21);
+var mapPopup_1 = __webpack_require__(3);
+var provide_1 = __webpack_require__(0);
+var CorridorConfig_1 = __webpack_require__(17);
+var Corridor_1 = __webpack_require__(10);
+var styles = __webpack_require__(6);
+var calcExtent = __webpack_require__(14);
+var crashData_1 = __webpack_require__(30);
+var mmFlags_1 = __webpack_require__(31);
+var controllingCriteria_1 = __webpack_require__(29);
+var constants = __webpack_require__(7);
+var ajaxGetters_1 = __webpack_require__(5);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('ssa');
+var mmPopupContentWithCrash = function (props) {
+    "use strict";
+    var returnHtml = styles.mmPopupContent(props);
+    returnHtml += crashData_1.default.getCrashSummary(props['pdpId']);
+    return returnHtml;
+};
+var SsaMapView = (function (_super) {
+    __extends(SsaMapView, _super);
+    /**
+     *
+     * @param {string} divId - container for the map
+     * @param {string} [dataClass=corridor-data] - class selector for the corridor data elements
+     * @param {string} [infoAnchorId=ssa-corridor-info-anchor] - id of element after which to insert the info rows
+     */
+    function SsaMapView(divId, dataClass, infoAnchorId) {
+        var _this = _super.call(this, divId) || this;
+        _this._ssaId = parseInt($('#hidden-ssa-id').val());
+        _this._snap = parseInt($('#hidden-snapshot-id').val());
+        /**
+         * @type {ol.Map}
+         */
+        _this.mainMap = quickMap_1.default({
+            divId: _this.mapId,
+            minZoom: 6,
+            zoom: 6,
+            fullScreen: true
+        });
+        var summaryListHtml = '<div class="segment-index-summary">';
+        summaryListHtml += '<div class="segment-index-summary-toggles">';
+        summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-zoom\" title=\"Zoom To Initial Extent\">&#8634;</span>";
+        summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-close\" title=\"Hide Legend\">&#8598;</span>";
+        summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-open\" title=\"Show Legend\">&#8600;</span>";
+        summaryListHtml += '</div>';
+        summaryListHtml += "<h4 style=\"color: " + constants.mmFlagColor + "\">Metamanager Flags</h4>";
+        summaryListHtml += "<ul id=\"" + constants.mmFlagListId + "\"></ul>";
+        summaryListHtml += "<h4 style=\"color: " + constants.controllingCriteriaColor + "\">Controlling Criteria</h4>";
+        summaryListHtml += "<ul id=\"" + constants.ccListId + "\"></ul>";
+        summaryListHtml += '</div>';
+        _this.$mapDiv.append(summaryListHtml);
+        var $legendDiv = _this.$mapDiv.find('.segment-index-summary');
+        var $closeButton = $legendDiv.find('.segment-index-summary-close');
+        var $openButton = $legendDiv.find('.segment-index-summary-open');
+        var $zoomExtent = $legendDiv.find('.segment-index-summary-zoom');
+        $openButton.hide();
+        var hideShowWorking = false;
+        var originalWidth = $legendDiv.width();
+        var originalMinHeight = $legendDiv.css('min-height');
+        var originalPadding = $legendDiv.css('padding');
+        $closeButton.click(function () {
+            if (hideShowWorking) {
+                return;
+            }
+            hideShowWorking = true;
+            $legendDiv.find('ul, h3, h4, h5').fadeOut(100, function () {
+                $legendDiv.css('padding', '2px');
+                $legendDiv.width('auto');
+                $legendDiv.css('min-height', 'auto');
+                $closeButton.hide();
+                $openButton.show();
+                hideShowWorking = false;
+            });
+        });
+        $openButton.click(function () {
+            if (hideShowWorking) {
+                return;
+            }
+            hideShowWorking = true;
+            $legendDiv.css('padding', originalPadding);
+            $legendDiv.width(originalWidth);
+            $legendDiv.css('min-height', originalMinHeight);
+            $legendDiv.find('ul, h3, h4, h5').fadeIn(100, function () {
+                $closeButton.show();
+                $openButton.hide();
+                hideShowWorking = false;
+            });
+        });
+        $zoomExtent.click(function () {
+            _this._fitExtent();
+        });
+        /**
+         * @type {MapPopupCls}
+         */
+        _this.mainMapPopup = mapPopup_1.default;
+        dataClass = typeof dataClass == 'string' ? dataClass : 'corridor-data';
+        infoAnchorId = typeof infoAnchorId == 'string' ? infoAnchorId : 'ssa-corridor-info-anchor';
+        dataClass = '.' + dataClass;
+        $(_this.mainMap.getTargetElement()).append('<div class="crashes-loaded-msg">Crashes Loaded</div>');
+        /**
+         *
+         * @type {Array<CorridorConfig>}
+         */
+        var corridorConfigs = [];
+        /**
+         *
+         * @type {Array<Corridor>}
+         */
+        _this._corridorArray = [];
+        // parse the data from the hidden input elements
+        $(dataClass).each(function (n, el) {
+            corridorConfigs.push(new CorridorConfig_1.default(el));
+        });
+        _this.createdCorridorsLength = corridorConfigs.length;
+        _this.loadedCorridorsLength = 0;
+        var returnLookup = {};
+        var returnArr = [];
+        ajaxGetters_1.default.getCcGeom(_this._ssaId, _this._snap, function (d) {
+            for (var _i = 0, _a = d['features']; _i < _a.length; _i++) {
+                var f = _a[_i];
+                var corId = f['properties']['corridorId'].toFixed();
+                if (!returnLookup[corId]) {
+                    returnArr.push(corId);
+                    returnLookup[corId] = { crs: d['crs'], type: d['type'], features: [] };
+                }
+                returnLookup[corId].features.push(f);
+            }
+            var outHtml = '';
+            for (var i = 0; i < returnArr.length; i++) {
+                var conf = corridorConfigs[i];
+                outHtml += conf.bootstrapHtml(i);
+                var corridor = new Corridor_1.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
+                    color: 'black',
+                    jsonFeatures: returnLookup[i.toFixed()],
+                });
+                mmFlags_1.default.addCorridor(corridor);
+                controllingCriteria_1.default.addCorridor(corridor);
+                _this._corridorArray.push(corridor);
+                _this.mainMap.addLayer(corridor.olLayer);
+                _this.mainMap.addLayer(corridor.nodeLayer.olLayer);
+                _this.mainMapPopup.addVectorPopup(corridor.layer, mmPopupContentWithCrash);
+            }
+            _this._afterCorridorLoad();
+            $('#' + infoAnchorId).after(outHtml);
+        });
+        mmFlags_1.default.init(_this.mainMap);
+        controllingCriteria_1.default.init(_this.mainMap);
+        return _this;
+    }
+    SsaMapView.prototype._afterCorridorLoad = function () {
+        this._fitExtent();
+        crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
+        mmFlags_1.default.afterLoad();
+        controllingCriteria_1.default.afterLoad();
+    };
+    SsaMapView.prototype._fitExtent = function () {
+        var lyrs = [];
+        for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
+            var c = _a[_i];
+            lyrs.push(c.layer);
+        }
+        if (lyrs.length > 0) {
+            calcExtent.fitToMap(lyrs, this.mainMap);
+        }
+    };
+    return SsaMapView;
+}(SsaMapBase_1.default));
+exports.SsaMapView = SsaMapView;
+nm.SsaMapView = SsaMapView;
+window['SsaMapView'] = SsaMapView;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SsaMapView;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Created by gavorhes on 5/16/2016.
+ */
+var provide_1 = __webpack_require__(0);
+// import * as styles  from '../layerStyles';
+var mapPopup_1 = __webpack_require__(3);
+var calcExtent = __webpack_require__(14);
+var makeGuid_1 = __webpack_require__(4);
+var CorridorConfig_1 = __webpack_require__(17);
+var Corridor_1 = __webpack_require__(10);
+var $ = __webpack_require__(1);
+var layerStyles_1 = __webpack_require__(6);
+var nm = provide_1.default('ssa');
+/**
+ *
+ * @param {string} [rowHtml=''] data row html
+ * @returns {string} full table html
+ */
+function tableContent(rowHtml) {
+    "use strict";
+    if (rowHtml === void 0) { rowHtml = ''; }
+    rowHtml = typeof rowHtml == 'string' ? rowHtml : '';
+    var tableContent = "<table>";
+    tableContent += "<tr>";
+    tableContent += '<th></th>';
+    tableContent += '<th>Corridors</th>';
+    tableContent += '<th></th>';
+    tableContent += "</tr>";
+    tableContent += rowHtml;
+    tableContent += "</table>";
+    return tableContent;
+}
+/**
+ *
+ * @param {string} fromRp - from reference point
+ * @param {string} toRp - to reference point
+ * @returns {string} string with abbreviated reference point identifiers separated by a hyphen
+ * @private
+ */
+function corridorName(fromRp, toRp) {
+    "use strict";
+    return fromRp.substring(0, 7) + ' - ' + toRp.substring(0, 7);
+}
+var CorridorCollection = (function () {
+    /**
+     * @param {jQuery} parentDiv - div id inside which to make the collection
+     * @param {ol.Map} theMap - the SSA main map
+     * @param {string} corridorDataIdOrClass - the corridor data container id or class
+     * @param {function} afterChange - function to run after a change has taken place
+     * @param {string} [dataClass=corridor-data] - function to run after a change has taken place
+     */
+    function CorridorCollection(parentDiv, theMap, corridorDataIdOrClass, afterChange, dataClass) {
+        var _this = this;
+        this._dataClass = dataClass || 'corridor-data';
+        this._afterChange = afterChange;
+        var _corridorDataContainer = $("." + corridorDataIdOrClass + ", #" + corridorDataIdOrClass);
+        if (_corridorDataContainer.length == 0) {
+            throw 'data container not found';
+        }
+        this.$corridorDataContainer = $(_corridorDataContainer[0]);
+        this.$corridorDataContainer.addClass('corridor-data-container');
+        this._map = theMap;
+        var corridorsGuid = makeGuid_1.default();
+        parentDiv.append("<div id=\"" + corridorsGuid + "\"></div>");
+        this.$containerEl = $('#' + corridorsGuid).addClass('corridor-collection-container');
+        var innerHtml = '<div class="corridor-collection">';
+        innerHtml += tableContent();
+        innerHtml += '</div>';
+        this.$containerEl.append(innerHtml);
+        this.$innerContainer = this.$containerEl.find('.corridor-collection');
+        this._visible = true;
+        this._inCreateModifyOperation = false;
+        this._showPopups = true;
+        /**
+         *
+         * @type {Array<Corridor>}
+         */
+        this._corridorArray = [];
+        /**
+         *
+         * @type {{}}
+         * @private
+         */
+        this._coridorLookup = {};
+        this._popupStyle = function (props) {
+            if (!_this.showPopups) {
+                return false;
+            }
+            return layerStyles_1.mmPopupContent(props);
+        };
+    }
+    /**
+     * add a corridor
+     * @param {Corridor} c - the corridor to be added
+     * @param [refreshData=true] c - the corridor to be added
+     */
+    CorridorCollection.prototype.addCorridorCreate = function (c, refreshData) {
+        if (refreshData === void 0) { refreshData = true; }
+        this._corridorArray.push(c);
+        this._coridorLookup[c.clientId] = c;
+        this._map.addLayer(c.olLayer);
+        this._map.addLayer(c.nodeLayer.olLayer);
+        c.layer.name = corridorName(c.rpFrom, c.rpTo);
+        mapPopup_1.default.addVectorPopup(c.layer, this._popupStyle);
+        if (refreshData) {
+            this.refreshHtmlCreate();
+        }
+    };
+    /**
+     * delete/remove a corridor
+     * @param {string|Corridor} cor - the corridor to be removed
+     */
+    CorridorCollection.prototype.removeCorridor = function (cor) {
+        if (!confirm('Confirm Delete Corridor?')) {
+            return;
+        }
+        if (typeof cor == 'string') {
+            cor = this._coridorLookup[cor];
+        }
+        var ix = this._corridorArray.indexOf(cor);
+        mapPopup_1.default.removeVectorPopup(cor.layer);
+        this._map.removeLayer(cor.olLayer);
+        this._map.removeLayer(cor.nodeLayer.olLayer);
+        this._corridorArray.splice(ix, 1);
+        delete this._coridorLookup[cor.clientId];
+        this._map.getView().setZoom(this._map.getView().getZoom() - 1);
+        this._map.getView().setZoom(this._map.getView().getZoom() + 1);
+        this.refreshHtmlCreate();
+    };
+    /**
+     * refresh the contents of the corridor table and hidden corridor data input elements
+     */
+    CorridorCollection.prototype.refreshHtmlCreate = function () {
+        this.$innerContainer.html('');
+        var rowContent = '';
+        for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
+            var c = _a[_i];
+            rowContent += c.tableHtmlCreate;
+        }
+        this.$innerContainer.append(tableContent(rowContent));
+        this.$corridorDataContainer.html('');
+        for (var i = 0; i < this._corridorArray.length; i++) {
+            var cor = this._corridorArray[i];
+            this.$corridorDataContainer.append(cor.getDataHtml(i));
+        }
+        this._afterChange();
+    };
+    Object.defineProperty(CorridorCollection.prototype, "visible", {
+        get: function () {
+            return this._visible;
+        },
+        set: function (viz) {
+            if (viz == this.visible) {
+                return;
+            }
+            this._visible = viz;
+            if (this.visible) {
+                this.$containerEl.show();
+            }
+            else {
+                this.$containerEl.hide();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CorridorCollection.prototype, "fullExtent", {
+        get: function () {
+            var lyrs = [];
+            for (var _i = 0, _a = this._corridorArray; _i < _a.length; _i++) {
+                var c = _a[_i];
+                lyrs.push(c.layer);
+            }
+            return calcExtent.calculateExtent(lyrs);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CorridorCollection.prototype, "inCreateModifyOperation", {
+        /**
+         * if currently in a create or modify operation
+         * @returns {boolean} is creating or modifying
+         */
+        get: function () {
+            return this._inCreateModifyOperation;
+        },
+        /**
+         * if currently in a create or modify operation
+         * @param {boolean} isInCreateModifyOperation - is creating or modifying
+         */
+        set: function (isInCreateModifyOperation) {
+            this._inCreateModifyOperation = isInCreateModifyOperation;
+            if (this.inCreateModifyOperation) {
+                this.$innerContainer.addClass('corridor-collection-create-modify');
+            }
+            else {
+                this.$innerContainer.removeClass('corridor-collection-create-modify');
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CorridorCollection.prototype, "showPopups", {
+        /**
+         *
+         * @returns {boolean} if the corridor popups should be shown
+         */
+        get: function () {
+            return this._showPopups;
+        },
+        /**
+         *
+         * @param {boolean} show - if the corridor popups should be shown
+         */
+        set: function (show) {
+            this._showPopups = show;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CorridorCollection.prototype, "corridorCount", {
+        get: function () {
+            return this._corridorArray.length;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     *
+     * @param {string} corId - corridor id
+     * @returns {Corridor} the corridor matching the id in the lookup
+     */
+    CorridorCollection.prototype.getCorridorById = function (corId) {
+        return this._coridorLookup[corId];
+    };
+    CorridorCollection.prototype.loadExistingCorridors = function () {
+        var _this = this;
+        var loadedCount = 0;
+        var existingCorridors = document.getElementsByClassName(this._dataClass);
+        // parse the data from the hidden input elements
+        for (var n = 0; n < existingCorridors.length; n++) {
+            var el = existingCorridors[n];
+            var conf = new CorridorConfig_1.default(el);
+            var corridor = new Corridor_1.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {
+                loadedCallback: function () {
+                    loadedCount++;
+                    //something special when all the corridors have been loaded
+                    if (_this.corridorCount == loadedCount) {
+                        var ext = _this.fullExtent;
+                        if (ext) {
+                            _this._map.getView().fit(ext, _this._map.getSize());
+                        }
+                        _this.refreshHtmlCreate();
+                    }
+                }
+            });
+            corridor.setDbValues(conf);
+            if (n == 0) {
+                $('#primaryCounty').val(corridor.countyStart);
+                $('#primaryRdwyRteId').val(corridor.routeId);
+            }
+            this.addCorridorCreate(corridor, false);
+        }
+    };
+    return CorridorCollection;
+}());
+exports.CorridorCollection = CorridorCollection;
+nm.CorridorCollection = CorridorCollection;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = CorridorCollection;
+//# sourceMappingURL=CorridorCollection.js.map
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/// <reference path="../../node_modules/@types/jqueryui/index.d.ts"/>
+
+var SelectCounty_1 = __webpack_require__(37);
+var SelectHighway_1 = __webpack_require__(38);
+var SegmentPicker_1 = __webpack_require__(36);
+var Corridor_1 = __webpack_require__(10);
+var provide_1 = __webpack_require__(0);
+var lyrStyles = __webpack_require__(6);
+var mapPopup_1 = __webpack_require__(3);
+var makeGuid_1 = __webpack_require__(4);
+var LayerEsriMapServer_1 = __webpack_require__(40);
+var $ = __webpack_require__(1);
+__webpack_require__(24);
+var nm = provide_1.default('ssa');
+var PickerCollection = (function () {
+    /**
+     *
+     * @param {jQuery} parentDiv - container div
+     * @param {ol.Map} theMap - the main map
+     */
+    function PickerCollection(parentDiv, theMap) {
+        this._map = theMap;
+        parentDiv.append('<div>' +
+            '<input type="button" value="Add Corridor" class="btn btn-default picker-create-corridor">' +
+            '<input type="button" value="Zoom to Extent" class="btn btn-default picker-zoom-extent">' +
+            '</div>');
+        this.$createCorridorButton = parentDiv.find('.picker-create-corridor');
+        this.$zoomExtentButton = parentDiv.find('.picker-zoom-extent');
+        var pickerGuid = makeGuid_1.default();
+        parentDiv.append("<div id=\"" + pickerGuid + "\"></div>");
+        this.$containerEl = $('#' + pickerGuid).addClass('picker-collection-container');
+        this.$containerEl.append('<div class="picker-collection"><span class="corridor-picker-help" title="Show Help"></span></div>');
+        this.$containerEl.append('<input type="button" value="Preview" class="btn btn-default picker-preview">');
+        this.$containerEl.append('<input type="button" value="Add" class="btn btn-default picker-add" disabled="disabled">');
+        this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" disabled="disabled" style="display: none;">');
+        this.$containerEl.append('<input type="button" value="Cancel" class="btn btn-default picker-cancel">');
+        this.$innerContainer = this.$containerEl.find('.picker-collection');
+        this._dummyCorridor = new Corridor_1.default(1, 1, '', '', 1, 1, 'h', -1, {
+            cancelLoad: true,
+            color: lyrStyles.corridorPreviewColor
+        });
+        this._dummyCorridor.layer.zIndex = 10;
+        this._map.addLayer(this._dummyCorridor.olLayer);
+        this._addModifyEnabled = false;
+        /**
+         *
+         * @type {Corridor|undefined}
+         * @private
+         */
+        this._modifyCorridor = undefined;
+        this.$btnPickerPreview = this.$containerEl.find('.picker-preview');
+        this.$btnPickerAdd = this.$containerEl.find('.picker-add');
+        this.$btnPickerModify = this.$containerEl.find('.picker-modify');
+        this.$btnPickerCancel = this.$containerEl.find('.picker-cancel');
+        this.countyStartSelect = new SelectCounty_1.default(this.$innerContainer, "Start County");
+        this.countyEndSelect = new SelectCounty_1.default(this.$innerContainer, "End County");
+        this.highwaySelect = new SelectHighway_1.default(this.$innerContainer);
+        this._metamanagerSegmentsLayer = new LayerEsriMapServer_1.default('http://transportal.cee.wisc.edu/applications/arcgis2/rest/services/MetaManager/MM_All_Segments/MapServer', {
+            minZoom: 7,
+            visible: false,
+            name: 'Metamanager Segments',
+            opacity: 0.4
+        });
+        this._map.addLayer(this._metamanagerSegmentsLayer.olLayer);
+        this.segmentPickerFrom = new SegmentPicker_1.default(this, true);
+        this.segmentPickerTo = new SegmentPicker_1.default(this, false);
+        this._map.addLayer(this.segmentPickerFrom.segmentLayer.olLayer);
+        this._map.addLayer(this.segmentPickerTo.segmentLayer.olLayer);
+        this._map.addLayer(this.segmentPickerFrom.selectionLayer.olLayer);
+        this._map.addLayer(this.segmentPickerTo.selectionLayer.olLayer);
+        /**
+         *
+         * @type {CorridorCollection|undefined}
+         */
+        this.corridorCollection = undefined;
+        this._addHandlers();
+        this._helpDialogInit();
+    }
+    PickerCollection.prototype._addHandlers = function () {
+        var _this = this;
+        this.$createCorridorButton.click(function () {
+            _this.startPicker();
+            _this.$createCorridorButton.prop('disabled', true);
+        });
+        this.$zoomExtentButton.click(function () {
+            var ext = _this.corridorCollection.fullExtent;
+            if (ext) {
+                _this._map.getView().fit(ext, _this._map.getSize());
+            }
+        });
+        this.$btnPickerCancel.click(function () {
+            _this.stopPicker();
+        });
+        this.$btnPickerPreview.click(function () {
+            _this.previewCorridor();
+        });
+        this.$btnPickerAdd.click(function () {
+            _this.addCorridor();
+        });
+        this.$btnPickerModify.click(function () {
+            _this.modifyCorridor();
+        });
+        this.countyStartSelect.addChangeListener(function (v) {
+            "use strict";
+            _this.highwaySelect.setStartEndCounty(v, _this.countyEndSelect.selectedValue);
+            _this.addModifyButtonEnabled = false;
+            _this.segmentPickerTo.segmentLayer.visible = !_this.startEndCountySame;
+        });
+        this.countyEndSelect.addChangeListener(function (v) {
+            "use strict";
+            _this.highwaySelect.setStartEndCounty(_this.countyStartSelect.selectedValue, v);
+            _this.addModifyButtonEnabled = false;
+            _this.segmentPickerTo.segmentLayer.visible = !_this.startEndCountySame;
+        });
+        this.highwaySelect.addChangeListener(function (hwy) {
+            "use strict";
+            _this.segmentPickerFrom.setCountyAndRoute(_this.countyStartSelect.selectedValue, hwy);
+            _this.segmentPickerTo.setCountyAndRoute(_this.countyEndSelect.selectedValue, hwy);
+            _this.addModifyButtonEnabled = false;
+        });
+        this.segmentPickerFrom.addChangeListener(function () {
+            _this.addModifyButtonEnabled = false;
+        });
+        this.segmentPickerTo.addChangeListener(function () {
+            _this.addModifyButtonEnabled = false;
+        });
+    };
+    /**
+     * Configure the help dialog
+     * @private
+     */
+    PickerCollection.prototype._helpDialogInit = function () {
+        var _this = this;
+        var helpInfo = 'Corridors are defined by selecting in sequence the start county, highway, and end county ';
+        helpInfo += "The reference points are then populated and can be selected either by using the combo box or ";
+        helpInfo += "by clicking a segment in the map and clicking select in the resulting popup ";
+        helpInfo += "Corridors are defined visually in the pickers as the start segment (green) and end segment (red) ";
+        helpInfo += "inclusive of the corridor extents";
+        $('body').append("<div class=\"corridor-picker-help-dialog\" title=\"Corridor Selection Help\">" +
+            ("<p style=\"text-align: justify\">" + helpInfo + "</p></div>"));
+        this.helpDialog = $(".corridor-picker-help-dialog");
+        this.helpDialog.dialog({
+            modal: true,
+            autoOpen: false,
+            height: 450,
+            width: 650,
+            buttons: [
+                {
+                    text: "OK",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        });
+        this.$containerEl.find('.corridor-picker-help').click(function () {
+            _this.helpDialog.dialog('open');
+        });
+    };
+    PickerCollection.prototype.previewCorridor = function () {
+        var _this = this;
+        if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
+            alert('Select From and To Reference Points');
+            return;
+        }
+        this._map.removeLayer(this._dummyCorridor.layer.olLayer);
+        this._map.removeLayer(this._dummyCorridor.nodeLayer.olLayer);
+        this._dummyCorridor = new Corridor_1.default(this.segmentPickerFrom.selectedPdpId, this.segmentPickerTo.selectedPdpId, this.segmentPickerFrom.selectedText, this.segmentPickerTo.selectedText, this.countyStartSelect.selectedValue, this.countyEndSelect.selectedValue, this.highwaySelect.selectedText, this.highwaySelect.selectedValue, {
+            cancelLoad: true,
+            color: lyrStyles.corridorPreviewColor
+        });
+        this._dummyCorridor.layer.zIndex = 10;
+        this._map.addLayer(this._dummyCorridor.layer.olLayer);
+        this._map.addLayer(this._dummyCorridor.nodeLayer.olLayer);
+        this._dummyCorridor.load(function (c) {
+            _this._map.getView().fit(c.extent, _this._map.getSize());
+            _this.addModifyButtonEnabled = true;
+        });
+    };
+    /**
+     * add a corridor
+     */
+    PickerCollection.prototype.addCorridor = function () {
+        var newCorridor = this._dummyCorridor.clone();
+        this.corridorCollection.addCorridorCreate(newCorridor);
+        this.segmentPickerTo.segmentLayer.visible = !this.startEndCountySame;
+        this.stopPicker();
+    };
+    PickerCollection.prototype.modifyCorridor = function () {
+        this._modifyCorridor.updateCorridor(this._dummyCorridor);
+        this.corridorCollection.refreshHtmlCreate();
+        this.stopPicker();
+    };
+    /**
+     * Populate the selections based on values from an existing corridor
+     * @param {Corridor} [existingCor=undefined] existing corridor if in an edit operation
+     */
+    PickerCollection.prototype.startPicker = function (existingCor) {
+        this.corridorCollection.inCreateModifyOperation = true;
+        this.$containerEl.show();
+        this.segmentPickerFrom.layersVisible = true;
+        this.segmentPickerTo.layersVisible = true;
+        this._metamanagerSegmentsLayer.visible = true;
+        this.corridorCollection.showPopups = false;
+        if (existingCor) {
+            this.$btnPickerAdd.hide();
+            this.$btnPickerModify.show();
+            this.countyStartSelect.box.val(existingCor.countyStart);
+            this.countyEndSelect.box.val(existingCor.countyEnd);
+            this.highwaySelect.setStartEndCounty(existingCor.countyStart, existingCor.countyEnd, existingCor.routeId);
+            this.segmentPickerFrom.setCountyAndRoute(existingCor.countyStart, existingCor.routeId, existingCor.pdpFrom);
+            this.segmentPickerTo.setCountyAndRoute(existingCor.countyEnd, existingCor.routeId, existingCor.pdpTo);
+            this._modifyCorridor = existingCor;
+            this._dummyCorridor.updateCorridor(existingCor);
+            this._map.getView().fit(this._dummyCorridor.extent, this._map.getSize());
+        }
+        else {
+            var $primCounty = $('#primaryCounty');
+            var $primRoute = $('#primaryRdwyRteId');
+            var primaryCounty = undefined;
+            var primaryRouteId = undefined;
+            if ($primCounty.length > 0) {
+                primaryCounty = $primCounty.val().length > 0 ? parseInt($primCounty.val()) : undefined;
+            }
+            if ($primRoute.length > 0) {
+                primaryRouteId = $primRoute.val().length > 0 ? parseInt($primRoute.val()) : undefined;
+            }
+            if (primaryCounty) {
+                this.countyStartSelect.box.val(primaryCounty);
+                this.countyEndSelect.box.val(primaryCounty);
+                this.highwaySelect.setStartEndCounty(primaryCounty, primaryCounty, primaryRouteId, true);
+            }
+            this.$btnPickerAdd.show();
+            this.$btnPickerModify.hide();
+        }
+    };
+    PickerCollection.prototype.stopPicker = function () {
+        this.corridorCollection.showPopups = true;
+        this.$btnPickerAdd.show();
+        this.$btnPickerModify.hide();
+        this.$btnPickerModify.prop('disabled', true);
+        this.$containerEl.hide();
+        this.$createCorridorButton.prop('disabled', false);
+        // this.countyStartSelect.box.val(1).trigger('change');
+        this.corridorCollection.visible = true;
+        this._dummyCorridor.layer.clear();
+        this._modifyCorridor = undefined;
+        this._dummyCorridor.nodeLayer.olLayer.getSource().clear();
+        this.addModifyButtonEnabled = false;
+        this.corridorCollection.inCreateModifyOperation = false;
+        $('.corridor-tr-selected').removeClass('corridor-tr-selected');
+        this.segmentPickerFrom.layersVisible = false;
+        this.segmentPickerTo.layersVisible = false;
+        this._metamanagerSegmentsLayer.visible = false;
+        mapPopup_1.default.closePopup();
+    };
+    Object.defineProperty(PickerCollection.prototype, "addModifyButtonEnabled", {
+        /**
+         * Getter for if an add modify operation is happening {boolean}
+         * @returns {boolean} - if the add or modify operation is happening
+         */
+        get: function () {
+            return this._addModifyEnabled;
+        },
+        /**
+         * Setter for if an add modify operation is happening {boolean}
+         * @param {boolean} isEnabled - if enabled
+         */
+        set: function (isEnabled) {
+            this._addModifyEnabled = isEnabled;
+            this.$btnPickerAdd.prop('disabled', !this.addModifyButtonEnabled);
+            this.$btnPickerModify.prop('disabled', !this.addModifyButtonEnabled);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PickerCollection.prototype, "startEndCountySame", {
+        /**
+         *
+         * @returns {boolean}
+         */
+        get: function () {
+            var isSame = this.countyStartSelect.selectedValue == this.countyEndSelect.selectedValue;
+            this.segmentPickerFrom.segmentLayer.name = isSame ? 'Start/End Segments' : 'Start Segment';
+            return isSame;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return PickerCollection;
+}());
+nm.PickerCollection = PickerCollection;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = PickerCollection;
+//# sourceMappingURL=PickerCollection.js.map
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * Created by gavorhes on 7/15/2016.
+ */
+var filterContollingCriteria_1 = __webpack_require__(33);
+var mapPopup_1 = __webpack_require__(3);
+var constants = __webpack_require__(7);
+var _DeficiencyBase_1 = __webpack_require__(16);
+var ol = __webpack_require__(2);
+var objectHelpers_1 = __webpack_require__(23);
+/**
+ *
+ * @param {ol.Feature} feature - the input feature
+ * @returns {Array<ol.style.Style>|null} - return style or null
+ */
+var ccStyle = function (feature) {
+    "use strict";
+    var props = feature.getProperties();
+    var show = false;
+    for (var _i = 0, _a = filterContollingCriteria_1.default.allValues; _i < _a.length; _i++) {
+        var cc = _a[_i];
+        if (props[cc] && filterContollingCriteria_1.default.valIsOn(cc)) {
+            show = true;
+            break;
+        }
+    }
+    var txtFunc = function () {
+        return new ol.style.Text({
+            text: props['ccId'],
+            scale: 1.5,
+            stroke: new ol.style.Stroke({
+                color: 'black',
+                width: 2
+            }),
+            fill: new ol.style.Fill({
+                color: constants.controllingCriteriaColor
+            })
+        });
+    };
+    if (show) {
+        return [new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: constants.controllingCriteriaColor,
+                    width: 6
+                }),
+                text: txtFunc()
+            })];
+    }
+    else {
+        return null;
+    }
+};
+var ControllingCriteria = (function (_super) {
+    __extends(ControllingCriteria, _super);
+    function ControllingCriteria() {
+        return _super.call(this, "Geometric Deficiencies", ccStyle, 201, constants.ccListId) || this;
+    }
+    /**
+     * initialize with the map
+     * @param {ol.Map} m - the ol map
+     */
+    ControllingCriteria.prototype.init = function (m) {
+        var _this = this;
+        _super.prototype.init.call(this, m);
+        filterContollingCriteria_1.default.addChangeCallback(function () {
+            _this.deficiencyLayer.refresh();
+        });
+        mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
+            var returnHtml = '';
+            returnHtml += '<ul>';
+            for (var _i = 0, _a = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _i < _a.length; _i++) {
+                var cc = _a[_i];
+                if (props[cc.key]) {
+                    returnHtml += "<li>";
+                    returnHtml += cc.value;
+                    var subEls = props[cc.key].split('::');
+                    returnHtml += '<ul>';
+                    for (var _b = 0, subEls_1 = subEls; _b < subEls_1.length; _b++) {
+                        var s = subEls_1[_b];
+                        returnHtml += "<li>" + s + "</li>";
+                    }
+                    returnHtml += '</ul>';
+                    returnHtml += '</li>';
+                }
+            }
+            returnHtml += '</ul>';
+            return returnHtml;
+        });
+    };
+    /**
+     *
+     * @param {Corridor} c - the corridor to be added
+     */
+    ControllingCriteria.prototype.addCorridor = function (c) {
+        var feats = c.layer.source.getFeatures();
+        for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
+            var f = feats_1[_i];
+            var props = f.getProperties();
+            var deficiencyList = [];
+            for (var _a = 0, _b = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _a < _b.length; _a++) {
+                var f_1 = _b[_a];
+                var ccProps = props[f_1.key];
+                if (ccProps) {
+                    deficiencyList.push(f_1.value);
+                }
+            }
+            if (deficiencyList.length > 0) {
+                this.deficiencyLayer.source.addFeature(f);
+                f.setProperties({ ccId: "" + props['pdpId'] });
+                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
+                appendHtml += deficiencyList.join(', ');
+                this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
+            }
+        }
+    };
+    return ControllingCriteria;
+}(_DeficiencyBase_1.default));
+ControllingCriteria.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
+    'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
+exports.ControllingCriteria = ControllingCriteria;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new ControllingCriteria();
+//# sourceMappingURL=controllingCriteria.js.map
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 7/13/2016.
+ */
+
+// uncomment this to use the example crash data
+// import exampleCrashData from './_exampleCrashData';
+var exampleCrashData = undefined;
+var ajaxGetters_1 = __webpack_require__(5);
+var objHelp = __webpack_require__(23);
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
+var filterCrash_1 = __webpack_require__(34);
+var colorUtil = __webpack_require__(46);
+var proj = __webpack_require__(9);
+var mapPopup_1 = __webpack_require__(3);
+var ol = __webpack_require__(2);
+var $ = __webpack_require__(1);
+function injColor(inj) {
+    "use strict";
+    var color = {
+        'K': 'rgb(255,0,0)',
+        'A': 'rgb(255,165,0)',
+        'B': 'rgb(255,255,0)',
+        'C': 'rgb(153,255,153)',
+        'P': 'rgb(141,227,230)'
+    }[inj];
+    return color || 'rgba(255,255,255,0)';
+}
+var crashProps = [
+    'doctnmbr',
+    // 'multiflag',
+    'accDate',
+    'ntfyHour',
+    'county',
+    'municipality',
+    'munitype',
+    'onHwyRp',
+    'onHwyDir',
+    'onStr',
+    'athHwy',
+    'atStr',
+    'intDir',
+    'intDis',
+    'accdSvr',
+    'injSvr',
+    'totFatl',
+    'toInj',
+    'accdType',
+    'mnrColl',
+    'accdLoc',
+    'hwyClass',
+    'roadCond',
+    'wthrCond',
+    'consZone',
+    'alcFlag',
+    'bikeFlag',
+    'cyclFlag',
+    'pedFlag',
+    'totVeh',
+    'lon',
+    'lat'
+];
+function processVal(v) {
+    if (v == null || typeof v == 'undefined') {
+        return '';
+    }
+    else {
+        return v;
+    }
+}
+/**
+ *
+ * @param {Array<CrashDataObject>} crashData - array of crash data
+ * @returns {string} crash summary table html
+ * @private
+ */
+function _crashInfoHelper(crashData) {
+    "use strict";
+    crashData.sort(function (a, b) {
+        var dteA = (new Date(a['dte'] + ' ' + a['time'])).getTime();
+        var dteB = (new Date(b['dte'] + ' ' + b['time'])).getTime();
+        if (dteA == dteB) {
+            return 0;
+        }
+        else {
+            return dteA > dteB ? -1 : 1;
+        }
+    });
+    var returnHtml = '';
+    returnHtml += '<ul class="crash-list">';
+    var crashSummary = {};
+    for (var _i = 0, crashData_1 = crashData; _i < crashData_1.length; _i++) {
+        var c = crashData_1[_i];
+        if (typeof crashSummary[c.injSvr] == 'undefined') {
+            crashSummary[c.injSvr] = 1;
+        }
+        else {
+            crashSummary[c.injSvr]++;
+        }
+        returnHtml += "<li style=\"background-color: " + injColor(c.injSvr) + ";\">";
+        returnHtml += c.accDate ? c.accDate : '';
+        if (c.mnrColl) {
+            returnHtml += ', ' + c.mnrColl;
+        }
+        if (c.injSvr) {
+            returnHtml += ', ' + c.injSvr;
+        }
+        returnHtml += '</li>';
+    }
+    returnHtml += '</ul>';
+    var crashType = {
+        'K': 'Fatal',
+        'A': 'Incapacitating',
+        'B': 'Non-incapacitating',
+        'C': 'Possible Injury',
+        'P': 'Property Damage'
+    };
+    var tableContent = '<table class="crash-summary-table">';
+    tableContent += "<tr><th colspan=\"2\">Crash Summary</th></tr>";
+    tableContent += "<tr><td>Total</td><td>" + crashData.length + "</td></tr>";
+    if (crashData.length > 0) {
+        for (var _a = 0, _b = ['K', 'A', 'B', 'C', 'P']; _a < _b.length; _a++) {
+            var k = _b[_a];
+            if (typeof crashSummary[k] != 'undefined') {
+                tableContent += "<tr><td>" + crashType[k] + "</td><td>" + crashSummary[k] + "</td></tr>";
+            }
+        }
+    }
+    tableContent += '</table>';
+    returnHtml = tableContent + returnHtml;
+    return returnHtml;
+}
+/**
+ *
+ * @param  feature - the input feature
+ * @returns return style or null
+ */
+var crashPointStyle = function (feature) {
+    "use strict";
+    var props = feature.getProperties();
+    var crashColor = filterCrash_1.default.getCrashColor(props['injSvr']);
+    if (!crashColor) {
+        return null;
+    }
+    var crashColorFill = colorUtil.rgbToRgba(crashColor, 0.6);
+    return [new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({
+                    color: crashColorFill
+                }),
+                stroke: new ol.style.Stroke({ color: crashColor, width: 2 })
+            })
+        })];
+};
+var CrashData = (function () {
+    function CrashData() {
+        this._crashHtmlLookup = {};
+        this._crashArrayLookup = {};
+        this.pointCrashes = new LayerBaseVectorGeoJson_1.default('', {
+            name: "Crash Points",
+            zIndex: 204,
+            minZoom: 10,
+            renderOrder: function (a, b) {
+                var sevOrder = ['P', 'C', 'B', 'A', 'K'];
+                var sevA = a.getProperties()['injSvr'];
+                var sevB = b.getProperties()['injSvr'];
+                var sevAInd = sevOrder.indexOf(sevA);
+                var sevBInd = sevOrder.indexOf(sevB);
+                if (sevAInd == sevBInd) {
+                    return 0;
+                }
+                return sevAInd > sevBInd ? 1 : -1;
+            }
+        });
+        this.pointCrashes.style = crashPointStyle;
+    }
+    /**
+     *
+     * @param m
+     * @param ssaId
+     * @param snapshot
+     */
+    CrashData.prototype.init = function (m, ssaId, snapshot) {
+        var _this = this;
+        mapPopup_1.default.addVectorPopup(this.pointCrashes, function (props) {
+            var returnHtml = '<table class="crash-popup-table">';
+            for (var _i = 0, crashProps_1 = crashProps; _i < crashProps_1.length; _i++) {
+                var p = crashProps_1[_i];
+                returnHtml += "<tr><td>" + p + "</td><td>" + processVal(props[p]) + "</td></tr>";
+            }
+            returnHtml += '</table>';
+            return returnHtml;
+        });
+        filterCrash_1.default.addChangeCallback(function () {
+            _this.pointCrashes.refresh();
+        });
+        ajaxGetters_1.default.getCrashes(ssaId, snapshot, function (d) {
+            _this._processCrashData(d);
+        });
+        m.addLayer(this.pointCrashes.olLayer);
+    };
+    CrashData.prototype._processCrashData = function (d) {
+        for (var _i = 0, _a = objHelp.keyValPairs(d); _i < _a.length; _i++) {
+            var itm = _a[_i];
+            /**
+             *
+             * @type {Array.<CrashDataObject>}
+             */
+            var crashes = itm.value;
+            this._crashHtmlLookup[itm.key] = _crashInfoHelper(crashes);
+            this._crashArrayLookup[itm.key] = crashes;
+            for (var _b = 0, crashes_1 = crashes; _b < crashes_1.length; _b++) {
+                var c = crashes_1[_b];
+                if (!(c.lon && c.lat)) {
+                    continue;
+                }
+                var geom = new ol.geom.Point([c.lon, c.lat]);
+                geom.transform(proj.proj4326, proj.proj3857);
+                var p = new ol.Feature(geom);
+                c['injSvr'] = c['injSvr'] || 'O';
+                p.setProperties(c);
+                this.pointCrashes.source.addFeature(p);
+            }
+        }
+        // flash a crashes loaded message
+        var $crashesLoadMsg = $('.crashes-loaded-msg');
+        if ($crashesLoadMsg) {
+            $crashesLoadMsg.fadeIn();
+            setTimeout(function () {
+                $crashesLoadMsg.fadeOut();
+            }, 4000);
+        }
+        else {
+            console.log('get crashes message element not found');
+        }
+    };
+    CrashData.prototype.getCrashSummary = function (pdp) {
+        var summ = this._crashHtmlLookup[pdp.toString()];
+        return summ || '';
+    };
+    return CrashData;
+}());
+exports.CrashData = CrashData;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new CrashData();
+//# sourceMappingURL=crashData.js.map
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * Created by gavorhes on 7/15/2016.
+ */
+var filterMmFlag_1 = __webpack_require__(35);
+var mapPopup_1 = __webpack_require__(3);
+var constants = __webpack_require__(7);
+var _DeficiencyBase_1 = __webpack_require__(16);
+var ol = __webpack_require__(2);
+/**
+ *
+ * @param {ol.Feature} feature - the input feature
+ * @returns {Array<ol.style.Style>|null} - return style or null
+ */
+var mmFlagStyle = function (feature) {
+    "use strict";
+    var props = feature.getProperties();
+    var txtFunc = function () {
+        return new ol.style.Text({
+            text: props['mmId'],
+            scale: 1.5,
+            stroke: new ol.style.Stroke({
+                color: 'black',
+                width: 2
+            }),
+            fill: new ol.style.Fill({
+                color: constants.mmFlagColor
+            })
+        });
+    };
+    if ((props['rateFlag'] >= 1 && filterMmFlag_1.default.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag_1.default.mmKabFlagOn) {
+        return [new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: constants.mmFlagColor,
+                    width: 6
+                }),
+                text: txtFunc()
+            })];
+    }
+    else {
+        return null;
+    }
+};
+var MmFlags = (function (_super) {
+    __extends(MmFlags, _super);
+    function MmFlags() {
+        return _super.call(this, "Safety Flags", mmFlagStyle, 200, constants.mmFlagListId) || this;
+    }
+    /**
+     * initialize with the map
+     * @param {ol.Map} m - the ol map
+     */
+    MmFlags.prototype.init = function (m) {
+        var _this = this;
+        _super.prototype.init.call(this, m);
+        filterMmFlag_1.default.addChangeCallback(function () {
+            _this.deficiencyLayer.refresh();
+        });
+        mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
+            var rates = [];
+            if (props['rateFlag'] != null) {
+                rates.push("Rate Flag: " + props['rateFlag'].toFixed(4));
+            }
+            if (props['kabCrshFlag'] != null) {
+                rates.push("KAB Flag: " + props['kabCrshFlag'].toFixed(4));
+            }
+            return "MM ID: " + props['mmId'] + "<br/>" + rates.join('<br>');
+        });
+    };
+    /**
+     *
+     * @param {Corridor} c - the corridor to be added
+     */
+    MmFlags.prototype.addCorridor = function (c) {
+        var feats = c.layer.source.getFeatures();
+        for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
+            var f = feats_1[_i];
+            var props = f.getProperties();
+            var triggerRateFlag = props['rateFlag'] >= 1;
+            var triggerKabFlag = props['kabCrshFlag'] >= 1;
+            if (props['rateFlag'] >= 1 || props['kabCrshFlag'] >= 1) {
+                this.deficiencyLayer.source.addFeature(f);
+                f.setProperties({ mmId: "" + props['pdpId'] });
+                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
+                var flags = [];
+                if (triggerRateFlag) {
+                    flags.push('Crash Rate');
+                }
+                if (triggerKabFlag) {
+                    flags.push('KAB');
+                }
+                appendHtml += flags.join(', ');
+                this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
+            }
+        }
+    };
+    return MmFlags;
+}(_DeficiencyBase_1.default));
+exports.MmFlags = MmFlags;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new MmFlags();
+//# sourceMappingURL=mmFlags.js.map
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Created by gavorhes on 5/17/2016.
+ */
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('ssa');
+exports.countyLookup = {
+    "1": "Adams",
+    "2": "Ashland",
+    "3": "Barron",
+    "4": "Bayfield",
+    "5": "Brown",
+    "6": "Buffalo",
+    "7": "Burnett",
+    "8": "Calumet",
+    "9": "Chippewa",
+    "10": "Clark",
+    "11": "Columbia",
+    "12": "Crawford",
+    "13": "Dane",
+    "14": "Dodge",
+    "15": "Door",
+    "16": "Douglas",
+    "17": "Dunn",
+    "18": "Eau Claire",
+    "19": "Florence",
+    "20": "Fond du Lac",
+    "21": "Forest",
+    "22": "Grant",
+    "23": "Green",
+    "24": "Green Lake",
+    "25": "Iowa",
+    "26": "Iron",
+    "27": "Jackson",
+    "28": "Jefferson",
+    "29": "Juneau",
+    "30": "Kenosha",
+    "31": "Kewaunee",
+    "32": "La Crosse",
+    "33": "Lafayette",
+    "34": "Langlade",
+    "35": "Lincoln",
+    "36": "Manitowoc",
+    "37": "Marathon",
+    "38": "Marinette",
+    "39": "Marquette",
+    "40": "Milwaukee",
+    "41": "Monroe",
+    "42": "Oconto",
+    "43": "Oneida",
+    "44": "Outagamie",
+    "45": "Ozaukee",
+    "46": "Pepin",
+    "47": "Pierce",
+    "48": "Polk",
+    "49": "Portage",
+    "50": "Price",
+    "51": "Racine",
+    "52": "Richland",
+    "53": "Rock",
+    "54": "Rusk",
+    "55": "Saint Croix",
+    "56": "Sauk",
+    "57": "Sawyer",
+    "58": "Shawano",
+    "59": "Sheboygan",
+    "60": "Taylor",
+    "61": "Trempealeau",
+    "62": "Vernon",
+    "63": "Vilas",
+    "64": "Walworth",
+    "65": "Washburn",
+    "66": "Washington",
+    "67": "Waukesha",
+    "68": "Waupaca",
+    "69": "Waushara",
+    "70": "Winnebago",
+    "71": "Wood",
+    "73": "Menominee"
+};
+nm.countyLookup = exports.countyLookup;
+/**
+ *
+ * @param {string|number} countyId
+ * @returns {string}
+ */
+function getCountyById(countyId) {
+    "use strict";
+    if (typeof countyId == 'number') {
+        countyId = countyId.toFixed();
+    }
+    return exports.countyLookup[countyId];
+}
+exports.getCountyById = getCountyById;
+nm.getCountyById = getCountyById;
+//# sourceMappingURL=countyLookup.js.map
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * Created by gavorhes on 7/14/2016.
+ */
+var FilterBase_1 = __webpack_require__(11);
+var FilterControllingCriteria = (function (_super) {
+    __extends(FilterControllingCriteria, _super);
+    function FilterControllingCriteria() {
+        return _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true) || this;
+    }
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignSpeedOn", {
+        get: function () {
+            return this.valIsOn('ccDesignSpeed');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccLaneWidthOn", {
+        get: function () {
+            return this.valIsOn('ccLaneWidth');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccShoulderWidthOn", {
+        get: function () {
+            return this.valIsOn('ccShoulderWidth');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccHorizontalCurveOn", {
+        get: function () {
+            return this.valIsOn('ccHorizontalCurve');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccSuperelevationOn", {
+        get: function () {
+            return this.valIsOn('ccSuperelevation');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccMaximumGradeOn", {
+        get: function () {
+            return this.valIsOn('ccMaximumGrade');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccStoppingSightOn", {
+        get: function () {
+            return this.valIsOn('ccStoppingSight');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccCrossSlopeOn", {
+        get: function () {
+            return this.valIsOn('ccCrossSlope');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccVerticalClearanceOn", {
+        get: function () {
+            return this.valIsOn('ccVerticalClearance');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignLoadingOn", {
+        get: function () {
+            return this.valIsOn('ccDesignLoading');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FilterControllingCriteria;
+}(FilterBase_1.default));
+exports.FilterControllingCriteria = FilterControllingCriteria;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new FilterControllingCriteria();
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * Created by gavorhes on 7/14/2016.
+ */
+var FilterBase_1 = __webpack_require__(11);
+var FilterCrash = (function (_super) {
+    __extends(FilterCrash, _super);
+    function FilterCrash() {
+        return _super.call(this, 'filter-crash', 'filter-crash-sub', false) || this;
+    }
+    /**
+     *
+     * @param {string} val - the lookup value
+     * @returns {string|null} crash color or null if the crash type should be suppressed
+     */
+    FilterCrash.prototype.getCrashColor = function (val) {
+        var isActive = _super.prototype.valIsOn.call(this, val);
+        if (!isActive) {
+            return null;
+        }
+        var color = {
+            'K': 'rgb(255,0,0)',
+            'A': 'rgb(255,165,0)',
+            'B': 'rgb(255,255,0)',
+            'C': 'rgb(153,255,153)',
+            'P': 'rgb(0,0,255)'
+        }[val];
+        return color || 'rgb(128,128,128)';
+    };
+    return FilterCrash;
+}(FilterBase_1.default));
+exports.FilterCrash = FilterCrash;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new FilterCrash();
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * Created by gavorhes on 7/14/2016.
+ */
+var FilterBase_1 = __webpack_require__(11);
+var FilterMmFlag = (function (_super) {
+    __extends(FilterMmFlag, _super);
+    function FilterMmFlag() {
+        return _super.call(this, 'mm-flags', 'mm-flags-sub', true) || this;
+    }
+    Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
+        get: function () {
+            return this.valIsOn('rateFlag');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterMmFlag.prototype, "mmKabFlagOn", {
+        get: function () {
+            return this.valIsOn('kabCrshFlag');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FilterMmFlag;
+}(FilterBase_1.default));
+exports.FilterMmFlag = FilterMmFlag;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new FilterMmFlag();
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/13/2016.
+ */
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var provide_1 = __webpack_require__(0);
+var SortedFeatures_1 = __webpack_require__(13);
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
+var mapPopup_1 = __webpack_require__(3);
+var SelectBoxBase_1 = __webpack_require__(12);
+var ajaxGetters_1 = __webpack_require__(5);
+var layerStyles = __webpack_require__(6);
+var ol = __webpack_require__(2);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('ssa.select');
+var SegmentPicker = (function (_super) {
+    __extends(SegmentPicker, _super);
+    /**
+     *
+     * @param {PickerCollection} pickerColl - picker collection
+     * @param {boolean} isFrom - is this the start (from) picker
+     */
+    function SegmentPicker(pickerColl, isFrom) {
+        var _this = this;
+        function contentGen(guid) {
+            var outString = '';
+            outString += "<div style=\"position: relative;\" class=\"select-picker-map-container\">";
+            outString += "<select id=\"" + guid + "\"></select>";
+            outString += "</div>";
+            return outString;
+        }
+        _this = _super.call(this, pickerColl.$innerContainer, isFrom ? 'Ref. Point #1' : 'Ref. Point #2', contentGen) || this;
+        _this._isFrom = isFrom;
+        _this._pickerColl = pickerColl;
+        /**
+         *
+         * @type {number|undefined}
+         * @private
+         */
+        _this._selectedPdpId = undefined;
+        _this.addChangeListener(function (v) {
+            _this.selectedPdpId = parseInt(v);
+        });
+        _this._box.keyup(function () {
+            if (_this.selectedPdpId != parseInt(_this.selectedValue.toString())) {
+                _this._box.trigger('change');
+            }
+        });
+        /**
+         *
+         * @type {SortedFeatures|undefined}
+         * @private
+         */
+        _this._sortedFeatures = undefined;
+        /**
+         *
+         * @type {LayerBaseVectorGeoJson}
+         * @protected
+         */
+        _this._segmentLayer = new LayerBaseVectorGeoJson_1.default('', {
+            minZoom: 6,
+            name: _this._isFrom ? 'Start Segment' : 'End Segment',
+            transform: { dataProjection: 'EPSG:3857', featureProjection: 'EPSG:3857' },
+            style: layerStyles.segmentLayer,
+            visible: false
+        });
+        _this._segNodeLayer = new LayerBaseVectorGeoJson_1.default('', {
+            style: layerStyles.segNodeStyle,
+            minZoom: 11,
+            visible: false
+        });
+        /**
+         *
+         * @type {LayerBaseVectorGeoJson}
+         * @private
+         */
+        _this._segmentSelectionLayer = new LayerBaseVectorGeoJson_1.default('', {
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: _this._isFrom ? layerStyles.fromSelectionColor : layerStyles.toSelectionColor,
+                    width: 8
+                })
+            }),
+            minZoom: 6,
+            visible: false,
+            zIndex: _this._isFrom ? 100 : 101
+        });
+        _this._selectBtnClass = _this._isFrom ? "select-seg-btn-from" : "select-seg-btn-to";
+        _this._selectBtnClassTo = 'select-seg-btn-to';
+        mapPopup_1.default.addVectorPopup(_this._segmentLayer, function (props) {
+            var returnHtml = '<table class="mm-popup-table">';
+            returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td>;";
+            returnHtml += "<td rowspan=\"5\">";
+            if (_this._pickerColl.startEndCountySame) {
+                returnHtml += "<input type=\"button\" id='" + props['pdpId'] + "' class=\"" + _this._selectBtnClass + "\" value=\"Select Start\"/>";
+                returnHtml += "<input type=\"button\" id='" + props['pdpId'] + "' class=\"" + _this._selectBtnClassTo + "\" value=\"Select End\"/>";
+            }
+            else {
+                returnHtml += "<input type=\"button\" id='" + props['pdpId'] + "' class=\"" + _this._selectBtnClass + "\" value=\"Select\"/>";
+            }
+            returnHtml += "</td></tr>";
+            returnHtml += "<tr><td>Hwy</td><td>" + props['hwyDir'] + "</td></tr>";
+            returnHtml += "<tr><td>DivUnd</td><td>" + props['divUnd'] + "</td></tr>";
+            returnHtml += "<tr><td>From</td><td>" + props['pdpFrom'] + "</td></tr>";
+            returnHtml += "<tr><td>To</td><td>" + props['pdpTo'] + "</td></tr>";
+            returnHtml += '</table>';
+            return returnHtml;
+        });
+        // add the popup change function to find the select button
+        mapPopup_1.default.addPopupChangedFunction(function () {
+            var selectButton = $("." + _this._selectBtnClass);
+            if (selectButton.length > 0) {
+                var __this_1 = _this;
+                selectButton.click(function () {
+                    __this_1.selectedPdpId = this['id'];
+                });
+            }
+        });
+        _this._enabled = false;
+        _this._layersVisible = false;
+        _this._box.click(function (evt) {
+            evt.stopPropagation();
+        });
+        _this._box.parent('div').click(function () {
+            if (_this._sortedFeatures == null) {
+                return;
+            }
+            var selectedFeature = _this._sortedFeatures.getFeature(_this.selectedPdpId);
+            if (selectedFeature == null) {
+                return;
+            }
+            mapPopup_1.default.map.getView().fit(selectedFeature.getGeometry().getExtent(), mapPopup_1.default.map.getSize());
+            mapPopup_1.default.map.getView().setZoom(mapPopup_1.default.map.getView().getZoom() - 2);
+        });
+        return _this;
+    }
+    /**
+     * @param {Array<object>} arr - array of returned objects, implementation defined in derived classes
+     */
+    SegmentPicker.prototype._processAjaxResult = function (arr) {
+        var _this = this;
+        arr.sort(function (a, b) {
+            var c = _this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
+            var d = _this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
+            if (c == d) {
+                return 0;
+            }
+            return c < d ? -1 : 1;
+        });
+        for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
+            var feat = arr_1[_i];
+            var props = feat['properties'];
+            if (this._isFrom) {
+                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['startRp'] + "</option>");
+            }
+            else {
+                this._box.append("<option value=\"" + props['pdpId'] + "\">" + props['endRp'] + "</option>");
+            }
+        }
+    };
+    /**
+     *
+     * @param {string|number} county - county id as string or number
+     * @param {string|number|null} rteId - routeId
+     * @param {number|undefined} [pdpId=undefined] - the pdp id to be set on load
+     */
+    SegmentPicker.prototype.setCountyAndRoute = function (county, rteId, pdpId) {
+        var _this = this;
+        pdpId = typeof pdpId == 'number' ? pdpId : undefined;
+        this.selectedPdpId = undefined;
+        this._box.html('');
+        this._box.addClass('refresh').removeClass('refresh');
+        if (mapPopup_1.default) {
+            mapPopup_1.default.closePopup();
+        }
+        if (typeof county == 'string') {
+            county = parseInt(county);
+        }
+        if (rteId == null) {
+            this.enabled = false;
+            return;
+        }
+        if (typeof rteId == 'string') {
+            rteId = parseInt(rteId);
+        }
+        ajaxGetters_1.default.getSegments(county, rteId, function (d) {
+            _this._segmentLayer.clear();
+            _this._segNodeLayer.clear();
+            _this._processAjaxResult(d['features']);
+            console.log(d);
+            if (d['features'].length > 0) {
+                _this.enabled = true;
+                _this._segmentLayer.addFeatures(d);
+                var feats = _this._segmentLayer.source.getFeatures();
+                _this._sortedFeatures = new SortedFeatures_1.default(feats, 'pdpId');
+                _this._setExtent();
+                if (typeof pdpId == 'number') {
+                    // this._box.val(pdpId.toFixed());
+                    _this.selectedPdpId = pdpId;
+                }
+                else {
+                    _this._box.trigger('change');
+                }
+                for (var i = 0; i < feats.length; i++) {
+                    var coords = feats[i].getGeometry()['getCoordinates']();
+                    if (coords.length > 0) {
+                        var startPoint = new ol.geom.Point(coords[0]);
+                        var endPoint = new ol.geom.Point(coords[coords.length - 1]);
+                        _this._segNodeLayer.source.addFeature(new ol.Feature(startPoint));
+                        _this._segNodeLayer.source.addFeature(new ol.Feature(endPoint));
+                    }
+                }
+            }
+            else {
+                _this.enabled = false;
+            }
+        });
+    };
+    SegmentPicker.prototype._setExtent = function () {
+    };
+    Object.defineProperty(SegmentPicker.prototype, "enabled", {
+        /**
+         * @returns {boolean} if enabled
+         */
+        get: function () {
+            return this._enabled;
+        },
+        /**
+         *
+         * @param {boolean} isEnabled - is enabled
+         * @private
+         */
+        set: function (isEnabled) {
+            this._enabled = isEnabled;
+            this._box.prop('disabled', !isEnabled);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SegmentPicker.prototype, "layersVisible", {
+        get: function () {
+            return this._layersVisible;
+        },
+        set: function (lyrsVisible) {
+            this._layersVisible = lyrsVisible;
+            if (this._isFrom) {
+                this.segmentLayer.visible = this.layersVisible;
+                this._segNodeLayer.visible = this.layersVisible;
+            }
+            else {
+                this.segmentLayer.visible = this.layersVisible && !this._pickerColl.startEndCountySame;
+                this._segNodeLayer.visible = this.layersVisible && !this._pickerColl.startEndCountySame;
+            }
+            this.selectionLayer.visible = this.layersVisible;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SegmentPicker.prototype, "selectedPdpId", {
+        /**
+         *
+         * @returns {number|undefined} selected id
+         */
+        get: function () {
+            return this._selectedPdpId;
+        },
+        /**
+         * set the currently selected pdp id
+         * @param {number|undefined} newId - new selected id
+         */
+        set: function (newId) {
+            if (mapPopup_1.default) {
+                mapPopup_1.default.closePopup();
+            }
+            if (typeof newId == 'string') {
+                newId = parseInt(newId);
+            }
+            if (newId == this._selectedPdpId) {
+                return;
+            }
+            this._selectedPdpId = newId;
+            this.selectionLayer.source.clear();
+            if (this._selectedPdpId != undefined) {
+                this._box.val(this.selectedPdpId);
+                var selectedFeature = this._sortedFeatures.getFeature(this.selectedPdpId);
+                this.selectionLayer.source.addFeature(selectedFeature);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SegmentPicker.prototype.clear = function () {
+        this._box.html('');
+        this.selectedPdpId = undefined;
+    };
+    Object.defineProperty(SegmentPicker.prototype, "segmentLayer", {
+        /**
+         * get the segment layer with the mm segments in the county and route id
+         * @returns {LayerBaseVectorGeoJson} - the segment layer
+         */
+        get: function () {
+            return this._segmentLayer;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SegmentPicker.prototype, "selectionLayer", {
+        /**
+         * get the selection hayer
+         * @returns {LayerBaseVectorGeoJson} the selection layer for this picker
+         */
+        get: function () {
+            return this._segmentSelectionLayer;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return SegmentPicker;
+}(SelectBoxBase_1.default));
+exports.SegmentPicker = SegmentPicker;
+nm.SegmentPicker = SegmentPicker;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SegmentPicker;
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 6/14/2016.
+ */
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var SelectBoxBase_1 = __webpack_require__(12);
+var ajaxGetters_1 = __webpack_require__(5);
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('ssa.select');
+var SelectCounty = (function (_super) {
+    __extends(SelectCounty, _super);
+    /**
+     *
+     * @param {jQuery} parent
+     * @param {string} labelContent
+     */
+    function SelectCounty(parent, labelContent) {
+        var _this = _super.call(this, parent, labelContent) || this;
+        ajaxGetters_1.default.getAllCounties(function (d) {
+            for (var _i = 0, d_1 = d; _i < d_1.length; _i++) {
+                var c = d_1[_i];
+                _this.box.append("<option value=\"" + c['id'] + "\" " + (c['primary'] ? 'selected' : '') + ">" + c['name'] + "</option>");
+            }
+            _this.box.trigger('change');
+        });
+        return _this;
+    }
+    return SelectCounty;
+}(SelectBoxBase_1.default));
+exports.SelectCounty = SelectCounty;
+nm.SelectStartCounty = SelectCounty;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SelectCounty;
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 5/12/2016.
+ */
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var SelectBoxBase_1 = __webpack_require__(12);
+var ajaxGetters_1 = __webpack_require__(5);
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('ssa.select');
+var SelectHighway = (function (_super) {
+    __extends(SelectHighway, _super);
+    /**
+     *
+     * @param {jQuery} parent - parent element
+     */
+    function SelectHighway(parent) {
+        return _super.call(this, parent, "Highway") || this;
+    }
+    // /**
+    //  *
+    //  * @param {number} countyId - county id
+    //  * @param {string|undefined} [hwy=undefined] - route id for initial selection
+    //  */
+    // setStartCounty(countyId, hwy) {
+    //     hwy = typeof hwy == 'string' ? hwy : undefined;
+    //     this.box.html('');
+    //     this.box.addClass('refresh').removeClass('refresh');
+    //
+    //     Ajx.getHighways(countyId, (d) => {
+    //         "use strict";
+    //
+    //         for (let h of d) {
+    //             this.box.append(`<option>${h['name']}</option>`);
+    //         }
+    //         if (d) {
+    //             if (hwy) {
+    //                 this.box.val(hwy);
+    //             } else {
+    //                 this.box.trigger('change');
+    //
+    //             }
+    //         }
+    //     });
+    // }
+    /**
+     *
+     * @param {number|string|null} startId - start county id
+     * @param {number|string|null} endId - end county id
+     * @param {number|string|null} [routeId=undefined] - route id for selection
+     * @param {boolean} [forceTrigger=false] - force change trigger to populate the rp pickers
+     */
+    SelectHighway.prototype.setStartEndCounty = function (startId, endId, routeId, forceTrigger) {
+        var _this = this;
+        if (forceTrigger === void 0) { forceTrigger = false; }
+        forceTrigger = typeof forceTrigger == 'boolean' ? forceTrigger : false;
+        if (startId == null || startId == undefined || endId == null) {
+            return;
+        }
+        if (typeof routeId == 'number') {
+            routeId = routeId.toFixed();
+        }
+        this.box.html('');
+        this.box.addClass('refresh').removeClass('refresh');
+        if (typeof startId == 'string') {
+            startId = parseInt(startId);
+        }
+        if (typeof endId == 'string') {
+            endId = parseInt(endId);
+        }
+        if (typeof routeId == 'string') {
+            routeId = parseInt(routeId);
+        }
+        ajaxGetters_1.default.getHwyByStartEndCounty(startId, endId, function (d) {
+            if (d.length > 0) {
+                d.sort(function (a, b) {
+                    var aName = a['name'];
+                    var bName = b['name'];
+                    if (aName == bName) {
+                        return 0;
+                    }
+                    else {
+                        return aName > bName ? 1 : -1;
+                    }
+                });
+                for (var _i = 0, d_1 = d; _i < d_1.length; _i++) {
+                    var c = d_1[_i];
+                    _this.box.append("<option value=\"" + c['id'] + "\" " + (c['primary'] ? 'selected' : '') + ">" + c['name'] + "</option>");
+                }
+                if (routeId) {
+                    _this.box.val(routeId.toFixed());
+                }
+                if (!routeId || forceTrigger) {
+                    _this.box.trigger('change');
+                }
+                _this.box.prop('disabled', false);
+            }
+            else {
+                _this.box.prop('disabled', true);
+                _this.box.trigger('change');
+            }
+        });
+    };
+    return SelectHighway;
+}(SelectBoxBase_1.default));
+exports.SelectHighway = SelectHighway;
+nm.SelectHighway = SelectHighway;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SelectHighway;
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var LayerBase_1 = __webpack_require__(18);
+var mapMove_1 = __webpack_require__(20);
+var provide_1 = __webpack_require__(0);
+var ol = __webpack_require__(2);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('layers');
+/**
+ * The Vector layer base
+ * @augments LayerBase
+ * @abstract
+ */
+var LayerBaseVector = (function (_super) {
+    __extends(LayerBaseVector, _super);
+    /**
+     * The base vector layer
+     * @param {string} url - pass an empty string to prevent default load and add from a json source
+     * @param {object} options - config
+     * @param {string} [options.id] - layer id
+     * @param {string} [options.name=Unnamed Layer] - layer name
+     * @param {number} [options.opacity=1] - opacity
+     * @param {boolean} [options.visible=true] - default visible
+     * @param {number} [options.minZoom=undefined] - min zoom level, 0 - 28
+     * @param {number} [options.maxZoom=undefined] - max zoom level, 0 - 28
+     * @param {object} [options.params={}] the get parameters to include to retrieve the layer
+     * @param {number} [options.zIndex=0] the z index for the layer
+     * @param {function} [options.loadCallback] function to call on load, context this is the layer object
+     * @param {boolean} [options.legendCollapse=false] if the legend item should be initially collapsed
+     * @param {boolean} [options.legendCheckbox=true] if the legend item should have a checkbox for visibility
+     * @param {boolean} [options.legendContent] additional content to add to the legend
+     *
+     * @param {boolean} [options.autoLoad=false] if the layer should auto load if not visible
+     * @param {object} [options.style=undefined] the layer style, use openlayers default style if not defined
+     * @param {boolean} [options.onDemand=false] if the layer should be loaded by extent on map move
+     * @param {number} [options.onDemandDelay=300] delay before the map move callback should be called
+     * @param {mapMoveMakeGetParams} [options.mapMoveMakeGetParams=function(lyr, extent, zoomLevel){}] function to create additional map move params
+     * @param {MapMoveCls} [options.mapMoveObj=mapMove] alternate map move object for use with multi map pages
+     *
+     */
+    function LayerBaseVector(url, options) {
+        if (options === void 0) { options = {}; }
+        var _this = _super.call(this, url, options) || this;
+        options = options;
+        //prevent regular load if no url has been provided
+        if (_this.url.trim() == '') {
+            _this._loaded = true;
+        }
+        _this._style = typeof options.style == 'undefined' ? undefined : options.style;
+        if (_this.visible) {
+            _this._autoLoad = true;
+        }
+        else {
+            _this._autoLoad = (typeof options['autoLoad'] == 'boolean' ? options['autoLoad'] : false);
+        }
+        _this._onDemand = typeof options.onDemand == 'boolean' ? options.onDemand : false;
+        _this._onDemandDelay = typeof options.onDemandDelay == 'number' ? options.onDemandDelay : 300;
+        if (options.mapMoveObj) {
+            _this._mapMove = options.mapMoveObj;
+        }
+        else {
+            _this._mapMove = _this._onDemand ? mapMove_1.default : undefined;
+        }
+        _this._mapMoveMakeGetParams = typeof options.mapMoveMakeGetParams == 'function' ? options.mapMoveMakeGetParams :
+            function () { return {}; };
+        if (_this._onDemand) {
+            _this._loaded = true;
+            _this._mapMoveParams = {};
+            _this._mapMove.checkInit();
+            _this._mapMove.addVectorLayer(_this);
+        }
+        _this._source = new ol.source.Vector();
+        _this._olLayer = new ol.layer.Vector({
+            source: _this._source,
+            visible: _this.visible,
+            style: _this.style,
+            minResolution: _this._minResolution,
+            maxResolution: _this._maxResolution,
+            renderOrder: options.renderOrder
+        });
+        _this.olLayer.setZIndex(_this._zIndex);
+        _this._projectionMap = null;
+        _this._projection4326 = new ol.proj.Projection({ code: "EPSG:4326" });
+        return _this;
+    }
+    /**
+     * dummy to be overridden
+     * @param {object} featureCollection - geojson or esrijson object
+     */
+    LayerBaseVector.prototype.addFeatures = function (featureCollection) {
+        console.log('Layer vector base addFeatures is a placeholder and does nothing');
+    };
+    /**
+     * Before call to map move callback, can prevent call by returning false
+     * @param {number} zoom - zoom level
+     * @param {string} [evtType=undefined] undefined for initial load, otherwise one of 'change:center', 'change:resolution'
+     * @returns {boolean} if the call should proceed
+     */
+    LayerBaseVector.prototype.mapMoveBefore = function (zoom, evtType) {
+        if (this.minZoom !== undefined) {
+            if (zoom < this.minZoom) {
+                return false;
+            }
+        }
+        if (this.maxZoom !== undefined) {
+            if (zoom > this.maxZoom) {
+                return false;
+            }
+        }
+        return this.visible;
+    };
+    /**
+     * callback to generate the parameters passed in the get request
+     * @param {object} extent - extent object
+     * @param {number} extent.minX - minX
+     * @param {number} extent.minY - minY
+     * @param {number} extent.maxX - maxX
+     * @param {number} extent.maxY - maxY
+     * @param {number} zoomLevel - zoom level
+     */
+    LayerBaseVector.prototype.mapMoveMakeGetParams = function (extent, zoomLevel) {
+        this._mapMoveParams = {};
+        $.extend(this._mapMoveParams, this.params);
+        $.extend(this._mapMoveParams, this._mapMoveMakeGetParams(this, extent, zoomLevel));
+    };
+    /**
+     * callback function on map move
+     * @param {object} d - the json response
+     */
+    LayerBaseVector.prototype.mapMoveCallback = function (d) {
+        if (this.source) {
+            this._source.clear();
+        }
+    };
+    /**
+     * clear features in the layer
+     */
+    LayerBaseVector.prototype.clear = function () {
+        if (this._source) {
+            this._source.clear();
+        }
+    };
+    Object.defineProperty(LayerBaseVector.prototype, "onDemandDelay", {
+        /**
+         * get on demand delay in miliseconds
+         */
+        get: function () {
+            return this._onDemandDelay;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "autoLoad", {
+        /**
+         * get if the layer is autoloaded
+         */
+        get: function () {
+            return this._autoLoad;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "style", {
+        /**
+         * get the style definition
+         */
+        get: function () {
+            return this._style;
+        },
+        /**
+         * set the style
+         * @param style - the style or function
+         */
+        set: function (style) {
+            this._style = style;
+            this.olLayer.setStyle(this._style);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "mapCrs", {
+        /**
+         * get the map CRS if it is defined by the map move object
+         */
+        get: function () {
+            return this.mapProj == null ? null : this.mapProj.getCode();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "mapProj", {
+        get: function () {
+            if (this._projectionMap != null) {
+                return this._projectionMap;
+            }
+            if (this._mapMove) {
+                this._projectionMap = this._mapMove.map.getView().getProjection();
+                return this._projectionMap;
+            }
+            else {
+                return null;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "mapMove", {
+        /**
+         * get the map move object
+         * @type {MapMoveCls|*}
+         */
+        get: function () {
+            return this._mapMove;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "mapMoveParams", {
+        /**
+         * map move params
+         * @type {object}
+         */
+        get: function () {
+            return this._mapMoveParams;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "visible", {
+        get: function () {
+            return this._visible;
+        },
+        /**
+         * Set the layer visibility
+         * @type {boolean}
+         * @override
+         */
+        set: function (visibility) {
+            _super.prototype.setVisible.call(this, visibility);
+            if (this._onDemand) {
+                this.mapMove.triggerLyrLoad(this);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "source", {
+        /**
+         * get the layer vector source
+         * @override
+         */
+        get: function () {
+            return this.getSource();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "features", {
+        /**
+         * array of ol features
+         */
+        get: function () {
+            return this.source.getFeatures();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerBaseVector.prototype, "olLayer", {
+        /**
+         *
+         */
+        get: function () {
+            return _super.prototype.getOlLayer.call(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    LayerBaseVector.prototype.setZIndex = function (newZ) {
+        this.olLayer.setZIndex(newZ);
+    };
+    return LayerBaseVector;
+}(LayerBase_1.LayerBase));
+exports.LayerBaseVector = LayerBaseVector;
+nm.LayerBaseVector = LayerBaseVector;
+exports.default = LayerBaseVector;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 12/7/2015.
+ */
+var LayerBase_1 = __webpack_require__(18);
+var esriToOl = __webpack_require__(41);
+var mapPopup_1 = __webpack_require__(3);
+var provide_1 = __webpack_require__(0);
+var ol = __webpack_require__(2);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('layers');
+/**
+ * esri mapserver layer
+ * @augments LayerBase
+ */
+var LayerEsriMapServer = (function (_super) {
+    __extends(LayerEsriMapServer, _super);
+    /**
+     * The base layer for all others
+     * @param {string} url - resource url
+     * @param {object} [options] - config
+     * @param {string} [options.id] - layer id
+     * @param {string} [options.name=Unnamed Layer] - layer name
+     * @param {number} [options.opacity=1] - opacity
+     * @param {boolean} [options.visible=true] - default visible
+     * @param {number} [options.minZoom=undefined] - min zoom level, 0 - 28
+     * @param {number} [options.maxZoom=undefined] - max zoom level, 0 - 28
+     * @param {object} [options.params={}] the get parameters to include to retrieve the layer
+     * @param {number} [options.zIndex=0] the z index for the layer
+     * @param {function} [options.loadCallback] function to call on load, context this is the layer object
+     * @param {boolean} [options.legendCollapse=false] if the legend item should be initially collapsed
+     * @param {boolean} [options.legendCheckbox=true] if the legend item should have a checkbox for visibility
+     * @param {boolean} [options.legendContent] additional content to add to the legend
+     * @param {boolean} [options.addPopup=false] if a popup should be added
+     * @param {undefined|Array<number>} [options.showLayers=undefined] if a popup should be added
+     */
+    function LayerEsriMapServer(url, options) {
+        if (options === void 0) { options = {}; }
+        var _this = _super.call(this, url, options) || this;
+        _this._source = new ol.source.TileArcGISRest({
+            url: _this.url == '' ? undefined : _this.url,
+            params: typeof options.showLayers == 'undefined' ? undefined : { layers: 'show:' + options.showLayers.join(',') }
+        });
+        _this._olLayer = new ol.layer.Tile({
+            source: _this._source,
+            visible: _this.visible,
+            opacity: _this.opacity,
+            minResolution: _this._minResolution,
+            maxResolution: _this._maxResolution
+        });
+        _this._olLayer.setZIndex(_this._zIndex);
+        options.addPopup = typeof options.addPopup == 'boolean' ? options.addPopup : false;
+        _this._esriFormat = new ol.format.EsriJSON();
+        _this._popupRequest = null;
+        _this.addLegendContent();
+        if (options.addPopup) {
+            mapPopup_1.default.addMapServicePopup(_this);
+        }
+        return _this;
+    }
+    /**
+     * add additional content to the legend
+     * @param {string} [additionalContent=''] additional content for legend
+     */
+    LayerEsriMapServer.prototype.addLegendContent = function (additionalContent) {
+        var _this = this;
+        var urlCopy = this.url;
+        if (urlCopy[urlCopy.length - 1] !== '/') {
+            urlCopy += '/';
+        }
+        urlCopy += 'legend?f=pjson&callback=?';
+        $.get(urlCopy, {}, function (d) {
+            var newHtml = esriToOl.makeMapServiceLegend(d);
+            _super.prototype.addLegendContent.call(_this, newHtml);
+        }, 'json');
+    };
+    LayerEsriMapServer.prototype.getPopupInfo = function (queryParams) {
+        if (!this.visible) {
+            return;
+        }
+        var urlCopy = this.url;
+        if (urlCopy[urlCopy.length - 1] != '/') {
+            urlCopy += '/';
+        }
+        urlCopy += 'identify?callback=?';
+        var __this = this;
+        if (this._popupRequest != null) {
+            this._popupRequest.abort();
+        }
+        this._popupRequest = $.get(urlCopy, queryParams, function (d) {
+            for (var _i = 0, _a = d['results']; _i < _a.length; _i++) {
+                var r = _a[_i];
+                var popupHtml = '<table class="esri-popup-table">';
+                for (var a in r['attributes']) {
+                    if (r['attributes'].hasOwnProperty(a)) {
+                        var attrVal = r['attributes'][a];
+                        if (attrVal == null || attrVal.toString().toLowerCase() == 'null') {
+                            continue;
+                        }
+                        var attr = a;
+                        if (attr.length > 14) {
+                            attr = attr.slice(0, 11) + '...';
+                        }
+                        popupHtml += "<tr><td>" + attr + "</td><td>" + attrVal + "</td></tr>";
+                    }
+                }
+                popupHtml += '</table>';
+                mapPopup_1.default.addMapServicePopupContent(__this._esriFormat.readFeature(r), __this, popupHtml, r['layerName']);
+            }
+        }, 'json');
+        this._popupRequest.always(function () {
+            __this._popupRequest = null;
+        });
+    };
+    Object.defineProperty(LayerEsriMapServer.prototype, "source", {
+        /**
+         *
+         * @returns {ol.source.TileArcGISRest} the vector source
+         */
+        get: function () {
+            return _super.prototype.getSource.call(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(LayerEsriMapServer.prototype, "olLayer", {
+        /**
+         *
+         * @returns the ol layer
+         */
+        get: function () {
+            return _super.prototype.getOlLayer.call(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return LayerEsriMapServer;
+}(LayerBase_1.LayerBase));
+exports.LayerEsriMapServer = LayerEsriMapServer;
+nm.LayerEsriMapServer = LayerEsriMapServer;
+exports.default = LayerEsriMapServer;
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 1/4/2016.
+ */
+var provide_1 = __webpack_require__(0);
+var ol = __webpack_require__(2);
+var nm = provide_1.default('olHelpers.esriToOlStyle');
+/**
+ * This callback is displayed as part of the Requester class.
+ * @callback styleFunc
+ * @param {ol.Feature} feat - openlayers feature
+ * @param {number} resolution - map resolution
+ */
+/**
+ *
+ * @param {Array<number>} colorArray - input color array
+ * @param {number} opacity - the opacity 0 to 1
+ * @returns {string} rgba string
+ * @private
+ */
+function _colorArrayToRgba(colorArray, opacity) {
+    "use strict";
+    return "rgba(" + colorArray[0] + "," + colorArray[1] + "," + colorArray[2] + "," + opacity + ")";
+}
+/**
+ * escape html charcters
+ * @param {string} str - input string
+ * @returns {string} escaped string
+ */
+function htmlEscape(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+nm.htmlEscape = htmlEscape;
+var CommonSymbol = (function () {
+    /**
+     *
+     * @param symbolObj
+     * @param {number} opacity
+     */
+    function CommonSymbol(symbolObj, opacity) {
+        this.symbolObj = symbolObj;
+        this.opacity = opacity;
+        this.olStyle = undefined;
+        this.legendHtml = '';
+    }
+    return CommonSymbol;
+}());
+var PointSymbol = (function (_super) {
+    __extends(PointSymbol, _super);
+    function PointSymbol(symbolObj, opacity) {
+        var _this = _super.call(this, symbolObj, opacity) || this;
+        switch (_this.symbolObj.type) {
+            case 'esriSMS':
+                var innerColor = _colorArrayToRgba(_this.symbolObj.color, _this.opacity);
+                var outerColor = _colorArrayToRgba(_this.symbolObj.outline.color, _this.opacity);
+                var outlineWidth = _this.symbolObj.outline.width;
+                var radius = _this.symbolObj.size;
+                _this.olStyle = new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: radius,
+                        fill: new ol.style.Fill({
+                            color: innerColor
+                        }),
+                        stroke: new ol.style.Stroke({ color: outerColor, width: outlineWidth })
+                    })
+                });
+                _this.legendHtml = "<span class=\"legend-layer-icon\" style=\"color: " + innerColor + "\">&#9679;</span>";
+                break;
+            case 'esriPMS':
+                _this.olStyle = new ol.style.Style({
+                    image: new ol.style.Icon({ src: "data:image/png;base64," + _this.symbolObj['imageData'] })
+                });
+                _this.legendHtml = "<img class=\"legend-layer-icon\" height=\"17\" src=\"data:image/png;base64," + _this.symbolObj['imageData'] + "\">";
+                break;
+            default:
+                console.log(_this.symbolObj);
+                alert('Point symbol does not handle symbol type: ' + _this.symbolObj['type']);
+        }
+        return _this;
+    }
+    return PointSymbol;
+}(CommonSymbol));
+var LineSymbol = (function (_super) {
+    __extends(LineSymbol, _super);
+    function LineSymbol(symbolObj, opacity) {
+        var _this = _super.call(this, symbolObj, opacity) || this;
+        switch (_this.symbolObj.type) {
+            case 'esriSLS':
+                var innerColor = _colorArrayToRgba(_this.symbolObj.color, _this.opacity);
+                var lineWidth = _this.symbolObj.width;
+                _this.olStyle = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: innerColor,
+                        //lineDash: [4],
+                        width: lineWidth
+                    })
+                });
+                _this.legendHtml = "<span class=\"legend-layer-icon\" ";
+                _this.legendHtml += "style=\"";
+                _this.legendHtml += "background-color: " + innerColor + ";";
+                _this.legendHtml += "width: 40px;";
+                _this.legendHtml += "height: 4px;";
+                _this.legendHtml += "position: relative;";
+                _this.legendHtml += "display: inline-block;";
+                _this.legendHtml += "top: -1px;";
+                _this.legendHtml += "\"></span>";
+                break;
+            default:
+                console.log(_this.symbolObj);
+                alert('Line symbol does not handle symbol type: ' + _this.symbolObj['type']);
+        }
+        return _this;
+    }
+    return LineSymbol;
+}(CommonSymbol));
+var PolygonSymbol = (function (_super) {
+    __extends(PolygonSymbol, _super);
+    function PolygonSymbol(symbolObj, opacity) {
+        var _this = _super.call(this, symbolObj, opacity) || this;
+        switch (_this.symbolObj['type']) {
+            case 'esriSFS':
+                var innerColor = _colorArrayToRgba(_this.symbolObj.color, _this.opacity);
+                var outerColor = _colorArrayToRgba(_this.symbolObj.outline.color, _this.opacity);
+                var outlineWidth = _this.symbolObj.outline.width;
+                _this.olStyle = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: outerColor,
+                        //lineDash: [4],
+                        width: outlineWidth
+                    }),
+                    fill: new ol.style.Fill({
+                        color: innerColor
+                    })
+                });
+                _this.legendHtml = "<span class=\"legend-layer-icon\" ";
+                _this.legendHtml += "style=\"";
+                _this.legendHtml += "background-color: " + innerColor + ";";
+                _this.legendHtml += "border: solid " + outerColor + " 1px;";
+                _this.legendHtml += "width: 40px;";
+                _this.legendHtml += "height: 9px;";
+                _this.legendHtml += "position: relative;";
+                _this.legendHtml += "display: inline-block;";
+                _this.legendHtml += "top: 2px;";
+                _this.legendHtml += "\"></span>";
+                break;
+            default:
+                console.log(_this.symbolObj);
+                alert('Polygon symbol does handle symbol type: ' + _this.symbolObj['type']);
+        }
+        return _this;
+    }
+    return PolygonSymbol;
+}(CommonSymbol));
+var SymbolGenerator = (function () {
+    function SymbolGenerator(esriResponse) {
+        this.opacity = (100 - (esriResponse['drawingInfo']['transparency'] || 0)) / 100;
+        this.renderer = esriResponse.drawingInfo.renderer;
+        this.olStyle = undefined;
+        this.legendHtml = '';
+    }
+    return SymbolGenerator;
+}());
+var SingleSymbol = (function (_super) {
+    __extends(SingleSymbol, _super);
+    /**
+     *
+     * @param {object} esriResponse - layer info
+     * @param SymbolClass - the symbol class to use
+     */
+    function SingleSymbol(esriResponse, SymbolClass) {
+        var _this = _super.call(this, esriResponse) || this;
+        _this.symbol = _this.renderer.symbol;
+        var symbolObj = new SymbolClass(_this.symbol, _this.opacity);
+        _this.olStyle = symbolObj.olStyle;
+        _this.legendHtml = symbolObj.legendHtml;
+        return _this;
+    }
+    return SingleSymbol;
+}(SymbolGenerator));
+var UniqueValueSymbol = (function (_super) {
+    __extends(UniqueValueSymbol, _super);
+    /**
+     *
+     * @param {object} esriResponse - layer info
+     * @param SymbolClass - the Symbol class definition
+     */
+    function UniqueValueSymbol(esriResponse, SymbolClass) {
+        var _this = _super.call(this, esriResponse) || this;
+        _this.uniqueValueInfos = _this.renderer['uniqueValueInfos'];
+        _this.propertyName = _this.renderer['field1'];
+        _this.defaultSymbol = _this.renderer['defaultSymbol'];
+        if (_this.defaultSymbol) {
+            var symbolObj = new SymbolClass(_this.defaultSymbol, _this.opacity);
+            _this.defaultStyle = symbolObj.olStyle;
+            _this.defaultLabelHtml = "<span class=\"legend-layer-subitem\">" + htmlEscape(_this.renderer['defaultLabel']) + "</span>" + symbolObj.legendHtml;
+        }
+        else {
+            _this.defaultStyle = undefined;
+            _this.defaultLabelHtml = 'other';
+        }
+        _this.valueArray = [];
+        _this.labelArray = [];
+        _this.legendArray = [];
+        _this.propertyStyleLookup = {};
+        for (var _i = 0, _a = _this.uniqueValueInfos; _i < _a.length; _i++) {
+            var uniqueVal = _a[_i];
+            _this.labelArray.push(uniqueVal['label']);
+            _this.valueArray.push(uniqueVal['value']);
+            var uniqueSym = new SymbolClass(uniqueVal.symbol, _this.opacity);
+            _this.legendArray.push("<span class=\"legend-layer-subitem\">" + htmlEscape(uniqueVal['label']) + "</span>" + uniqueSym.legendHtml);
+            _this.propertyStyleLookup[uniqueVal['value']] = uniqueSym.olStyle;
+        }
+        _this.olStyle = function (feature) {
+            var checkProperties = feature.getProperties();
+            var checkProperty = checkProperties[_this.propertyName];
+            var returnValue;
+            if (_this.propertyStyleLookup[checkProperty] !== undefined) {
+                returnValue = [_this.propertyStyleLookup[checkProperty]];
+            }
+            else {
+                returnValue = [_this.defaultStyle];
+            }
+            return returnValue;
+        };
+        if (_this.defaultLabelHtml !== null) {
+            _this.legendArray.push(_this.defaultLabelHtml);
+        }
+        _this.legendHtml = '<ul>';
+        for (var _b = 0, _c = _this.legendArray; _b < _c.length; _b++) {
+            var h = _c[_b];
+            _this.legendHtml += "<li>" + h + "</li>";
+        }
+        _this.legendHtml += '</ul>';
+        return _this;
+    }
+    return UniqueValueSymbol;
+}(SymbolGenerator));
+/**
+ * style and legend object
+ * @typedef {object} styleAndLegend
+ * @property {styleFunc} style - style function
+ * @property {string} legend - legend content
+ */
+/**
+ *
+ * @param {object} esriResponse - layer info
+ * @returns {styleAndLegend} style and legend object
+ */
+function makeFeatureServiceLegendAndSymbol(esriResponse) {
+    "use strict";
+    var renderer = esriResponse.drawingInfo.renderer;
+    var symbolLegendOut = null;
+    switch (renderer.type) {
+        case 'simple':
+            switch (esriResponse.geometryType) {
+                case 'esriGeometryPoint':
+                    symbolLegendOut = new SingleSymbol(esriResponse, PointSymbol);
+                    break;
+                case 'esriGeometryPolyline':
+                    symbolLegendOut = new SingleSymbol(esriResponse, LineSymbol);
+                    break;
+                case 'esriGeometryPolygon':
+                    symbolLegendOut = new SingleSymbol(esriResponse, PolygonSymbol);
+                    break;
+                default:
+                    console.log(esriResponse);
+                    alert(esriResponse.geometryType + ' not handled');
+            }
+            break;
+        case 'uniqueValue':
+            switch (esriResponse.geometryType) {
+                case 'esriGeometryPoint':
+                    symbolLegendOut = new UniqueValueSymbol(esriResponse, PointSymbol);
+                    break;
+                case 'esriGeometryPolyline':
+                    symbolLegendOut = new UniqueValueSymbol(esriResponse, LineSymbol);
+                    break;
+                case 'esriGeometryPolygon':
+                    symbolLegendOut = new UniqueValueSymbol(esriResponse, PolygonSymbol);
+                    break;
+                default:
+                    console.log(esriResponse);
+                    alert(esriResponse['geometryType'] + ' not handled');
+            }
+            break;
+        default:
+            alert('not handled renderer type: ' + renderer['type']);
+    }
+    if (symbolLegendOut == null) {
+        return { style: undefined, legend: '' };
+    }
+    else {
+        return { style: symbolLegendOut.olStyle, legend: symbolLegendOut.legendHtml };
+    }
+}
+exports.makeFeatureServiceLegendAndSymbol = makeFeatureServiceLegendAndSymbol;
+nm.makeFeatureServiceLegendAndSymbol = makeFeatureServiceLegendAndSymbol;
+/**
+ *
+ * @param {object} lyrObject - the layer as defined in the response
+ * @param {boolean} [skipLayerNameAndExpander=false] use only icons
+ * @returns {string} legend html
+ */
+function mapServiceLegendItem(lyrObject, skipLayerNameAndExpander) {
+    if (skipLayerNameAndExpander === void 0) { skipLayerNameAndExpander = false; }
+    skipLayerNameAndExpander = typeof skipLayerNameAndExpander == 'boolean' ? skipLayerNameAndExpander : false;
+    var layerName = lyrObject['layerName'];
+    var legendItems = lyrObject['legend'];
+    var legendHtml = '';
+    if (!skipLayerNameAndExpander) {
+        legendHtml += "<span class=\"legend-layer-subitem\">" + layerName + "</span>";
+    }
+    if (legendItems.length == 1) {
+        legendHtml = "<img class=\"legend-layer-icon\" height=\"17\" src=\"data:image/png;base64," + legendItems[0]['imageData'] + "\">";
+    }
+    else {
+        if (!skipLayerNameAndExpander) {
+            legendHtml += '<span class="legend-items-expander" title="Expand/Collapse">&#9660;</span>';
+        }
+        legendHtml += '<ul>';
+        for (var i = 0; i < legendItems.length; i++) {
+            legendHtml += "<li>";
+            legendHtml += "<span class=\"legend-layer-subitem\">" + htmlEscape(legendItems[i]['label']) + "</span>";
+            legendHtml += "<img class=\"legend-layer-icon\" height=\"17\" src=\"data:image/png;base64," + legendItems[i]['imageData'] + "\">";
+            legendHtml += "</li>";
+        }
+        legendHtml += '</ul>';
+    }
+    if (!skipLayerNameAndExpander) {
+        legendHtml = "<span class=\"legend-layer-subitem\">" + layerName + "</span>" + legendHtml;
+    }
+    return legendHtml;
+}
+/**
+ * make map service legent
+ * @param {object} esriResponse - layer info
+ * @returns {string} legend content
+ */
+function makeMapServiceLegend(esriResponse) {
+    "use strict";
+    var newLegendHtml = '';
+    var layers = esriResponse['layers'];
+    if (layers.length == 1) {
+        newLegendHtml += mapServiceLegendItem(layers[0], true);
+    }
+    else {
+        newLegendHtml += '<ul>';
+        for (var i = 0; i < layers.length; i++) {
+            newLegendHtml += '<li>' + mapServiceLegendItem(layers[i]) + '</li>';
+        }
+        newLegendHtml += '</ul>';
+    }
+    return newLegendHtml;
+}
+exports.makeMapServiceLegend = makeMapServiceLegend;
+nm.makeMapServiceLegend = makeMapServiceLegend;
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var mapInteractionBase_1 = __webpack_require__(19);
+var checkDefined = __webpack_require__(22);
+var provide_1 = __webpack_require__(0);
+var makeGuid_1 = __webpack_require__(4);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('olHelpers');
+/**
+ * assists with map move interactions, trigger callback functions
+ * @augments MapInteractionBase
+ */
+var MapMoveCls = (function (_super) {
+    __extends(MapMoveCls, _super);
+    /**
+     * constructor called implicitly
+     */
+    function MapMoveCls() {
+        var _this = _super.call(this, 'map move') || this;
+        _this._arrLyrRequest = [];
+        _this._arrLyrTimeout = [];
+        _this._arrLayer = [];
+        _this._lookupLayer = {};
+        _this._mapMoveCallbacks = [];
+        _this._mapMoveCallbacksLookup = {};
+        _this._mapMoveCallbackDelays = [];
+        _this._mapMoveCallbackContext = [];
+        _this._mapMoveCallbackTimeout = [];
+        _this._mapExtent = undefined;
+        _this._zoomLevel = undefined;
+        return _this;
+    }
+    /**
+     * initialize the map move object
+     * @param theMap - the ol map
+     */
+    MapMoveCls.prototype.init = function (theMap) {
+        var _this = this;
+        _super.prototype.init.call(this, theMap);
+        this.map.getView().on(['change:center', 'change:resolution'], function (e) {
+            _this._updateMapExtent();
+            // trigger the layer updates
+            for (var i = 0; i < _this._arrLayer.length; i++) {
+                _this.triggerLyrLoad(_this._arrLayer[i], i, e.type);
+            }
+            // trigger the map callbacks
+            for (var i = 0; i < _this._mapMoveCallbacks.length; i++) {
+                _this.triggerMoveCallback(i, e.type);
+            }
+        });
+    };
+    MapMoveCls.prototype._updateMapExtent = function () {
+        var theView = this.map.getView();
+        this._zoomLevel = theView.getZoom();
+        var extentArray = theView.calculateExtent(this.map.getSize());
+        this._mapExtent = {
+            minX: extentArray[0],
+            minY: extentArray[1],
+            maxX: extentArray[2],
+            maxY: extentArray[3]
+        };
+    };
+    Object.defineProperty(MapMoveCls.prototype, "mapExtent", {
+        /**
+         * return the map extent
+         */
+        get: function () {
+            if (!this._mapExtent) {
+                this._updateMapExtent();
+            }
+            return this._mapExtent;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Trigger the layer load
+     * @param lyr the layer being acted on
+     * @param index index of the layer
+     * @param eventType the event triggering the load, as 'change:center' or 'change:resolution'
+     */
+    MapMoveCls.prototype.triggerLyrLoad = function (lyr, index, eventType) {
+        if (checkDefined.undefinedOrNull(lyr) && checkDefined.undefinedOrNull(index)) {
+            throw 'need to define lyr or index';
+        }
+        else if (checkDefined.definedAndNotNull(lyr) && checkDefined.undefinedOrNull(index)) {
+            index = this._arrLayer.indexOf(lyr);
+        }
+        else if (checkDefined.undefinedOrNull(lyr) && checkDefined.definedAndNotNull(index)) {
+            lyr = this._arrLayer[index];
+        }
+        // clear the timeout
+        if (this._arrLyrTimeout[index] != null) {
+            clearTimeout(this._arrLyrTimeout[index]);
+            this._arrLyrTimeout[index] = null;
+        }
+        // abort if necessary and clear the request
+        if (this._arrLyrRequest[index] != null && this._arrLyrRequest[index] != 4) {
+            this._arrLyrRequest[index].abort();
+            this._arrLyrRequest[index] = null;
+        }
+        // dummy callback used if before load returns false
+        var callbackFunc = function () { };
+        if (lyr.mapMoveBefore(this._zoomLevel, eventType)) {
+            lyr.mapMoveMakeGetParams(this._mapExtent, this._zoomLevel);
+            var __this_1 = this;
+            callbackFunc = function () {
+                function innerFunction(theLayer, theIndex) {
+                    var _innerThis = this;
+                    this._arrLyrRequest[theIndex] = $.get(theLayer.url, theLayer.mapMoveParams, function (d) {
+                        /**
+                         * @type {LayerBaseVector}
+                         */
+                        theLayer.mapMoveCallback(d);
+                        theLayer.loadCallback();
+                    }, 'json').fail(function (jqXHR) {
+                        if (jqXHR.statusText != 'abort') {
+                            console.log('failed');
+                            console.log(theLayer.url);
+                            console.log(theLayer.mapMoveParams);
+                        }
+                    }).always(function () {
+                        _innerThis._arrLyrTimeout[theIndex] = null;
+                        _innerThis._arrLyrRequest[theIndex] = null;
+                    });
+                }
+                innerFunction.call(__this_1, lyr, index);
+            };
+        }
+        else {
+            lyr.clear();
+        }
+        this._arrLyrTimeout[index] = setTimeout(callbackFunc, lyr.onDemandDelay);
+    };
+    /**
+     * trigger the map move call back at the given index
+     * @param ind - the index of the layer
+     * @param eventType=undefined the event triggering the load as 'change:center' or 'change:resolution'
+     * @param functionId=undefined the function id used to reference the added callback function
+     */
+    MapMoveCls.prototype.triggerMoveCallback = function (ind, eventType, functionId) {
+        if (typeof ind == 'undefined' && typeof functionId == 'undefined') {
+            throw 'either the function index or the id must be defined';
+        }
+        if (typeof ind !== 'number') {
+            ind = this._mapMoveCallbacks.indexOf(this._mapMoveCallbacksLookup[functionId]);
+        }
+        if (ind < 0) {
+            console.log('function not found');
+            return;
+        }
+        // clear the timeout
+        if (this._mapMoveCallbackTimeout[ind] != null) {
+            clearTimeout(this._mapMoveCallbackTimeout[ind]);
+            this._mapMoveCallbackTimeout[ind] = null;
+        }
+        var ctx = this._mapMoveCallbackContext[ind];
+        var theFunc = this._mapMoveCallbacks[ind];
+        var __this = this;
+        var f = function () {
+            if (ctx !== null) {
+                theFunc.call(ctx, __this._mapExtent, __this._zoomLevel, eventType);
+            }
+            else {
+                theFunc(__this._mapExtent, __this._zoomLevel, eventType);
+            }
+        };
+        this._mapMoveCallbackTimeout[ind] = setTimeout(f, this._mapMoveCallbackDelays[ind]);
+    };
+    /**
+     * Add a layer to the interaction
+     * @param  lyr - layer to add
+     * @param triggerOnAdd - if the layer should be loaded on add
+     */
+    MapMoveCls.prototype.addVectorLayer = function (lyr, triggerOnAdd) {
+        if (triggerOnAdd === void 0) { triggerOnAdd = true; }
+        if (this._arrLayer.indexOf(lyr) > -1) {
+            console.log('already added ' + lyr.name + ' to map move');
+            return;
+        }
+        this._checkInit();
+        this._arrLyrRequest.push(null);
+        this._arrLyrTimeout.push(null);
+        this._arrLayer.push(lyr);
+        this._lookupLayer[lyr.id] = lyr;
+        triggerOnAdd = typeof triggerOnAdd == 'boolean' ? triggerOnAdd : true;
+        if (triggerOnAdd) {
+            if (this._mapExtent === undefined) {
+                this._updateMapExtent();
+            }
+            this.triggerLyrLoad(lyr, this._arrLayer.length - 1);
+        }
+    };
+    /**
+     * add a callback to the map move event
+     * @param func - callback function
+     * @param context - the context to use for this function
+     * @param delay=50 the delay before call load
+     * @param triggerOnAdd if the layer should be loaded on add to mapMove
+     * @param functionId optional id to reference the function later for outside triggering
+     */
+    MapMoveCls.prototype.addCallback = function (func, context, delay, triggerOnAdd, functionId) {
+        if (this._mapMoveCallbacks.indexOf(func) > -1) {
+            console.log('this function already added to map move');
+            return;
+        }
+        this._checkInit();
+        if (!functionId) {
+            functionId = makeGuid_1.default();
+        }
+        this._mapMoveCallbacks.push(func);
+        this._mapMoveCallbacksLookup[functionId] = functionId;
+        this._mapMoveCallbackDelays.push(typeof delay == 'number' ? delay : 50);
+        this._mapMoveCallbackContext.push(checkDefined.definedAndNotNull(context) ? context : null);
+        this._mapMoveCallbackTimeout.push(null);
+        triggerOnAdd = typeof triggerOnAdd == 'boolean' ? triggerOnAdd : true;
+        if (triggerOnAdd) {
+            if (this._mapExtent === undefined) {
+                this._updateMapExtent();
+            }
+            this.triggerMoveCallback(this._mapMoveCallbacks.length - 1);
+        }
+    };
+    return MapMoveCls;
+}(mapInteractionBase_1.default));
+exports.MapMoveCls = MapMoveCls;
+nm.MapMoveCls = MapMoveCls;
+exports.default = MapMoveCls;
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 11/3/2015.
+ */
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var mapInteractionBase_1 = __webpack_require__(19);
+var provide_1 = __webpack_require__(0);
+var ol = __webpack_require__(2);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('olHelpers');
+var FeatureLayerProperties = (function () {
+    /**
+     *
+     * @param feature the feature
+     * @param layer - the layer in the popup
+     * @param layerIndex - index of the layer
+     * @param selectionLayer - the ol selection layer
+     * @param [esriLayerName=undefined] - esri layer name
+     */
+    function FeatureLayerProperties(feature, layer, layerIndex, selectionLayer, esriLayerName) {
+        this.feature = feature;
+        this.layer = layer;
+        this.layerIndex = layerIndex;
+        this.selectionLayer = selectionLayer;
+        this.popupContent = '';
+        this.esriLayerName = typeof esriLayerName == 'string' ? esriLayerName : undefined;
+    }
+    Object.defineProperty(FeatureLayerProperties.prototype, "layerName", {
+        get: function () {
+            if (typeof this.esriLayerName == 'string') {
+                return this.esriLayerName;
+            }
+            else {
+                return this.layer.name;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FeatureLayerProperties;
+}());
+exports.FeatureLayerProperties = FeatureLayerProperties;
+/**
+ * map popup class
+ * @augments MapInteractionBase
+ */
+var MapPopupCls = (function (_super) {
+    __extends(MapPopupCls, _super);
+    /**
+     * Definition for openlayers style function
+     * @callback olStyleFunction
+     * &param feature the openlayers vector feature
+     * $param
+     */
+    /**
+     * map popup constructor
+     */
+    function MapPopupCls() {
+        var _this = _super.call(this, 'map popup') || this;
+        _this._arrPopupLayerIds = [];
+        _this._arrPopupLayerNames = [];
+        _this._arrPopupLayers = [];
+        _this._arrPopupOlLayers = [];
+        _this._arrPopupContentFunction = [];
+        _this._$popupContainer = undefined;
+        _this._$popupContent = undefined;
+        _this._$popupCloser = undefined;
+        _this._popupOverlay = undefined;
+        _this._selectionLayers = [];
+        _this._selectionLayerLookup = {};
+        _this._mapClickFunctions = [];
+        //let a = function($jqueryContent){console.log($jqueryContent)};
+        //this._popupChangedLookup = {'a': a};
+        _this._popupChangedFunctions = [];
+        _this._esriMapServiceLayers = [];
+        _this._popupOpen = false;
+        _this._popupCoordinate = null;
+        _this._passThroughLayerFeatureArray = [];
+        _this._currentPopupIndex = -1;
+        _this._popupContentLength = 0;
+        return _this;
+    }
+    /**
+     * map popup initialization
+     * @param {ol.Map} theMap - the ol map
+     */
+    MapPopupCls.prototype.init = function (theMap) {
+        var _this = this;
+        _super.prototype.init.call(this, theMap);
+        var $map;
+        var target = this.map.getTarget();
+        if (typeof target == 'string') {
+            $map = $('#' + target);
+        }
+        else {
+            $map = $(target);
+        }
+        $map.append('<div class="ol-popup">' +
+            '<span class="ol-popup-closer">X</span>' +
+            '<div class="popup-content"></div>' +
+            '</div>');
+        this._$popupContainer = $map.find('.ol-popup');
+        this._$popupContent = $map.find('.popup-content');
+        this._$popupCloser = $map.find('.ol-popup-closer');
+        var _ease = function (n) {
+            return ol.easing.inAndOut(n);
+        };
+        this._popupOverlay = new ol.Overlay({
+            element: this._$popupContainer[0],
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 250,
+                source: theMap.getView().getCenter(),
+                easing: _ease
+            }
+        });
+        this._map.addOverlay(this._popupOverlay);
+        this._$popupCloser.click(function (evt) {
+            _this.closePopup();
+        });
+        // display popup on click
+        this._map.on('singleclick', function (evt) {
+            _this.closePopup();
+            _this._popupCoordinate = evt['coordinate'];
+            // esri map service layers
+            if (_this._esriMapServiceLayers.length > 0) {
+                var queryParams = {
+                    geometry: evt['coordinate'].join(','),
+                    geometryType: 'esriGeometryPoint',
+                    layers: 'all',
+                    sr: _this._map.getView().getProjection().getCode().split(':')[1],
+                    mapExtent: _this._map.getView().calculateExtent(_this._map.getSize()).join(','),
+                    imageDisplay: _this._map.getSize().join(',') + ',96',
+                    returnGeometry: true,
+                    tolerance: 15,
+                    f: 'pjson'
+                };
+                for (var _i = 0, _a = _this._esriMapServiceLayers; _i < _a.length; _i++) {
+                    var l = _a[_i];
+                    l.getPopupInfo(queryParams);
+                }
+            }
+            var layerFeatureObjectArray = _this._featuresAtPixel(evt['pixel']);
+            _this._passThroughLayerFeatureArray = [];
+            _this._currentPopupIndex = -1;
+            for (var i = 0; i < layerFeatureObjectArray.length; i++) {
+                var featObj = layerFeatureObjectArray[i];
+                var props = featObj.feature.getProperties();
+                var popupContentResponse = _this._arrPopupContentFunction[featObj.layerIndex](props, _this._$popupContent);
+                //skip if return was false
+                if (popupContentResponse === false) {
+                    //continue;
+                }
+                else if (typeof popupContentResponse == 'string') {
+                    featObj.popupContent = popupContentResponse;
+                    _this._passThroughLayerFeatureArray.push(featObj);
+                }
+                else {
+                    featObj.selectionLayer.getSource().addFeature(featObj.feature);
+                }
+            }
+            _this._popupContentLength = _this._passThroughLayerFeatureArray.length;
+            _this._currentPopupIndex = -1;
+            var popupHtml = '<div class="ol-popup-nav">';
+            popupHtml += '<span class="previous-popup ol-popup-nav-arrow">&#9664;</span>';
+            popupHtml += '<span class="next-popup ol-popup-nav-arrow">&#9654;</span>';
+            popupHtml += "<span class=\"current-popup-item-number\" style=\"font-weight: bold;\"></span>";
+            popupHtml += "<span>&nbsp;of&nbsp;</span>";
+            popupHtml += "<span class=\"popup-content-length\" style=\"font-weight: bold;\">" + _this._popupContentLength + "</span>";
+            popupHtml += "<span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>";
+            popupHtml += "<span class=\"current-popup-layer-name\"></span>";
+            popupHtml += '</div>';
+            popupHtml += '<div class="ol-popup-inner">';
+            popupHtml += '</div>';
+            _this._$popupContent.html(popupHtml);
+            _this._$popupContent.find('.previous-popup').click(function () {
+                if (_this._popupContentLength == 1) {
+                    return;
+                }
+                if (_this._currentPopupIndex == 0) {
+                    _this._currentPopupIndex = _this._popupContentLength - 1;
+                }
+                else {
+                    _this._currentPopupIndex--;
+                }
+                _this._triggerFeatSelect();
+            });
+            var nextPopup = _this._$popupContent.find('.next-popup');
+            nextPopup.click(function () {
+                if (_this._popupContentLength == 1 && _this._currentPopupIndex > -1) {
+                    return;
+                }
+                if (_this._currentPopupIndex == _this._popupContentLength - 1) {
+                    _this._currentPopupIndex = 0;
+                }
+                else {
+                    _this._currentPopupIndex++;
+                }
+                _this._triggerFeatSelect();
+            });
+            if (_this._popupContentLength > 0) {
+                nextPopup.trigger('click');
+                _this._popupOverlay.setPosition(_this._popupCoordinate);
+                _this._$popupContent.scrollTop(0);
+                _this._popupOpen = true;
+            }
+        });
+        //change mouse cursor when over marker
+        this._map.on('pointermove', function (evt) {
+            if (evt['dragging']) {
+                return;
+            }
+            var pixel = _this.map.getEventPixel(evt['originalEvent']);
+            var hit = _this.map.hasFeatureAtPixel(pixel, function (lyrCandidate) {
+                for (var _i = 0, _a = _this._arrPopupOlLayers; _i < _a.length; _i++) {
+                    var olLayer = _a[_i];
+                    if (lyrCandidate == olLayer) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var mapElement = _this.map.getTargetElement();
+            mapElement.style.cursor = hit ? 'pointer' : '';
+        });
+        return true;
+    };
+    /**
+     * helper to select features
+     * @private
+     */
+    MapPopupCls.prototype._triggerFeatSelect = function () {
+        var $currentPopupItemNumber = this._$popupContent.find('.current-popup-item-number');
+        var $innerPopup = this._$popupContent.find('.ol-popup-inner');
+        var $layerNameSpan = this._$popupContent.find('.current-popup-layer-name');
+        this.clearSelection();
+        var lyrFeatObj = this._passThroughLayerFeatureArray[this._currentPopupIndex];
+        $currentPopupItemNumber.html((this._currentPopupIndex + 1).toFixed());
+        $layerNameSpan.html(lyrFeatObj.layerName);
+        $innerPopup.html(lyrFeatObj.popupContent);
+        lyrFeatObj.selectionLayer.getSource().addFeature(lyrFeatObj.feature);
+        for (var _i = 0, _a = this._popupChangedFunctions; _i < _a.length; _i++) {
+            var f = _a[_i];
+            f(this._$popupContent);
+        }
+    };
+    /**
+     *
+     * @param feature - the ol feature
+     * @param {LayerEsriMapServer} lyr - the map server layer
+     * @param {string} popupContent - popup content
+     * @param {string} esriName - esri layer name
+     */
+    MapPopupCls.prototype.addMapServicePopupContent = function (feature, lyr, popupContent, esriName) {
+        var featLayerObject = new FeatureLayerProperties(feature, lyr, this._popupContentLength, this._selectionLayerLookup[lyr.id], esriName);
+        featLayerObject.popupContent = popupContent;
+        this._passThroughLayerFeatureArray.push(featLayerObject);
+        this._popupContentLength++;
+        $('.popup-content-length').html(this._popupContentLength.toFixed());
+        if (!this._popupOpen) {
+            this._$popupContent.find('.next-popup').trigger('click');
+            this._popupOverlay.setPosition(this._popupCoordinate);
+            this._$popupContent.scrollTop(0);
+            this._popupOpen = true;
+        }
+    };
+    /**
+     *
+     * @param  pixel - the ol pixel
+     * @returns  feature layer properties
+     * @private
+     */
+    MapPopupCls.prototype._featuresAtPixel = function (pixel) {
+        var _this = this;
+        var layerFeatureObjectArray = [];
+        this.map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            var lyrIndex = _this._arrPopupOlLayers.indexOf(layer);
+            if (lyrIndex > -1) {
+                layerFeatureObjectArray.push(new FeatureLayerProperties(feature, _this._arrPopupLayers[lyrIndex], lyrIndex, _this._selectionLayers[lyrIndex]));
+            }
+        });
+        return layerFeatureObjectArray;
+    };
+    MapPopupCls.prototype.closePopup = function () {
+        this._checkInit();
+        this._popupOpen = false;
+        this._popupOverlay.setPosition(undefined);
+        this._$popupCloser[0].blur();
+        this.clearSelection();
+        this._$popupContent.html('');
+        return false;
+    };
+    ;
+    /**
+     *
+     * @param chgFunction - popup change function
+     */
+    MapPopupCls.prototype.addPopupChangedFunction = function (chgFunction) {
+        this._popupChangedFunctions.push(chgFunction);
+    };
+    /**
+     *
+     * @param {LayerBase|*} lyr - the layer being acted on
+     * @param {object} [selectionStyle={}] the selection style configuration
+     * @param {string} [selectionStyle.color=rgba(255,170,0,0.5)] the selection color
+     * @param {number} [selectionStyle.width=10] the selection width for linear features
+     * @param {object|function} [selectionStyle.olStyle=undefined] an openlayers style object or function
+     * @returns  the new selection layer
+     * @private
+     */
+    MapPopupCls.prototype._addPopupLayer = function (lyr, selectionStyle) {
+        this._checkInit();
+        selectionStyle = selectionStyle || {};
+        selectionStyle.color = selectionStyle.color || 'rgba(255,170,0,0.5)';
+        selectionStyle.width = selectionStyle.width || 10;
+        var theStyle;
+        if (selectionStyle.olStyle) {
+            theStyle = selectionStyle.olStyle;
+        }
+        else {
+            theStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: selectionStyle.color,
+                    width: selectionStyle.width
+                }),
+                image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({ color: selectionStyle.color }),
+                    stroke: new ol.style.Stroke({ color: selectionStyle.color, width: 1 })
+                }),
+                fill: new ol.style.Fill({
+                    color: selectionStyle.color
+                })
+            });
+        }
+        var selectionLayer = new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            style: theStyle
+        });
+        selectionLayer.setZIndex(100);
+        this._selectionLayers.push(selectionLayer);
+        this._selectionLayerLookup[lyr.id] = selectionLayer;
+        this.map.addLayer(selectionLayer);
+        return selectionLayer;
+    };
+    /**
+     * Add popup to the map
+     * @param {LayerBase|*} lyr The layer that the popup with act on
+     * @param {popupCallback} popupContentFunction - popup content function that makes popup info
+     * @param {object} [selectionStyle={}] the selection style configuration
+     * @param {string} [selectionStyle.color=rgba(255,170,0,0.5)] the selection color
+     * @param {number} [selectionStyle.width=10] the selection width for linear features
+     * @param {object|function} [selectionStyle.olStyle=undefined] an openlayers style object or function
+     * @returns {object} a reference to the ol selection layer
+     */
+    MapPopupCls.prototype.addVectorPopup = function (lyr, popupContentFunction, selectionStyle) {
+        var selectionLayer = this._addPopupLayer(lyr, selectionStyle);
+        this._arrPopupLayerIds.push(lyr.id);
+        this._arrPopupLayerNames.push(lyr.name);
+        this._arrPopupLayers.push(lyr);
+        this._arrPopupOlLayers.push(lyr.olLayer);
+        this._arrPopupContentFunction.push(popupContentFunction);
+        return selectionLayer;
+    };
+    ;
+    /**
+     *
+     * @param {LayerBase} lyr - layer
+     */
+    MapPopupCls.prototype.removeVectorPopup = function (lyr) {
+        var idx = this._arrPopupLayerIds.indexOf(lyr.id);
+        if (idx > -1) {
+            this._arrPopupLayerIds.splice(idx, 1);
+            this._arrPopupLayerNames.splice(idx, 1);
+            this._arrPopupLayers.splice(idx, 1);
+            this._arrPopupOlLayers.splice(idx, 1);
+            this._arrPopupContentFunction.splice(idx, 1);
+            this._selectionLayers.splice(idx, 1);
+            delete this._selectionLayerLookup[lyr.id];
+        }
+    };
+    /**
+     *
+     * @param {LayerEsriMapServer} lyr - map server layer
+     * @param {object} [selectionStyle={}] the selection style configuration
+     * @param {string} [selectionStyle.color=rgba(255,170,0,0.5)] the selection color
+     * @param {number} [selectionStyle.width=10] the selection width for linear features
+     * @param {object|function} [selectionStyle.olStyle=undefined] an openlayers style object or function
+     * @returns {object} a reference to the ol selection layer
+     */
+    MapPopupCls.prototype.addMapServicePopup = function (lyr, selectionStyle) {
+        var selectionLayer = this._addPopupLayer(lyr, selectionStyle);
+        this._esriMapServiceLayers.push(lyr);
+        return selectionLayer;
+    };
+    MapPopupCls.prototype.clearSelection = function () {
+        this._checkInit();
+        for (var i = 0; i < this._selectionLayers.length; i++) {
+            this._selectionLayers[i].getSource().clear();
+        }
+        for (var _i = 0, _a = this._mapClickFunctions; _i < _a.length; _i++) {
+            var f = _a[_i];
+            f();
+        }
+    };
+    ;
+    /**
+     * Add a function to be called when the map is clicked but before any popups are implemented
+     * @param {function} func - the map click function
+     */
+    MapPopupCls.prototype.addMapClickFunction = function (func) {
+        this._mapClickFunctions.push(func);
+    };
+    return MapPopupCls;
+}(mapInteractionBase_1.default));
+exports.MapPopupCls = MapPopupCls;
+nm.MapPopupCls = MapPopupCls;
+exports.default = MapPopupCls;
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 12/15/2015.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var provide_1 = __webpack_require__(0);
+var ol = __webpack_require__(2);
+var $ = __webpack_require__(1);
+var nm = provide_1.default('olHelpers');
+/**
+ * Sets up a map with some default parameters and initializes
+ * mapMove and mapPopup
+ *
+ * @param [options={}] config options
+ * @param [options.divId=map] map div id
+ * @param [options.center={}] center config object
+ * @param [options.center.x=-10018378] center x, web mercator x or lon
+ * @param [options.center.y=5574910] center y, web mercator y or lat
+ * @param [options.zoom=7] zoom level
+ * @param [options.minZoom=undefined] min zoom
+ * @param [options.maxZoom=undefined] max zoom
+ * @param [options.baseSwitcher=true] if add base map switcher
+ * @param [options.fullScreen=false] if add base map switcher
+ * @returns the ol map
+ */
+function quickMapBase(options) {
+    options = options || {};
+    options.divId = options.divId || 'map';
+    options.center = options.center || { x: -10018378, y: 5574910 };
+    options.zoom = typeof options.zoom == 'number' ? options.zoom : 7;
+    options.baseSwitcher = typeof options.baseSwitcher == 'boolean' ? options.baseSwitcher : true;
+    options.fullScreen = typeof options.fullScreen == 'boolean' ? options.fullScreen : false;
+    var $mapDiv = $('#' + options.divId);
+    $mapDiv.css('position', 'relative');
+    var osmLayer = new ol.layer.Tile({ source: new ol.source.OSM() });
+    // let satLayer = new ol.layer.Tile({visible: false, source: new ol.source.MapQuest({layer: 'sat'})});
+    var osmCss = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAADQ1NDk5OURFREtLS1FHSFlZWGJRVGJiYWdmZWxsbHRmaXBpanN0c3V0dHp5eX5+fIVzd4F3eeV0jud5juZ8k4aHhomHhoyGh5eGj5OVlJiVlZiYl5qZmJydnKOTlaKZmqKdnaOioaqqqKuzsbOvrrSysLa3tbW4uLm6ub27ub+/vbGXwbCZwbCgxLKlxrOqyLStybO3yrSxyrWzzbW2y7a1zbK4y7W6zbW8y760yrTAzbTFzrPKzrLOzrTJzrTOzr7CwbXC0LXK0LTO0L3I0bPQz7TQz7PS0bXQ0LnR0brW1bzT0r7U077V1Lzc2dqNqteUsdyXscaquuOHneaGmueHnOeJnuiBleiKn+eNoOiOoOWUpOiRo+iSpeiUpeqYpumaqOmdrPSynemgruSqtOmisOmlsuuqtequuOW1vOuxu+uxvOq1ve+xvPK0pvW3o/W5pfO5qvS7qfCwvMOuwc2/wNenxNyyzNe/0Nq31Nq51dy72Oy3wOu4wOu+xey4wO+6xO2+xfTAr/TCsvfFtPHLvvTJuMPDwMfHxcXKyc3DxMvFyMvLyM3PzcDV08DV1MTX1cbY1s7X1sjZ1sra2Mnd3M7b2c7c2tfH1tnB1t7F2d7M29fX1tLY1tDd2tHe3NTf3NnS19rZ1tva2Nnf3t3d28rh3tXg3Nnh3tzj393k39ni4N7k4N7n5uXDyOfLz+zAxu3CyOzEyezKzeDJ3eLM3uvP0u3P0ePf2+7R0u7Q1u/U0+7U1ezc0+7a2e/d2+3f3vbFzvLOwfHN0PPQw/TUx/LWyvLYzPDQ1fPe0ubc4vve4uHh3+nh3+/h2u/h3vHj2vHl3uHm4eTn4uDp5ebo4+Xo5ODq6ebq6OTv6+nl4+/j4O7l4e7n5ujp4+np5Ozq5e7s5urt6O7t6Orw6u7x6u3x7vPj5PDl4fDo4vDq5fDt5vDu6PDv7PTv6fDx6vHx7fH17fXw6fXy7fb07/bz8fT18vn38vr39fr48/r59Pr6+P3++//+/gAAALNTSk0AAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGHRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4wLjlsM35OAAAFNElEQVRIS1VVCZxVUxi/9l0UIUT2bMnY43bVI2c0Y01kSWIaS0j2JEtkN41piomZrPPKQ2aQ7JKImOZlnm2493TJzDufuU1Zi+v/fee+mZ//793vnPOd7zvfes5zDBEZkBBjAcIjb+Iiotqgdhat8AMK0vl7/R9N7GiWtshqIr+EZ5gYKibyUsXY1l/mfFpssvUlWQ0FkU3gy4+RB/+kwYcO8pRSnldcOU/r2lAHARSwk2ORgEmOdC1EsuRiYSqMPwwroMIraZk5V2fYJQjCKfZrRmh3gSAZi2i4b7wSylWu8EqZwS59JkFUaW96JbNSc+CEUmt4rorwuZmWdDaoc+uZETuQlTCU5xYzR7muUnVUVo+BcRhre/VwUpasgJwhH7JkYIYA0sNxhmCwUK+lw6vCKBZehw01dEiyw4Q4aE0Z4ahDhKaFQsGnJ2BgqKoTBsNjFy0SlW6whRAZTdm8DBJmkBZhDi1j4xJQBk6ywrWUTymaCxac8lROcdauRGzQSNtA7EHUYhXyEwhhgjFUqRuO+rauhF1awFpzCsmwUbjIFBR0u1bKtyGpulW/H/cVVzkyGaIWTIR9pFAV6GK2gPMXMX8gPk9zzxXgI1kimcAltEYr+cjio1imlKpEa9rOipLm+p+CZ6Bw//qd1/f/O+GwMxbSLpyoZEcwkyh2jIks+3hmdd2jWUw4scxNysnHxU7nSspTRcJjCZGL3IsjsYJMMg5mwgx7gaIOLBFCogAgBBoNa9w+DE6I+Bs7FTgwwrJbHjWDgpYo2KwtBTcYEDuloC9geQw+k2RGnPGpTaOlq7AS+YICUz4DZVaX2TiNDhuYfTtY4geLi0IoCm3XccwM9hx4kU28StQEljDs3ZEpFGA+8dKzLmV9ymIwF5FOGn2GdJM8KLHDJbXyiYVMG9MRTLiXGGg2QKaxM3khPSRrwM9zEIardxU2w/EiA0gOeYKHzDR0V7/QGV3lKIA9ktrDArxO3gdA+k6SKoBiVwcm7NjZb9+Hnztg282TuHVZ9LOISFNt9MgyCetZVczSxnyDbl17Penq6mqpg1IhRaEO2aVLUO4/r17H8tTv6f13h71dduvZI3Y+uMdWksNSauLovJw5hsqiPIUvt0ku7/iBeUR3sksmomYWtRbAjbiLfv2lX9/V7LVG4uYnUZXhQ7f2OPCZEx9wrYWTcePEQqPEML8pl4mMdr/jlXlvHiRiJ2+MSTFY4TTSYStuvz2R/JXh+PPeGXm055J+3/YDWuNu3R3DArPutyg0ZgykMVDU9Ndm22+wYalr2rse48CnsTIFcMn73vfhNrktx1EUcZnPv6ah3Yy5cDTRdBEoGoBeah71dqFyjZDJLkWk3N3v4uuktssjWpzciMPxQeHj8nMKzcGuB0tAyzFhdCKOYWv4HwOQVwIxLG99a6uvH3sJCyO3h+k4EZ+G7+xj5f4XXksoaGrdMRzSc8ARA8+cdOuk2x6fffNNt5x+Ro1omPlrT/CQDlcNlpx4NBIWXhkx7Y3Zp3ofNR7Uv89Om/beW0TLIynHv3vs1VsOFpSWSXvfuPUf9BrRFyxgXdHoKJnQFegPOovvzz59ntrzye240ig8UQ3lDI2VqwagrKIQcLXNFL3wglN2OHdBQ6/vI3kENDVBwRb3k1XtczFbjWn4EzMYi7CF3129+JTYuRSdrGuS92g5dpqn6qXoJQs5xmL8p+Wt4hLbt0mx2OLNZR2bbPy8zJNQGFM/f/CfXZekRYFjGCWjIJpM+WiCzGBPWHhoyaAsjRT/B2Gy5yzYJkwUAAAAAElFTkSuQmCC')";
+    var aerialCss = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQALBgIMDQgOBwQOEQcTBwUSCwoVDAwdBw8ZDgUREwYUGAYZFQYZGgkTFQoVGQsZFAwZHBMeDhIbFBEbHAwWIA4bIREcIQ4hCQwjFw4lHBgkDB8sDxUiExIiGhAoGxohFRshGRorHQcrKQsiIQwmKgooJA0pKQ81Jw8yLRMiIxImKxUrJREuKhslJB0rIhooKRUuMBMyLhkwJhozKh48LxUzMRM9MBwzMiUvFCMtGiMwEiwzFCgzHDI+GSIsISkvJSQxIiM2LiY5Jic+Lyk0JSo0Ky49JSs9KSU1NSM7NCs2NS8+NDM1JzU9Ljg7IDJCHS1DLSNAMitCMSxIOjREITZLIDZJKDlFIjpFKztKJT1LKzJBMzpHMD1JMjpKPD1RKjlQNC1DQj5QQEA8MEJGJkBKJUJNK0lLLEJMMkVMPEpONENSLUdZL0pTLkpaLkRUMkRSPEVZMktUM0pVOklZMklZNEpcNU1ZMk1ZNUxfMk5dNkxcOVFUM1RUOFJbNVFZOVNYPVFdOVJdPFVaOVVaPVVdOlVdPVpaNlpdO0phN01hOlBiN1NhPFNoP1piPWFbPmRjPENOQEtPSURTQkJVS0xVQk1VSkxbQkxcS0heUVFXRFRcQlJfTFxeQlpeS05lQk1kSFRjQVRjSlZpQ1tkQlxlSlxpRF1rSVVnUVtlU1llXF9tU1xoXlxwSl9ramRfQmJlQ2FhSWFlSWFlTmVlSWRmTGFoQWFpRWFsRmVpRWVtRmNsSmtlRGpqRmpsS2BmWGRsUmFrW2ptUmZyR2RxTGpxTWVyU2RyW2d5V2tzUmt0WW15VG15WXFuTHNtVnFxTXF4T3h0TnJzUnJ1XHJ4VXN6Wnp0VHx1W315VXp8XGR0YGx0YHVzZXJ0aHR9ZXV+aHl9YHOCXXqBXXeCYHyCY3iEaHyIYn+JaXqKcYB5WIN6Y4SCXoCDZIGEaYCIZoOLa4iCaImJbIOOdYuMco6OeIuVcpOKbZKPc5aQb5eXe5ufg6KjhAAAAAAAAAAAAAAAAOGCeQgAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGHRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4wLjlsM35OAAAH80lEQVRISy1WbXQUVxm+6wqnk3Zmpxl2FG2EGg92C8GDlWptVTwa+uF3xcKmDfFzCUzDsJNsunXipglJXJbrtJWmwZNSnHD3jojRgUIm2UumIZ0JZ7JByrALbMWW0IBW8aRa4+cf76TeX3Nm3uc+z/s+7/vugl4r/aMTrT4e1pPTqnnmJNn5AyUzRnrRle/qE33dsvrBtAQVoxtpZNK3zSzYjUjviWO2Ag+R77dl7W36n/1Ep9KBPG/S+Py0PkjU/gPKQGqwTHryiWYFAXSvMairsio7SjyNsnCzh0qKImV9/7mhfHQZx2yN1O+7rXUm33MUPaboOkAJHaoIdXfJj2xWeyD8jMFEXkvIu5qzpU988gWB5zl+GS+sFe55trEVPdWZB2miq8bBVkNFO2R0qnrfkiXhcJhtDNXE6tbW97/s9O9/7ZfVhx86/CwrROpfvvxboMqeLsuqPr1j44qEwDNMOBximUiYoU8sw7BC/a7T72uEnyJDlGxZ9KcglZRyuqqrv/tSZErgOI4NgRBTIw9EmHAoFGZZnp6aGaJ2GTxfxYs8kKVUQh7WB5hQeC3LsUxoxVKW14l3BX2WcoUYPiZyLLe8teZ+iuT4GGhvV5KpKWkpyzxEr2MZgQ1xdRjfRBoH+2k6lIHjKTHPPBo8CSJISqqq4wGGOcWylIGlgvgNX1Gd8vF5f+IUIwb30ng+Gg2QfBRIMvy0jG8SVkYo4N0zvUXVRztbJ/L6xL7lUZEXBEHkuZqlS6gEAUgKJurnhFtfpACOYd8b/hVbJPqwi44a6KA0sPVjIi/SIyxb3u8KlAJ0S8jRVgrlW+nVHPdrhiXCxu42d86ByksDc80P3MkJFBFQ8Ho1lQegpWJRWFGsDsRwwv7pIyvuQW0ZkrX6NDVFbqcvaQI8vbyqzt5AARrsbKx5yhQEGs+wPO56bOK+0rcwMrOKkpUbZWYxV04UeZZv/cBKFhRL6Qdv9y4LfEDA7/thg7tTmv1a5/GnO0wl0dQg80wglZaHUmxRvjwAHOfyN0mxrpqLUpcjsK3NHYMo4R1o6eho2ZyIb2FoeOC3ILK8kZ2HQMOuWywGXUkJBCeTbYFS0+ym1h2/6UgmvnrvKYZZtIEXGf75C2cIAp5LHNd71x7uPoTjakrWH9e3KFpaatjUvJUysFw0KrLMYMW2lTg4PeUQx6kJEALvxXEmCdVyPLHtCSjBhc01XCjIgafxou+PE6KC1dhxSCwoBCc+N4P3btM84pmdSSjJnjO/nvY4LQfVyz5/I+v6IwjUOMjy+MVCxIbKupTJaEktp7cTKU42Pvjh2m/8cSpC6aPsaX/MHSuUQLVVsIa4RUTs/r/BVAexNdjdnsNG7j/rV93xheLMzKnFrPeTEQchCyCcKb25aAIn7lrAertrZwyNXM8N6zfWrFo3d2SmOEcF83x/r+OOFgrAHYWF7cELjhV7UQo/6WAIUVl9JFl8a//HZ66VpbY3I9QKZqPru77lA+iOWAIr0hKxHCmmr0othSyeIl5y3qt4xT8gSNrKEZozs8Els67rgsLOZ+ygzwMfbtNhobfgzpEyGnz7htPtzUi6PuOoj7K0WF/MXiUFxwGajRD1hjYXHXI9p406qOyinp5/tiWcDHY0jIu4n64Qfq7kliB2gemag9QbOia0PbbDMbd43SHuvxFxrAocxins7MX5Kqbe1QixKBxoV4//PfAgGCu+Rlm4SvZizyDH+0reDHp92iO0BuX3bCfItl0PEwvYLqpwXG2MHlGsQ4S8pMJZv1JGmHiEoHQDdOjwmVlEP/nE9ADKjI8xLI0OOGITfy0SbeG/C2jKUDGSlDhM9I3IpK9iup6XnbRNC7yqueNsJCCIiXzdQhnaGN+46umnEdy5U5UbUJ48LFM9GkJo8BdDOiAZ7ZIQbKhYLMqvhU2wmNxjEAsS2AI7y4nWF64duePbk7YV3zvAVLEMD9AxJRNa3KDUibV7DjnkuprMEYjScFNcaR2ceP2u9R/5k1052Ryme5phAFRswlHjAudiP4dOy7CaxLgdJh9vUlU1702/+LPa1U9fvPi9qlA4XEUBJc3dFlpsR457IDl1iPqLp7o81NQgyV19iYU38uTiv975Pd3SiwQcsGjx+v4/6fl5T7EOOMTCtpbKxfemsQq/3olQZcminADAAI0cuGLHaHOFxbuGvRk/Z9u7CULqoVR6NE0yx1avj30oRhc/jWUoIALGxkz0dg1Dl9iaI7LqOOXKsXJFwjiuEAi70Jra2nW1PL08zLBhZsMABpW5csI7TPfew9ipFKcn5k1i+1KyCWKjC3W/8dF1d666+RaabBVTFTHacjoojBNDh0NDxk+IPTlwfqJkWpbnpFHXIbLbmpxEQ3ff/Z0g/mauXsoln9wDRjy/NHsQFw3P6vWuTJ43/+FZrk2cvAFRipCKdfD9y2+pjRj78s0KdCUDKJvdV91ChngV38T20TM+gghjpJaPlpFr2xbEz5g4A/NGt5rNwdwmYGeeeMXBSLHHUIc+6RsojRH9VTUm3/mLf/64b470XvoxoTKhlMBQ2jMEzo2PjxdGMppmn1RM24bWFJqaQv4BcuJa2Sam7Zokq1ldCsz06NCBHrhwqVQYpfFj42NZexz1EW9SR/kT58nEeQKJb2fPXjjp0u/YUkwHEgLeOnf2nOuf1TRTM02CLKLTPy60/x1CCztqn7Ev+BdsC3m+30decQvW/wBNTwU+CfUQAQAAAABJRU5ErkJggg==')";
+    if (options.baseSwitcher) {
+        //  let switcherContent = '<div class="base-map-switcher" title="Toggle Base Layer" style="';
+        //  switcherContent += 'position: absolute; top: 70px; left: 4px; border: solid black 1px; ';
+        //  switcherContent += `height: 50px; width: 50px; z-index: 10; border-radius: 4px; background: ${aerialCss};`;
+        //  switcherContent += '"></div>';
+        //  $mapDiv.append(switcherContent);
+        //
+        // $mapDiv.find('.base-map-switcher').click(function() {
+        //      "use strict";
+        //      osmLayer.setVisible(!osmLayer.getVisible());
+        //      satLayer.setVisible(!satLayer.getVisible());
+        //
+        //      if (osmLayer.getVisible()){
+        //          $(this).css('background', aerialCss);
+        //      } else {
+        //          $(this).css('background', osmCss);
+        //      }
+        //  });
+    }
+    if (options.zoom < 0 || options.zoom > 28) {
+        throw 'zoom out of range';
+    }
+    if (options.center.x >= -180 && options.center.x <= 180 && options.center.y >= -90 && options.center.y <= 90) {
+        var p = new ol.geom.Point([options.center.x, options.center.y]);
+        new ol.proj.Projection({ code: "EPSG:4326" });
+        p.transform(new ol.proj.Projection({ code: "EPSG:4326" }), new ol.proj.Projection({ code: "EPSG:3857" }));
+        var coordinates = p.getCoordinates();
+        options.center.x = coordinates[0];
+        options.center.y = coordinates[1];
+    }
+    var controls = ol.control.defaults({
+        attributionOptions: { collapsible: false }
+    });
+    var view = new ol.View({
+        center: [options.center.x, options.center.y],
+        zoom: options.zoom,
+        minZoom: options.minZoom,
+        maxZoom: options.maxZoom
+    });
+    var map = new ol.Map({
+        layers: [osmLayer],
+        target: options.divId,
+        controls: controls,
+        view: view
+    });
+    if (options.fullScreen) {
+        map.addControl(new ol.control.FullScreen({}));
+    }
+    return map;
+}
+exports.quickMapBase = quickMapBase;
+nm.quickMapBase = quickMapBase;
+exports.default = quickMapBase;
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 12/14/2015.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('olHelpers.zoomResolutionConvert');
+var _zoomResLookup = [
+    156543.03392804097,
+    78271.51696402048,
+    39135.75848201024,
+    19567.87924100512,
+    9783.93962050256,
+    4891.96981025128,
+    2445.98490512564,
+    1222.99245256282,
+    611.49622628141,
+    305.748113140705,
+    152.8740565703525,
+    76.43702828517625,
+    38.21851414258813,
+    19.109257071294063,
+    9.554628535647032,
+    4.777314267823516,
+    2.388657133911758,
+    1.194328566955879,
+    0.5971642834779395,
+    0.29858214173896974,
+    0.14929107086948487,
+    0.07464553543474244,
+    0.03732276771737122,
+    0.01866138385868561,
+    0.009330691929342804,
+    0.004665345964671402,
+    0.002332672982335701,
+    0.0011663364911678506,
+    0.0005831682455839253 //28
+];
+/**
+ * Get the resolution given the zoom level
+ * @param {number} zoomLevel - the zoom level
+ * @returns {number|*} the map resolution
+ */
+function zoomToResolution(zoomLevel) {
+    "use strict";
+    if (typeof zoomLevel == 'number') {
+        if (zoomLevel % 1 === 0 && zoomLevel >= 0 && zoomLevel <= 28) {
+            return _zoomResLookup[zoomLevel];
+        }
+        else {
+            console.log("invalid zoom level provided: " + zoomLevel);
+            return undefined;
+        }
+    }
+    else {
+        return undefined;
+    }
+}
+exports.zoomToResolution = zoomToResolution;
+nm.zoomToResolution = zoomToResolution;
+/**
+ * Get resolution from the zoom level
+ * @param {number} resolution - the resolution
+ * @returns {number|*} the zoom level
+ */
+function resolutionToZoom(resolution) {
+    for (var i = 0; i < _zoomResLookup.length; i++) {
+        if (resolution >= _zoomResLookup[i]) {
+            return i;
+        }
+    }
+    return 0;
+}
+exports.resolutionToZoom = resolutionToZoom;
+nm.resolutionToZoom = resolutionToZoom;
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 11/3/2015.
+ */
+var provide_1 = __webpack_require__(0);
+var chk = __webpack_require__(22);
+var nm = provide_1.default('util.colors');
+/**
+ * helper function to convert to hex
+ * @param {number|string} x - the number to convert to hex
+ * @returns {string} number as hex
+ * @private
+ */
+function _hex(x) {
+    var hexDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
+    return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
+}
+/**
+ * converts an RGB string to hex
+ * @param {string} rgb - rgb color
+ * @returns {string} rbg as hex
+ */
+function rgb2hex(rgb) {
+    var rgb1 = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    return ("#" + _hex(rgb1[1]) + _hex(rgb1[2]) + _hex(rgb1[3])).toUpperCase();
+}
+exports.rgb2hex = rgb2hex;
+nm.rgb2hex = rgb2hex;
+/**
+ * Convert hex string to RGB or RGBA string
+ * @param {string} hexString - hex color string
+ * @param {number} [alphaVal=undefined] Alpha value
+ * @returns {string} - rgb or rgba color
+ */
+function hexAlphaToRgbOrRgba(hexString, alphaVal) {
+    hexString = ((hexString.charAt(0) == "#") ? hexString.substring(1, 7) : hexString);
+    var r = parseInt(hexString.substring(0, 2), 16).toString() || '0';
+    var g = parseInt(hexString.substring(2, 4), 16).toString() || '0';
+    var b = parseInt(hexString.substring(4, 6), 16).toString() || '0';
+    if (alphaVal) {
+        return "rgba(" + r + "," + g + "," + b + "," + alphaVal + ")";
+    }
+    else {
+        return "rgba(" + r + "," + g + "," + b + ")";
+    }
+}
+exports.hexAlphaToRgbOrRgba = hexAlphaToRgbOrRgba;
+nm.hexAlphaToRgbOrRgba = hexAlphaToRgbOrRgba;
+/**
+ * adds alpha value to rgb string 'rgb(r, b, g)', returns 'rgba(r, g, b, a)'
+ * @param {string} rgb - rgb color
+ * @param {number} alpha - alpha value 0 to 1
+ * @returns {string} rgba color
+ */
+function rgbToRgba(rgb, alpha) {
+    var pieces = rgb.split(',');
+    pieces[0] = pieces[0].replace('rgb', 'rgba');
+    pieces[2] = pieces[2].replace(')', '');
+    pieces.push(' ' + alpha.toFixed(1) + ')');
+    return pieces.join(',');
+}
+exports.rgbToRgba = rgbToRgba;
+nm.rgbToRgba = rgbToRgba;
+/**
+ * @typedef {function} colorLookupByNumber
+ * @param {number} num - the number to use to retrieve the color
+ * @returns {string} rgb color
+ */
+/**
+ * Make a blue green red gradient
+ * @param {number} minVal - minimum value
+ * @param {number} maxVal - maximum value
+ * @param {boolean} flipColors - if the colors should be flipped
+ * @returns {colorLookupByNumber} color lookup function
+ */
+function makeBlueGreenRedGradient(minVal, maxVal, flipColors) {
+    if (typeof flipColors != "boolean") {
+        flipColors = false;
+    }
+    return function (theVal) {
+        var r, g, b;
+        var ratio;
+        if (chk.undefinedOrNull(theVal)) {
+            return 'rgb(100,100,100)';
+        }
+        var percent = (theVal - minVal) / (maxVal - minVal);
+        if (flipColors == true) {
+            percent = 1 - percent;
+        }
+        if (percent >= 1) {
+            r = 255;
+            g = 0;
+            b = 0;
+        }
+        else if (percent <= 0) {
+            r = 0;
+            g = 0;
+            b = 255;
+        }
+        else if (percent < .25) {
+            // green up, blue constant
+            r = 0;
+            g = Math.floor(255 * percent / 0.25);
+            b = 255;
+        }
+        else if (percent < 0.50) {
+            //blue down, green constant
+            ratio = (percent - 0.25) / 0.25;
+            r = 0;
+            g = 255;
+            b = 255 - Math.floor(255 * ratio);
+        }
+        else if (percent < 0.75) {
+            // red up, green constant
+            ratio = (percent - 0.5) / 0.25;
+            r = Math.floor(255 * ratio);
+            g = 255;
+            b = 0;
+        }
+        else {
+            // green down, red constant
+            ratio = (percent - 0.75) / 0.25;
+            r = 255;
+            g = 255 - Math.floor(255 * ratio);
+            b = 0;
+        }
+        r = r.toFixed();
+        g = g.toFixed();
+        b = b.toFixed();
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    };
+}
+exports.makeBlueGreenRedGradient = makeBlueGreenRedGradient;
+nm.makeBlueGreenRedGradient = makeBlueGreenRedGradient;
+/**
+ * Create a function that will return colors based on a gradient
+ * @param {number} median - median value
+ * @param {number} stdDev - standard deviation
+ * @param {boolean} flipColors - if the colors should be flipped
+ * @returns {colorLookupByNumber} color lookup function
+ */
+function makeBlueGreenRedGradientZScore(median, stdDev, flipColors) {
+    var grd = makeBlueGreenRedGradient(-2.5, 2.5, flipColors);
+    return function (theVal) {
+        var zScore;
+        if (theVal == null) {
+            zScore = null;
+        }
+        else {
+            zScore = (theVal - median) / stdDev;
+        }
+        return grd(zScore);
+    };
+}
+exports.makeBlueGreenRedGradientZScore = makeBlueGreenRedGradientZScore;
+nm.makeBlueGreenRedGradientZScore = makeBlueGreenRedGradientZScore;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Created by gavorhes on 10/4/2016.
+ */
+var SsaMapCreate_1 = __webpack_require__(25);
+var SsaMapView_1 = __webpack_require__(26);
+window['SsaMapCreate'] = SsaMapCreate_1.SsaMapCreate;
+window['SsaMapView'] = SsaMapView_1.SsaMapView;
+console.log('here');
+console.log('here');
+
+
+/***/ })
+/******/ ]);
 //# sourceMappingURL=ssaApps.js.map
