@@ -10,10 +10,12 @@ import SelectBoxBase from 'webmapsjs/dist/domUtil/SelectBoxBase';
 import Ajx from '../ajaxGetters';
 import * as layerStyles from '../layerStyles';
 import {zoomToResolution} from 'webmapsjs/dist/olHelpers/zoomResolutionConvert';
+import {proj3857} from 'webmapsjs/dist/olHelpers/projections';
 
-import ol = require('custom-ol');
 import PickerCollection from "../collections/PickerCollection";
 import $ = require('jquery');
+import ol = require('custom-ol');
+
 const nm = provide('ssa.select');
 
 
@@ -84,7 +86,7 @@ export class SegmentPicker extends SelectBoxBase {
             {
                 minZoom: 6,
                 name: this._isFrom ? 'Start Segment' : 'End Segment',
-                transform: {dataProjection: 'EPSG:3857', featureProjection: 'EPSG:3857'},
+                transform: {dataProjection: proj3857, featureProjection: proj3857},
                 style: layerStyles.segmentLayer,
                 visible: false
             }
@@ -238,7 +240,6 @@ export class SegmentPicker extends SelectBoxBase {
                 this._segmentLayer.clear();
                 this._segNodeLayer.clear();
                 this._processAjaxResult(d['features']);
-                console.log(d);
 
                 if (d['features'].length > 0) {
                     this.enabled = true;

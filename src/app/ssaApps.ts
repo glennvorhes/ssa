@@ -6,5 +6,4 @@ import {SsaMapView} from './SsaMapView';
 
 window['SsaMapCreate'] = SsaMapCreate;
 window['SsaMapView'] = SsaMapView;
-console.log('here');
-console.log('here');
+
