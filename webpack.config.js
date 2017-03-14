@@ -17,12 +17,15 @@ module.exports = {
             {test: /\.js$/, loader: "source-map-loader"}
         ]
     },
+    resolve: {
+        extensions: [".ts", ".tsx", ".js", '.jsx']
+    },
     externals: {
         "custom-ol": "ol",
         "jquery": "$",
         "c3": "c3",
         "d3": "d3",
-        // "jquery-ui": "",
+        "jquery-ui": true,
         "react-dom": "ReactDOM",
         "react": "React"
     }

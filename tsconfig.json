@@ -3,19 +3,11 @@
   "version": "2.0.3",
   "compilerOptions": {
     "module": "commonjs",
-    "declaration": true,
-    "outDir": "dist",
     "target": "es5",
-    "rootDir": "src",
     "sourceMap": true,
+    "inlineSources": true,
     "jsx": "react",
-    "watch": true
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "noEmitOnError": true
+  }
 }
 

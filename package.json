@@ -15,9 +15,8 @@
     "typedoc": "typedoc --mode file --out doc src",
     "serve-site": "python -m http.server 5001",
     "serve-proxy": "python proxy.py",
-    "tsc": "tsc -w",
-    "webpack-d": "webpack -d -w",
-    "webpack-p": "webpack -p"
+    "webpack": "node_modules\\.bin\\webpack -w",
+    "webpack-p": "node_moduels\\.bin\\webpack -p"
   },
   "author": "",
   "license": "ISC",
@@ -33,7 +32,10 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "source-map-loader": "^0.1.5",
-    "webmapsjs": "git://github.com/glennvorhes/webmapsjs.git#master"
+    "ts-loader": "^2.0.1",
+    "typescript": "^2.2.1",
+    "webmapsjs": "git://github.com/glennvorhes/webmapsjs.git#master",
+    "webpack": "^2.2.1"
   },
   "repository": {
     "type": "git",
