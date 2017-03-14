@@ -1,14 +1,13 @@
 "use strict";
 const path = require('path');
 
-const appDir = path.join(__dirname, 'dist/app');
-const outDir = path.join(__dirname, 'build');
 
 module.exports = {
-    entry: path.join(appDir, 'ssaApps.js'),
+
+    entry: path.join(__dirname, 'src', 'app', 'ssaApps.ts'),
     devtool: 'source-map',
     output: {
-        path: outDir,
+        path: path.join(__dirname, 'build'),
         filename: "ssaApps.js"
     },
     module: {
@@ -25,7 +24,7 @@ module.exports = {
         "jquery": "$",
         "c3": "c3",
         "d3": "d3",
-        "jquery-ui": true,
+        "jquery-ui": "$",
         "react-dom": "ReactDOM",
         "react": "React"
     }
