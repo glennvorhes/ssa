@@ -16,7 +16,7 @@
     "serve-site": "python -m http.server 5001",
     "serve-proxy": "python proxy.py",
     "webpack": "node_modules\\.bin\\webpack -w",
-    "webpack-p": "node_moduels\\.bin\\webpack -p"
+    "webpack-p": "node_modules\\.bin\\webpack -p -w"
   },
   "author": "",
   "license": "ISC",
