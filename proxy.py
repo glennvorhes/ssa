@@ -27,9 +27,9 @@ def proxy(some_url):
 
     arg_dict = {k: v for k, v in request.args.items()}
     if arg_dict:
-        url_string = 'http://localhost:8082/SSA/{0}?{1}'.format(some_url, urlencode(arg_dict))
+        url_string = 'http://localhost:8080/SSA/{0}?{1}'.format(some_url, urlencode(arg_dict))
     else:
-        url_string = 'http://localhost:8082/SSA/{0}'.format(some_url)
+        url_string = 'http://localhost:8080/SSA/{0}'.format(some_url)
 
     response = requests.get(url_string)
     return json.dumps(response.json())

@@ -10,7 +10,7 @@ import * as lyrStyles from '../layerStyles';
 import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 import makeGuid from 'webmapsjs/dist/util/makeGuid';
 import CorridorCollection from '../collections/CorridorCollection';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import LayerEsriMapServer from 'webmapsjs/dist/layers/LayerEsriMapServer';
 
 import $ = require("jquery");

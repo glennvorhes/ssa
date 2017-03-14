@@ -2,9 +2,9 @@
  * Created by gavorhes on 5/13/2016.
  */
 "use strict";
-var makeGuid_1 = require('webmapsjs/dist/util/makeGuid');
-var provide_1 = require('webmapsjs/dist/util/provide');
-var $ = require('jquery');
+var makeGuid_1 = require("webmapsjs/dist/util/makeGuid");
+var provide_1 = require("webmapsjs/dist/util/provide");
+var $ = require("jquery");
 var nm = provide_1.default('ssa');
 var SsaMapBase = (function () {
     function SsaMapBase(divId) {

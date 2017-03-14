@@ -7,11 +7,11 @@ var __extends = (this && this.__extends) || function (d, b) {
 /**
  * Created by gavorhes on 7/15/2016.
  */
-var filterMmFlag_1 = require('../filters/filterMmFlag');
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var constants = require('../constants');
-var _DeficiencyBase_1 = require('./_DeficiencyBase');
-var custom_ol_1 = require('custom-ol');
+var filterMmFlag_1 = require("../filters/filterMmFlag");
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var constants = require("../constants");
+var _DeficiencyBase_1 = require("./_DeficiencyBase");
+var ol = require("custom-ol");
 /**
  *
  * @param {ol.Feature} feature - the input feature
@@ -21,21 +21,21 @@ var mmFlagStyle = function (feature) {
     "use strict";
     var props = feature.getProperties();
     var txtFunc = function () {
-        return new custom_ol_1.default.style.Text({
+        return new ol.style.Text({
             text: props['mmId'],
             scale: 1.5,
-            stroke: new custom_ol_1.default.style.Stroke({
+            stroke: new ol.style.Stroke({
                 color: 'black',
                 width: 2
             }),
-            fill: new custom_ol_1.default.style.Fill({
+            fill: new ol.style.Fill({
                 color: constants.mmFlagColor
             })
         });
     };
     if ((props['rateFlag'] >= 1 && filterMmFlag_1.default.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag_1.default.mmKabFlagOn) {
-        return [new custom_ol_1.default.style.Style({
-                stroke: new custom_ol_1.default.style.Stroke({
+        return [new ol.style.Style({
+                stroke: new ol.style.Stroke({
                     color: constants.mmFlagColor,
                     width: 6
                 }),
@@ -49,7 +49,7 @@ var mmFlagStyle = function (feature) {
 var MmFlags = (function (_super) {
     __extends(MmFlags, _super);
     function MmFlags() {
-        _super.call(this, "Safety Flags", mmFlagStyle, 200, constants.mmFlagListId);
+        return _super.call(this, "Safety Flags", mmFlagStyle, 200, constants.mmFlagListId) || this;
     }
     /**
      * initialize with the map

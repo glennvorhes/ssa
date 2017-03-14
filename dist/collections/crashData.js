@@ -5,15 +5,15 @@
 // uncomment this to use the example crash data
 // import exampleCrashData from './_exampleCrashData';
 var exampleCrashData = undefined;
-var ajaxGetters_1 = require('../ajaxGetters');
-var objHelp = require('webmapsjs/dist/util/objectHelpers');
-var LayerBaseVectorGeoJson_1 = require('webmapsjs/dist/layers/LayerBaseVectorGeoJson');
-var filterCrash_1 = require('../filters/filterCrash');
-var colorUtil = require('webmapsjs/dist/util/colors');
-var proj = require('webmapsjs/dist/olHelpers/projections');
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var custom_ol_1 = require('custom-ol');
-var $ = require('jquery');
+var ajaxGetters_1 = require("../ajaxGetters");
+var objHelp = require("webmapsjs/dist/util/objectHelpers");
+var LayerBaseVectorGeoJson_1 = require("webmapsjs/dist/layers/LayerBaseVectorGeoJson");
+var filterCrash_1 = require("../filters/filterCrash");
+var colorUtil = require("webmapsjs/dist/util/colors");
+var proj = require("webmapsjs/dist/olHelpers/projections");
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var ol = require("custom-ol");
+var $ = require("jquery");
 function injColor(inj) {
     "use strict";
     var color = {
@@ -142,13 +142,13 @@ var crashPointStyle = function (feature) {
         return null;
     }
     var crashColorFill = colorUtil.rgbToRgba(crashColor, 0.6);
-    return [new custom_ol_1.default.style.Style({
-            image: new custom_ol_1.default.style.Circle({
+    return [new ol.style.Style({
+            image: new ol.style.Circle({
                 radius: 6,
-                fill: new custom_ol_1.default.style.Fill({
+                fill: new ol.style.Fill({
                     color: crashColorFill
                 }),
-                stroke: new custom_ol_1.default.style.Stroke({ color: crashColor, width: 2 })
+                stroke: new ol.style.Stroke({ color: crashColor, width: 2 })
             })
         })];
 };
@@ -214,9 +214,9 @@ var CrashData = (function () {
                 if (!(c.lon && c.lat)) {
                     continue;
                 }
-                var geom = new custom_ol_1.default.geom.Point([c.lon, c.lat]);
+                var geom = new ol.geom.Point([c.lon, c.lat]);
                 geom.transform(proj.proj4326, proj.proj3857);
-                var p = new custom_ol_1.default.Feature(geom);
+                var p = new ol.Feature(geom);
                 c['injSvr'] = c['injSvr'] || 'O';
                 p.setProperties(c);
                 this.pointCrashes.source.addFeature(p);

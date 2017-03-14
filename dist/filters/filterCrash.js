@@ -7,11 +7,11 @@ var __extends = (this && this.__extends) || function (d, b) {
 /**
  * Created by gavorhes on 7/14/2016.
  */
-var FilterBase_1 = require('./FilterBase');
+var FilterBase_1 = require("./FilterBase");
 var FilterCrash = (function (_super) {
     __extends(FilterCrash, _super);
     function FilterCrash() {
-        _super.call(this, 'filter-crash', 'filter-crash-sub', false);
+        return _super.call(this, 'filter-crash', 'filter-crash-sub', false) || this;
     }
     /**
      *

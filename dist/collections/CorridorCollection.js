@@ -2,14 +2,14 @@
 /**
  * Created by gavorhes on 5/16/2016.
  */
-var provide_1 = require('webmapsjs/dist/util/provide');
+var provide_1 = require("webmapsjs/dist/util/provide");
 // import * as styles  from '../layerStyles';
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var calcExtent = require('webmapsjs/dist/olHelpers/extentUtil');
-var makeGuid_1 = require('webmapsjs/dist/util/makeGuid');
-var CorridorConfig_1 = require('../corridor/CorridorConfig');
-var Corridor_1 = require('../corridor/Corridor');
-var $ = require('jquery');
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var calcExtent = require("webmapsjs/dist/olHelpers/extentUtil");
+var makeGuid_1 = require("webmapsjs/dist/util/makeGuid");
+var CorridorConfig_1 = require("../corridor/CorridorConfig");
+var Corridor_1 = require("../corridor/Corridor");
+var $ = require("jquery");
 var layerStyles_1 = require("../layerStyles");
 var nm = provide_1.default('ssa');
 /**

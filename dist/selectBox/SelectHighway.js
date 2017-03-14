@@ -7,9 +7,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var SelectBoxBase_1 = require('webmapsjs/dist/domUtil/SelectBoxBase');
-var ajaxGetters_1 = require('../ajaxGetters');
-var provide_1 = require('webmapsjs/dist/util/provide');
+var SelectBoxBase_1 = require("webmapsjs/dist/domUtil/SelectBoxBase");
+var ajaxGetters_1 = require("../ajaxGetters");
+var provide_1 = require("webmapsjs/dist/util/provide");
 var nm = provide_1.default('ssa.select');
 var SelectHighway = (function (_super) {
     __extends(SelectHighway, _super);
@@ -18,7 +18,7 @@ var SelectHighway = (function (_super) {
      * @param {jQuery} parent - parent element
      */
     function SelectHighway(parent) {
-        _super.call(this, parent, "Highway");
+        return _super.call(this, parent, "Highway") || this;
     }
     // /**
     //  *

@@ -5,7 +5,7 @@
  */
 import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 declare class DeficiencyBase {
     _map: ol.Map;
     deficiencyLayer: LayerBaseVectorGeoJson;

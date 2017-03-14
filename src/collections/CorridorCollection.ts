@@ -9,7 +9,7 @@ import makeGuid from 'webmapsjs/dist/util/makeGuid';
 import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
 import {popupCallback} from 'webmapsjs/dist/olHelpers/mapPopupCls'
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 
 import $ = require('jquery');
 import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";

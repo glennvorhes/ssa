@@ -2,10 +2,10 @@
 /**
  * Created by gavorhes on 7/15/2016.
  */
-var LayerBaseVectorGeoJson_1 = require('webmapsjs/dist/layers/LayerBaseVectorGeoJson');
-var SortedFeatures_1 = require('webmapsjs/dist/olHelpers/SortedFeatures');
-var constants = require('../constants');
-var $ = require('jquery');
+var LayerBaseVectorGeoJson_1 = require("webmapsjs/dist/layers/LayerBaseVectorGeoJson");
+var SortedFeatures_1 = require("webmapsjs/dist/olHelpers/SortedFeatures");
+var constants = require("../constants");
+var $ = require("jquery");
 var DeficiencyBase = (function () {
     /**
      *

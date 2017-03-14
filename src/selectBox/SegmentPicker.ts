@@ -11,11 +11,10 @@ import Ajx from '../ajaxGetters';
 import * as layerStyles from '../layerStyles';
 import {zoomToResolution} from 'webmapsjs/dist/olHelpers/zoomResolutionConvert';
 
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import PickerCollection from "../collections/PickerCollection";
 import $ = require('jquery');
 const nm = provide('ssa.select');
-
 
 
 export class SegmentPicker extends SelectBoxBase {
@@ -239,6 +238,8 @@ export class SegmentPicker extends SelectBoxBase {
                 this._segmentLayer.clear();
                 this._segNodeLayer.clear();
                 this._processAjaxResult(d['features']);
+                console.log(d);
+
                 if (d['features'].length > 0) {
                     this.enabled = true;
                     this._segmentLayer.addFeatures(d);

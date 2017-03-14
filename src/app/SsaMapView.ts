@@ -15,7 +15,7 @@ import crashData from '../collections/crashData';
 import mmFlags from '../collections/mmFlags';
 import controllingCriteria from '../collections/controllingCriteria';
 import * as constants from '../constants';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import ajx from '../ajaxGetters';
 import $ = require('jquery');
 import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";

@@ -14,7 +14,7 @@ import * as colorUtil from 'webmapsjs/dist/util/colors';
 import * as proj from 'webmapsjs/dist/olHelpers/projections';
 import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import $ = require('jquery');
 
 

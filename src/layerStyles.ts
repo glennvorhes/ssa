@@ -2,7 +2,7 @@
  * Created by gavorhes on 5/13/2016.
  */
 
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 
 import {proj3857} from "webmapsjs/dist/olHelpers/projections";
 import {LayerBaseVectorGeoJsonOptions} from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';

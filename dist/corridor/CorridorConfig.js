@@ -2,8 +2,8 @@
  * Created by gavorhes on 5/17/2016.
  */
 "use strict";
-var countyLookup_1 = require('../countyLookup');
-var $ = require('jquery');
+var countyLookup_1 = require("../countyLookup");
+var $ = require("jquery");
 function labelValueHelper(label, val) {
     "use strict";
     var outHtml = '<div class="col-xs-2">';

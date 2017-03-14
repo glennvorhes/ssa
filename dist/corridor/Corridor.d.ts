@@ -1,9 +1,9 @@
 /**
  * Created by gavorhes on 5/11/2016.
  */
-import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
+import { LayerBaseVectorGeoJson } from "webmapsjs/dist/layers/LayerBaseVectorGeoJson";
 import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import CorridorConfig from "./CorridorConfig";
 declare class Corridor {
     _valid: boolean;

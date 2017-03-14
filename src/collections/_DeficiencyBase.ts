@@ -7,7 +7,7 @@ import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 
 import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
 import * as constants from '../constants';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import $ = require('jquery');
 
 

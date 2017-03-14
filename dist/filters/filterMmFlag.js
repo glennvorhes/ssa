@@ -7,11 +7,11 @@ var __extends = (this && this.__extends) || function (d, b) {
 /**
  * Created by gavorhes on 7/14/2016.
  */
-var FilterBase_1 = require('./FilterBase');
+var FilterBase_1 = require("./FilterBase");
 var FilterMmFlag = (function (_super) {
     __extends(FilterMmFlag, _super);
     function FilterMmFlag() {
-        _super.call(this, 'mm-flags', 'mm-flags-sub', true);
+        return _super.call(this, 'mm-flags', 'mm-flags-sub', true) || this;
     }
     Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
         get: function () {

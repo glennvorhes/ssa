@@ -6,7 +6,7 @@ import SelectHighway from '../selectBox/SelectHighway';
 import SegmentPicker from '../selectBox/SegmentPicker';
 import Corridor from '../corridor/Corridor';
 import CorridorCollection from '../collections/CorridorCollection';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import LayerEsriMapServer from 'webmapsjs/dist/layers/LayerEsriMapServer';
 import 'jquery-ui';
 declare class PickerCollection {

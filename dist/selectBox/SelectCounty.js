@@ -7,9 +7,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var SelectBoxBase_1 = require('webmapsjs/dist/domUtil/SelectBoxBase');
-var ajaxGetters_1 = require('../ajaxGetters');
-var provide_1 = require('webmapsjs/dist/util/provide');
+var SelectBoxBase_1 = require("webmapsjs/dist/domUtil/SelectBoxBase");
+var ajaxGetters_1 = require("../ajaxGetters");
+var provide_1 = require("webmapsjs/dist/util/provide");
 var nm = provide_1.default('ssa.select');
 var SelectCounty = (function (_super) {
     __extends(SelectCounty, _super);
@@ -19,8 +19,7 @@ var SelectCounty = (function (_super) {
      * @param {string} labelContent
      */
     function SelectCounty(parent, labelContent) {
-        var _this = this;
-        _super.call(this, parent, labelContent);
+        var _this = _super.call(this, parent, labelContent) || this;
         ajaxGetters_1.default.getAllCounties(function (d) {
             for (var _i = 0, d_1 = d; _i < d_1.length; _i++) {
                 var c = d_1[_i];
@@ -28,6 +27,7 @@ var SelectCounty = (function (_super) {
             }
             _this.box.trigger('change');
         });
+        return _this;
     }
     return SelectCounty;
 }(SelectBoxBase_1.default));

@@ -12,7 +12,7 @@ import provide from 'webmapsjs/dist/util/provide';
 
 import PickerCollection from '../collections/PickerCollection';
 import CorridorCollection from '../collections/CorridorCollection';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 
 import $ = require('jquery');
 import 'jquery-ui';

@@ -2,15 +2,15 @@
  * Created by gavorhes on 5/11/2016.
  */
 "use strict";
-var LayerBaseVectorGeoJson_1 = require('webmapsjs/dist/layers/LayerBaseVectorGeoJson');
-var makeGuid_1 = require('webmapsjs/dist/util/makeGuid');
-var provide_1 = require('webmapsjs/dist/util/provide');
-var layerStyles_1 = require('../layerStyles');
-var ajaxGetters_1 = require('../ajaxGetters');
-var SortedFeatures_1 = require('webmapsjs/dist/olHelpers/SortedFeatures');
-var layerStyles = require('../layerStyles');
-var ext = require('webmapsjs/dist/olHelpers/extentUtil');
-var custom_ol_1 = require('custom-ol');
+var LayerBaseVectorGeoJson_1 = require("webmapsjs/dist/layers/LayerBaseVectorGeoJson");
+var makeGuid_1 = require("webmapsjs/dist/util/makeGuid");
+var provide_1 = require("webmapsjs/dist/util/provide");
+var layerStyles_1 = require("../layerStyles");
+var ajaxGetters_1 = require("../ajaxGetters");
+var SortedFeatures_1 = require("webmapsjs/dist/olHelpers/SortedFeatures");
+var layerStyles = require("../layerStyles");
+var ext = require("webmapsjs/dist/olHelpers/extentUtil");
+var ol = require("custom-ol");
 var nm = provide_1.default('ssa');
 function escapeHtml(string) {
     return String(string).replace(/[&<>"'\/]/g, function (s) {
@@ -102,8 +102,8 @@ var Corridor = (function () {
         if (typeof routeId != 'number') {
             throw 'route id is not number';
         }
-        this._corridorLayer = new LayerBaseVectorGeoJson_1.default('', layerStyles_1.layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true));
-        this.nodeLayer = new LayerBaseVectorGeoJson_1.default('', {
+        this._corridorLayer = new LayerBaseVectorGeoJson_1.LayerBaseVectorGeoJson('', layerStyles_1.layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true));
+        this.nodeLayer = new LayerBaseVectorGeoJson_1.LayerBaseVectorGeoJson('', {
             style: layerStyles.segNodeStyle,
             minZoom: 11,
             zIndex: 3
@@ -156,10 +156,10 @@ var Corridor = (function () {
         for (var i = 0; i < features.length; i++) {
             var coords = features[i].getGeometry()['getCoordinates']();
             if (coords && coords.length > 0) {
-                var startPoint = new custom_ol_1.default.geom.Point(coords[0]);
-                var endPoint = new custom_ol_1.default.geom.Point(coords[coords.length - 1]);
-                this.nodeLayer.olLayer.getSource().addFeature(new custom_ol_1.default.Feature(startPoint));
-                this.nodeLayer.olLayer.getSource().addFeature(new custom_ol_1.default.Feature(endPoint));
+                var startPoint = new ol.geom.Point(coords[0]);
+                var endPoint = new ol.geom.Point(coords[coords.length - 1]);
+                this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(startPoint));
+                this.nodeLayer.olLayer.getSource().addFeature(new ol.Feature(endPoint));
             }
         }
     };

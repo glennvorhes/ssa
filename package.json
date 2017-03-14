@@ -11,7 +11,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "update-webmapsjs": "npm update webmapsjs",
-    "update-custom-ol": "npm update custom-ol",
+    "update-custom-ol": "npm update custom-ol & COPY /Y node_modules\\custom-ol\\lib\\index.js build\\ol.js",
     "typedoc": "typedoc --mode file --out doc src",
     "serve-site": "python -m http.server 5001",
     "serve-proxy": "python proxy.py",

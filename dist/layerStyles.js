@@ -2,10 +2,10 @@
  * Created by gavorhes on 5/13/2016.
  */
 "use strict";
-var custom_ol_1 = require('custom-ol');
+var ol = require("custom-ol");
 var projections_1 = require("webmapsjs/dist/olHelpers/projections");
-exports.segmentLayer = new custom_ol_1.default.style.Style({
-    stroke: new custom_ol_1.default.style.Stroke({ color: 'darkblue', width: 5 })
+exports.segmentLayer = new ol.style.Style({
+    stroke: new ol.style.Stroke({ color: 'darkblue', width: 5 })
 });
 exports.fromSelectionColor = '#48FD14';
 exports.toSelectionColor = '#EE0071';
@@ -49,8 +49,8 @@ function layerConfigHelper(name, color, visible) {
         minZoom: 4,
         name: name,
         transform: { dataProjection: projections_1.proj3857, featureProjection: projections_1.proj3857 },
-        style: new custom_ol_1.default.style.Style({
-            stroke: new custom_ol_1.default.style.Stroke({
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
                 color: color,
                 width: 6
             })
@@ -70,14 +70,14 @@ exports.mmPopupContent = function (props) {
     returnHtml += '</table>';
     return returnHtml;
 };
-exports.segNodeStyle = new custom_ol_1.default.style.Style({
-    image: new custom_ol_1.default.style.RegularShape({
+exports.segNodeStyle = new ol.style.Style({
+    image: new ol.style.RegularShape({
         radius: 6,
         points: 4,
-        fill: new custom_ol_1.default.style.Fill({
+        fill: new ol.style.Fill({
             color: 'rgb(0, 0, 0)'
         }),
-        stroke: new custom_ol_1.default.style.Stroke({ color: 'rgb(0, 0, 0', width: 2 })
+        stroke: new ol.style.Stroke({ color: 'rgb(0, 0, 0', width: 2 })
     })
 });
 //# sourceMappingURL=layerStyles.js.map

@@ -2,7 +2,7 @@
  * Created by gavorhes on 5/11/2016.
  */
 
-import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
+import {LayerBaseVectorGeoJson} from "webmapsjs/dist/layers/LayerBaseVectorGeoJson";
 
 import makeGuid from 'webmapsjs/dist/util/makeGuid';
 import provide from 'webmapsjs/dist/util/provide';
@@ -11,8 +11,7 @@ import Ajx  from '../ajaxGetters';
 import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
 import * as layerStyles from '../layerStyles';
 import * as ext from 'webmapsjs/dist/olHelpers/extentUtil';
-
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import CorridorConfig from "./CorridorConfig";
 
 

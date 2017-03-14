@@ -2,7 +2,7 @@
 /// <reference types="jqueryui" />
 import Corridor from '../corridor/Corridor';
 import { popupCallback } from 'webmapsjs/dist/olHelpers/mapPopupCls';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 export declare class CorridorCollection {
     $innerContainer: JQuery;
     $corridorDataContainer: JQuery;

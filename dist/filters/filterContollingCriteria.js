@@ -7,11 +7,11 @@ var __extends = (this && this.__extends) || function (d, b) {
 /**
  * Created by gavorhes on 7/14/2016.
  */
-var FilterBase_1 = require('./FilterBase');
+var FilterBase_1 = require("./FilterBase");
 var FilterControllingCriteria = (function (_super) {
     __extends(FilterControllingCriteria, _super);
     function FilterControllingCriteria() {
-        _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true);
+        return _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true) || this;
     }
     Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignSpeedOn", {
         get: function () {

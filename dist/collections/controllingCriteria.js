@@ -7,12 +7,12 @@ var __extends = (this && this.__extends) || function (d, b) {
 /**
  * Created by gavorhes on 7/15/2016.
  */
-var filterContollingCriteria_1 = require('../filters/filterContollingCriteria');
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var constants = require('../constants');
-var _DeficiencyBase_1 = require('./_DeficiencyBase');
-var custom_ol_1 = require('custom-ol');
-var objectHelpers_1 = require('webmapsjs/dist/util/objectHelpers');
+var filterContollingCriteria_1 = require("../filters/filterContollingCriteria");
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var constants = require("../constants");
+var _DeficiencyBase_1 = require("./_DeficiencyBase");
+var ol = require("custom-ol");
+var objectHelpers_1 = require("webmapsjs/dist/util/objectHelpers");
 /**
  *
  * @param {ol.Feature} feature - the input feature
@@ -30,21 +30,21 @@ var ccStyle = function (feature) {
         }
     }
     var txtFunc = function () {
-        return new custom_ol_1.default.style.Text({
+        return new ol.style.Text({
             text: props['ccId'],
             scale: 1.5,
-            stroke: new custom_ol_1.default.style.Stroke({
+            stroke: new ol.style.Stroke({
                 color: 'black',
                 width: 2
             }),
-            fill: new custom_ol_1.default.style.Fill({
+            fill: new ol.style.Fill({
                 color: constants.controllingCriteriaColor
             })
         });
     };
     if (show) {
-        return [new custom_ol_1.default.style.Style({
-                stroke: new custom_ol_1.default.style.Stroke({
+        return [new ol.style.Style({
+                stroke: new ol.style.Stroke({
                     color: constants.controllingCriteriaColor,
                     width: 6
                 }),
@@ -58,7 +58,7 @@ var ccStyle = function (feature) {
 var ControllingCriteria = (function (_super) {
     __extends(ControllingCriteria, _super);
     function ControllingCriteria() {
-        _super.call(this, "Geometric Deficiencies", ccStyle, 201, constants.ccListId);
+        return _super.call(this, "Geometric Deficiencies", ccStyle, 201, constants.ccListId) || this;
     }
     /**
      * initialize with the map
@@ -118,10 +118,10 @@ var ControllingCriteria = (function (_super) {
             }
         }
     };
-    ControllingCriteria.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
-        'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
     return ControllingCriteria;
 }(_DeficiencyBase_1.default));
+ControllingCriteria.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
+    'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
 exports.ControllingCriteria = ControllingCriteria;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = new ControllingCriteria();

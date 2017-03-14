@@ -7,15 +7,15 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var provide_1 = require('webmapsjs/dist/util/provide');
-var SortedFeatures_1 = require('webmapsjs/dist/olHelpers/SortedFeatures');
-var LayerBaseVectorGeoJson_1 = require('webmapsjs/dist/layers/LayerBaseVectorGeoJson');
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var SelectBoxBase_1 = require('webmapsjs/dist/domUtil/SelectBoxBase');
-var ajaxGetters_1 = require('../ajaxGetters');
-var layerStyles = require('../layerStyles');
-var custom_ol_1 = require('custom-ol');
-var $ = require('jquery');
+var provide_1 = require("webmapsjs/dist/util/provide");
+var SortedFeatures_1 = require("webmapsjs/dist/olHelpers/SortedFeatures");
+var LayerBaseVectorGeoJson_1 = require("webmapsjs/dist/layers/LayerBaseVectorGeoJson");
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var SelectBoxBase_1 = require("webmapsjs/dist/domUtil/SelectBoxBase");
+var ajaxGetters_1 = require("../ajaxGetters");
+var layerStyles = require("../layerStyles");
+var ol = require("custom-ol");
+var $ = require("jquery");
 var nm = provide_1.default('ssa.select');
 var SegmentPicker = (function (_super) {
     __extends(SegmentPicker, _super);
@@ -33,19 +33,19 @@ var SegmentPicker = (function (_super) {
             outString += "</div>";
             return outString;
         }
-        _super.call(this, pickerColl.$innerContainer, isFrom ? 'Ref. Point #1' : 'Ref. Point #2', contentGen);
-        this._isFrom = isFrom;
-        this._pickerColl = pickerColl;
+        _this = _super.call(this, pickerColl.$innerContainer, isFrom ? 'Ref. Point #1' : 'Ref. Point #2', contentGen) || this;
+        _this._isFrom = isFrom;
+        _this._pickerColl = pickerColl;
         /**
          *
          * @type {number|undefined}
          * @private
          */
-        this._selectedPdpId = undefined;
-        this.addChangeListener(function (v) {
+        _this._selectedPdpId = undefined;
+        _this.addChangeListener(function (v) {
             _this.selectedPdpId = parseInt(v);
         });
-        this._box.keyup(function () {
+        _this._box.keyup(function () {
             if (_this.selectedPdpId != parseInt(_this.selectedValue.toString())) {
                 _this._box.trigger('change');
             }
@@ -55,20 +55,20 @@ var SegmentPicker = (function (_super) {
          * @type {SortedFeatures|undefined}
          * @private
          */
-        this._sortedFeatures = undefined;
+        _this._sortedFeatures = undefined;
         /**
          *
          * @type {LayerBaseVectorGeoJson}
          * @protected
          */
-        this._segmentLayer = new LayerBaseVectorGeoJson_1.default('', {
+        _this._segmentLayer = new LayerBaseVectorGeoJson_1.default('', {
             minZoom: 6,
-            name: this._isFrom ? 'Start Segment' : 'End Segment',
+            name: _this._isFrom ? 'Start Segment' : 'End Segment',
             transform: { dataProjection: 'EPSG:3857', featureProjection: 'EPSG:3857' },
             style: layerStyles.segmentLayer,
             visible: false
         });
-        this._segNodeLayer = new LayerBaseVectorGeoJson_1.default('', {
+        _this._segNodeLayer = new LayerBaseVectorGeoJson_1.default('', {
             style: layerStyles.segNodeStyle,
             minZoom: 11,
             visible: false
@@ -78,20 +78,20 @@ var SegmentPicker = (function (_super) {
          * @type {LayerBaseVectorGeoJson}
          * @private
          */
-        this._segmentSelectionLayer = new LayerBaseVectorGeoJson_1.default('', {
-            style: new custom_ol_1.default.style.Style({
-                stroke: new custom_ol_1.default.style.Stroke({
-                    color: this._isFrom ? layerStyles.fromSelectionColor : layerStyles.toSelectionColor,
+        _this._segmentSelectionLayer = new LayerBaseVectorGeoJson_1.default('', {
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: _this._isFrom ? layerStyles.fromSelectionColor : layerStyles.toSelectionColor,
                     width: 8
                 })
             }),
             minZoom: 6,
             visible: false,
-            zIndex: this._isFrom ? 100 : 101
+            zIndex: _this._isFrom ? 100 : 101
         });
-        this._selectBtnClass = this._isFrom ? "select-seg-btn-from" : "select-seg-btn-to";
-        this._selectBtnClassTo = 'select-seg-btn-to';
-        mapPopup_1.default.addVectorPopup(this._segmentLayer, function (props) {
+        _this._selectBtnClass = _this._isFrom ? "select-seg-btn-from" : "select-seg-btn-to";
+        _this._selectBtnClassTo = 'select-seg-btn-to';
+        mapPopup_1.default.addVectorPopup(_this._segmentLayer, function (props) {
             var returnHtml = '<table class="mm-popup-table">';
             returnHtml += "<tr><td>PdpId</td><td>" + props['pdpId'] + "</td>;";
             returnHtml += "<td rowspan=\"5\">";
@@ -120,12 +120,12 @@ var SegmentPicker = (function (_super) {
                 });
             }
         });
-        this._enabled = false;
-        this._layersVisible = false;
-        this._box.click(function (evt) {
+        _this._enabled = false;
+        _this._layersVisible = false;
+        _this._box.click(function (evt) {
             evt.stopPropagation();
         });
-        this._box.parent('div').click(function () {
+        _this._box.parent('div').click(function () {
             if (_this._sortedFeatures == null) {
                 return;
             }
@@ -136,6 +136,7 @@ var SegmentPicker = (function (_super) {
             mapPopup_1.default.map.getView().fit(selectedFeature.getGeometry().getExtent(), mapPopup_1.default.map.getSize());
             mapPopup_1.default.map.getView().setZoom(mapPopup_1.default.map.getView().getZoom() - 2);
         });
+        return _this;
     }
     /**
      * @param {Array<object>} arr - array of returned objects, implementation defined in derived classes
@@ -190,6 +191,7 @@ var SegmentPicker = (function (_super) {
             _this._segmentLayer.clear();
             _this._segNodeLayer.clear();
             _this._processAjaxResult(d['features']);
+            console.log(d);
             if (d['features'].length > 0) {
                 _this.enabled = true;
                 _this._segmentLayer.addFeatures(d);
@@ -206,10 +208,10 @@ var SegmentPicker = (function (_super) {
                 for (var i = 0; i < feats.length; i++) {
                     var coords = feats[i].getGeometry()['getCoordinates']();
                     if (coords.length > 0) {
-                        var startPoint = new custom_ol_1.default.geom.Point(coords[0]);
-                        var endPoint = new custom_ol_1.default.geom.Point(coords[coords.length - 1]);
-                        _this._segNodeLayer.source.addFeature(new custom_ol_1.default.Feature(startPoint));
-                        _this._segNodeLayer.source.addFeature(new custom_ol_1.default.Feature(endPoint));
+                        var startPoint = new ol.geom.Point(coords[0]);
+                        var endPoint = new ol.geom.Point(coords[coords.length - 1]);
+                        _this._segNodeLayer.source.addFeature(new ol.Feature(startPoint));
+                        _this._segNodeLayer.source.addFeature(new ol.Feature(endPoint));
                     }
                 }
             }

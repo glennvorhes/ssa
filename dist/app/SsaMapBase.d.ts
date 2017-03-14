@@ -2,7 +2,7 @@
 /// <reference types="jqueryui" />
 import { MapPopupCls } from "webmapsjs/dist/olHelpers/mapPopupCls";
 import { MapMoveCls } from "webmapsjs/dist/olHelpers/mapMoveCls";
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 export declare class SsaMapBase {
     $mainContainer: JQuery;
     _mapId: string;

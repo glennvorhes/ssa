@@ -1,12 +1,12 @@
 /**
  * Created by gavorhes on 5/13/2016.
  */
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import { LayerBaseVectorGeoJsonOptions } from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 export declare const segmentLayer: ol.style.Style;
-export declare const fromSelectionColor: string;
-export declare const toSelectionColor: string;
-export declare const corridorPreviewColor: string;
+export declare const fromSelectionColor = "#48FD14";
+export declare const toSelectionColor = "#EE0071";
+export declare const corridorPreviewColor = "black";
 /**
  * return a random color for styling
  * @returns {string}

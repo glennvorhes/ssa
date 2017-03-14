@@ -8,7 +8,7 @@ import {MapPopupCls} from "webmapsjs/dist/olHelpers/mapPopupCls";
 import {MapMoveCls} from "webmapsjs/dist/olHelpers/mapMoveCls";
 import $ = require('jquery');
 const nm = provide('ssa');
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 
 
 export class SsaMapBase {

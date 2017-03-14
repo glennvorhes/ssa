@@ -5,7 +5,7 @@ import filterControllingCritera from '../filters/filterContollingCriteria';
 import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 import * as constants from '../constants';
 import DeficiencyBase from './_DeficiencyBase';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers'
 
 

@@ -1,16 +1,16 @@
 /// <reference path="../../node_modules/@types/jqueryui/index.d.ts"/>
 "use strict";
-var SelectCounty_1 = require('../selectBox/SelectCounty');
-var SelectHighway_1 = require('../selectBox/SelectHighway');
-var SegmentPicker_1 = require('../selectBox/SegmentPicker');
-var Corridor_1 = require('../corridor/Corridor');
-var provide_1 = require('webmapsjs/dist/util/provide');
-var lyrStyles = require('../layerStyles');
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var makeGuid_1 = require('webmapsjs/dist/util/makeGuid');
-var LayerEsriMapServer_1 = require('webmapsjs/dist/layers/LayerEsriMapServer');
+var SelectCounty_1 = require("../selectBox/SelectCounty");
+var SelectHighway_1 = require("../selectBox/SelectHighway");
+var SegmentPicker_1 = require("../selectBox/SegmentPicker");
+var Corridor_1 = require("../corridor/Corridor");
+var provide_1 = require("webmapsjs/dist/util/provide");
+var lyrStyles = require("../layerStyles");
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var makeGuid_1 = require("webmapsjs/dist/util/makeGuid");
+var LayerEsriMapServer_1 = require("webmapsjs/dist/layers/LayerEsriMapServer");
 var $ = require("jquery");
-require('jquery-ui');
+require("jquery-ui");
 var nm = provide_1.default('ssa');
 var PickerCollection = (function () {
     /**

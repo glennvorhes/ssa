@@ -7,15 +7,15 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var SsaMapBase_1 = require('./SsaMapBase');
-var quickMap_1 = require('webmapsjs/dist/olHelpers/quickMap');
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var makeGuid_1 = require('webmapsjs/dist/util/makeGuid');
-var provide_1 = require('webmapsjs/dist/util/provide');
-var PickerCollection_1 = require('../collections/PickerCollection');
-var CorridorCollection_1 = require('../collections/CorridorCollection');
-var $ = require('jquery');
-require('jquery-ui');
+var SsaMapBase_1 = require("./SsaMapBase");
+var quickMap_1 = require("webmapsjs/dist/olHelpers/quickMap");
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var makeGuid_1 = require("webmapsjs/dist/util/makeGuid");
+var provide_1 = require("webmapsjs/dist/util/provide");
+var PickerCollection_1 = require("../collections/PickerCollection");
+var CorridorCollection_1 = require("../collections/CorridorCollection");
+var $ = require("jquery");
+require("jquery-ui");
 var nm = provide_1.default('ssa');
 var SsaMapCreate = (function (_super) {
     __extends(SsaMapCreate, _super);
@@ -26,11 +26,10 @@ var SsaMapCreate = (function (_super) {
      * @param {string} [dataClass=corridor-data] - class selector for the corridor data elements
      */
     function SsaMapCreate(divId, corridorDataContainer, dataClass) {
-        var _this = this;
-        _super.call(this, divId);
-        this.$mainContainer.prepend("<div class=\"ssa-map-sidebar\"></div>");
-        this.mainMap = quickMap_1.default({
-            divId: this.mapId,
+        var _this = _super.call(this, divId) || this;
+        _this.$mainContainer.prepend("<div class=\"ssa-map-sidebar\"></div>");
+        _this.mainMap = quickMap_1.default({
+            divId: _this.mapId,
             minZoom: 6,
             zoom: 6,
             fullScreen: true
@@ -38,17 +37,18 @@ var SsaMapCreate = (function (_super) {
         /**
          * @type {MapPopupCls}
          */
-        this.mainMapPopup = mapPopup_1.default;
-        this.$sideBar = this.$mainContainer.find('.ssa-map-sidebar');
+        _this.mainMapPopup = mapPopup_1.default;
+        _this.$sideBar = _this.$mainContainer.find('.ssa-map-sidebar');
         var afterChange = function () {
             _this._afterChange();
         };
-        this.pickerCollection = new PickerCollection_1.default(this.$sideBar, this.mainMap);
+        _this.pickerCollection = new PickerCollection_1.default(_this.$sideBar, _this.mainMap);
         var corridorsGuid = makeGuid_1.default();
-        this.$sideBar.append("<div id=\"" + corridorsGuid + "\"></div>");
-        this.corridorCollection = new CorridorCollection_1.default(this.$sideBar, this.mainMap, corridorDataContainer, afterChange, dataClass);
-        this.pickerCollection.corridorCollection = this.corridorCollection;
-        this.corridorCollection.loadExistingCorridors();
+        _this.$sideBar.append("<div id=\"" + corridorsGuid + "\"></div>");
+        _this.corridorCollection = new CorridorCollection_1.default(_this.$sideBar, _this.mainMap, corridorDataContainer, afterChange, dataClass);
+        _this.pickerCollection.corridorCollection = _this.corridorCollection;
+        _this.corridorCollection.loadExistingCorridors();
+        return _this;
     }
     SsaMapCreate.prototype._afterChange = function () {
         var __this = this;

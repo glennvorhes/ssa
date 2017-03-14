@@ -7,20 +7,20 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var SsaMapBase_1 = require('./SsaMapBase');
-var quickMap_1 = require('webmapsjs/dist/olHelpers/quickMap');
-var mapPopup_1 = require('webmapsjs/dist/olHelpers/mapPopup');
-var provide_1 = require('webmapsjs/dist/util/provide');
-var CorridorConfig_1 = require('../corridor/CorridorConfig');
-var Corridor_1 = require('../corridor/Corridor');
-var styles = require('../layerStyles');
-var calcExtent = require('webmapsjs/dist/olHelpers/extentUtil');
-var crashData_1 = require('../collections/crashData');
-var mmFlags_1 = require('../collections/mmFlags');
-var controllingCriteria_1 = require('../collections/controllingCriteria');
-var constants = require('../constants');
-var ajaxGetters_1 = require('../ajaxGetters');
-var $ = require('jquery');
+var SsaMapBase_1 = require("./SsaMapBase");
+var quickMap_1 = require("webmapsjs/dist/olHelpers/quickMap");
+var mapPopup_1 = require("webmapsjs/dist/olHelpers/mapPopup");
+var provide_1 = require("webmapsjs/dist/util/provide");
+var CorridorConfig_1 = require("../corridor/CorridorConfig");
+var Corridor_1 = require("../corridor/Corridor");
+var styles = require("../layerStyles");
+var calcExtent = require("webmapsjs/dist/olHelpers/extentUtil");
+var crashData_1 = require("../collections/crashData");
+var mmFlags_1 = require("../collections/mmFlags");
+var controllingCriteria_1 = require("../collections/controllingCriteria");
+var constants = require("../constants");
+var ajaxGetters_1 = require("../ajaxGetters");
+var $ = require("jquery");
 var nm = provide_1.default('ssa');
 var mmPopupContentWithCrash = function (props) {
     "use strict";
@@ -37,15 +37,14 @@ var SsaMapView = (function (_super) {
      * @param {string} [infoAnchorId=ssa-corridor-info-anchor] - id of element after which to insert the info rows
      */
     function SsaMapView(divId, dataClass, infoAnchorId) {
-        var _this = this;
-        _super.call(this, divId);
-        this._ssaId = parseInt($('#hidden-ssa-id').val());
-        this._snap = parseInt($('#hidden-snapshot-id').val());
+        var _this = _super.call(this, divId) || this;
+        _this._ssaId = parseInt($('#hidden-ssa-id').val());
+        _this._snap = parseInt($('#hidden-snapshot-id').val());
         /**
          * @type {ol.Map}
          */
-        this.mainMap = quickMap_1.default({
-            divId: this.mapId,
+        _this.mainMap = quickMap_1.default({
+            divId: _this.mapId,
             minZoom: 6,
             zoom: 6,
             fullScreen: true
@@ -61,8 +60,8 @@ var SsaMapView = (function (_super) {
         summaryListHtml += "<h4 style=\"color: " + constants.controllingCriteriaColor + "\">Controlling Criteria</h4>";
         summaryListHtml += "<ul id=\"" + constants.ccListId + "\"></ul>";
         summaryListHtml += '</div>';
-        this.$mapDiv.append(summaryListHtml);
-        var $legendDiv = this.$mapDiv.find('.segment-index-summary');
+        _this.$mapDiv.append(summaryListHtml);
+        var $legendDiv = _this.$mapDiv.find('.segment-index-summary');
         var $closeButton = $legendDiv.find('.segment-index-summary-close');
         var $openButton = $legendDiv.find('.segment-index-summary-open');
         var $zoomExtent = $legendDiv.find('.segment-index-summary-zoom');
@@ -105,11 +104,11 @@ var SsaMapView = (function (_super) {
         /**
          * @type {MapPopupCls}
          */
-        this.mainMapPopup = mapPopup_1.default;
+        _this.mainMapPopup = mapPopup_1.default;
         dataClass = typeof dataClass == 'string' ? dataClass : 'corridor-data';
         infoAnchorId = typeof infoAnchorId == 'string' ? infoAnchorId : 'ssa-corridor-info-anchor';
         dataClass = '.' + dataClass;
-        $(this.mainMap.getTargetElement()).append('<div class="crashes-loaded-msg">Crashes Loaded</div>');
+        $(_this.mainMap.getTargetElement()).append('<div class="crashes-loaded-msg">Crashes Loaded</div>');
         /**
          *
          * @type {Array<CorridorConfig>}
@@ -119,16 +118,16 @@ var SsaMapView = (function (_super) {
          *
          * @type {Array<Corridor>}
          */
-        this._corridorArray = [];
+        _this._corridorArray = [];
         // parse the data from the hidden input elements
         $(dataClass).each(function (n, el) {
             corridorConfigs.push(new CorridorConfig_1.default(el));
         });
-        this.createdCorridorsLength = corridorConfigs.length;
-        this.loadedCorridorsLength = 0;
+        _this.createdCorridorsLength = corridorConfigs.length;
+        _this.loadedCorridorsLength = 0;
         var returnLookup = {};
         var returnArr = [];
-        ajaxGetters_1.default.getCcGeom(this._ssaId, this._snap, function (d) {
+        ajaxGetters_1.default.getCcGeom(_this._ssaId, _this._snap, function (d) {
             for (var _i = 0, _a = d['features']; _i < _a.length; _i++) {
                 var f = _a[_i];
                 var corId = f['properties']['corridorId'].toFixed();
@@ -156,8 +155,9 @@ var SsaMapView = (function (_super) {
             _this._afterCorridorLoad();
             $('#' + infoAnchorId).after(outHtml);
         });
-        mmFlags_1.default.init(this.mainMap);
-        controllingCriteria_1.default.init(this.mainMap);
+        mmFlags_1.default.init(_this.mainMap);
+        controllingCriteria_1.default.init(_this.mainMap);
+        return _this;
     }
     SsaMapView.prototype._afterCorridorLoad = function () {
         this._fitExtent();

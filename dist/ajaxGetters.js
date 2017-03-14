@@ -2,8 +2,8 @@
  * Created by gavorhes on 5/12/2016.
  */
 "use strict";
-var provide_1 = require('webmapsjs/dist/util/provide');
-var $ = require('jquery');
+var provide_1 = require("webmapsjs/dist/util/provide");
+var $ = require("jquery");
 var home = $('#site-root').val();
 if (window.location.port == '5001') {
     home = 'http://localhost:5004/';

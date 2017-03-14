@@ -2,7 +2,7 @@
 /**
  * Created by gavorhes on 5/17/2016.
  */
-var provide_1 = require('webmapsjs/dist/util/provide');
+var provide_1 = require("webmapsjs/dist/util/provide");
 var nm = provide_1.default('ssa');
 exports.countyLookup = {
     "1": "Adams",

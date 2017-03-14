@@ -1,5 +1,5 @@
 import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 export interface CrashDataObject {
     pdpId: number;
     cumulMile: number;

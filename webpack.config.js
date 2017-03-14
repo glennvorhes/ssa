@@ -13,7 +13,17 @@ module.exports = {
     },
     module: {
         loaders: [
+            {test: /\.tsx?$/, loader: "ts-loader"},
             {test: /\.js$/, loader: "source-map-loader"}
         ]
+    },
+    externals: {
+        "custom-ol": "ol",
+        "jquery": "$",
+        "c3": "c3",
+        "d3": "d3",
+        // "jquery-ui": "",
+        "react-dom": "ReactDOM",
+        "react": "React"
     }
 };

@@ -1,5 +1,5 @@
 import DeficiencyBase from './_DeficiencyBase';
-import ol from 'custom-ol';
+import ol = require('custom-ol');
 export declare class MmFlags extends DeficiencyBase {
     constructor();
     /**

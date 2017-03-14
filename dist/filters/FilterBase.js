@@ -2,8 +2,8 @@
  * Created by gavorhes on 7/13/2016.
  */
 "use strict";
-var provide_1 = require('webmapsjs/dist/util/provide');
-var $ = require('jquery');
+var provide_1 = require("webmapsjs/dist/util/provide");
+var $ = require("jquery");
 var nm = provide_1.default('ssa');
 var FilterBase = (function () {
     /**
