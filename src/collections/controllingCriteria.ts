@@ -14,7 +14,7 @@ import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers'
  * @param {ol.Feature} feature - the input feature
  * @returns {Array<ol.style.Style>|null} - return style or null
  */
-const ccStyle = (feature) => {
+const ccStyle = (feature: ol.Feature): ol.style.Style[] =>  {
     "use strict";
 
     let props = feature.getProperties();
@@ -92,6 +92,10 @@ export class ControllingCriteria extends DeficiencyBase {
                     returnHtml += '<ul>';
 
                     for (let s of subEls) {
+                        if (!isNaN(parseInt(s)) || s.trim().length == 0){
+                            continue;
+                        }
+
                         returnHtml += `<li>${s}</li>`;
                     }
 
