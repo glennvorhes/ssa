@@ -128,9 +128,6 @@ export class SsaMapView extends SsaMapBase {
         });
 
 
-        /**
-         * @type {MapPopupCls}
-         */
         this.mainMapPopup = mapPopup;
 
         dataClass = typeof dataClass == 'string' ? dataClass : 'corridor-data';
