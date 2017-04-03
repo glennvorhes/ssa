@@ -14,7 +14,9 @@
 <input id="hidden-mm-version" type="hidden" value="2016-09">
 <input id="hidden-stn-version" type="hidden" value="2014">
 <a href=".">Back</a><br/>
-<a href="../doc/index.html" target="_blank">Documentation</a>
+<a href="../doc/index.html" target="_blank">Documentation</a><br>
+<button id="download-map-image">Get Canvas</button><br>
+
 
 <form>
     <div class="grid main-grid">
@@ -227,7 +229,7 @@
 <script src="../build/ssaApps.js"></script>
 <script>
     var glob = {};
-    new SsaMapView('ssa-map-container', 'corridor-data', 'ssa-corridor-info-anchor');
+    var viewApp = new SsaMapView('ssa-map-container', 'corridor-data', 'ssa-corridor-info-anchor');
 </script>
 </body>
 </html>

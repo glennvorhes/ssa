@@ -36,6 +36,8 @@ export class SsaMapView extends SsaMapBase {
     createdCorridorsLength: number;
     _corridorArray: Corridor[];
     loadedCorridorsLength: number;
+    private $getMapButton: JQuery;
+    private getMapLinkId: string;
     private _ssaId: number;
     private _snap: number;
 
@@ -50,10 +52,16 @@ export class SsaMapView extends SsaMapBase {
         this._ssaId = parseInt($('#hidden-ssa-id').val());
         this._snap = parseInt($('#hidden-snapshot-id').val());
 
+        this.$getMapButton = $('#download-map-image');
 
-        /**
-         * @type {ol.Map}
-         */
+        this.getMapLinkId = 'get-map-link';
+
+        let linkHtml = `<a id="${this.getMapLinkId}" href="#" ` +
+            `download="map-image-id-${this._ssaId}-ver-${this._snap}.png" ` +
+            `style="display: none"></a>`;
+
+        $('#' + this.mapId).append(linkHtml);
+
         this.mainMap = quickMap({
             divId: this.mapId,
             minZoom: 6,
@@ -95,7 +103,7 @@ export class SsaMapView extends SsaMapBase {
             }
             hideShowWorking = true;
 
-            $legendDiv.find('ul, h3, h4, h5').fadeOut(100, ()=> {
+            $legendDiv.find('ul, h3, h4, h5').fadeOut(100, () => {
                 $legendDiv.css('padding', '2px');
                 $legendDiv.width('auto');
                 $legendDiv.css('min-height', 'auto');
@@ -116,14 +124,14 @@ export class SsaMapView extends SsaMapBase {
             $legendDiv.width(originalWidth);
             $legendDiv.css('min-height', originalMinHeight);
 
-            $legendDiv.find('ul, h3, h4, h5').fadeIn(100, ()=> {
+            $legendDiv.find('ul, h3, h4, h5').fadeIn(100, () => {
                 $closeButton.show();
                 $openButton.hide();
                 hideShowWorking = false;
             });
         });
 
-        $zoomExtent.click(()=> {
+        $zoomExtent.click(() => {
             this._fitExtent();
         });
 
@@ -206,6 +214,50 @@ export class SsaMapView extends SsaMapBase {
         mmFlags.init(this.mainMap);
         controllingCriteria.init(this.mainMap);
 
+
+        this.$getMapButton.click(() => {
+            let mapTarget: HTMLDivElement = this.mainMap.getTargetElement() as HTMLDivElement;
+
+            let originalHeight = mapTarget.style.height;
+            let originalWidth = mapTarget.style.width;
+            let originalPosition = mapTarget.style.position;
+
+            let mapSize = 2000;
+            let mapTimeout = 2000;
+
+            mapTarget.style.height = `${mapSize}px`;
+            mapTarget.style.width = `${mapSize}px`;
+            mapTarget.style.position = 'absolute';
+
+
+            this.mainMap.once('postrender', () => {
+                this._fitExtent();
+                setTimeout(() => {
+                    this.mainMap.once('postcompose', (event) => {
+                        try {
+                            let canvas: HTMLCanvasElement = event['context'].canvas;
+                            let linkEl: HTMLAnchorElement = document.getElementById(this.getMapLinkId) as HTMLAnchorElement;
+                            linkEl.href = canvas.toDataURL('image/png');
+                            linkEl.click();
+                            linkEl.href = '#';
+
+                            mapTarget.style.height = originalHeight;
+                            mapTarget.style.width = originalWidth;
+                            mapTarget.style.position = originalPosition;
+
+                            this.mainMap.updateSize();
+                            this._fitExtent();
+                        }
+                        catch (ex) {
+                            // reportParams['imgData'] = null;
+                        }
+                    });
+                    this.mainMap.renderSync();
+                }, mapTimeout);
+            });
+
+            this.mainMap.updateSize();
+        })
     }
 
     _afterCorridorLoad() {
@@ -225,10 +277,9 @@ export class SsaMapView extends SsaMapBase {
             lyrs.push(c.layer);
         }
 
-        if (lyrs.length > 0){
+        if (lyrs.length > 0) {
             calcExtent.fitToMap(lyrs, this.mainMap);
         }
-
     }
 }
 
