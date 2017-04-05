@@ -31,6 +31,26 @@ const mmPopupContentWithCrash = (props) => {
     return returnHtml;
 };
 
+function get_browser() {
+    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=/\brv[ :]+(\d+)/g.exec(ua) || [];
+        return {name:'IE',version:(tem[1]||'')};
+        }
+    if(M[1]==='Chrome'){
+        tem=ua.match(/\bOPR|Edge\/(\d+)/)
+        if(tem!=null)   {return {name:'Opera', version:tem[1]};}
+        }
+    M=M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem=ua.match(/version\/(\d+)/i))!=null) {M.splice(1,1,tem[1]);}
+    return {
+      name: M[0],
+      version: M[1]
+    };
+ }
+
+ console.log(get_browser());
+
 
 export class SsaMapView extends SsaMapBase {
     createdCorridorsLength: number;
@@ -221,6 +241,8 @@ export class SsaMapView extends SsaMapBase {
             let originalHeight = mapTarget.style.height;
             let originalWidth = mapTarget.style.width;
             let originalPosition = mapTarget.style.position;
+            let originalCenter = this.mainMap.getView().getCenter();
+            let originalZoom = this.mainMap.getView().getZoom();
 
             let mapSize = 2000;
             let mapTimeout = 2000;
@@ -246,7 +268,8 @@ export class SsaMapView extends SsaMapBase {
                             mapTarget.style.position = originalPosition;
 
                             this.mainMap.updateSize();
-                            this._fitExtent();
+                            this.mainMap.getView().setCenter(originalCenter);
+                            this.mainMap.getView().setZoom(originalZoom);
                         }
                         catch (ex) {
                             // reportParams['imgData'] = null;
