@@ -122,6 +122,8 @@ export class SegmentPicker extends SelectBoxBase {
         this._selectBtnClassTo = 'select-seg-btn-to';
 
         mapPopup.addVectorPopup(this._segmentLayer, (props) => {
+            console.log(props);
+
             let returnHtml = '<table class="mm-popup-table">';
             returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td>;`;
             returnHtml += `<td rowspan="5">`;
@@ -132,10 +134,10 @@ export class SegmentPicker extends SelectBoxBase {
                 returnHtml += `<input type="button" id='${props['pdpId']}' class="${this._selectBtnClass}" value="Select"/>`;
             }
             returnHtml += `</td></tr>`;
-            returnHtml += `<tr><td>Hwy</td><td>${props['hwyDir']}</td></tr>`;
+            returnHtml += `<tr><td>Hwy</td><td>${props['stdName']}</td></tr>`;
             returnHtml += `<tr><td>DivUnd</td><td>${props['divUnd']}</td></tr>`;
-            returnHtml += `<tr><td>From</td><td>${props['pdpFrom']}</td></tr>`;
-            returnHtml += `<tr><td>To</td><td>${props['pdpTo']}</td></tr>`;
+            returnHtml += `<tr><td>From</td><td>${props['startRp']}</td></tr>`;
+            returnHtml += `<tr><td>To</td><td>${props['endRp']}</td></tr>`;
             returnHtml += '</table>';
 
             return returnHtml;
