@@ -31,25 +31,36 @@ const mmPopupContentWithCrash = (props) => {
     return returnHtml;
 };
 
-function get_browser() {
-    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    if(/trident/i.test(M[1])){
-        tem=/\brv[ :]+(\d+)/g.exec(ua) || [];
-        return {name:'IE',version:(tem[1]||'')};
-        }
-    if(M[1]==='Chrome'){
-        tem=ua.match(/\bOPR|Edge\/(\d+)/)
-        if(tem!=null)   {return {name:'Opera', version:tem[1]};}
-        }
-    M=M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-    if((tem=ua.match(/version\/(\d+)/i))!=null) {M.splice(1,1,tem[1]);}
-    return {
-      name: M[0],
-      version: M[1]
-    };
- }
+interface iGetBrowser {
+    name: string;
+    version: string;
+}
 
- console.log(get_browser());
+function get_browser(): iGetBrowser {
+    let ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if (/trident/i.test(M[1])) {
+        tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return {name: 'IE', version: (tem[1] || '')};
+    }
+    if (M[1] === 'Chrome') {
+        tem = ua.match(/\bOPR|Edge\/(\d+)/)
+        if (tem != null) {
+            return {name: 'Opera', version: tem[1]};
+        }
+    }
+    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+    if ((tem = ua.match(/version\/(\d+)/i)) != null) {
+        M.splice(1, 1, tem[1]);
+    }
+    return {
+        name: M[0],
+        version: M[1]
+    };
+}
+
+
+
+
 
 
 export class SsaMapView extends SsaMapBase {
@@ -60,6 +71,7 @@ export class SsaMapView extends SsaMapBase {
     private getMapLinkId: string;
     private _ssaId: number;
     private _snap: number;
+    private mapImageName: string;
 
     /**
      *
@@ -75,9 +87,10 @@ export class SsaMapView extends SsaMapBase {
         this.$getMapButton = $('#download-map-image');
 
         this.getMapLinkId = 'get-map-link';
+        this.mapImageName = `map-image-id-${this._ssaId}-ver-${this._snap}.png`;
 
         let linkHtml = `<a id="${this.getMapLinkId}" href="#" ` +
-            `download="map-image-id-${this._ssaId}-ver-${this._snap}.png" ` +
+            `download="${this.mapImageName}" ` +
             `style="display: none"></a>`;
 
         $('#' + this.mapId).append(linkHtml);
@@ -236,6 +249,18 @@ export class SsaMapView extends SsaMapBase {
 
 
         this.$getMapButton.click(() => {
+            let browserVersion = get_browser();
+            console.log(`browser name: ${browserVersion.name}, version: ${browserVersion.version}`);
+            let isIE = false;
+            if (browserVersion.name.search(/IE?/) > -1){
+                isIE = true;
+
+                if (parseInt(browserVersion.version) < 11){
+                    alert("Unsupported Browser\nUpgrade to Internet Explorer 11 or use Firefox or Chrome");
+                    return;
+                }
+            }
+
             let mapTarget: HTMLDivElement = this.mainMap.getTargetElement() as HTMLDivElement;
 
             let originalHeight = mapTarget.style.height;
@@ -244,7 +269,7 @@ export class SsaMapView extends SsaMapBase {
             let originalCenter = this.mainMap.getView().getCenter();
             let originalZoom = this.mainMap.getView().getZoom();
 
-            let mapSize = 2000;
+            let mapSize = 1800;
             let mapTimeout = 2000;
 
             mapTarget.style.height = `${mapSize}px`;
@@ -253,15 +278,22 @@ export class SsaMapView extends SsaMapBase {
 
 
             this.mainMap.once('postrender', () => {
+
                 this._fitExtent();
                 setTimeout(() => {
                     this.mainMap.once('postcompose', (event) => {
                         try {
                             let canvas: HTMLCanvasElement = event['context'].canvas;
-                            let linkEl: HTMLAnchorElement = document.getElementById(this.getMapLinkId) as HTMLAnchorElement;
-                            linkEl.href = canvas.toDataURL('image/png');
-                            linkEl.click();
-                            linkEl.href = '#';
+                            let imgData = canvas.toDataURL('image/png');
+
+                            if (isIE){
+                                window.navigator.msSaveBlob(canvas.msToBlob(), this.mapImageName);
+                            } else {
+                                let linkEl: HTMLAnchorElement = document.getElementById(this.getMapLinkId) as HTMLAnchorElement;
+                                linkEl.href = imgData;
+                                linkEl.click();
+                                linkEl.href = '#';
+                            }
 
                             mapTarget.style.height = originalHeight;
                             mapTarget.style.width = originalWidth;
