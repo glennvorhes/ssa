@@ -19,12 +19,13 @@ import ol = require('custom-ol');
 import ajx from '../ajaxGetters';
 import $ = require('jquery');
 import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";
+import {mmPopupContent} from '../popup';
 
 const nm = provide('ssa');
 
 const mmPopupContentWithCrash = (props) => {
     "use strict";
-    let returnHtml = styles.mmPopupContent(props);
+    let returnHtml = mmPopupContent(props);
 
     returnHtml += crashData.getCrashSummary(props['pdpId']);
 
@@ -57,10 +58,6 @@ function get_browser(): iGetBrowser {
         version: M[1]
     };
 }
-
-
-
-
 
 
 export class SsaMapView extends SsaMapBase {

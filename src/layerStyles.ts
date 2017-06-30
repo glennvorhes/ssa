@@ -6,6 +6,10 @@ import ol = require('custom-ol');
 
 import {proj3857} from "webmapsjs/dist/olHelpers/projections";
 import {LayerBaseVectorGeoJsonOptions} from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
+import filterCrash from './filters/filterCrash';
+import * as colorUtil from 'webmapsjs/dist/util/colors';
+
+
 
 export const segmentLayer = new ol.style.Style({
     stroke: new ol.style.Stroke({color: 'darkblue', width: 5})
@@ -66,19 +70,6 @@ export function layerConfigHelper(name: string, color: string, visible: boolean)
     };
 }
 
-export const mmPopupContent = (props: Object) => {
-
-    let returnHtml = '<table class="mm-popup-table">';
-    returnHtml += `<tr><td>PdpId</td><td>${props['pdpId']}</td></tr>`;
-    returnHtml += `<tr><td>Highway</td><td>${props['stdName']}</td></tr>`;
-    returnHtml += `<tr><td>Description</td><td>${props['rpDesc'] ? props['rpDesc'] : '-'}</td></tr>`;
-    returnHtml += `<tr><td>Divided</td><td>${props['divUnd']}</td></tr>`;
-    returnHtml += `<tr><td>From RP</td><td>${props['startRp']}</td></tr>`;
-    returnHtml += `<tr><td>To RP</td><td>${props['endRp']}</td></tr>`;
-    returnHtml += '</table>';
-
-    return returnHtml;
-};
 
 export const segNodeStyle = new ol.style.Style({
     image: new ol.style.RegularShape({
@@ -90,3 +81,32 @@ export const segNodeStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({color: 'rgb(0, 0, 0', width: 2})
     })
 });
+
+
+/**
+ *
+ * @param  feature - the input feature
+ * @returns return style or null
+ */
+export const crashPointStyle = (feature: ol.Feature): ol.style.Style[] => {
+    "use strict";
+
+    let props = feature.getProperties();
+
+    let crashColor = filterCrash.getCrashColor(props['injSvr']);
+    if (!crashColor) {
+        return null;
+    }
+
+    let crashColorFill = colorUtil.rgbToRgba(crashColor, 0.6);
+
+    return [new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 6,
+            fill: new ol.style.Fill({
+                color: crashColorFill
+            }),
+            stroke: new ol.style.Stroke({color: crashColor, width: 2})
+        })
+    })];
+};

@@ -13,7 +13,7 @@ import ol = require('custom-ol');
 
 import $ = require('jquery');
 import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";
-import {mmPopupContent} from "../layerStyles";
+import {mmPopupContent} from "../popup";
 const nm = provide('ssa');
 
 /**
