@@ -2,8 +2,17 @@
  * Created by glenn on 6/30/2017.
  */
 import iCrashData from './collections/iCrashData';
+import $ = require('jquery');
 
 const crashReportURl = 'https://transportal.cee.wisc.edu/applications/crash-reports/retrieveCrashReport.do?doctnmbr=';
+
+let $showCrashReport = $('#hidden-show-crash-report');
+
+let showCrashReport = false;
+
+if ($showCrashReport && $showCrashReport.val().toLowerCase().trim() == 'y'){
+    showCrashReport = true;
+}
 
 export const mmPopupContent = (props: Object) => {
 
@@ -18,6 +27,8 @@ export const mmPopupContent = (props: Object) => {
 
     return returnHtml;
 };
+
+
 
 const crashProps = [
     'doctnmbr',
@@ -81,6 +92,10 @@ function processVal(v) {
     }
 }
 
+function crashReportDownload(docNum: string): string {
+    return `<a class="crash-map-download" title="Download Crash Report" target="_blank" href="${crashReportURl}${docNum}"></a>`
+}
+
 
 export const crashPointPopup = (props: { [s: string]: any }): string => {
     let returnHtml = '<table class="crash-popup-table">';
@@ -89,11 +104,11 @@ export const crashPointPopup = (props: { [s: string]: any }): string => {
         let p = crashProps[i];
         let v = processVal(props[p]);
 
-        if (i == 0){
-            v = `<a title="Download Crash Report" target="_blank" href="${crashReportURl}${v}">${v}</a>`;
+        if (i == 0 && showCrashReport){
+            v = `<span style="margin-right: 3px">${v}</span>${crashReportDownload(v)}`;
         }
 
-        returnHtml += `<tr><td>${p}</td><td>${v}</td></tr>`;
+        returnHtml += `<tr><td>${p}&nbsp;&nbsp;</td><td>${v}</td></tr>`;
     }
     returnHtml += '</table>';
 
@@ -133,9 +148,12 @@ export function crashInfoHelper(crashData: Array<iCrashData>): string {
             crashSummary[c.injSvr]++;
         }
 
-
         returnHtml += `<li style="background-color: ${injColor(c.injSvr)};">`;
-        returnHtml += `<a title="Download Crash Report" target="_blank" href="${crashReportURl}${c.doctnmbr}"></a>`;
+
+        if (showCrashReport){
+            returnHtml += crashReportDownload(c.doctnmbr);
+        }
+
         returnHtml += c.accDate ? c.accDate : '';
 
         if (c.mnrColl) {

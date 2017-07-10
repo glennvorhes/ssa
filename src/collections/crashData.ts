@@ -82,7 +82,18 @@ export class CrashData {
              *
              * @type {Array.<CrashDataObject>}
              */
-            let crashes = itm.value as iCrashData[];
+            let _crashes = itm.value as iCrashData[];
+            let crashes = [] as iCrashData[];
+
+            let addedCrashDocNumbers: string[] = [];
+
+            for (let c of _crashes){
+                if (addedCrashDocNumbers.indexOf(c.doctnmbr) > -1){
+                    continue;
+                }
+                addedCrashDocNumbers.push(c.doctnmbr);
+                crashes.push(c);
+            }
 
 
             this._crashHtmlLookup[itm.key] = crashInfoHelper(crashes);
