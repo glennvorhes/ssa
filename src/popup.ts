@@ -10,9 +10,16 @@ let $showCrashReport = $('#hidden-show-crash-report');
 
 let showCrashReport = false;
 
-if ($showCrashReport && $showCrashReport.val().toLowerCase().trim() == 'y'){
-    showCrashReport = true;
+
+
+if ($showCrashReport){
+    let crashReportVal = $showCrashReport.val();
+
+    if (typeof crashReportVal == 'string' && crashReportVal.toLowerCase().trim() == 'y'){
+        showCrashReport = true;
+    }
 }
+
 
 export const mmPopupContent = (props: Object) => {
 
@@ -64,7 +71,6 @@ const crashProps = [
     'lon',
     'lat'
 ];
-
 
 
 

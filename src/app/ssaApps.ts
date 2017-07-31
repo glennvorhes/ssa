@@ -9,6 +9,13 @@ declare const glob;
 window['SsaMapCreate'] = SsaMapCreate;
 window['SsaMapView'] = SsaMapView;
 
-glob['SsaMapCreate'] = SsaMapCreate;
-glob['SsaMapView'] = SsaMapView;
+try {
+    glob['SsaMapCreate'] = SsaMapCreate;
+    glob['SsaMapView'] = SsaMapView;
+}
+catch (ex) {
+    let glob = {};
+    glob['SsaMapCreate'] = SsaMapCreate;
+    glob['SsaMapView'] = SsaMapView;
+}
 
