@@ -98,7 +98,7 @@ export const crashPointStyle = (feature: ol.Feature): ol.style.Style[] => {
         return null;
     }
 
-    let crashColorFill = colorUtil.rgbToRgba(crashColor, 0.6);
+    let crashColorFill = colorUtil.rgbToRgba(crashColor, 0.9);
 
     return [new ol.style.Style({
         image: new ol.style.Circle({

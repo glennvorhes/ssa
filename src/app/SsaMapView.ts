@@ -14,12 +14,14 @@ import * as calcExtent from 'webmapsjs/dist/olHelpers/extentUtil';
 import crashData from '../collections/crashData';
 import mmFlags from '../collections/mmFlags';
 import controllingCriteria from '../collections/controllingCriteria';
+import deficiency from '../collections/Deficiency';
 import * as constants from '../constants';
 import ol = require('custom-ol');
 import ajx from '../ajaxGetters';
 import $ = require('jquery');
 import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";
 import {mmPopupContent} from '../popup';
+import {get_browser} from 'webmapsjs/dist/util/get_browser';
 
 const nm = provide('ssa');
 
@@ -31,33 +33,6 @@ const mmPopupContentWithCrash = (props) => {
 
     return returnHtml;
 };
-
-interface iGetBrowser {
-    name: string;
-    version: string;
-}
-
-function get_browser(): iGetBrowser {
-    let ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    if (/trident/i.test(M[1])) {
-        tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-        return {name: 'IE', version: (tem[1] || '')};
-    }
-    if (M[1] === 'Chrome') {
-        tem = ua.match(/\bOPR|Edge\/(\d+)/)
-        if (tem != null) {
-            return {name: 'Opera', version: tem[1]};
-        }
-    }
-    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
-    if ((tem = ua.match(/version\/(\d+)/i)) != null) {
-        M.splice(1, 1, tem[1]);
-    }
-    return {
-        name: M[0],
-        version: M[1]
-    };
-}
 
 
 export class SsaMapView extends SsaMapBase {
@@ -96,8 +71,10 @@ export class SsaMapView extends SsaMapBase {
             divId: this.mapId,
             minZoom: 6,
             zoom: 6,
-            fullScreen: true
+            fullScreen: true,
+            addGeocode: true
         });
+
 
         let summaryListHtml = '<div class="segment-index-summary">';
         summaryListHtml += '<div class="segment-index-summary-toggles">';
@@ -226,6 +203,7 @@ export class SsaMapView extends SsaMapBase {
 
                 mmFlags.addCorridor(corridor);
                 controllingCriteria.addCorridor(corridor);
+                deficiency.addCorridor(corridor);
 
                 this._corridorArray.push(corridor);
 
@@ -243,6 +221,7 @@ export class SsaMapView extends SsaMapBase {
 
         mmFlags.init(this.mainMap);
         controllingCriteria.init(this.mainMap);
+        deficiency.init(this.mainMap);
 
 
         this.$getMapButton.click(() => {
@@ -319,6 +298,7 @@ export class SsaMapView extends SsaMapBase {
         crashData.init(this.mainMap, this._ssaId, this._snap);
         mmFlags.afterLoad();
         controllingCriteria.afterLoad();
+        deficiency.afterLoad()
     }
 
     private _fitExtent() {

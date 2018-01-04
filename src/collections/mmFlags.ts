@@ -15,39 +15,39 @@ import ol = require('custom-ol');
  */
 const mmFlagStyle = (feature: ol.Feature): Array<ol.style.Style> => {
     "use strict";
+    return null;
 
-    let props = feature.getProperties();
-
-
-    let txtFunc = () => {
-        return new ol.style.Text(
-            {
-                text: props['mmId'],
-                scale: 1.5,
-                stroke: new ol.style.Stroke({
-                    color: 'black',
-                    width: 2
-                }),
-                fill: new ol.style.Fill({
-                    color: constants.mmFlagColor
-                })
-            }
-        );
-
-    };
-
-
-    if ((props['rateFlag'] >= 1 && filterMmFlag.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag.mmKabFlagOn) {
-        return [new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: constants.mmFlagColor,
-                width: 6
-            }),
-            text: txtFunc()
-        })];
-    } else {
-        return null;
-    }
+    // let props = feature.getProperties();
+    //
+    // let txtFunc = () => {
+    //     return new ol.style.Text(
+    //         {
+    //             text: props['mmId'],
+    //             scale: 1.5,
+    //             stroke: new ol.style.Stroke({
+    //                 color: 'black',
+    //                 width: 2
+    //             }),
+    //             fill: new ol.style.Fill({
+    //                 color: constants.mmFlagColor
+    //             })
+    //         }
+    //     );
+    //
+    // };
+    //
+    //
+    // if ((props['rateFlag'] >= 1 && filterMmFlag.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag.mmKabFlagOn) {
+    //     return [new ol.style.Style({
+    //         stroke: new ol.style.Stroke({
+    //             color: constants.mmFlagColor,
+    //             width: 6
+    //         }),
+    //         text: txtFunc()
+    //     })];
+    // } else {
+    //     return null;
+    // }
 };
 
 

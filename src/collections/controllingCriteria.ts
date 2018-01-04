@@ -17,44 +17,46 @@ import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers'
 const ccStyle = (feature: ol.Feature): ol.style.Style[] =>  {
     "use strict";
 
-    let props = feature.getProperties();
+    return null;
 
-    let show = false;
-
-    for (let cc of filterControllingCritera.allValues) {
-        if (props[cc] && filterControllingCritera.valIsOn(cc)) {
-            show = true;
-            break;
-        }
-    }
-
-    let txtFunc = () => {
-        return new ol.style.Text(
-            {
-                text: props['ccId'],
-                scale: 1.5,
-                stroke: new ol.style.Stroke({
-                    color: 'black',
-                    width: 2
-                }),
-                fill: new ol.style.Fill({
-                    color: constants.controllingCriteriaColor
-                })
-            }
-        );
-    };
-
-    if (show) {
-        return [new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: constants.controllingCriteriaColor,
-                width: 6
-            }),
-            text: txtFunc()
-        })];
-    } else {
-        return null;
-    }
+    // let props = feature.getProperties();
+    //
+    // let show = false;
+    //
+    // for (let cc of filterControllingCritera.allValues) {
+    //     if (props[cc] && filterControllingCritera.valIsOn(cc)) {
+    //         show = true;
+    //         break;
+    //     }
+    // }
+    //
+    // let txtFunc = () => {
+    //     return new ol.style.Text(
+    //         {
+    //             text: props['ccId'],
+    //             scale: 1.5,
+    //             stroke: new ol.style.Stroke({
+    //                 color: 'black',
+    //                 width: 2
+    //             }),
+    //             fill: new ol.style.Fill({
+    //                 color: constants.controllingCriteriaColor
+    //             })
+    //         }
+    //     );
+    // };
+    //
+    // if (show) {
+    //     return [new ol.style.Style({
+    //         stroke: new ol.style.Stroke({
+    //             color: constants.controllingCriteriaColor,
+    //             width: 6
+    //         }),
+    //         text: txtFunc()
+    //     })];
+    // } else {
+    //     return null;
+    // }
 };
 
 

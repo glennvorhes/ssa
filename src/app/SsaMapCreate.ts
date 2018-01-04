@@ -41,7 +41,8 @@ export class SsaMapCreate extends SsaMapBase {
             divId: this.mapId,
             minZoom: 6,
             zoom: 6,
-            fullScreen: true
+            fullScreen: true,
+            addGeocode: true
         });
 
 
