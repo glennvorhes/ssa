@@ -5411,6 +5411,9 @@ var Deficiency = (function (_super) {
         filterMmFlag_1.default.addChangeCallback(function () {
             _this.deficiencyLayer.refresh();
         });
+        filterContollingCriteria_1.default.addChangeCallback(function () {
+            _this.deficiencyLayer.refresh();
+        });
         mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
             // console.log(props);
             var returnHtml = "PDP ID: " + props['pdpId'] + "<br/>";

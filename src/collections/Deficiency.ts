@@ -108,6 +108,10 @@ export class Deficiency extends DeficiencyBase {
             this.deficiencyLayer.refresh();
         });
 
+        filterControllingCritera.addChangeCallback(() => {
+            this.deficiencyLayer.refresh();
+        });
+
         mapPopup.addVectorPopup(this.deficiencyLayer, (props) => {
             // console.log(props);
 
