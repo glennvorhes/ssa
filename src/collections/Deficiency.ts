@@ -8,6 +8,7 @@ import DeficiencyBase from './_DeficiencyBase';
 import ol = require('custom-ol');
 import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers';
 import filterControllingCritera from '../filters/filterContollingCriteria';
+import {txtFunc, mmProps} from '../layerStyles'
 
 
 let hasMmFlag = 'hasMmFlag';
@@ -15,28 +16,22 @@ let hasCc = 'hasCc';
 let rateFlag = 'rateFlag';
 let kabCrshFlag = 'kabCrshFlag';
 
-interface mmProps {
-    mmId?: string;
-    pdpId?: number;
-    rateFlag: number;
-    kabCrshFlag: number
-}
-
-let txtFunc = (p: mmProps) => {
-    return new ol.style.Text(
-        {
-            text: p.pdpId.toFixed(),
-            scale: 1.5,
-            stroke: new ol.style.Stroke({
-                color: 'black',
-                width: 2
-            }),
-            fill: new ol.style.Fill({
-                color: 'white'
-            })
-        }
-    );
-};
+//
+// let txtFunc = (p: mmProps) => {
+//     return new ol.style.Text(
+//         {
+//             text: p.pdpId.toFixed(),
+//             scale: 1.5,
+//             stroke: new ol.style.Stroke({
+//                 color: 'black',
+//                 width: 2
+//             }),
+//             fill: new ol.style.Fill({
+//                 color: 'white'
+//             })
+//         }
+//     );
+// };
 
 /**
  *
@@ -70,10 +65,31 @@ const deficiencyStyle = (feature: ol.Feature): Array<ol.style.Style> => {
         }));
     }
 
-    if ((props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn) || props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn) {
+    let rateOrKab = (props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn) || (props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn);
+    let onlyRate = props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn;
+    let onlyKab = props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn;
+    let rateAndKab = onlyRate && onlyKab;
+
+    let color;
+
+    if (onlyRate) {
+        color = 'yellow';
+    }
+
+    if (onlyKab) {
+        color = 'orange';
+    }
+
+    if (rateAndKab) {
+        color = 'red';
+    }
+
+
+    if (rateOrKab) {
+
         returnStyles.push(new ol.style.Style({
             stroke: new ol.style.Stroke({
-                color: constants.mmFlagColor,
+                color: color,
                 width: 5
             }),
             text: txtFunc(props as mmProps)

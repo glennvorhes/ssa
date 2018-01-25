@@ -28,6 +28,32 @@ let colorOptions = ['#FF00FF', '#7FFF00', '#FA8072',
     '#FF6347', '#40E0D0', '#ADFF2F', '#6495ED',
     '#FF8C00', '#7FFFD4', '#DA70D6'];
 
+
+export interface mmProps {
+    mmId?: string;
+    pdpId?: number;
+    rateFlag: number;
+    kabCrshFlag: number
+}
+
+export function txtFunc(p: mmProps): ol.style.Text{
+    return new ol.style.Text(
+        {
+            text: p.pdpId.toFixed(),
+            scale: 1.5,
+            stroke: new ol.style.Stroke({
+                color: 'black',
+                width: 2
+            }),
+            fill: new ol.style.Fill({
+                color: 'white'
+            })
+        }
+    );
+}
+
+
+
 /**
  * return a random color for styling
  * @returns {string}
@@ -106,7 +132,7 @@ export const crashPointStyle = (feature: ol.Feature): ol.style.Style[] => {
             fill: new ol.style.Fill({
                 color: crashColorFill
             }),
-            stroke: new ol.style.Stroke({color: crashColor, width: 2})
+            stroke: new ol.style.Stroke({color: 'black', width: 1})
         })
     })];
 };

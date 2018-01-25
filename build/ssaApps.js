@@ -447,6 +447,20 @@ var returnedColors = [];
 var colorOptions = ['#FF00FF', '#7FFF00', '#FA8072',
     '#FF6347', '#40E0D0', '#ADFF2F', '#6495ED',
     '#FF8C00', '#7FFFD4', '#DA70D6'];
+function txtFunc(p) {
+    return new ol.style.Text({
+        text: p.pdpId.toFixed(),
+        scale: 1.5,
+        stroke: new ol.style.Stroke({
+            color: 'black',
+            width: 2
+        }),
+        fill: new ol.style.Fill({
+            color: 'white'
+        })
+    });
+}
+exports.txtFunc = txtFunc;
 /**
  * return a random color for styling
  * @returns {string}
@@ -517,7 +531,7 @@ exports.crashPointStyle = function (feature) {
                 fill: new ol.style.Fill({
                     color: crashColorFill
                 }),
-                stroke: new ol.style.Stroke({ color: crashColor, width: 2 })
+                stroke: new ol.style.Stroke({ color: 'black', width: 1 })
             })
         })];
 };
@@ -5334,23 +5348,27 @@ var _DeficiencyBase_1 = __webpack_require__(15);
 var ol = __webpack_require__(2);
 var objectHelpers_1 = __webpack_require__(14);
 var filterContollingCriteria_1 = __webpack_require__(25);
+var layerStyles_1 = __webpack_require__(8);
 var hasMmFlag = 'hasMmFlag';
 var hasCc = 'hasCc';
 var rateFlag = 'rateFlag';
 var kabCrshFlag = 'kabCrshFlag';
-var txtFunc = function (p) {
-    return new ol.style.Text({
-        text: p.pdpId.toFixed(),
-        scale: 1.5,
-        stroke: new ol.style.Stroke({
-            color: 'black',
-            width: 2
-        }),
-        fill: new ol.style.Fill({
-            color: 'white'
-        })
-    });
-};
+//
+// let txtFunc = (p: mmProps) => {
+//     return new ol.style.Text(
+//         {
+//             text: p.pdpId.toFixed(),
+//             scale: 1.5,
+//             stroke: new ol.style.Stroke({
+//                 color: 'black',
+//                 width: 2
+//             }),
+//             fill: new ol.style.Fill({
+//                 color: 'white'
+//             })
+//         }
+//     );
+// };
 /**
  *
  * @param feature - the input feature
@@ -5374,16 +5392,30 @@ var deficiencyStyle = function (feature) {
                 color: constants.controllingCriteriaColor,
                 width: 13
             }),
-            text: txtFunc(props)
+            text: layerStyles_1.txtFunc(props)
         }));
     }
-    if ((props.rateFlag >= 1 && filterMmFlag_1.default.mmRateFlagOn) || props.kabCrshFlag >= 1 && filterMmFlag_1.default.mmKabFlagOn) {
+    var rateOrKab = (props.rateFlag >= 1 && filterMmFlag_1.default.mmRateFlagOn) || (props.kabCrshFlag >= 1 && filterMmFlag_1.default.mmKabFlagOn);
+    var onlyRate = props.rateFlag >= 1 && filterMmFlag_1.default.mmRateFlagOn;
+    var onlyKab = props.kabCrshFlag >= 1 && filterMmFlag_1.default.mmKabFlagOn;
+    var rateAndKab = onlyRate && onlyKab;
+    var color;
+    if (onlyRate) {
+        color = 'yellow';
+    }
+    if (onlyKab) {
+        color = 'orange';
+    }
+    if (rateAndKab) {
+        color = 'red';
+    }
+    if (rateOrKab) {
         returnStyles.push(new ol.style.Style({
             stroke: new ol.style.Stroke({
-                color: constants.mmFlagColor,
+                color: color,
                 width: 5
             }),
-            text: txtFunc(props)
+            text: layerStyles_1.txtFunc(props)
         }));
     }
     if (returnStyles.length > 0) {
