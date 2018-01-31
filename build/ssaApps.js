@@ -5528,7 +5528,7 @@ var Deficiency = (function (_super) {
                 var appendHtml = "<span style=\"font-weight: bold; color: white\">" + props['pdpId'] + "</span>:&nbsp;";
                 var defs = [];
                 if (triggerRateFlag && triggerKabFlag) {
-                    defs.push("<span style=\"color: " + styles.mmBothColor + "\">KAB Crash Rate</span>");
+                    defs.push("<span style=\"color: " + styles.mmBothColor + "\">KAB, Crash Rate</span>");
                 }
                 else if (triggerRateFlag) {
                     defs.push("<span style=\"color: " + styles.mmRateFlagColor + "\">Crash Rate</span>");

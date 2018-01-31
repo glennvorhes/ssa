@@ -131,7 +131,7 @@ export class Deficiency extends DeficiencyBase {
                 let defs = [];
 
                 if (triggerRateFlag && triggerKabFlag){
-                    defs.push(`<span style="color: ${styles.mmBothColor}">KAB Crash Rate</span>`);
+                    defs.push(`<span style="color: ${styles.mmBothColor}">KAB, Crash Rate</span>`);
                 } else if (triggerRateFlag) {
                     defs.push(`<span style="color: ${styles.mmRateFlagColor}">Crash Rate</span>`);
                 } else if (triggerKabFlag) {
