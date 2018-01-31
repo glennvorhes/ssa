@@ -5527,10 +5527,13 @@ var Deficiency = (function (_super) {
                 this.deficiencyLayer.source.addFeature(f);
                 var appendHtml = "<span style=\"font-weight: bold; color: white\">" + props['pdpId'] + "</span>:&nbsp;";
                 var defs = [];
-                if (triggerRateFlag) {
+                if (triggerRateFlag && triggerKabFlag) {
+                    defs.push("<span style=\"color: " + styles.mmBothColor + "\">KAB Crash Rate</span>");
+                }
+                else if (triggerRateFlag) {
                     defs.push("<span style=\"color: " + styles.mmRateFlagColor + "\">Crash Rate</span>");
                 }
-                if (triggerKabFlag) {
+                else if (triggerKabFlag) {
                     defs.push("<span style=\"color: " + styles.mmKabFlagColor + "\">KAB</span>");
                 }
                 appendHtml += defs.join(' ');
