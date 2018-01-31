@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 50);
+/******/ 	return __webpack_require__(__webpack_require__.s = 48);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -124,7 +124,7 @@ module.exports = ol;
  */
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mapPopupCls_1 = __webpack_require__(35);
+var mapPopupCls_1 = __webpack_require__(34);
 /**
  * The single popup object catch is that it is common to multimap pages
  * @type {MapPopupCls}
@@ -388,57 +388,18 @@ nm.AjaxGetters = AjaxGetters;
 
 "use strict";
 /**
- * Created by gavorhes on 8/17/2016.
- */
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.mmFlagListId = 'mm-deficiency-list';
-exports.ccListId = 'cc-deficiency-list';
-exports.pdpDataAttr = 'data-pdp-id';
-exports.mmFlagColor = '#00FF00';
-exports.controllingCriteriaColor = '#00FF00';
-exports.defListId = 'deficiency-list';
-exports.defColor = 'white';
-// export const contollingCriteriaLookup = {
-//     'ccDesignSpeed': 'Design Speed',
-//     'Grade': 'Grade',
-//     'Lane Width': 'Lane Width',
-//     'Stopping Sight Distance': 'Stopping Sight Distance',
-//     'Shoulder Width': 'Shoulder Width',
-//     'Pavement Cross Slope': 'Pavement Cross Slope',
-//     'Horizontal Alignment': 'Horizontal Alignment',
-//     'Vertical Clearance': 'Vertical Clearance',
-//     'Superelevation': 'Superelevation',
-//     'Structural Capacity': 'Structural Capacity'
-// };
-exports.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
-    'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
-exports.propValues = ['Design Speed', 'Lane Width', 'Shoulder Width', 'Horizontal Alignment', 'Superelevation',
-    'Grade', 'Stopping Sight Distance', 'Pavement Cross Slope', 'Vertical Clearance', 'Structural Capacity'];
-exports.controllingCriteriaProps = {};
-for (var i = 0; i < exports.propNames.length; i++) {
-    exports.controllingCriteriaProps[exports.propNames[i]] = exports.propValues[i];
-}
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
  * Created by gavorhes on 5/13/2016.
  */
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ol = __webpack_require__(2);
 var projections_1 = __webpack_require__(5);
-var filterCrash_1 = __webpack_require__(27);
-var colorUtil = __webpack_require__(38);
+var filterCrash_1 = __webpack_require__(25);
+var colorUtil = __webpack_require__(37);
 // import filterControllingCritera from '../filters/filterContollingCriteria';
-var filterContollingCriteria_1 = __webpack_require__(18);
-var filterMmFlag_1 = __webpack_require__(19);
-var constants = __webpack_require__(7);
+var filterContollingCriteria_1 = __webpack_require__(24);
+var filterMmFlag_1 = __webpack_require__(26);
+var constants = __webpack_require__(9);
 exports.segmentLayer = new ol.style.Style({
     stroke: new ol.style.Stroke({ color: 'darkblue', width: 5 })
 });
@@ -600,7 +561,7 @@ exports.deficiencyStyle = deficiencyStyle;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -619,7 +580,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var LayerBaseVector_1 = __webpack_require__(30);
+var LayerBaseVector_1 = __webpack_require__(29);
 var provide_1 = __webpack_require__(0);
 var ol = __webpack_require__(2);
 var $ = __webpack_require__(1);
@@ -713,6 +674,45 @@ var LayerBaseVectorGeoJson = (function (_super) {
 exports.LayerBaseVectorGeoJson = LayerBaseVectorGeoJson;
 nm.LayerBaseVectorGeoJson = LayerBaseVectorGeoJson;
 exports.default = LayerBaseVectorGeoJson;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 8/17/2016.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mmFlagListId = 'mm-deficiency-list';
+exports.ccListId = 'cc-deficiency-list';
+exports.pdpDataAttr = 'data-pdp-id';
+exports.mmFlagColor = '#00FF00';
+exports.controllingCriteriaColor = '#00FF00';
+exports.defListId = 'deficiency-list';
+exports.defColor = 'white';
+// export const contollingCriteriaLookup = {
+//     'ccDesignSpeed': 'Design Speed',
+//     'Grade': 'Grade',
+//     'Lane Width': 'Lane Width',
+//     'Stopping Sight Distance': 'Stopping Sight Distance',
+//     'Shoulder Width': 'Shoulder Width',
+//     'Pavement Cross Slope': 'Pavement Cross Slope',
+//     'Horizontal Alignment': 'Horizontal Alignment',
+//     'Vertical Clearance': 'Vertical Clearance',
+//     'Superelevation': 'Superelevation',
+//     'Structural Capacity': 'Structural Capacity'
+// };
+exports.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
+    'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
+exports.propValues = ['Design Speed', 'Lane Width', 'Shoulder Width', 'Horizontal Alignment', 'Superelevation',
+    'Grade', 'Stopping Sight Distance', 'Pavement Cross Slope', 'Vertical Clearance', 'Structural Capacity'];
+exports.controllingCriteriaProps = {};
+for (var i = 0; i < exports.propNames.length; i++) {
+    exports.controllingCriteriaProps[exports.propNames[i]] = exports.propValues[i];
+}
 
 
 /***/ }),
@@ -1193,186 +1193,17 @@ nm.calculateExtent = calculateExtent;
 
 "use strict";
 /**
- * Created by gavorhes on 6/7/2016.
- */
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var provide_1 = __webpack_require__(0);
-var nm = provide_1.default('util');
-/**
- * iterate over the key value pairs of an object
- * @example for (let x:KeyValuePair of keyValPairs(object)){..}
- * @param {object} obj - the input object
- * @returns {Array<keyVals>} - array of key value pairs
- */
-function keyValPairs(obj) {
-    var outArray = [];
-    for (var _i = 0, _a = Object.keys(obj); _i < _a.length; _i++) {
-        var key = _a[_i];
-        outArray.push({ 'key': key, 'value': obj[key] });
-    }
-    outArray.sort(function (a, b) {
-        "use strict";
-        return a > b ? 1 : -1;
-    });
-    return outArray;
-}
-exports.keyValPairs = keyValPairs;
-nm.keyValPairs = keyValPairs;
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by gavorhes on 7/15/2016.
- */
-var LayerBaseVectorGeoJson_1 = __webpack_require__(9);
-var SortedFeatures_1 = __webpack_require__(12);
-var constants = __webpack_require__(7);
-var $ = __webpack_require__(1);
-var DeficiencyBase = (function () {
-    /**
-     *
-     * @param {string} layerName - layer name
-     * @param {function|object} layerStyle - layer style
-     * @param {number} z - z index
-     * @param {string} summaryListId - summaryListId
-     */
-    function DeficiencyBase(layerName, layerStyle, z, summaryListId) {
-        this.deficiencyLayer = new LayerBaseVectorGeoJson_1.default('', {
-            zIndex: z,
-            name: layerName
-        });
-        this.deficiencyLayer.style = layerStyle;
-        this._summaryListItems = [];
-        /**
-         *
-         * @type {SortedFeatures|undefined}
-         * @private
-         */
-        this._sortedFeatures = undefined;
-        /**
-         *
-         * @type {ol.Map|undefined}
-         * @private
-         */
-        this._map = undefined;
-        this._summaryListId = summaryListId;
-        /**
-         *
-         * @type {jQuery|undefined}
-         * @private
-         */
-        this.$summaryList = undefined;
-    }
-    /**
-     * initialize with the map
-     * @param {ol.Map} m - the ol map
-     * @abstract
-     */
-    DeficiencyBase.prototype.init = function (m) {
-        this._map = m;
-        m.addLayer(this.deficiencyLayer.olLayer);
-        this.$summaryList = $("#" + this._summaryListId);
-    };
-    /**
-     *
-     * @param {Corridor} c - the corridor to be added
-     * @abstract
-     */
-    DeficiencyBase.prototype.addCorridor = function (c) {
-        // let feats = c.layer.source.getFeatures();
-        //
-        // let $mmDeficiencyList = $(`#${constants.mmFlagListId}`);
-        //
-        // for (let f of feats) {
-        //     // f.setProperties()
-        //     let props = f.getProperties();
-        //     let rate = props['rateFlag'];
-        //     let kab = props['kabFlag'];
-        //
-        //     let triggerRateFlag = typeof rate == 'number' && rate > 1;
-        //     let triggerKabFlag = typeof kab == 'number' && kab > 1;
-        //
-        //     if (triggerRateFlag || triggerKabFlag) {
-        //         this.deficiencyLayer.source.addFeature(f);
-        //         mmFlagIndex++;
-        //
-        //         f.setProperties({mmId: 'MM' + mmFlagIndex.toFixed()});
-        //         let appendHtml = `<b>MM${mmFlagIndex.toFixed()}</b>:&nbsp;`;
-        //         let flags = [];
-        //         if (triggerRateFlag) {
-        //             flags.push('Crash Rate');
-        //         }
-        //         if (triggerKabFlag) {
-        //             flags.push('KAB');
-        //         }
-        //
-        //         appendHtml += flags.join(', ');
-        //         $mmDeficiencyList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
-        //     }
-        // }
-    };
-    /**
-     *
-     * @param pdpId
-     * @returns {ol.Feature|undefined}
-     */
-    DeficiencyBase.prototype.getFeatureById = function (pdpId) {
-        return this._sortedFeatures.getFeature(pdpId);
-    };
-    /**
-     * @abstract
-     */
-    DeficiencyBase.prototype.afterLoad = function () {
-        this._sortedFeatures = new SortedFeatures_1.default(this.deficiencyLayer.features, 'pdpId');
-        var _this = this;
-        this._summaryListItems.sort(function (a, b) {
-            if (a.pdpId == b.pdpId) {
-                return 0;
-            }
-            else {
-                return a.pdpId < b.pdpId ? -1 : 1;
-            }
-        });
-        for (var _i = 0, _a = this._summaryListItems; _i < _a.length; _i++) {
-            var i = _a[_i];
-            this.$summaryList.append(i.liText);
-        }
-        this.$summaryList.find('li').click(function () {
-            var $this = $(this);
-            var theFeature = _this.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
-            _this._map.getView().fit(theFeature.getGeometry().getExtent(), _this._map.getSize());
-            _this._map.getView().setZoom(_this._map.getView().getZoom() - 1);
-        });
-    };
-    return DeficiencyBase;
-}());
-exports.default = DeficiencyBase;
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
  * Created by gavorhes on 5/11/2016.
  */
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var LayerBaseVectorGeoJson_1 = __webpack_require__(9);
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
 var makeGuid_1 = __webpack_require__(4);
 var provide_1 = __webpack_require__(0);
-var layerStyles_1 = __webpack_require__(8);
+var layerStyles_1 = __webpack_require__(7);
 var ajaxGetters_1 = __webpack_require__(6);
 var SortedFeatures_1 = __webpack_require__(12);
-var layerStyles = __webpack_require__(8);
+var layerStyles = __webpack_require__(7);
 var ext = __webpack_require__(13);
 var ol = __webpack_require__(2);
 var nm = provide_1.default('ssa');
@@ -1714,7 +1545,7 @@ exports.default = Corridor;
 
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1841,161 +1672,13 @@ exports.default = FilterBase;
 
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by gavorhes on 7/14/2016.
- */
-var FilterBase_1 = __webpack_require__(17);
-var FilterControllingCriteria = (function (_super) {
-    __extends(FilterControllingCriteria, _super);
-    function FilterControllingCriteria() {
-        return _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true) || this;
-    }
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignSpeedOn", {
-        get: function () {
-            return this.valIsOn('ccDesignSpeed');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccLaneWidthOn", {
-        get: function () {
-            return this.valIsOn('ccLaneWidth');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccShoulderWidthOn", {
-        get: function () {
-            return this.valIsOn('ccShoulderWidth');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccHorizontalCurveOn", {
-        get: function () {
-            return this.valIsOn('ccHorizontalCurve');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccSuperelevationOn", {
-        get: function () {
-            return this.valIsOn('ccSuperelevation');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccMaximumGradeOn", {
-        get: function () {
-            return this.valIsOn('ccMaximumGrade');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccStoppingSightOn", {
-        get: function () {
-            return this.valIsOn('ccStoppingSight');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccCrossSlopeOn", {
-        get: function () {
-            return this.valIsOn('ccCrossSlope');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccVerticalClearanceOn", {
-        get: function () {
-            return this.valIsOn('ccVerticalClearance');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignLoadingOn", {
-        get: function () {
-            return this.valIsOn('ccDesignLoading');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return FilterControllingCriteria;
-}(FilterBase_1.default));
-exports.FilterControllingCriteria = FilterControllingCriteria;
-exports.default = new FilterControllingCriteria();
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by gavorhes on 7/14/2016.
- */
-var FilterBase_1 = __webpack_require__(17);
-var FilterMmFlag = (function (_super) {
-    __extends(FilterMmFlag, _super);
-    function FilterMmFlag() {
-        return _super.call(this, 'mm-flags', 'mm-flags-sub', true) || this;
-    }
-    Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
-        get: function () {
-            return this.valIsOn('rateFlag');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterMmFlag.prototype, "mmKabFlagOn", {
-        get: function () {
-            return this.valIsOn('kabCrshFlag');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return FilterMmFlag;
-}(FilterBase_1.default));
-exports.FilterMmFlag = FilterMmFlag;
-exports.default = new FilterMmFlag();
-
-
-/***/ }),
-/* 20 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var zoomResolutionConvert = __webpack_require__(37);
+var zoomResolutionConvert = __webpack_require__(36);
 var provide_1 = __webpack_require__(0);
 var makeGuid_1 = __webpack_require__(4);
 var $ = __webpack_require__(1);
@@ -2398,7 +2081,7 @@ exports.default = LayerBase;
 
 
 /***/ }),
-/* 21 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2481,7 +2164,7 @@ exports.default = MapInteractionBase;
 
 
 /***/ }),
-/* 22 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2490,7 +2173,7 @@ exports.default = MapInteractionBase;
  */
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mapMoveCls_1 = __webpack_require__(34);
+var mapMoveCls_1 = __webpack_require__(33);
 /**
  * The single map move object catch is that it is common to multimap pages
  * @type {MapMoveCls}
@@ -2500,7 +2183,7 @@ exports.default = exports.mapMove;
 
 
 /***/ }),
-/* 23 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2509,9 +2192,9 @@ exports.default = exports.mapMove;
  */
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var quickMapBase_1 = __webpack_require__(36);
+var quickMapBase_1 = __webpack_require__(35);
 var provide_1 = __webpack_require__(0);
-var mapMove_1 = __webpack_require__(22);
+var mapMove_1 = __webpack_require__(18);
 var mapPopup_1 = __webpack_require__(3);
 var nm = provide_1.default('olHelpers');
 /**
@@ -2543,7 +2226,7 @@ exports.default = quickMap;
 
 
 /***/ }),
-/* 24 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2576,7 +2259,41 @@ nm.definedAndNotNull = definedAndNotNull;
 
 
 /***/ }),
-/* 25 */
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by gavorhes on 6/7/2016.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var provide_1 = __webpack_require__(0);
+var nm = provide_1.default('util');
+/**
+ * iterate over the key value pairs of an object
+ * @example for (let x:KeyValuePair of keyValPairs(object)){..}
+ * @param {object} obj - the input object
+ * @returns {Array<keyVals>} - array of key value pairs
+ */
+function keyValPairs(obj) {
+    var outArray = [];
+    for (var _i = 0, _a = Object.keys(obj); _i < _a.length; _i++) {
+        var key = _a[_i];
+        outArray.push({ 'key': key, 'value': obj[key] });
+    }
+    outArray.sort(function (a, b) {
+        "use strict";
+        return a > b ? 1 : -1;
+    });
+    return outArray;
+}
+exports.keyValPairs = keyValPairs;
+nm.keyValPairs = keyValPairs;
+
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2642,7 +2359,7 @@ exports.default = SsaMapBase;
 
 
 /***/ }),
-/* 26 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2651,7 +2368,7 @@ exports.default = SsaMapBase;
  */
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var countyLookup_1 = __webpack_require__(46);
+var countyLookup_1 = __webpack_require__(44);
 var $ = __webpack_require__(1);
 function labelValueHelper(label, val) {
     "use strict";
@@ -2708,7 +2425,7 @@ exports.default = CorridorConfig;
 
 
 /***/ }),
-/* 27 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2727,7 +2444,109 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by gavorhes on 7/14/2016.
  */
-var FilterBase_1 = __webpack_require__(17);
+var FilterBase_1 = __webpack_require__(15);
+var FilterControllingCriteria = (function (_super) {
+    __extends(FilterControllingCriteria, _super);
+    function FilterControllingCriteria() {
+        return _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true) || this;
+    }
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignSpeedOn", {
+        get: function () {
+            return this.valIsOn('ccDesignSpeed');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccLaneWidthOn", {
+        get: function () {
+            return this.valIsOn('ccLaneWidth');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccShoulderWidthOn", {
+        get: function () {
+            return this.valIsOn('ccShoulderWidth');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccHorizontalCurveOn", {
+        get: function () {
+            return this.valIsOn('ccHorizontalCurve');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccSuperelevationOn", {
+        get: function () {
+            return this.valIsOn('ccSuperelevation');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccMaximumGradeOn", {
+        get: function () {
+            return this.valIsOn('ccMaximumGrade');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccStoppingSightOn", {
+        get: function () {
+            return this.valIsOn('ccStoppingSight');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccCrossSlopeOn", {
+        get: function () {
+            return this.valIsOn('ccCrossSlope');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccVerticalClearanceOn", {
+        get: function () {
+            return this.valIsOn('ccVerticalClearance');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignLoadingOn", {
+        get: function () {
+            return this.valIsOn('ccDesignLoading');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FilterControllingCriteria;
+}(FilterBase_1.default));
+exports.FilterControllingCriteria = FilterControllingCriteria;
+exports.default = new FilterControllingCriteria();
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 7/14/2016.
+ */
+var FilterBase_1 = __webpack_require__(15);
 exports.kColor = 'rgb(255,0,0)';
 exports.aColor = 'rgb(255,165,0)';
 exports.bColor = 'rgb(255,255,0)';
@@ -2764,7 +2583,53 @@ exports.default = new FilterCrash();
 
 
 /***/ }),
-/* 28 */
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 7/14/2016.
+ */
+var FilterBase_1 = __webpack_require__(15);
+var FilterMmFlag = (function (_super) {
+    __extends(FilterMmFlag, _super);
+    function FilterMmFlag() {
+        return _super.call(this, 'mm-flags', 'mm-flags-sub', true) || this;
+    }
+    Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
+        get: function () {
+            return this.valIsOn('rateFlag');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterMmFlag.prototype, "mmKabFlagOn", {
+        get: function () {
+            return this.valIsOn('kabCrshFlag');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FilterMmFlag;
+}(FilterBase_1.default));
+exports.FilterMmFlag = FilterMmFlag;
+exports.default = new FilterMmFlag();
+
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2783,13 +2648,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var SsaMapBase_1 = __webpack_require__(25);
-var quickMap_1 = __webpack_require__(23);
+var SsaMapBase_1 = __webpack_require__(22);
+var quickMap_1 = __webpack_require__(19);
 var mapPopup_1 = __webpack_require__(3);
 var makeGuid_1 = __webpack_require__(4);
 var provide_1 = __webpack_require__(0);
-var PickerCollection_1 = __webpack_require__(42);
-var CorridorCollection_1 = __webpack_require__(40);
+var PickerCollection_1 = __webpack_require__(41);
+var CorridorCollection_1 = __webpack_require__(39);
 var $ = __webpack_require__(1);
 __webpack_require__(1);
 var nm = provide_1.default('ssa');
@@ -2855,7 +2720,7 @@ exports.default = SsaMapCreate;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2874,20 +2739,20 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var SsaMapBase_1 = __webpack_require__(25);
-var quickMap_1 = __webpack_require__(23);
+var SsaMapBase_1 = __webpack_require__(22);
+var quickMap_1 = __webpack_require__(19);
 var mapPopup_1 = __webpack_require__(3);
 var provide_1 = __webpack_require__(0);
-var CorridorConfig_1 = __webpack_require__(26);
-var Corridor_1 = __webpack_require__(16);
+var CorridorConfig_1 = __webpack_require__(23);
+var Corridor_1 = __webpack_require__(14);
 var calcExtent = __webpack_require__(13);
-var crashData_1 = __webpack_require__(44);
-var Deficiency_1 = __webpack_require__(41);
-var constants = __webpack_require__(7);
+var crashData_1 = __webpack_require__(43);
+var Deficiency_1 = __webpack_require__(40);
+var constants = __webpack_require__(9);
 var ajaxGetters_1 = __webpack_require__(6);
 var $ = __webpack_require__(1);
 var popup_1 = __webpack_require__(10);
-var get_browser_1 = __webpack_require__(39);
+var get_browser_1 = __webpack_require__(38);
 // import controllingCriteria from '../collections/controllingCriteria';
 // import mmFlags from '../collections/mmFlags';
 var nm = provide_1.default('ssa');
@@ -2933,7 +2798,7 @@ var SsaMapView = (function (_super) {
         // summaryListHtml += `<ul id="${constants.mmFlagListId}"></ul>`;
         // summaryListHtml += `<h4 style="color: ${constants.controllingCriteriaColor}">Controlling Criteria</h4>`;
         // summaryListHtml += `<ul id="${constants.ccListId}"></ul>`;
-        summaryListHtml += "<h4 style=\"color: " + constants.defColor + "; font-size: large\">Deficiencies</h4>";
+        summaryListHtml += "<h4 style=\"color: " + constants.defColor + "; font-size: large\">Flags and Deficiencies</h4>";
         summaryListHtml += "<ul id=\"" + constants.defListId + "\"></ul>";
         summaryListHtml += '</div>';
         _this.$mapDiv.append(summaryListHtml);
@@ -3114,7 +2979,7 @@ exports.default = SsaMapView;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3130,8 +2995,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var LayerBase_1 = __webpack_require__(20);
-var mapMove_1 = __webpack_require__(22);
+var LayerBase_1 = __webpack_require__(16);
+var mapMove_1 = __webpack_require__(18);
 var provide_1 = __webpack_require__(0);
 var ol = __webpack_require__(2);
 var $ = __webpack_require__(1);
@@ -3417,7 +3282,7 @@ exports.default = LayerBaseVector;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3436,8 +3301,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by gavorhes on 12/7/2015.
  */
-var LayerBase_1 = __webpack_require__(20);
-var esriToOl = __webpack_require__(32);
+var LayerBase_1 = __webpack_require__(16);
+var esriToOl = __webpack_require__(31);
 var mapPopup_1 = __webpack_require__(3);
 var provide_1 = __webpack_require__(0);
 var ol = __webpack_require__(2);
@@ -3601,7 +3466,7 @@ exports.default = LayerEsriMapServer;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3966,7 +3831,7 @@ nm.makeMapServiceLegend = makeMapServiceLegend;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4052,7 +3917,7 @@ exports.Geocode = Geocode;
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4068,8 +3933,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var mapInteractionBase_1 = __webpack_require__(21);
-var checkDefined = __webpack_require__(24);
+var mapInteractionBase_1 = __webpack_require__(17);
+var checkDefined = __webpack_require__(20);
 var provide_1 = __webpack_require__(0);
 var makeGuid_1 = __webpack_require__(4);
 var $ = __webpack_require__(1);
@@ -4297,7 +4162,7 @@ exports.default = MapMoveCls;
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4316,7 +4181,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var mapInteractionBase_1 = __webpack_require__(21);
+var mapInteractionBase_1 = __webpack_require__(17);
 var provide_1 = __webpack_require__(0);
 var ol = __webpack_require__(2);
 var $ = __webpack_require__(1);
@@ -4732,7 +4597,7 @@ exports.default = MapPopupCls;
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4744,7 +4609,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var provide_1 = __webpack_require__(0);
 var ol = __webpack_require__(2);
 var $ = __webpack_require__(1);
-var geocode_1 = __webpack_require__(33);
+var geocode_1 = __webpack_require__(32);
 var nm = provide_1.default('olHelpers');
 /**
  * Sets up a map with some default parameters and initializes
@@ -4835,7 +4700,7 @@ exports.default = quickMapBase;
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4917,7 +4782,7 @@ nm.resolutionToZoom = resolutionToZoom;
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4927,7 +4792,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Created by gavorhes on 11/3/2015.
  */
 var provide_1 = __webpack_require__(0);
-var chk = __webpack_require__(24);
+var chk = __webpack_require__(20);
 var nm = provide_1.default('util.colors');
 /**
  * helper function to convert to hex
@@ -5090,7 +4955,7 @@ nm.makeBlueGreenRedGradientZScore = makeBlueGreenRedGradientZScore;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5126,7 +4991,7 @@ exports.default = get_browser;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5140,8 +5005,8 @@ var provide_1 = __webpack_require__(0);
 var mapPopup_1 = __webpack_require__(3);
 var calcExtent = __webpack_require__(13);
 var makeGuid_1 = __webpack_require__(4);
-var CorridorConfig_1 = __webpack_require__(26);
-var Corridor_1 = __webpack_require__(16);
+var CorridorConfig_1 = __webpack_require__(23);
+var Corridor_1 = __webpack_require__(14);
 var $ = __webpack_require__(1);
 var popup_1 = __webpack_require__(10);
 var nm = provide_1.default('ssa');
@@ -5404,7 +5269,7 @@ exports.default = CorridorCollection;
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5423,13 +5288,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by gavorhes on 7/15/2016.
  */
-var filterMmFlag_1 = __webpack_require__(19);
+var filterMmFlag_1 = __webpack_require__(26);
 var mapPopup_1 = __webpack_require__(3);
-var constants = __webpack_require__(7);
-var _DeficiencyBase_1 = __webpack_require__(15);
-var objectHelpers_1 = __webpack_require__(14);
-var filterContollingCriteria_1 = __webpack_require__(18);
-var styles = __webpack_require__(8);
+var constants = __webpack_require__(9);
+var _DeficiencyBase_1 = __webpack_require__(42);
+var objectHelpers_1 = __webpack_require__(21);
+var filterContollingCriteria_1 = __webpack_require__(24);
+var styles = __webpack_require__(7);
 var hasMmFlag = 'hasMmFlag';
 var hasCc = 'hasCc';
 var rateFlag = 'rateFlag';
@@ -5528,7 +5393,7 @@ var Deficiency = (function (_super) {
                 var appendHtml = "<span style=\"font-weight: bold; color: white\">" + props['pdpId'] + "</span>:&nbsp;";
                 var defs = [];
                 if (triggerRateFlag && triggerKabFlag) {
-                    defs.push("<span style=\"color: " + styles.mmBothColor + "\">KAB, Crash Rate</span>");
+                    defs.push("<span style=\"color: " + styles.mmBothColor + "\">KAB,&nbsp;Crash Rate</span>");
                 }
                 else if (triggerRateFlag) {
                     defs.push("<span style=\"color: " + styles.mmRateFlagColor + "\">Crash Rate</span>");
@@ -5538,12 +5403,12 @@ var Deficiency = (function (_super) {
                 }
                 appendHtml += defs.join(' ');
                 if (defs.length > 0) {
-                    appendHtml += ' ';
+                    appendHtml += ',&nbsp;';
                 }
                 if (deficiencyList.length > 0) {
                     console.log(deficiencyList);
                     appendHtml += "<span style=\"color: " + styles.controllingCriteriaColor + "\">" +
-                        (deficiencyList.join(', ') + "</span>");
+                        (deficiencyList.join(',&nbsp;') + "</span>");
                 }
                 this._summaryListItems.push({
                     pdpId: props['pdpId'],
@@ -5560,22 +5425,22 @@ exports.default = new Deficiency();
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /// <reference path="../../node_modules/@types/jqueryui/index.d.ts"/>
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var SelectCounty_1 = __webpack_require__(48);
-var SelectHighway_1 = __webpack_require__(49);
-var SegmentPicker_1 = __webpack_require__(47);
-var Corridor_1 = __webpack_require__(16);
+var SelectCounty_1 = __webpack_require__(46);
+var SelectHighway_1 = __webpack_require__(47);
+var SegmentPicker_1 = __webpack_require__(45);
+var Corridor_1 = __webpack_require__(14);
 var provide_1 = __webpack_require__(0);
-var lyrStyles = __webpack_require__(8);
+var lyrStyles = __webpack_require__(7);
 var mapPopup_1 = __webpack_require__(3);
 var makeGuid_1 = __webpack_require__(4);
-var LayerEsriMapServer_1 = __webpack_require__(31);
+var LayerEsriMapServer_1 = __webpack_require__(30);
 var $ = __webpack_require__(1);
 __webpack_require__(1);
 var nm = provide_1.default('ssa');
@@ -5861,8 +5726,142 @@ exports.default = PickerCollection;
 
 
 /***/ }),
-/* 43 */,
-/* 44 */
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 7/15/2016.
+ */
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
+var SortedFeatures_1 = __webpack_require__(12);
+var constants = __webpack_require__(9);
+var $ = __webpack_require__(1);
+var DeficiencyBase = (function () {
+    /**
+     *
+     * @param {string} layerName - layer name
+     * @param {function|object} layerStyle - layer style
+     * @param {number} z - z index
+     * @param {string} summaryListId - summaryListId
+     */
+    function DeficiencyBase(layerName, layerStyle, z, summaryListId) {
+        this.deficiencyLayer = new LayerBaseVectorGeoJson_1.default('', {
+            zIndex: z,
+            name: layerName
+        });
+        this.deficiencyLayer.style = layerStyle;
+        this._summaryListItems = [];
+        /**
+         *
+         * @type {SortedFeatures|undefined}
+         * @private
+         */
+        this._sortedFeatures = undefined;
+        /**
+         *
+         * @type {ol.Map|undefined}
+         * @private
+         */
+        this._map = undefined;
+        this._summaryListId = summaryListId;
+        /**
+         *
+         * @type {jQuery|undefined}
+         * @private
+         */
+        this.$summaryList = undefined;
+    }
+    /**
+     * initialize with the map
+     * @param {ol.Map} m - the ol map
+     * @abstract
+     */
+    DeficiencyBase.prototype.init = function (m) {
+        this._map = m;
+        m.addLayer(this.deficiencyLayer.olLayer);
+        this.$summaryList = $("#" + this._summaryListId);
+    };
+    /**
+     *
+     * @param {Corridor} c - the corridor to be added
+     * @abstract
+     */
+    DeficiencyBase.prototype.addCorridor = function (c) {
+        // let feats = c.layer.source.getFeatures();
+        //
+        // let $mmDeficiencyList = $(`#${constants.mmFlagListId}`);
+        //
+        // for (let f of feats) {
+        //     // f.setProperties()
+        //     let props = f.getProperties();
+        //     let rate = props['rateFlag'];
+        //     let kab = props['kabFlag'];
+        //
+        //     let triggerRateFlag = typeof rate == 'number' && rate > 1;
+        //     let triggerKabFlag = typeof kab == 'number' && kab > 1;
+        //
+        //     if (triggerRateFlag || triggerKabFlag) {
+        //         this.deficiencyLayer.source.addFeature(f);
+        //         mmFlagIndex++;
+        //
+        //         f.setProperties({mmId: 'MM' + mmFlagIndex.toFixed()});
+        //         let appendHtml = `<b>MM${mmFlagIndex.toFixed()}</b>:&nbsp;`;
+        //         let flags = [];
+        //         if (triggerRateFlag) {
+        //             flags.push('Crash Rate');
+        //         }
+        //         if (triggerKabFlag) {
+        //             flags.push('KAB');
+        //         }
+        //
+        //         appendHtml += flags.join(', ');
+        //         $mmDeficiencyList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
+        //     }
+        // }
+    };
+    /**
+     *
+     * @param pdpId
+     * @returns {ol.Feature|undefined}
+     */
+    DeficiencyBase.prototype.getFeatureById = function (pdpId) {
+        return this._sortedFeatures.getFeature(pdpId);
+    };
+    /**
+     * @abstract
+     */
+    DeficiencyBase.prototype.afterLoad = function () {
+        this._sortedFeatures = new SortedFeatures_1.default(this.deficiencyLayer.features, 'pdpId');
+        var _this = this;
+        this._summaryListItems.sort(function (a, b) {
+            if (a.pdpId == b.pdpId) {
+                return 0;
+            }
+            else {
+                return a.pdpId < b.pdpId ? -1 : 1;
+            }
+        });
+        for (var _i = 0, _a = this._summaryListItems; _i < _a.length; _i++) {
+            var i = _a[_i];
+            this.$summaryList.append(i.liText);
+        }
+        this.$summaryList.find('li').click(function () {
+            var $this = $(this);
+            var theFeature = _this.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
+            _this._map.getView().fit(theFeature.getGeometry().getExtent(), _this._map.getSize());
+            _this._map.getView().setZoom(_this._map.getView().getZoom() - 1);
+        });
+    };
+    return DeficiencyBase;
+}());
+exports.default = DeficiencyBase;
+
+
+/***/ }),
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5875,12 +5874,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import exampleCrashData from './_exampleCrashData';
 var exampleCrashData = undefined;
 var ajaxGetters_1 = __webpack_require__(6);
-var objHelp = __webpack_require__(14);
-var LayerBaseVectorGeoJson_1 = __webpack_require__(9);
-var filterCrash_1 = __webpack_require__(27);
+var objHelp = __webpack_require__(21);
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
+var filterCrash_1 = __webpack_require__(25);
 var proj = __webpack_require__(5);
 var mapPopup_1 = __webpack_require__(3);
-var layerStyles_1 = __webpack_require__(8);
+var layerStyles_1 = __webpack_require__(7);
 var popup_1 = __webpack_require__(10);
 var popup_2 = __webpack_require__(10);
 var ol = __webpack_require__(2);
@@ -5980,8 +5979,7 @@ exports.default = new CrashData();
 
 
 /***/ }),
-/* 45 */,
-/* 46 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6084,7 +6082,7 @@ nm.getCountyById = getCountyById;
 
 
 /***/ }),
-/* 47 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6105,11 +6103,11 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var provide_1 = __webpack_require__(0);
 var SortedFeatures_1 = __webpack_require__(12);
-var LayerBaseVectorGeoJson_1 = __webpack_require__(9);
+var LayerBaseVectorGeoJson_1 = __webpack_require__(8);
 var mapPopup_1 = __webpack_require__(3);
 var SelectBoxBase_1 = __webpack_require__(11);
 var ajaxGetters_1 = __webpack_require__(6);
-var layerStyles = __webpack_require__(8);
+var layerStyles = __webpack_require__(7);
 var projections_1 = __webpack_require__(5);
 var $ = __webpack_require__(1);
 var ol = __webpack_require__(2);
@@ -6424,7 +6422,7 @@ exports.default = SegmentPicker;
 
 
 /***/ }),
-/* 48 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6473,7 +6471,7 @@ exports.default = SelectCounty;
 
 
 /***/ }),
-/* 49 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6597,7 +6595,7 @@ exports.default = SelectHighway;
 
 
 /***/ }),
-/* 50 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6606,8 +6604,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by gavorhes on 10/4/2016.
  */
-var SsaMapCreate_1 = __webpack_require__(28);
-var SsaMapView_1 = __webpack_require__(29);
+var SsaMapCreate_1 = __webpack_require__(27);
+var SsaMapView_1 = __webpack_require__(28);
 window['SsaMapCreate'] = SsaMapCreate_1.SsaMapCreate;
 window['SsaMapView'] = SsaMapView_1.SsaMapView;
 try {

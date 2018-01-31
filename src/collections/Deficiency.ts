@@ -131,7 +131,7 @@ export class Deficiency extends DeficiencyBase {
                 let defs = [];
 
                 if (triggerRateFlag && triggerKabFlag){
-                    defs.push(`<span style="color: ${styles.mmBothColor}">KAB, Crash Rate</span>`);
+                    defs.push(`<span style="color: ${styles.mmBothColor}">KAB,&nbsp;Crash Rate</span>`);
                 } else if (triggerRateFlag) {
                     defs.push(`<span style="color: ${styles.mmRateFlagColor}">Crash Rate</span>`);
                 } else if (triggerKabFlag) {
@@ -141,13 +141,13 @@ export class Deficiency extends DeficiencyBase {
                 appendHtml += defs.join(' ');
 
                 if (defs.length > 0){
-                    appendHtml += ' ';
+                    appendHtml += ',&nbsp;';
                 }
 
                 if (deficiencyList.length > 0){
                     console.log(deficiencyList);
                      appendHtml += `<span style="color: ${styles.controllingCriteriaColor}">` +
-                         `${deficiencyList.join(', ')}</span>`;
+                         `${deficiencyList.join(',&nbsp;')}</span>`;
                 }
 
                 this._summaryListItems.push({

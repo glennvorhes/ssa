@@ -91,7 +91,7 @@ export class SsaMapView extends SsaMapBase {
         // summaryListHtml += `<h4 style="color: ${constants.controllingCriteriaColor}">Controlling Criteria</h4>`;
         // summaryListHtml += `<ul id="${constants.ccListId}"></ul>`;
 
-        summaryListHtml += `<h4 style="color: ${constants.defColor}; font-size: large">Deficiencies</h4>`;
+        summaryListHtml += `<h4 style="color: ${constants.defColor}; font-size: large">Flags and Deficiencies</h4>`;
         summaryListHtml += `<ul id="${constants.defListId}"></ul>`;
 
         summaryListHtml += '</div>';
