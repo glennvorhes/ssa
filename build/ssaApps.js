@@ -396,7 +396,9 @@ exports.mmFlagListId = 'mm-deficiency-list';
 exports.ccListId = 'cc-deficiency-list';
 exports.pdpDataAttr = 'data-pdp-id';
 exports.mmFlagColor = '#00FF00';
-exports.controllingCriteriaColor = '#FFC632';
+exports.controllingCriteriaColor = '#00FF00';
+exports.defListId = 'deficiency-list';
+exports.defColor = 'white';
 // export const contollingCriteriaLookup = {
 //     'ccDesignSpeed': 'Design Speed',
 //     'Grade': 'Grade',
@@ -431,14 +433,22 @@ for (var i = 0; i < exports.propNames.length; i++) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ol = __webpack_require__(2);
 var projections_1 = __webpack_require__(5);
-var filterCrash_1 = __webpack_require__(26);
+var filterCrash_1 = __webpack_require__(27);
 var colorUtil = __webpack_require__(38);
+// import filterControllingCritera from '../filters/filterContollingCriteria';
+var filterContollingCriteria_1 = __webpack_require__(18);
+var filterMmFlag_1 = __webpack_require__(19);
+var constants = __webpack_require__(7);
 exports.segmentLayer = new ol.style.Style({
     stroke: new ol.style.Stroke({ color: 'darkblue', width: 5 })
 });
 exports.fromSelectionColor = '#48FD14';
 exports.toSelectionColor = '#EE0071';
 exports.corridorPreviewColor = 'black';
+exports.mmRateFlagColor = 'yellow';
+exports.mmKabFlagColor = 'orange';
+exports.mmBothColor = 'red';
+exports.controllingCriteriaColor = constants.controllingCriteriaColor;
 /**
  *
  * @type {Array<string>}
@@ -535,6 +545,58 @@ exports.crashPointStyle = function (feature) {
             })
         })];
 };
+function deficiencyStyle(feature) {
+    "use strict";
+    var props = feature.getProperties();
+    var returnStyles = [];
+    var showCc = false;
+    for (var _i = 0, _a = filterContollingCriteria_1.default.allValues; _i < _a.length; _i++) {
+        var cc = _a[_i];
+        if (props[cc] && filterContollingCriteria_1.default.valIsOn(cc)) {
+            showCc = true;
+            break;
+        }
+    }
+    if (showCc) {
+        returnStyles.push(new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: exports.controllingCriteriaColor,
+                width: 14
+            }),
+            text: txtFunc(props)
+        }));
+    }
+    var rateOrKab = (props.rateFlag >= 1 && filterMmFlag_1.default.mmRateFlagOn) || (props.kabCrshFlag >= 1 && filterMmFlag_1.default.mmKabFlagOn);
+    var onlyRate = props.rateFlag >= 1 && filterMmFlag_1.default.mmRateFlagOn;
+    var onlyKab = props.kabCrshFlag >= 1 && filterMmFlag_1.default.mmKabFlagOn;
+    var rateAndKab = onlyRate && onlyKab;
+    var color;
+    if (onlyRate) {
+        color = exports.mmRateFlagColor;
+    }
+    if (onlyKab) {
+        color = exports.mmKabFlagColor;
+    }
+    if (rateAndKab) {
+        color = exports.mmBothColor;
+    }
+    if (rateOrKab) {
+        returnStyles.push(new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: color,
+                width: 5
+            }),
+            text: txtFunc(props)
+        }));
+    }
+    if (returnStyles.length > 0) {
+        return returnStyles;
+    }
+    else {
+        return null;
+    }
+}
+exports.deficiencyStyle = deficiencyStyle;
 
 
 /***/ }),
@@ -1187,6 +1249,7 @@ var DeficiencyBase = (function () {
             name: layerName
         });
         this.deficiencyLayer.style = layerStyle;
+        this._summaryListItems = [];
         /**
          *
          * @type {SortedFeatures|undefined}
@@ -1269,6 +1332,18 @@ var DeficiencyBase = (function () {
     DeficiencyBase.prototype.afterLoad = function () {
         this._sortedFeatures = new SortedFeatures_1.default(this.deficiencyLayer.features, 'pdpId');
         var _this = this;
+        this._summaryListItems.sort(function (a, b) {
+            if (a.pdpId == b.pdpId) {
+                return 0;
+            }
+            else {
+                return a.pdpId < b.pdpId ? -1 : 1;
+            }
+        });
+        for (var _i = 0, _a = this._summaryListItems; _i < _a.length; _i++) {
+            var i = _a[_i];
+            this.$summaryList.append(i.liText);
+        }
         this.$summaryList.find('li').click(function () {
             var $this = $(this);
             var theFeature = _this.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
@@ -1771,6 +1846,154 @@ exports.default = FilterBase;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 7/14/2016.
+ */
+var FilterBase_1 = __webpack_require__(17);
+var FilterControllingCriteria = (function (_super) {
+    __extends(FilterControllingCriteria, _super);
+    function FilterControllingCriteria() {
+        return _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true) || this;
+    }
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignSpeedOn", {
+        get: function () {
+            return this.valIsOn('ccDesignSpeed');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccLaneWidthOn", {
+        get: function () {
+            return this.valIsOn('ccLaneWidth');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccShoulderWidthOn", {
+        get: function () {
+            return this.valIsOn('ccShoulderWidth');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccHorizontalCurveOn", {
+        get: function () {
+            return this.valIsOn('ccHorizontalCurve');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccSuperelevationOn", {
+        get: function () {
+            return this.valIsOn('ccSuperelevation');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccMaximumGradeOn", {
+        get: function () {
+            return this.valIsOn('ccMaximumGrade');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccStoppingSightOn", {
+        get: function () {
+            return this.valIsOn('ccStoppingSight');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccCrossSlopeOn", {
+        get: function () {
+            return this.valIsOn('ccCrossSlope');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccVerticalClearanceOn", {
+        get: function () {
+            return this.valIsOn('ccVerticalClearance');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignLoadingOn", {
+        get: function () {
+            return this.valIsOn('ccDesignLoading');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FilterControllingCriteria;
+}(FilterBase_1.default));
+exports.FilterControllingCriteria = FilterControllingCriteria;
+exports.default = new FilterControllingCriteria();
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Created by gavorhes on 7/14/2016.
+ */
+var FilterBase_1 = __webpack_require__(17);
+var FilterMmFlag = (function (_super) {
+    __extends(FilterMmFlag, _super);
+    function FilterMmFlag() {
+        return _super.call(this, 'mm-flags', 'mm-flags-sub', true) || this;
+    }
+    Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
+        get: function () {
+            return this.valIsOn('rateFlag');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FilterMmFlag.prototype, "mmKabFlagOn", {
+        get: function () {
+            return this.valIsOn('kabCrshFlag');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return FilterMmFlag;
+}(FilterBase_1.default));
+exports.FilterMmFlag = FilterMmFlag;
+exports.default = new FilterMmFlag();
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
 var zoomResolutionConvert = __webpack_require__(37);
 var provide_1 = __webpack_require__(0);
@@ -2175,7 +2398,7 @@ exports.default = LayerBase;
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2258,7 +2481,7 @@ exports.default = MapInteractionBase;
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2277,7 +2500,7 @@ exports.default = exports.mapMove;
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2288,7 +2511,7 @@ exports.default = exports.mapMove;
 Object.defineProperty(exports, "__esModule", { value: true });
 var quickMapBase_1 = __webpack_require__(36);
 var provide_1 = __webpack_require__(0);
-var mapMove_1 = __webpack_require__(20);
+var mapMove_1 = __webpack_require__(22);
 var mapPopup_1 = __webpack_require__(3);
 var nm = provide_1.default('olHelpers');
 /**
@@ -2320,7 +2543,7 @@ exports.default = quickMap;
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2353,7 +2576,7 @@ nm.definedAndNotNull = definedAndNotNull;
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2419,7 +2642,7 @@ exports.default = SsaMapBase;
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2485,159 +2708,6 @@ exports.default = CorridorConfig;
 
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by gavorhes on 7/14/2016.
- */
-var FilterBase_1 = __webpack_require__(17);
-var FilterControllingCriteria = (function (_super) {
-    __extends(FilterControllingCriteria, _super);
-    function FilterControllingCriteria() {
-        return _super.call(this, 'filter-controlling-criteria', 'filter-controlling-criteria-sub', true) || this;
-    }
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignSpeedOn", {
-        get: function () {
-            return this.valIsOn('ccDesignSpeed');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccLaneWidthOn", {
-        get: function () {
-            return this.valIsOn('ccLaneWidth');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccShoulderWidthOn", {
-        get: function () {
-            return this.valIsOn('ccShoulderWidth');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccHorizontalCurveOn", {
-        get: function () {
-            return this.valIsOn('ccHorizontalCurve');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccSuperelevationOn", {
-        get: function () {
-            return this.valIsOn('ccSuperelevation');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccMaximumGradeOn", {
-        get: function () {
-            return this.valIsOn('ccMaximumGrade');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccStoppingSightOn", {
-        get: function () {
-            return this.valIsOn('ccStoppingSight');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccCrossSlopeOn", {
-        get: function () {
-            return this.valIsOn('ccCrossSlope');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccVerticalClearanceOn", {
-        get: function () {
-            return this.valIsOn('ccVerticalClearance');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterControllingCriteria.prototype, "ccDesignLoadingOn", {
-        get: function () {
-            return this.valIsOn('ccDesignLoading');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return FilterControllingCriteria;
-}(FilterBase_1.default));
-exports.FilterControllingCriteria = FilterControllingCriteria;
-exports.default = new FilterControllingCriteria();
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by gavorhes on 7/14/2016.
- */
-var FilterBase_1 = __webpack_require__(17);
-var FilterCrash = (function (_super) {
-    __extends(FilterCrash, _super);
-    function FilterCrash() {
-        return _super.call(this, 'filter-crash', 'filter-crash-sub', false) || this;
-    }
-    /**
-     *
-     * @param {string} val - the lookup value
-     * @returns {string|null} crash color or null if the crash type should be suppressed
-     */
-    FilterCrash.prototype.getCrashColor = function (val) {
-        var isActive = _super.prototype.valIsOn.call(this, val);
-        if (!isActive) {
-            return null;
-        }
-        var color = {
-            'K': 'rgb(255,0,0)',
-            'A': 'rgb(255,165,0)',
-            'B': 'rgb(255,255,0)',
-            'C': 'rgb(153,255,153)',
-            'P': 'rgb(0,0,255)'
-        }[val];
-        return color || 'rgb(128,128,128)';
-    };
-    return FilterCrash;
-}(FilterBase_1.default));
-exports.FilterCrash = FilterCrash;
-exports.default = new FilterCrash();
-
-
-/***/ }),
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2658,29 +2728,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Created by gavorhes on 7/14/2016.
  */
 var FilterBase_1 = __webpack_require__(17);
-var FilterMmFlag = (function (_super) {
-    __extends(FilterMmFlag, _super);
-    function FilterMmFlag() {
-        return _super.call(this, 'mm-flags', 'mm-flags-sub', true) || this;
+exports.kColor = 'rgb(255,0,0)';
+exports.aColor = 'rgb(255,165,0)';
+exports.bColor = 'rgb(255,255,0)';
+exports.cColor = 'rgb(153,255,153)';
+exports.oColor = 'rgb(0,0,255)';
+var FilterCrash = (function (_super) {
+    __extends(FilterCrash, _super);
+    function FilterCrash() {
+        return _super.call(this, 'filter-crash', 'filter-crash-sub', false) || this;
     }
-    Object.defineProperty(FilterMmFlag.prototype, "mmRateFlagOn", {
-        get: function () {
-            return this.valIsOn('rateFlag');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FilterMmFlag.prototype, "mmKabFlagOn", {
-        get: function () {
-            return this.valIsOn('kabCrshFlag');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return FilterMmFlag;
+    /**
+     *
+     * @param {string} val - the lookup value
+     * @returns {string|null} crash color or null if the crash type should be suppressed
+     */
+    FilterCrash.prototype.getCrashColor = function (val) {
+        var isActive = _super.prototype.valIsOn.call(this, val);
+        if (!isActive) {
+            return null;
+        }
+        var color = {
+            'K': exports.kColor,
+            'A': exports.aColor,
+            'B': exports.bColor,
+            'C': exports.cColor,
+            'P': exports.oColor
+        }[val];
+        return color || 'rgb(128,128,128)';
+    };
+    return FilterCrash;
 }(FilterBase_1.default));
-exports.FilterMmFlag = FilterMmFlag;
-exports.default = new FilterMmFlag();
+exports.FilterCrash = FilterCrash;
+exports.default = new FilterCrash();
 
 
 /***/ }),
@@ -2703,8 +2783,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var SsaMapBase_1 = __webpack_require__(23);
-var quickMap_1 = __webpack_require__(21);
+var SsaMapBase_1 = __webpack_require__(25);
+var quickMap_1 = __webpack_require__(23);
 var mapPopup_1 = __webpack_require__(3);
 var makeGuid_1 = __webpack_require__(4);
 var provide_1 = __webpack_require__(0);
@@ -2794,22 +2874,22 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var SsaMapBase_1 = __webpack_require__(23);
-var quickMap_1 = __webpack_require__(21);
+var SsaMapBase_1 = __webpack_require__(25);
+var quickMap_1 = __webpack_require__(23);
 var mapPopup_1 = __webpack_require__(3);
 var provide_1 = __webpack_require__(0);
-var CorridorConfig_1 = __webpack_require__(24);
+var CorridorConfig_1 = __webpack_require__(26);
 var Corridor_1 = __webpack_require__(16);
 var calcExtent = __webpack_require__(13);
 var crashData_1 = __webpack_require__(44);
-var mmFlags_1 = __webpack_require__(45);
-var controllingCriteria_1 = __webpack_require__(43);
 var Deficiency_1 = __webpack_require__(41);
 var constants = __webpack_require__(7);
 var ajaxGetters_1 = __webpack_require__(6);
 var $ = __webpack_require__(1);
 var popup_1 = __webpack_require__(10);
 var get_browser_1 = __webpack_require__(39);
+// import controllingCriteria from '../collections/controllingCriteria';
+// import mmFlags from '../collections/mmFlags';
 var nm = provide_1.default('ssa');
 var mmPopupContentWithCrash = function (props) {
     "use strict";
@@ -2849,10 +2929,12 @@ var SsaMapView = (function (_super) {
         summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-close\" title=\"Hide Legend\">&#8598;</span>";
         summaryListHtml += "<span class=\"segment-index-summary-toggle segment-index-summary-open\" title=\"Show Legend\">&#8600;</span>";
         summaryListHtml += '</div>';
-        summaryListHtml += "<h4 style=\"color: " + constants.mmFlagColor + "\">Metamanager Flags</h4>";
-        summaryListHtml += "<ul id=\"" + constants.mmFlagListId + "\"></ul>";
-        summaryListHtml += "<h4 style=\"color: " + constants.controllingCriteriaColor + "\">Controlling Criteria</h4>";
-        summaryListHtml += "<ul id=\"" + constants.ccListId + "\"></ul>";
+        // summaryListHtml += `<h4 style="color: ${constants.mmFlagColor}">Metamanager Flags</h4>`;
+        // summaryListHtml += `<ul id="${constants.mmFlagListId}"></ul>`;
+        // summaryListHtml += `<h4 style="color: ${constants.controllingCriteriaColor}">Controlling Criteria</h4>`;
+        // summaryListHtml += `<ul id="${constants.ccListId}"></ul>`;
+        summaryListHtml += "<h4 style=\"color: " + constants.defColor + "; font-size: large\">Deficiencies</h4>";
+        summaryListHtml += "<ul id=\"" + constants.defListId + "\"></ul>";
         summaryListHtml += '</div>';
         _this.$mapDiv.append(summaryListHtml);
         var $legendDiv = _this.$mapDiv.find('.segment-index-summary');
@@ -2936,8 +3018,8 @@ var SsaMapView = (function (_super) {
                     color: 'black',
                     jsonFeatures: returnLookup[i.toFixed()],
                 });
-                mmFlags_1.default.addCorridor(corridor);
-                controllingCriteria_1.default.addCorridor(corridor);
+                // mmFlags.addCorridor(corridor);
+                // controllingCriteria.addCorridor(corridor);
                 Deficiency_1.default.addCorridor(corridor);
                 _this._corridorArray.push(corridor);
                 _this.mainMap.addLayer(corridor.olLayer);
@@ -2947,8 +3029,8 @@ var SsaMapView = (function (_super) {
             _this._afterCorridorLoad();
             $('#' + infoAnchorId).after(outHtml);
         });
-        mmFlags_1.default.init(_this.mainMap);
-        controllingCriteria_1.default.init(_this.mainMap);
+        // mmFlags.init(this.mainMap);
+        // controllingCriteria.init(this.mainMap);
         Deficiency_1.default.init(_this.mainMap);
         _this.$getMapButton.click(function () {
             var browserVersion = get_browser_1.get_browser();
@@ -3009,8 +3091,8 @@ var SsaMapView = (function (_super) {
     SsaMapView.prototype._afterCorridorLoad = function () {
         this._fitExtent();
         crashData_1.default.init(this.mainMap, this._ssaId, this._snap);
-        mmFlags_1.default.afterLoad();
-        controllingCriteria_1.default.afterLoad();
+        // mmFlags.afterLoad();
+        // controllingCriteria.afterLoad();
         Deficiency_1.default.afterLoad();
     };
     SsaMapView.prototype._fitExtent = function () {
@@ -3048,8 +3130,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var LayerBase_1 = __webpack_require__(18);
-var mapMove_1 = __webpack_require__(20);
+var LayerBase_1 = __webpack_require__(20);
+var mapMove_1 = __webpack_require__(22);
 var provide_1 = __webpack_require__(0);
 var ol = __webpack_require__(2);
 var $ = __webpack_require__(1);
@@ -3354,7 +3436,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by gavorhes on 12/7/2015.
  */
-var LayerBase_1 = __webpack_require__(18);
+var LayerBase_1 = __webpack_require__(20);
 var esriToOl = __webpack_require__(32);
 var mapPopup_1 = __webpack_require__(3);
 var provide_1 = __webpack_require__(0);
@@ -3986,8 +4068,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var mapInteractionBase_1 = __webpack_require__(19);
-var checkDefined = __webpack_require__(22);
+var mapInteractionBase_1 = __webpack_require__(21);
+var checkDefined = __webpack_require__(24);
 var provide_1 = __webpack_require__(0);
 var makeGuid_1 = __webpack_require__(4);
 var $ = __webpack_require__(1);
@@ -4234,7 +4316,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var mapInteractionBase_1 = __webpack_require__(19);
+var mapInteractionBase_1 = __webpack_require__(21);
 var provide_1 = __webpack_require__(0);
 var ol = __webpack_require__(2);
 var $ = __webpack_require__(1);
@@ -4845,7 +4927,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Created by gavorhes on 11/3/2015.
  */
 var provide_1 = __webpack_require__(0);
-var chk = __webpack_require__(22);
+var chk = __webpack_require__(24);
 var nm = provide_1.default('util.colors');
 /**
  * helper function to convert to hex
@@ -5058,7 +5140,7 @@ var provide_1 = __webpack_require__(0);
 var mapPopup_1 = __webpack_require__(3);
 var calcExtent = __webpack_require__(13);
 var makeGuid_1 = __webpack_require__(4);
-var CorridorConfig_1 = __webpack_require__(24);
+var CorridorConfig_1 = __webpack_require__(26);
 var Corridor_1 = __webpack_require__(16);
 var $ = __webpack_require__(1);
 var popup_1 = __webpack_require__(10);
@@ -5341,94 +5423,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by gavorhes on 7/15/2016.
  */
-var filterMmFlag_1 = __webpack_require__(27);
+var filterMmFlag_1 = __webpack_require__(19);
 var mapPopup_1 = __webpack_require__(3);
 var constants = __webpack_require__(7);
 var _DeficiencyBase_1 = __webpack_require__(15);
-var ol = __webpack_require__(2);
 var objectHelpers_1 = __webpack_require__(14);
-var filterContollingCriteria_1 = __webpack_require__(25);
-var layerStyles_1 = __webpack_require__(8);
+var filterContollingCriteria_1 = __webpack_require__(18);
+var styles = __webpack_require__(8);
 var hasMmFlag = 'hasMmFlag';
 var hasCc = 'hasCc';
 var rateFlag = 'rateFlag';
 var kabCrshFlag = 'kabCrshFlag';
-//
-// let txtFunc = (p: mmProps) => {
-//     return new ol.style.Text(
-//         {
-//             text: p.pdpId.toFixed(),
-//             scale: 1.5,
-//             stroke: new ol.style.Stroke({
-//                 color: 'black',
-//                 width: 2
-//             }),
-//             fill: new ol.style.Fill({
-//                 color: 'white'
-//             })
-//         }
-//     );
-// };
-/**
- *
- * @param feature - the input feature
- * @returns return style or null
- */
-var deficiencyStyle = function (feature) {
-    "use strict";
-    var props = feature.getProperties();
-    var returnStyles = [];
-    var showCc = false;
-    for (var _i = 0, _a = filterContollingCriteria_1.default.allValues; _i < _a.length; _i++) {
-        var cc = _a[_i];
-        if (props[cc] && filterContollingCriteria_1.default.valIsOn(cc)) {
-            showCc = true;
-            break;
-        }
-    }
-    if (showCc) {
-        returnStyles.push(new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: constants.controllingCriteriaColor,
-                width: 13
-            }),
-            text: layerStyles_1.txtFunc(props)
-        }));
-    }
-    var rateOrKab = (props.rateFlag >= 1 && filterMmFlag_1.default.mmRateFlagOn) || (props.kabCrshFlag >= 1 && filterMmFlag_1.default.mmKabFlagOn);
-    var onlyRate = props.rateFlag >= 1 && filterMmFlag_1.default.mmRateFlagOn;
-    var onlyKab = props.kabCrshFlag >= 1 && filterMmFlag_1.default.mmKabFlagOn;
-    var rateAndKab = onlyRate && onlyKab;
-    var color;
-    if (onlyRate) {
-        color = 'yellow';
-    }
-    if (onlyKab) {
-        color = 'orange';
-    }
-    if (rateAndKab) {
-        color = 'red';
-    }
-    if (rateOrKab) {
-        returnStyles.push(new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: color,
-                width: 5
-            }),
-            text: layerStyles_1.txtFunc(props)
-        }));
-    }
-    if (returnStyles.length > 0) {
-        return returnStyles;
-    }
-    else {
-        return null;
-    }
-};
 var Deficiency = (function (_super) {
     __extends(Deficiency, _super);
     function Deficiency() {
-        var _this = _super.call(this, "Deficiencies", deficiencyStyle, 200, constants.mmFlagListId) || this;
+        var _this = _super.call(this, "Deficiencies", styles.deficiencyStyle, 200, constants.defListId) || this;
         _this.metaList = [];
         _this.deficiencyList = [];
         return _this;
@@ -5516,6 +5525,28 @@ var Deficiency = (function (_super) {
             }
             if (triggerRateFlag || triggerKabFlag || deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
+                var appendHtml = "<span style=\"font-weight: bold; color: white\">" + props['pdpId'] + "</span>:&nbsp;";
+                var defs = [];
+                if (triggerRateFlag) {
+                    defs.push("<span style=\"color: " + styles.mmRateFlagColor + "\">Crash Rate</span>");
+                }
+                if (triggerKabFlag) {
+                    defs.push("<span style=\"color: " + styles.mmKabFlagColor + "\">KAB</span>");
+                }
+                appendHtml += defs.join(' ');
+                if (defs.length > 0) {
+                    appendHtml += ' ';
+                }
+                if (deficiencyList.length > 0) {
+                    console.log(deficiencyList);
+                    appendHtml += "<span style=\"color: " + styles.controllingCriteriaColor + "\">" +
+                        (deficiencyList.join(', ') + "</span>");
+                }
+                this._summaryListItems.push({
+                    pdpId: props['pdpId'],
+                    liText: "<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>"
+                });
+                // this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
             }
         }
     };
@@ -5827,152 +5858,7 @@ exports.default = PickerCollection;
 
 
 /***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by gavorhes on 7/15/2016.
- */
-var filterContollingCriteria_1 = __webpack_require__(25);
-var mapPopup_1 = __webpack_require__(3);
-var constants = __webpack_require__(7);
-var _DeficiencyBase_1 = __webpack_require__(15);
-var objectHelpers_1 = __webpack_require__(14);
-/**
- *
- * @param {ol.Feature} feature - the input feature
- * @returns {Array<ol.style.Style>|null} - return style or null
- */
-var ccStyle = function (feature) {
-    "use strict";
-    return null;
-    // let props = feature.getProperties();
-    //
-    // let show = false;
-    //
-    // for (let cc of filterControllingCritera.allValues) {
-    //     if (props[cc] && filterControllingCritera.valIsOn(cc)) {
-    //         show = true;
-    //         break;
-    //     }
-    // }
-    //
-    // let txtFunc = () => {
-    //     return new ol.style.Text(
-    //         {
-    //             text: props['ccId'],
-    //             scale: 1.5,
-    //             stroke: new ol.style.Stroke({
-    //                 color: 'black',
-    //                 width: 2
-    //             }),
-    //             fill: new ol.style.Fill({
-    //                 color: constants.controllingCriteriaColor
-    //             })
-    //         }
-    //     );
-    // };
-    //
-    // if (show) {
-    //     return [new ol.style.Style({
-    //         stroke: new ol.style.Stroke({
-    //             color: constants.controllingCriteriaColor,
-    //             width: 6
-    //         }),
-    //         text: txtFunc()
-    //     })];
-    // } else {
-    //     return null;
-    // }
-};
-var ControllingCriteria = (function (_super) {
-    __extends(ControllingCriteria, _super);
-    function ControllingCriteria() {
-        return _super.call(this, "Geometric Deficiencies", ccStyle, 201, constants.ccListId) || this;
-    }
-    /**
-     * initialize with the map
-     * @param {ol.Map} m - the ol map
-     */
-    ControllingCriteria.prototype.init = function (m) {
-        var _this = this;
-        _super.prototype.init.call(this, m);
-        filterContollingCriteria_1.default.addChangeCallback(function () {
-            _this.deficiencyLayer.refresh();
-        });
-        mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
-            var returnHtml = '';
-            returnHtml += '<ul>';
-            for (var _i = 0, _a = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _i < _a.length; _i++) {
-                var cc = _a[_i];
-                if (props[cc.key]) {
-                    returnHtml += "<li>";
-                    returnHtml += cc.value;
-                    var subEls = props[cc.key].split('::');
-                    returnHtml += '<ul>';
-                    for (var _b = 0, subEls_1 = subEls; _b < subEls_1.length; _b++) {
-                        var s = subEls_1[_b];
-                        if (!isNaN(parseInt(s)) || s.trim().length == 0) {
-                            continue;
-                        }
-                        returnHtml += "<li>" + s + "</li>";
-                    }
-                    returnHtml += '</ul>';
-                    returnHtml += '</li>';
-                }
-            }
-            returnHtml += '</ul>';
-            return returnHtml;
-        });
-    };
-    /**
-     *
-     * @param {Corridor} c - the corridor to be added
-     */
-    ControllingCriteria.prototype.addCorridor = function (c) {
-        var feats = c.layer.source.getFeatures();
-        for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
-            var f = feats_1[_i];
-            var props = f.getProperties();
-            var deficiencyList = [];
-            for (var _a = 0, _b = objectHelpers_1.keyValPairs(constants.controllingCriteriaProps); _a < _b.length; _a++) {
-                var f_1 = _b[_a];
-                var ccProps = props[f_1.key];
-                if (ccProps) {
-                    deficiencyList.push(f_1.value);
-                }
-            }
-            if (deficiencyList.length > 0) {
-                this.deficiencyLayer.source.addFeature(f);
-                f.setProperties({ ccId: "" + props['pdpId'] });
-                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
-                appendHtml += deficiencyList.join(', ');
-                this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
-            }
-        }
-    };
-    return ControllingCriteria;
-}(_DeficiencyBase_1.default));
-ControllingCriteria.propNames = ['ccDesignSpeed', 'ccLaneWidth', 'ccShoulderWidth', 'ccHorizontalCurve', 'ccSuperelevation',
-    'ccMaximumGrade', 'ccStoppingSight', 'ccCrossSlope', 'ccVerticalClearance', 'ccDesignLoading'];
-exports.ControllingCriteria = ControllingCriteria;
-exports.default = new ControllingCriteria();
-
-
-/***/ }),
+/* 43 */,
 /* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5988,7 +5874,7 @@ var exampleCrashData = undefined;
 var ajaxGetters_1 = __webpack_require__(6);
 var objHelp = __webpack_require__(14);
 var LayerBaseVectorGeoJson_1 = __webpack_require__(9);
-var filterCrash_1 = __webpack_require__(26);
+var filterCrash_1 = __webpack_require__(27);
 var proj = __webpack_require__(5);
 var mapPopup_1 = __webpack_require__(3);
 var layerStyles_1 = __webpack_require__(8);
@@ -6091,129 +5977,7 @@ exports.default = new CrashData();
 
 
 /***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by gavorhes on 7/15/2016.
- */
-var filterMmFlag_1 = __webpack_require__(27);
-var mapPopup_1 = __webpack_require__(3);
-var constants = __webpack_require__(7);
-var _DeficiencyBase_1 = __webpack_require__(15);
-/**
- *
- * @param {ol.Feature} feature - the input feature
- * @returns {Array<ol.style.Style>|null} - return style or null
- */
-var mmFlagStyle = function (feature) {
-    "use strict";
-    return null;
-    // let props = feature.getProperties();
-    //
-    // let txtFunc = () => {
-    //     return new ol.style.Text(
-    //         {
-    //             text: props['mmId'],
-    //             scale: 1.5,
-    //             stroke: new ol.style.Stroke({
-    //                 color: 'black',
-    //                 width: 2
-    //             }),
-    //             fill: new ol.style.Fill({
-    //                 color: constants.mmFlagColor
-    //             })
-    //         }
-    //     );
-    //
-    // };
-    //
-    //
-    // if ((props['rateFlag'] >= 1 && filterMmFlag.mmRateFlagOn) || props['kabCrshFlag'] >= 1 && filterMmFlag.mmKabFlagOn) {
-    //     return [new ol.style.Style({
-    //         stroke: new ol.style.Stroke({
-    //             color: constants.mmFlagColor,
-    //             width: 6
-    //         }),
-    //         text: txtFunc()
-    //     })];
-    // } else {
-    //     return null;
-    // }
-};
-var MmFlags = (function (_super) {
-    __extends(MmFlags, _super);
-    function MmFlags() {
-        return _super.call(this, "Safety Flags", mmFlagStyle, 200, constants.mmFlagListId) || this;
-    }
-    /**
-     * initialize with the map
-     * @param {ol.Map} m - the ol map
-     */
-    MmFlags.prototype.init = function (m) {
-        var _this = this;
-        _super.prototype.init.call(this, m);
-        filterMmFlag_1.default.addChangeCallback(function () {
-            _this.deficiencyLayer.refresh();
-        });
-        mapPopup_1.default.addVectorPopup(this.deficiencyLayer, function (props) {
-            var rates = [];
-            if (props['rateFlag'] != null) {
-                rates.push("Rate Flag: " + props['rateFlag'].toFixed(4));
-            }
-            if (props['kabCrshFlag'] != null) {
-                rates.push("KAB Flag: " + props['kabCrshFlag'].toFixed(4));
-            }
-            return "MM ID: " + props['mmId'] + "<br/>" + rates.join('<br>');
-        });
-    };
-    /**
-     *
-     * @param {Corridor} c - the corridor to be added
-     */
-    MmFlags.prototype.addCorridor = function (c) {
-        var feats = c.layer.source.getFeatures();
-        for (var _i = 0, feats_1 = feats; _i < feats_1.length; _i++) {
-            var f = feats_1[_i];
-            var props = f.getProperties();
-            var triggerRateFlag = props['rateFlag'] >= 1;
-            var triggerKabFlag = props['kabCrshFlag'] >= 1;
-            if (props['rateFlag'] >= 1 || props['kabCrshFlag'] >= 1) {
-                this.deficiencyLayer.source.addFeature(f);
-                f.setProperties({ mmId: "" + props['pdpId'] });
-                var appendHtml = "<b>" + props['pdpId'] + "</b>:&nbsp;";
-                var flags = [];
-                if (triggerRateFlag) {
-                    flags.push('Crash Rate');
-                }
-                if (triggerKabFlag) {
-                    flags.push('KAB');
-                }
-                appendHtml += flags.join(', ');
-                this.$summaryList.append("<li " + constants.pdpDataAttr + "=\"" + props['pdpId'] + "\">" + appendHtml + "</li>");
-            }
-        }
-    };
-    return MmFlags;
-}(_DeficiencyBase_1.default));
-exports.MmFlags = MmFlags;
-exports.default = new MmFlags();
-
-
-/***/ }),
+/* 45 */,
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 

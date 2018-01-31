@@ -8,7 +8,7 @@ import DeficiencyBase from './_DeficiencyBase';
 import ol = require('custom-ol');
 import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers';
 import filterControllingCritera from '../filters/filterContollingCriteria';
-import {txtFunc, mmProps} from '../layerStyles'
+import * as styles from '../layerStyles'
 
 
 let hasMmFlag = 'hasMmFlag';
@@ -16,101 +16,12 @@ let hasCc = 'hasCc';
 let rateFlag = 'rateFlag';
 let kabCrshFlag = 'kabCrshFlag';
 
-//
-// let txtFunc = (p: mmProps) => {
-//     return new ol.style.Text(
-//         {
-//             text: p.pdpId.toFixed(),
-//             scale: 1.5,
-//             stroke: new ol.style.Stroke({
-//                 color: 'black',
-//                 width: 2
-//             }),
-//             fill: new ol.style.Fill({
-//                 color: 'white'
-//             })
-//         }
-//     );
-// };
-
-/**
- *
- * @param feature - the input feature
- * @returns return style or null
- */
-const deficiencyStyle = (feature: ol.Feature): Array<ol.style.Style> => {
-    "use strict";
-
-    let props: mmProps = feature.getProperties() as mmProps;
-
-    let returnStyles = [];
-
-
-    let showCc = false;
-
-    for (let cc of filterControllingCritera.allValues) {
-        if (props[cc] && filterControllingCritera.valIsOn(cc)) {
-            showCc = true;
-            break;
-        }
-    }
-
-    if (showCc) {
-        returnStyles.push(new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: constants.controllingCriteriaColor,
-                width: 13
-            }),
-            text: txtFunc(props as mmProps)
-        }));
-    }
-
-    let rateOrKab = (props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn) || (props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn);
-    let onlyRate = props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn;
-    let onlyKab = props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn;
-    let rateAndKab = onlyRate && onlyKab;
-
-    let color;
-
-    if (onlyRate) {
-        color = 'yellow';
-    }
-
-    if (onlyKab) {
-        color = 'orange';
-    }
-
-    if (rateAndKab) {
-        color = 'red';
-    }
-
-
-    if (rateOrKab) {
-
-        returnStyles.push(new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: color,
-                width: 5
-            }),
-            text: txtFunc(props as mmProps)
-        }));
-    }
-
-    if (returnStyles.length > 0) {
-        return returnStyles;
-    } else {
-        return null
-    }
-
-};
-
-
 export class Deficiency extends DeficiencyBase {
     public metaList: string[] = [];
     public deficiencyList: string[] = [];
 
     constructor() {
-        super("Deficiencies", deficiencyStyle, 200, constants.mmFlagListId);
+        super("Deficiencies", styles.deficiencyStyle, 200, constants.defListId);
     }
 
     /**
@@ -214,7 +125,40 @@ export class Deficiency extends DeficiencyBase {
 
             if (triggerRateFlag || triggerKabFlag || deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
+
+                let appendHtml = `<span style="font-weight: bold; color: white">${props['pdpId']}</span>:&nbsp;`;
+
+                let defs = [];
+                if (triggerRateFlag) {
+                    defs.push(`<span style="color: ${styles.mmRateFlagColor}">Crash Rate</span>`);
+                }
+                if (triggerKabFlag) {
+                    defs.push(`<span style="color: ${styles.mmKabFlagColor}">KAB</span>`);
+                }
+
+                appendHtml += defs.join(' ');
+
+                if (defs.length > 0){
+                    appendHtml += ' ';
+                }
+
+                if (deficiencyList.length > 0){
+                    console.log(deficiencyList);
+                     appendHtml += `<span style="color: ${styles.controllingCriteriaColor}">` +
+                         `${deficiencyList.join(', ')}</span>`;
+                }
+
+                this._summaryListItems.push({
+                        pdpId: props['pdpId'],
+                        liText: `<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`
+                    }
+                );
+
+
+                // this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
             }
+
+
         }
     }
 }

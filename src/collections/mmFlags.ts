@@ -113,7 +113,14 @@ export class MmFlags extends DeficiencyBase {
                 }
 
                 appendHtml += flags.join(', ');
-                this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
+
+                this._summaryListItems.push({
+                    pdpId: props['pdpId'],
+                    liText: `<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`}
+                    );
+
+
+                // this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
             }
         }
     }
@@ -121,4 +128,4 @@ export class MmFlags extends DeficiencyBase {
 }
 
 
-export default new MmFlags();
+// export default new MmFlags();

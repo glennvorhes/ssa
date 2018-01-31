@@ -3,6 +3,12 @@
  */
 import FilterBase from './FilterBase';
 
+export let kColor = 'rgb(255,0,0)';
+export let aColor = 'rgb(255,165,0)';
+export let bColor = 'rgb(255,255,0)';
+export let cColor = 'rgb(153,255,153)';
+export let oColor = 'rgb(0,0,255)';
+
 export class FilterCrash extends FilterBase {
 
     constructor() {
@@ -22,11 +28,11 @@ export class FilterCrash extends FilterBase {
         }
 
         let color = {
-            'K': 'rgb(255,0,0)',
-            'A': 'rgb(255,165,0)',
-            'B': 'rgb(255,255,0)',
-            'C': 'rgb(153,255,153)',
-            'P': 'rgb(0,0,255)'
+            'K': kColor,
+            'A': aColor,
+            'B': bColor,
+            'C': cColor,
+            'P': oColor
         }[val];
 
         return color || 'rgb(128,128,128)';

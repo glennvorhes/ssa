@@ -7,7 +7,10 @@ export const mmFlagListId = 'mm-deficiency-list';
 export const ccListId = 'cc-deficiency-list';
 export const pdpDataAttr = 'data-pdp-id';
 export const mmFlagColor = '#00FF00';
-export const controllingCriteriaColor = '#FFC632';
+export const controllingCriteriaColor = '#00FF00';
+export const defListId = 'deficiency-list';
+export const defColor = 'white';
+
 
 // export const contollingCriteriaLookup = {
 //     'ccDesignSpeed': 'Design Speed',

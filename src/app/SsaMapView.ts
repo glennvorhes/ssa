@@ -12,8 +12,8 @@ import Corridor from '../corridor/Corridor';
 import * as styles  from '../layerStyles';
 import * as calcExtent from 'webmapsjs/dist/olHelpers/extentUtil';
 import crashData from '../collections/crashData';
-import mmFlags from '../collections/mmFlags';
-import controllingCriteria from '../collections/controllingCriteria';
+
+
 import deficiency from '../collections/Deficiency';
 import * as constants from '../constants';
 import ol = require('custom-ol');
@@ -22,6 +22,9 @@ import $ = require('jquery');
 import {LayerBaseVector} from "webmapsjs/dist/layers/LayerBaseVector";
 import {mmPopupContent} from '../popup';
 import {get_browser} from 'webmapsjs/dist/util/get_browser';
+
+// import controllingCriteria from '../collections/controllingCriteria';
+// import mmFlags from '../collections/mmFlags';
 
 const nm = provide('ssa');
 
@@ -83,11 +86,13 @@ export class SsaMapView extends SsaMapBase {
         summaryListHtml += `<span class="segment-index-summary-toggle segment-index-summary-open" title="Show Legend">&#8600;</span>`;
         summaryListHtml += '</div>';
 
-        summaryListHtml += `<h4 style="color: ${constants.mmFlagColor}">Metamanager Flags</h4>`;
-        summaryListHtml += `<ul id="${constants.mmFlagListId}"></ul>`;
-        summaryListHtml += `<h4 style="color: ${constants.controllingCriteriaColor}">Controlling Criteria</h4>`;
-        summaryListHtml += `<ul id="${constants.ccListId}"></ul>`;
+        // summaryListHtml += `<h4 style="color: ${constants.mmFlagColor}">Metamanager Flags</h4>`;
+        // summaryListHtml += `<ul id="${constants.mmFlagListId}"></ul>`;
+        // summaryListHtml += `<h4 style="color: ${constants.controllingCriteriaColor}">Controlling Criteria</h4>`;
+        // summaryListHtml += `<ul id="${constants.ccListId}"></ul>`;
 
+        summaryListHtml += `<h4 style="color: ${constants.defColor}; font-size: large">Deficiencies</h4>`;
+        summaryListHtml += `<ul id="${constants.defListId}"></ul>`;
 
         summaryListHtml += '</div>';
         this.$mapDiv.append(summaryListHtml);
@@ -201,8 +206,9 @@ export class SsaMapView extends SsaMapBase {
                     }
                 );
 
-                mmFlags.addCorridor(corridor);
-                controllingCriteria.addCorridor(corridor);
+                // mmFlags.addCorridor(corridor);
+                // controllingCriteria.addCorridor(corridor);
+
                 deficiency.addCorridor(corridor);
 
                 this._corridorArray.push(corridor);
@@ -219,8 +225,9 @@ export class SsaMapView extends SsaMapBase {
         });
 
 
-        mmFlags.init(this.mainMap);
-        controllingCriteria.init(this.mainMap);
+        // mmFlags.init(this.mainMap);
+        // controllingCriteria.init(this.mainMap);
+
         deficiency.init(this.mainMap);
 
 
@@ -296,8 +303,10 @@ export class SsaMapView extends SsaMapBase {
         this._fitExtent();
 
         crashData.init(this.mainMap, this._ssaId, this._snap);
-        mmFlags.afterLoad();
-        controllingCriteria.afterLoad();
+
+        // mmFlags.afterLoad();
+        // controllingCriteria.afterLoad();
+
         deficiency.afterLoad()
     }
 

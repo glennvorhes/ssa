@@ -14,7 +14,7 @@ import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers'
  * @param {ol.Feature} feature - the input feature
  * @returns {Array<ol.style.Style>|null} - return style or null
  */
-const ccStyle = (feature: ol.Feature): ol.style.Style[] =>  {
+const ccStyle = (feature: ol.Feature): ol.style.Style[] => {
     "use strict";
 
     return null;
@@ -94,7 +94,7 @@ export class ControllingCriteria extends DeficiencyBase {
                     returnHtml += '<ul>';
 
                     for (let s of subEls) {
-                        if (!isNaN(parseInt(s)) || s.trim().length == 0){
+                        if (!isNaN(parseInt(s)) || s.trim().length == 0) {
                             continue;
                         }
 
@@ -144,7 +144,13 @@ export class ControllingCriteria extends DeficiencyBase {
 
                 let appendHtml = `<b>${props['pdpId']}</b>:&nbsp;`;
                 appendHtml += deficiencyList.join(', ');
-                this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
+                // this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
+
+                this._summaryListItems.push({
+                        pdpId: props['pdpId'],
+                        liText: `<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`
+                    }
+                );
 
             }
 
@@ -154,4 +160,4 @@ export class ControllingCriteria extends DeficiencyBase {
 }
 
 
-export default new ControllingCriteria();
+// export default new ControllingCriteria();

@@ -8,6 +8,12 @@ import {proj3857} from "webmapsjs/dist/olHelpers/projections";
 import {LayerBaseVectorGeoJsonOptions} from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 import filterCrash from './filters/filterCrash';
 import * as colorUtil from 'webmapsjs/dist/util/colors';
+// import filterControllingCritera from '../filters/filterContollingCriteria';
+import filterControllingCritera from './filters/filterContollingCriteria';
+import filterMmFlag from './filters/filterMmFlag';
+import * as constants from './constants';
+
+
 
 
 
@@ -18,6 +24,10 @@ export const segmentLayer = new ol.style.Style({
 export const fromSelectionColor = '#48FD14';
 export const toSelectionColor = '#EE0071';
 export const corridorPreviewColor = 'black';
+export const mmRateFlagColor = 'yellow';
+export const mmKabFlagColor = 'orange';
+export const mmBothColor = 'red';
+export const controllingCriteriaColor = constants.controllingCriteriaColor;
 
 /**
  *
@@ -51,8 +61,6 @@ export function txtFunc(p: mmProps): ol.style.Text{
         }
     );
 }
-
-
 
 /**
  * return a random color for styling
@@ -136,3 +144,70 @@ export const crashPointStyle = (feature: ol.Feature): ol.style.Style[] => {
         })
     })];
 };
+
+export function deficiencyStyle(feature: ol.Feature): ol.style.Style[] {
+    "use strict";
+
+    let props: mmProps = feature.getProperties() as mmProps;
+
+    let returnStyles = [];
+
+
+    let showCc = false;
+
+    for (let cc of filterControllingCritera.allValues) {
+        if (props[cc] && filterControllingCritera.valIsOn(cc)) {
+            showCc = true;
+            break;
+        }
+    }
+
+    if (showCc) {
+        returnStyles.push(new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: controllingCriteriaColor,
+                width: 14
+            }),
+            text: txtFunc(props as mmProps)
+        }));
+    }
+
+    let rateOrKab = (props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn) || (props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn);
+    let onlyRate = props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn;
+    let onlyKab = props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn;
+    let rateAndKab = onlyRate && onlyKab;
+
+    let color;
+
+    if (onlyRate) {
+        color = mmRateFlagColor;
+    }
+
+    if (onlyKab) {
+        color = mmKabFlagColor;
+    }
+
+    if (rateAndKab) {
+        color = mmBothColor;
+    }
+
+
+    if (rateOrKab) {
+
+        returnStyles.push(new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: color,
+                width: 5
+            }),
+            text: txtFunc(props as mmProps)
+        }));
+    }
+
+    if (returnStyles.length > 0) {
+        return returnStyles;
+    } else {
+        return null
+    }
+
+}
+

@@ -445,7 +445,8 @@ select:disabled {
   background-color: #b81900;
 }
 #mm-deficiency-list li,
-#cc-deficiency-list li {
+#cc-deficiency-list li,
+#deficiency-list li {
   cursor: pointer;
 }
 #mm-deficiency-list {

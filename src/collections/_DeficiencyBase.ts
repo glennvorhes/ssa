@@ -11,13 +11,22 @@ import ol = require('custom-ol');
 import $ = require('jquery');
 
 
+export interface liIdText{
+    pdpId: number;
+    liText: string;
+}
+
 class DeficiencyBase {
     _map: ol.Map;
     deficiencyLayer: LayerBaseVectorGeoJson;
     _sortedFeatures: SortedFeatures;
 
     $summaryList: JQuery;
+
+
     _summaryListId: string;
+
+    _summaryListItems: liIdText[];
 
     /**
      *
@@ -36,6 +45,8 @@ class DeficiencyBase {
         });
 
         this.deficiencyLayer.style = layerStyle;
+
+        this._summaryListItems = [];
 
         /**
          *
@@ -129,6 +140,18 @@ class DeficiencyBase {
         this._sortedFeatures = new SortedFeatures(this.deficiencyLayer.features, 'pdpId');
 
         let _this = this;
+
+        this._summaryListItems.sort((a, b) => {
+            if (a.pdpId == b.pdpId){
+                return 0;
+            } else {
+                return a.pdpId < b.pdpId ? -1 : 1;
+            }
+        });
+
+        for (let i of this._summaryListItems){
+            this.$summaryList.append(i.liText);
+        }
 
         this.$summaryList.find('li').click(function () {
             let $this = $(this);
