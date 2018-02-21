@@ -2676,10 +2676,7 @@ var SsaMapCreate = (function (_super) {
             fullScreen: true,
             addGeocode: true
         });
-        /**
-         * @type {MapPopupCls}
-         */
-        _this.mainMapPopup = mapPopup_1.default;
+        _this.mainMapPopup = mapPopup_1.mapPopup;
         _this.$sideBar = _this.$mainContainer.find('.ssa-map-sidebar');
         var afterChange = function () {
             _this._afterChange();
@@ -5462,9 +5459,9 @@ var PickerCollection = (function () {
         parentDiv.append("<div id=\"" + pickerGuid + "\"></div>");
         this.$containerEl = $('#' + pickerGuid).addClass('picker-collection-container');
         this.$containerEl.append('<div class="picker-collection"><span class="corridor-picker-help" title="Show Help"></span></div>');
-        this.$containerEl.append('<input type="button" value="Preview" class="btn btn-default picker-preview">');
-        this.$containerEl.append('<input type="button" value="Add" class="btn btn-default picker-add" disabled="disabled">');
-        this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" disabled="disabled" style="display: none;">');
+        // this.$containerEl.append('<input type="button" value="Preview" class="btn btn-default picker-preview">');
+        this.$containerEl.append('<input type="button" value="Add" class="btn btn-default picker-add">');
+        this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" style="display: none;">');
         this.$containerEl.append('<input type="button" value="Cancel" class="btn btn-default picker-cancel">');
         this.$innerContainer = this.$containerEl.find('.picker-collection');
         this._dummyCorridor = new Corridor_1.default(1, 1, '', '', 1, 1, 'h', -1, {
@@ -5480,7 +5477,7 @@ var PickerCollection = (function () {
          * @private
          */
         this._modifyCorridor = undefined;
-        this.$btnPickerPreview = this.$containerEl.find('.picker-preview');
+        // this.$btnPickerPreview = this.$containerEl.find('.picker-preview');
         this.$btnPickerAdd = this.$containerEl.find('.picker-add');
         this.$btnPickerModify = this.$containerEl.find('.picker-modify');
         this.$btnPickerCancel = this.$containerEl.find('.picker-cancel');
@@ -5523,14 +5520,16 @@ var PickerCollection = (function () {
         this.$btnPickerCancel.click(function () {
             _this.stopPicker();
         });
-        this.$btnPickerPreview.click(function () {
-            _this.previewCorridor();
-        });
+        // this.$btnPickerPreview.click(() => {
+        //     this.previewCorridor(()=> {});
+        //     // this.addCorridor();
+        // });
         this.$btnPickerAdd.click(function () {
-            _this.addCorridor();
+            _this.previewCorridor(_this.addCorridor);
+            // this.addCorridor();
         });
         this.$btnPickerModify.click(function () {
-            _this.modifyCorridor();
+            _this.previewCorridor(_this.modifyCorridor);
         });
         this.countyStartSelect.addChangeListener(function (v) {
             "use strict";
@@ -5589,7 +5588,7 @@ var PickerCollection = (function () {
             _this.helpDialog.dialog('open');
         });
     };
-    PickerCollection.prototype.previewCorridor = function () {
+    PickerCollection.prototype.previewCorridor = function (callback) {
         var _this = this;
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
@@ -5607,6 +5606,7 @@ var PickerCollection = (function () {
         this._dummyCorridor.load(function (c) {
             _this._map.getView().fit(c.extent, _this._map.getSize());
             _this.addModifyButtonEnabled = true;
+            callback.call(_this);
         });
     };
     /**
@@ -5670,7 +5670,7 @@ var PickerCollection = (function () {
         this.corridorCollection.showPopups = true;
         this.$btnPickerAdd.show();
         this.$btnPickerModify.hide();
-        this.$btnPickerModify.prop('disabled', true);
+        // this.$btnPickerModify.prop('disabled', true);
         this.$containerEl.hide();
         this.$createCorridorButton.prop('disabled', false);
         // this.countyStartSelect.box.val(1).trigger('change');
@@ -5700,8 +5700,8 @@ var PickerCollection = (function () {
          */
         set: function (isEnabled) {
             this._addModifyEnabled = isEnabled;
-            this.$btnPickerAdd.prop('disabled', !this.addModifyButtonEnabled);
-            this.$btnPickerModify.prop('disabled', !this.addModifyButtonEnabled);
+            // this.$btnPickerAdd.prop('disabled', !this.addModifyButtonEnabled);
+            // this.$btnPickerModify.prop('disabled', !this.addModifyButtonEnabled);
         },
         enumerable: true,
         configurable: true

@@ -58,7 +58,6 @@ export class SsaMapView extends SsaMapBase {
         super(divId);
         this._ssaId = parseInt($('#hidden-ssa-id').val());
         this._snap = parseInt($('#hidden-snapshot-id').val());
-
         this.$getMapButton = $('#download-map-image');
 
         this.getMapLinkId = 'get-map-link';

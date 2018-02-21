@@ -29,7 +29,7 @@ class PickerCollection {
     $containerEl: JQuery;
     _dummyCorridor: Corridor;
     _modifyCorridor: Corridor;
-    $btnPickerPreview: JQuery;
+    // $btnPickerPreview: JQuery;
     $btnPickerAdd: JQuery;
     $btnPickerModify: JQuery;
     $btnPickerCancel: JQuery;
@@ -70,9 +70,9 @@ class PickerCollection {
 
         this.$containerEl = $('#' + pickerGuid).addClass('picker-collection-container');
         this.$containerEl.append('<div class="picker-collection"><span class="corridor-picker-help" title="Show Help"></span></div>');
-        this.$containerEl.append('<input type="button" value="Preview" class="btn btn-default picker-preview">');
-        this.$containerEl.append('<input type="button" value="Add" class="btn btn-default picker-add" disabled="disabled">');
-        this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" disabled="disabled" style="display: none;">');
+        // this.$containerEl.append('<input type="button" value="Preview" class="btn btn-default picker-preview">');
+        this.$containerEl.append('<input type="button" value="Add" class="btn btn-default picker-add">');
+        this.$containerEl.append('<input type="button" value="Modify" class="btn btn-default picker-modify" style="display: none;">');
         this.$containerEl.append('<input type="button" value="Cancel" class="btn btn-default picker-cancel">');
         this.$innerContainer = this.$containerEl.find('.picker-collection');
 
@@ -93,7 +93,7 @@ class PickerCollection {
         this._modifyCorridor = undefined;
 
 
-        this.$btnPickerPreview = this.$containerEl.find('.picker-preview');
+        // this.$btnPickerPreview = this.$containerEl.find('.picker-preview');
         this.$btnPickerAdd = this.$containerEl.find('.picker-add');
         this.$btnPickerModify = this.$containerEl.find('.picker-modify');
         this.$btnPickerCancel = this.$containerEl.find('.picker-cancel');
@@ -149,16 +149,18 @@ class PickerCollection {
             this.stopPicker();
         });
 
-        this.$btnPickerPreview.click(() => {
-            this.previewCorridor();
-        });
+        // this.$btnPickerPreview.click(() => {
+        //     this.previewCorridor(()=> {});
+        //     // this.addCorridor();
+        // });
 
         this.$btnPickerAdd.click(() => {
-            this.addCorridor();
+            this.previewCorridor(this.addCorridor);
+            // this.addCorridor();
         });
 
         this.$btnPickerModify.click(() => {
-            this.modifyCorridor();
+            this.previewCorridor(this.modifyCorridor);
         });
 
 
@@ -233,7 +235,7 @@ class PickerCollection {
     }
 
 
-    previewCorridor() {
+    previewCorridor(callback: Function) {
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
 
@@ -265,7 +267,7 @@ class PickerCollection {
         this._dummyCorridor.load((c) => {
             this._map.getView().fit(c.extent, this._map.getSize());
             this.addModifyButtonEnabled = true;
-
+            callback.call(this);
         });
     }
 
@@ -340,7 +342,7 @@ class PickerCollection {
         this.corridorCollection.showPopups = true;
         this.$btnPickerAdd.show();
         this.$btnPickerModify.hide();
-        this.$btnPickerModify.prop('disabled', true);
+        // this.$btnPickerModify.prop('disabled', true);
         this.$containerEl.hide();
         this.$createCorridorButton.prop('disabled', false);
         // this.countyStartSelect.box.val(1).trigger('change');
@@ -372,8 +374,8 @@ class PickerCollection {
      */
     set addModifyButtonEnabled(isEnabled) {
         this._addModifyEnabled = isEnabled;
-        this.$btnPickerAdd.prop('disabled', !this.addModifyButtonEnabled);
-        this.$btnPickerModify.prop('disabled', !this.addModifyButtonEnabled);
+        // this.$btnPickerAdd.prop('disabled', !this.addModifyButtonEnabled);
+        // this.$btnPickerModify.prop('disabled', !this.addModifyButtonEnabled);
     }
 
     /**

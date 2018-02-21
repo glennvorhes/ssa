@@ -5,7 +5,7 @@
 import SsaMapBase from './SsaMapBase';
 import * as calcExtent from 'webmapsjs/dist/olHelpers/extentUtil';
 import quickMap from 'webmapsjs/dist/olHelpers/quickMap';
-import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
+import {mapPopup} from 'webmapsjs/dist/olHelpers/mapPopup';
 import makeGuid from 'webmapsjs/dist/util/makeGuid';
 
 import provide from 'webmapsjs/dist/util/provide';
@@ -46,9 +46,6 @@ export class SsaMapCreate extends SsaMapBase {
         });
 
 
-        /**
-         * @type {MapPopupCls}
-         */
         this.mainMapPopup = mapPopup;
 
 
