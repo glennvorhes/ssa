@@ -9,9 +9,10 @@ import mapMove from 'webmapsjs/dist/olHelpers/mapMove';
 import provide from 'webmapsjs/dist/util/provide';
 import CorridorConfig from '../corridor/CorridorConfig';
 import Corridor from '../corridor/Corridor';
-import * as styles  from '../layerStyles';
+import * as styles from '../layerStyles';
 import * as calcExtent from 'webmapsjs/dist/olHelpers/extentUtil';
 import crashData from '../collections/crashData';
+import {mapToBase64, iMapToBase64Options} from 'webmapsjs/dist/olHelpers/mapToBase64';
 
 
 import deficiency from '../collections/Deficiency';
@@ -42,7 +43,7 @@ export class SsaMapView extends SsaMapBase {
     createdCorridorsLength: number;
     _corridorArray: Corridor[];
     loadedCorridorsLength: number;
-    private $getMapButton: JQuery;
+    // private $getMapButton: JQuery;
     private getMapLinkId: string;
     private _ssaId: number;
     private _snap: number;
@@ -58,7 +59,6 @@ export class SsaMapView extends SsaMapBase {
         super(divId);
         this._ssaId = parseInt($('#hidden-ssa-id').val());
         this._snap = parseInt($('#hidden-snapshot-id').val());
-        this.$getMapButton = $('#download-map-image');
 
         this.getMapLinkId = 'get-map-link';
         this.mapImageName = `map-image-id-${this._ssaId}-ver-${this._snap}.png`;
@@ -228,73 +228,13 @@ export class SsaMapView extends SsaMapBase {
         // controllingCriteria.init(this.mainMap);
 
         deficiency.init(this.mainMap);
+    }
 
-
-        this.$getMapButton.click(() => {
-            let browserVersion = get_browser();
-            console.log(`browser name: ${browserVersion.name}, version: ${browserVersion.version}`);
-            let isIE = false;
-            if (browserVersion.name.search(/IE?/) > -1){
-                isIE = true;
-
-                if (parseInt(browserVersion.version) < 11){
-                    alert("Unsupported Browser\nUpgrade to Internet Explorer 11 or use Firefox or Chrome");
-                    return;
-                }
-            }
-
-            let mapTarget: HTMLDivElement = this.mainMap.getTargetElement() as HTMLDivElement;
-
-            let originalHeight = mapTarget.style.height;
-            let originalWidth = mapTarget.style.width;
-            let originalPosition = mapTarget.style.position;
-            let originalCenter = this.mainMap.getView().getCenter();
-            let originalZoom = this.mainMap.getView().getZoom();
-
-            let mapSize = 1800;
-            let mapTimeout = 2000;
-
-            mapTarget.style.height = `${mapSize}px`;
-            mapTarget.style.width = `${mapSize}px`;
-            mapTarget.style.position = 'absolute';
-
-
-            this.mainMap.once('postrender', () => {
-
-                this._fitExtent();
-                setTimeout(() => {
-                    this.mainMap.once('postcompose', (event) => {
-                        try {
-                            let canvas: HTMLCanvasElement = event['context'].canvas;
-                            let imgData = canvas.toDataURL('image/png');
-
-                            if (isIE){
-                                window.navigator.msSaveBlob(canvas.msToBlob(), this.mapImageName);
-                            } else {
-                                let linkEl: HTMLAnchorElement = document.getElementById(this.getMapLinkId) as HTMLAnchorElement;
-                                linkEl.href = imgData;
-                                linkEl.click();
-                                linkEl.href = '#';
-                            }
-
-                            mapTarget.style.height = originalHeight;
-                            mapTarget.style.width = originalWidth;
-                            mapTarget.style.position = originalPosition;
-
-                            this.mainMap.updateSize();
-                            this.mainMap.getView().setCenter(originalCenter);
-                            this.mainMap.getView().setZoom(originalZoom);
-                        }
-                        catch (ex) {
-                            // reportParams['imgData'] = null;
-                        }
-                    });
-                    this.mainMap.renderSync();
-                }, mapTimeout);
-            });
-
-            this.mainMap.updateSize();
-        })
+    public getMapData(callback: (imgData: string) => any, options: iMapToBase64Options) {
+        options = options || {};
+        options.delay = typeof options.delay === 'number'? options.delay: 2000;
+        this._fitExtent();
+        mapToBase64(this.mainMap, callback, options);
     }
 
     _afterCorridorLoad() {

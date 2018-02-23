@@ -1,5 +1,4 @@
-/// <reference path="../../node_modules/@types/jqueryui/index.d.ts"/>
-
+//
 import SelectCounty from '../selectBox/SelectCounty';
 import SelectHighway from '../selectBox/SelectHighway';
 import SegmentPicker from '../selectBox/SegmentPicker';
@@ -15,7 +14,6 @@ import LayerEsriMapServer from 'webmapsjs/dist/layers/LayerEsriMapServer';
 
 import $ = require("jquery");
 import 'jquery-ui';
-
 
 
 

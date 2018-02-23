@@ -237,6 +237,12 @@
 <script>
     var glob = {};
     var viewApp = new SsaMapView('ssa-map-container', 'corridor-data', 'ssa-corridor-info-anchor');
+
+    $('#download-map-image').click(function (){
+        viewApp.getMapData(function(mapData){
+            console.log(mapData);
+        } )
+    })
 </script>
 </body>
 </html>

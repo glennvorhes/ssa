@@ -145,7 +145,7 @@ export class Deficiency extends DeficiencyBase {
                 }
 
                 if (deficiencyList.length > 0){
-                    console.log(deficiencyList);
+                    // console.log(deficiencyList);
                      appendHtml += `<span style="color: ${styles.controllingCriteriaColor}">` +
                          `${deficiencyList.join(',&nbsp;')}</span>`;
                 }
