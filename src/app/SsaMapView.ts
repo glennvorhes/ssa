@@ -31,10 +31,10 @@ const nm = provide('ssa');
 
 const mmPopupContentWithCrash = (props) => {
     "use strict";
-    let returnHtml = mmPopupContent(props);
 
+    let returnHtml = '';
     returnHtml += crashData.getCrashSummary(props['pdpId']);
-
+    returnHtml += mmPopupContent(props);
     return returnHtml;
 };
 
@@ -202,6 +202,7 @@ export class SsaMapView extends SsaMapBase {
                     {
                         color: 'black',
                         jsonFeatures: returnLookup[i.toFixed()],
+                        idx: i + 1
                     }
                 );
 

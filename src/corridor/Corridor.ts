@@ -91,12 +91,13 @@ class Corridor {
                 countyStart: number|string, countyEnd: number|string,
                 highway: string, routeId: number|string,
                 options: {
+                    idx?: number,
                     loadedCallback?: (c: Corridor) => any,
                     databaseId?: number|string,
                     color?: string,
                     features?: Array<ol.Feature>,
                     cancelLoad?: boolean,
-                    jsonFeatures?: JSON
+                    jsonFeatures?: JSON,
                 } = {}) {
 
 
@@ -150,8 +151,13 @@ class Corridor {
             throw 'route id is not number';
         }
 
+        let corName = corridorName(this.rpFrom, this.rpTo);
+        if (typeof options.idx === 'number'){
+            corName = `Corridor #${options.idx}`;
+        }
+
         this._corridorLayer = new LayerBaseVectorGeoJson('',
-            layerConfigHelper(corridorName(this.rpFrom, this.rpTo), this._color, true)
+            layerConfigHelper(corName, this._color, true)
         );
 
         this.nodeLayer = new LayerBaseVectorGeoJson('', {

@@ -241,7 +241,7 @@
     $('#download-map-image').click(function (){
         viewApp.getMapData(function(mapData){
             console.log(mapData);
-        } )
+        }, {delay: 2000, resize: {width: 2400, height: 2400}} )
     })
 </script>
 </body>
