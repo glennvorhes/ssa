@@ -234,7 +234,7 @@ export class SsaMapView extends SsaMapBase {
     public getMapData(callback: (imgData: string) => any, options: iMapToBase64Options) {
         options = options || {};
         options.delay = typeof options.delay === 'number'? options.delay: 2000;
-        this._fitExtent();
+        options.layers = this._fitExtent();
         mapToBase64(this.mainMap, callback, options);
     }
 
@@ -250,7 +250,7 @@ export class SsaMapView extends SsaMapBase {
         deficiency.afterLoad()
     }
 
-    private _fitExtent() {
+    private _fitExtent(): LayerBaseVector[] {
 
         let lyrs: LayerBaseVector[] = [];
 
@@ -261,6 +261,8 @@ export class SsaMapView extends SsaMapBase {
         if (lyrs.length > 0) {
             calcExtent.fitToMap(lyrs, this.mainMap);
         }
+
+        return lyrs;
     }
 }
 
