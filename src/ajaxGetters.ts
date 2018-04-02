@@ -8,8 +8,8 @@ import $ = require('jquery');
 
 let home = $('#site-root').val();
 
-if (window.location.port == '5001'){
-    home ='http://localhost:5004/'
+if (window.location.port == '5001') {
+    home = 'http://localhost:5004/'
 }
 
 const getStartCountiesUrl = home + 'getStartCounties';
@@ -24,8 +24,25 @@ const getCcGeomUrl = home + 'getCcGeom';
 const nm = provide('ssa');
 
 
-export interface ajaxCallback{
-    (inObject) : any
+export interface ajaxCallback {
+    (inObject): any
+}
+
+function addMmStnParams(p: Object) {
+
+    let $mm = $('#hidden-mm-version');
+
+    if ($mm.length > 0) {
+        p['mm'] = $mm.val();
+    }
+
+    let $stn = $('#hidden-stn-version');
+
+    if ($stn.length > 0) {
+        p['stn'] = parseInt($stn.val());
+    }
+
+    console.log(p);
 }
 
 
@@ -50,7 +67,7 @@ function _ajaxInner(url, params, callback) {
  * @param {object} [params={}] get params
  * @param {ajaxCallback} [calbackHelper=undefined] - callback helper
  */
-function _ajaxHelper(url: string, callback: ajaxCallback, params:Object = {}, calbackHelper? : ajaxCallback) {
+function _ajaxHelper(url: string, callback: ajaxCallback, params: Object = {}, calbackHelper?: ajaxCallback) {
     "use strict";
 
     params[(Math.random() * 1000000).toFixed()] = (Math.random() * 1000000).toFixed();
@@ -79,10 +96,9 @@ let _countySort = (d) => {
             return a['name'] < b['name'] ? -1 : 1;
         }
     });
-    
+
     return d;
 };
-
 
 
 /**
@@ -93,10 +109,9 @@ export class AjaxGetters {
     /**
      * Do not instantiate this class - only static methods
      */
-    constructor(){
+    constructor() {
         throw 'this class should not be instantiated';
     }
-
 
 
     /**
@@ -141,7 +156,7 @@ export class AjaxGetters {
      * @param {number} routeId - route id
      * @param {ajaxCallback} callback - callback function
      */
-    public static getSegments(county: number, routeId: string|number, callback: ajaxCallback) {
+    public static getSegments(county: number, routeId: string | number, callback: ajaxCallback) {
         "use strict";
 
         let routeIdNum;
@@ -153,11 +168,13 @@ export class AjaxGetters {
 
         let params = {"routeid": routeIdNum, "county": county};
 
-        let $mm = $('#hidden-mm-version');
+        addMmStnParams(params);
 
-        if ($mm.length > 0){
-            params['mm'] = $mm.val();
-        }
+        // let $mm = $('#hidden-mm-version');
+        //
+        // if ($mm.length > 0) {
+        //     params['mm'] = $mm.val();
+        // }
 
 
         _ajaxHelper(getSegmentsUrl, callback, params);
@@ -170,15 +187,17 @@ export class AjaxGetters {
      * @param {number} endPdp - end pdp id
      * @param {ajaxCallback} callback - callback function
      */
-    public static getCorridor(startPdp: number, endPdp: number,  callback: ajaxCallback) {
+    public static getCorridor(startPdp: number, endPdp: number, callback: ajaxCallback) {
         "use strict";
         let params = {"from": startPdp, "to": endPdp};
 
-        let $mm = $('#hidden-mm-version');
+        addMmStnParams(params);
 
-        if ($mm.length > 0){
-            params['mm'] = $mm.val();
-        }
+        // let $mm = $('#hidden-mm-version');
+        //
+        // if ($mm.length > 0) {
+        //     params['mm'] = $mm.val();
+        // }
 
         _ajaxHelper(getCorridorUrl, callback, params);
     }
@@ -190,7 +209,7 @@ export class AjaxGetters {
      * @param {number} snapshot
      * @param {ajaxCallback} callback - callback function
      */
-    public static getCrashes(ssaId: number, snapshot: number, callback: ajaxCallback){
+    public static getCrashes(ssaId: number, snapshot: number, callback: ajaxCallback) {
         "use strict";
 
         let params = {
@@ -231,7 +250,7 @@ export class AjaxGetters {
         _ajaxHelper(getAllHighwaysForStartEndCountyUrl, callback, params);
     }
 
-    public static getCcGeom(ssaId: number, snapshot: number, callback: ajaxCallback){
+    public static getCcGeom(ssaId: number, snapshot: number, callback: ajaxCallback) {
         "use strict";
 
         let params = {

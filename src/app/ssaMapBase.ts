@@ -32,8 +32,17 @@ export class SsaMapBase {
          * @protected
          */
         this._mapId = makeGuid();
-        
-        this.$mainContainer.append(`<div id="${this._mapId}" class="ssa-main-map"></div>`);
+
+        let mapDivHtml = `<div id="${this._mapId}" class="ssa-main-map">`;
+        mapDivHtml += `<div class="map-canvas-overlay">`;
+        mapDivHtml += `<div>`;
+        mapDivHtml += `<h3>Generating Map Image</h3>`;
+
+        mapDivHtml += `</div>`;
+        mapDivHtml += `</div>`;
+        mapDivHtml += `</div>`;
+
+        this.$mainContainer.append(mapDivHtml);
         
         $('.ol-zoom-out').html('&#8211;');
 

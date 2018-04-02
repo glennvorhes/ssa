@@ -167,8 +167,7 @@ export function deficiencyStyle(feature: ol.Feature): ol.style.Style[] {
             stroke: new ol.style.Stroke({
                 color: controllingCriteriaColor,
                 width: 14
-            }),
-            text: txtFunc(props as mmProps)
+            })
         }));
     }
 
@@ -191,14 +190,53 @@ export function deficiencyStyle(feature: ol.Feature): ol.style.Style[] {
         color = mmBothColor;
     }
 
-
     if (rateOrKab) {
 
         returnStyles.push(new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: color,
                 width: 5
-            }),
+            })
+        }));
+    }
+
+    if (returnStyles.length > 0) {
+        return returnStyles;
+    } else {
+        return null
+    }
+}
+
+export function deficiencyStyleLabels(feature: ol.Feature): ol.style.Style[] {
+    "use strict";
+
+    let props: mmProps = feature.getProperties() as mmProps;
+
+    let returnStyles = [];
+
+
+    let showCc = false;
+
+    for (let cc of filterControllingCritera.allValues) {
+        if (props[cc] && filterControllingCritera.valIsOn(cc)) {
+            showCc = true;
+            break;
+        }
+    }
+
+    if (showCc) {
+        returnStyles.push(new ol.style.Style({
+            text: txtFunc(props as mmProps)
+        }));
+    }
+
+    let rateOrKab = (props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn) || (props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn);
+    let onlyRate = props.rateFlag >= 1 && filterMmFlag.mmRateFlagOn;
+    let onlyKab = props.kabCrshFlag >= 1 && filterMmFlag.mmKabFlagOn;
+    let rateAndKab = onlyRate && onlyKab;
+
+    if (rateOrKab) {
+        returnStyles.push(new ol.style.Style({
             text: txtFunc(props as mmProps)
         }));
     }
@@ -208,6 +246,5 @@ export function deficiencyStyle(feature: ol.Feature): ol.style.Style[] {
     } else {
         return null
     }
-
 }
 

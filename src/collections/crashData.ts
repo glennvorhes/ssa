@@ -32,7 +32,7 @@ export class CrashData {
         this._crashArrayLookup = {};
         this.pointCrashes = new LayerBaseVectorGeoJson('', {
             name: "Crash Points",
-            zIndex: 204,
+            zIndex: 20,
             minZoom: 10,
             renderOrder: (a: ol.Feature, b: ol.Feature): number => {
                 let sevOrder = ['P', 'C', 'B', 'A', 'K'];

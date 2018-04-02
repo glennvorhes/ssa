@@ -1,47 +1,83 @@
 /**
  * Created by gavorhes on 7/15/2016.
  */
-import filterMmFlag from '../filters/filterMmFlag';
 import mapPopup from 'webmapsjs/dist/olHelpers/mapPopup';
 import * as constants from '../constants';
-import DeficiencyBase from './_DeficiencyBase';
 import ol = require('custom-ol');
 import {keyValPairs} from 'webmapsjs/dist/util/objectHelpers';
 import filterControllingCritera from '../filters/filterContollingCriteria';
-import * as styles from '../layerStyles'
+import filterMmFlag from '../filters/filterMmFlag';
 
+import * as styles from '../layerStyles'
+import SortedFeatures from 'webmapsjs/dist/olHelpers/SortedFeatures';
+import LayerBaseVectorGeoJson from 'webmapsjs/dist/layers/LayerBaseVectorGeoJson';
 
 let hasMmFlag = 'hasMmFlag';
 let hasCc = 'hasCc';
 let rateFlag = 'rateFlag';
 let kabCrshFlag = 'kabCrshFlag';
 
-export class Deficiency extends DeficiencyBase {
-    public metaList: string[] = [];
-    public deficiencyList: string[] = [];
+interface liIdText {
+    pdpId: number;
+    liText: string;
+}
 
+export class Deficiency {
+
+    _map: ol.Map;
+    deficiencyLayer: LayerBaseVectorGeoJson;
+    deficiencyLayerLabel: LayerBaseVectorGeoJson;
+    _sortedFeatures: SortedFeatures;
+
+    $summaryList: JQuery;
+    _summaryListId: string;
+    _summaryListItems: liIdText[];
+
+    /**
+     *
+     */
     constructor() {
-        super("Deficiencies", styles.deficiencyStyle, 200, constants.defListId);
+
+        this.deficiencyLayer = new LayerBaseVectorGeoJson('', {
+            zIndex: 10,
+            name: "Deficiencies",
+            style: styles.deficiencyStyle
+        });
+
+        this.deficiencyLayerLabel = new LayerBaseVectorGeoJson('', {
+            zIndex: 50,
+            style: styles.deficiencyStyleLabels
+        });
+
+        this._summaryListItems = [];
+        this._sortedFeatures = undefined;
+        this._map = undefined;
+        this._summaryListId = constants.defListId;
+        this.$summaryList = undefined;
     }
 
     /**
      * initialize with the map
      * @param  m - the ol map
+     * @abstract
      */
     init(m: ol.Map) {
-        super.init(m);
+        this._map = m;
+        m.addLayer(this.deficiencyLayer.olLayer);
+        m.addLayer(this.deficiencyLayerLabel.olLayer);
+        this.$summaryList = $(`#${this._summaryListId}`);
 
         filterMmFlag.addChangeCallback(() => {
             this.deficiencyLayer.refresh();
+            this.deficiencyLayerLabel.refresh();
         });
 
         filterControllingCritera.addChangeCallback(() => {
             this.deficiencyLayer.refresh();
+            this.deficiencyLayerLabel.refresh();
         });
 
         mapPopup.addVectorPopup(this.deficiencyLayer, (props) => {
-            // console.log(props);
-
             let returnHtml = `PDP ID: ${props['pdpId']}<br/>`;
 
             let rates = [];
@@ -103,6 +139,7 @@ export class Deficiency extends DeficiencyBase {
     /**
      *
      * @param {Corridor} c - the corridor to be added
+     * @abstract
      */
     addCorridor(c) {
         let feats = c.layer.source.getFeatures();
@@ -125,12 +162,13 @@ export class Deficiency extends DeficiencyBase {
 
             if (triggerRateFlag || triggerKabFlag || deficiencyList.length > 0) {
                 this.deficiencyLayer.source.addFeature(f);
+                this.deficiencyLayerLabel.source.addFeature(f);
 
                 let appendHtml = `<span style="font-weight: bold; color: white">${props['pdpId']}</span>:&nbsp;`;
 
                 let defs = [];
 
-                if (triggerRateFlag && triggerKabFlag){
+                if (triggerRateFlag && triggerKabFlag) {
                     defs.push(`<span style="color: ${styles.mmBothColor}">KAB,&nbsp;Crash Rate</span>`);
                 } else if (triggerRateFlag) {
                     defs.push(`<span style="color: ${styles.mmRateFlagColor}">Crash Rate</span>`);
@@ -140,14 +178,13 @@ export class Deficiency extends DeficiencyBase {
 
                 appendHtml += defs.join(' ');
 
-                if (defs.length > 0){
+                if (defs.length > 0) {
                     appendHtml += ',&nbsp;';
                 }
 
-                if (deficiencyList.length > 0){
-                    // console.log(deficiencyList);
-                     appendHtml += `<span style="color: ${styles.controllingCriteriaColor}">` +
-                         `${deficiencyList.join(',&nbsp;')}</span>`;
+                if (deficiencyList.length > 0) {
+                    appendHtml += `<span style="color: ${styles.controllingCriteriaColor}">` +
+                        `${deficiencyList.join(',&nbsp;')}</span>`;
                 }
 
                 this._summaryListItems.push({
@@ -155,13 +192,48 @@ export class Deficiency extends DeficiencyBase {
                         liText: `<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`
                     }
                 );
-
-
-                // this.$summaryList.append(`<li ${constants.pdpDataAttr}="${props['pdpId']}">${appendHtml}</li>`);
             }
-
-
         }
+    }
+
+
+    /**
+     *
+     * @param {number} pdpId
+     * @returns {ol.Feature}
+     */
+    getFeatureById(pdpId: number): ol.Feature {
+        return this._sortedFeatures.getFeature(pdpId);
+    }
+
+    /**
+     * @abstract
+     */
+    afterLoad() {
+        this._sortedFeatures = new SortedFeatures(this.deficiencyLayer.features, 'pdpId');
+
+        let _this = this;
+
+        this._summaryListItems.sort((a, b) => {
+            if (a.pdpId == b.pdpId) {
+                return 0;
+            } else {
+                return a.pdpId < b.pdpId ? -1 : 1;
+            }
+        });
+
+        for (let i of this._summaryListItems) {
+            this.$summaryList.append(i.liText);
+        }
+
+        this.$summaryList.find('li').click(function () {
+            let $this = $(this);
+
+            let theFeature = _this.getFeatureById(parseInt($this.attr(constants.pdpDataAttr)));
+
+            _this._map.getView().fit(theFeature.getGeometry().getExtent(), _this._map.getSize());
+            _this._map.getView().setZoom(_this._map.getView().getZoom() - 1);
+        });
     }
 }
 
