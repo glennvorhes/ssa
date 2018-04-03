@@ -212,7 +212,6 @@ function addMmStnParams(p) {
     if ($stn.length > 0) {
         p['stn'] = parseInt($stn.val());
     }
-    console.log(p);
 }
 /**
  * inner function to help ajax
@@ -2914,7 +2913,6 @@ var SsaMapView = (function (_super) {
         _this._corridorArray = [];
         // parse the data from the hidden input elements
         $(dataClass).each(function (n, el) {
-            console.log(el);
             corridorConfigs.push(new CorridorConfig_1.default(el));
         });
         _this.createdCorridorsLength = corridorConfigs.length;
@@ -2933,7 +2931,6 @@ var SsaMapView = (function (_super) {
             }
             var outHtml = '';
             for (var i = 0; i < returnArr.length; i++) {
-                console.log(i);
                 var conf = corridorConfigs[i];
                 outHtml += conf.bootstrapHtml(i);
                 var corridor = new Corridor_1.default(conf.startPdp, conf.endPdp, conf.startRp, conf.endRp, conf.startCounty, conf.endCounty, conf.hgwy, conf.routeId, {

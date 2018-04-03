@@ -41,8 +41,6 @@ function addMmStnParams(p: Object) {
     if ($stn.length > 0) {
         p['stn'] = parseInt($stn.val());
     }
-
-    console.log(p);
 }
 
 

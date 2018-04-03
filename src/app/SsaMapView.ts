@@ -169,7 +169,6 @@ export class SsaMapView extends SsaMapBase {
 
         // parse the data from the hidden input elements
         $(dataClass).each((n, el) => {
-            console.log(el);
             corridorConfigs.push(new CorridorConfig(el));
         });
 
@@ -194,7 +193,6 @@ export class SsaMapView extends SsaMapBase {
             let outHtml = '';
 
             for (let i = 0; i < returnArr.length; i++) {
-                console.log(i);
                 let conf = corridorConfigs[i];
                 outHtml += conf.bootstrapHtml(i);
 
