@@ -153,12 +153,12 @@ class PickerCollection {
         // });
 
         this.$btnPickerAdd.click(() => {
-            this.previewCorridor(this.addCorridor);
+            this.saveCorridor(this.addCorridor);
             // this.addCorridor();
         });
 
         this.$btnPickerModify.click(() => {
-            this.previewCorridor(this.modifyCorridor);
+            this.saveCorridor(this.modifyCorridor);
         });
 
 
@@ -233,7 +233,7 @@ class PickerCollection {
     }
 
 
-    previewCorridor(callback: Function) {
+    saveCorridor(callback: Function) {
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
             return;

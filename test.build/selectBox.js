@@ -282,7 +282,7 @@ var PickerCollection = function () {
         });
 
         this.$btnPickerPreview.click(function () {
-            _this.previewCorridor();
+            _this.saveCorridor();
         });
 
         this.$btnPickerAdd.click(function () {

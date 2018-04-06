@@ -5619,11 +5619,11 @@ var PickerCollection = (function () {
         //     // this.addCorridor();
         // });
         this.$btnPickerAdd.click(function () {
-            _this.previewCorridor(_this.addCorridor);
+            _this.saveCorridor(_this.addCorridor);
             // this.addCorridor();
         });
         this.$btnPickerModify.click(function () {
-            _this.previewCorridor(_this.modifyCorridor);
+            _this.saveCorridor(_this.modifyCorridor);
         });
         this.countyStartSelect.addChangeListener(function (v) {
             "use strict";
@@ -5682,7 +5682,7 @@ var PickerCollection = (function () {
             _this.helpDialog.dialog('open');
         });
     };
-    PickerCollection.prototype.previewCorridor = function (callback) {
+    PickerCollection.prototype.saveCorridor = function (callback) {
         var _this = this;
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
