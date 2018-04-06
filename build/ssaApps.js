@@ -310,20 +310,12 @@ var AjaxGetters = (function () {
      */
     AjaxGetters.getSegments = function (county, routeId, callback) {
         "use strict";
-        var routeIdNum;
-        if (typeof routeId == 'string') {
-            routeIdNum = parseInt(routeId);
-        }
-        else {
-            routeIdNum = routeId;
-        }
-        var params = { "routeid": routeIdNum, "county": county };
+        var routeIdNum = typeof routeId == 'string' ? parseInt(routeId) : routeId;
+        var params = {
+            "routeid": routeIdNum,
+            "county": county
+        };
         addMmStnParams(params);
-        // let $mm = $('#hidden-mm-version');
-        //
-        // if ($mm.length > 0) {
-        //     params['mm'] = $mm.val();
-        // }
         _ajaxHelper(getSegmentsUrl, callback, params);
     };
     /**
@@ -1052,6 +1044,13 @@ var SelectBoxBase = (function () {
          */
         set: function (v) {
             this.box.val(v);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SelectBoxBase.prototype, "selectedIndex", {
+        get: function () {
+            return this._box[0].selectedIndex;
         },
         enumerable: true,
         configurable: true
@@ -5689,6 +5688,12 @@ var PickerCollection = (function () {
             alert('Select From and To Reference Points');
             return;
         }
+        var fromInd = this.segmentPickerFrom.box.find('option:selected').index();
+        var toInd = this.segmentPickerTo.box.find('option:selected').index();
+        if (fromInd > toInd) {
+            alert('From and To reference points must be in correct order');
+            return;
+        }
         this._map.removeLayer(this._dummyCorridor.layer.olLayer);
         this._map.removeLayer(this._dummyCorridor.nodeLayer.olLayer);
         this._dummyCorridor = new Corridor_1.default(this.segmentPickerFrom.selectedPdpId, this.segmentPickerTo.selectedPdpId, this.segmentPickerFrom.selectedText, this.segmentPickerTo.selectedText, this.countyStartSelect.selectedValue, this.countyEndSelect.selectedValue, this.highwaySelect.selectedText, this.highwaySelect.selectedValue, {
@@ -6198,15 +6203,16 @@ var SegmentPicker = (function (_super) {
      * @param {Array<object>} arr - array of returned objects, implementation defined in derived classes
      */
     SegmentPicker.prototype._processAjaxResult = function (arr) {
-        var _this = this;
-        arr.sort(function (a, b) {
-            var c = _this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
-            var d = _this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
-            if (c == d) {
-                return 0;
-            }
-            return c < d ? -1 : 1;
-        });
+        // arr.sort((a, b) => {
+        //     let c = this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
+        //     let d = this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
+        //
+        //     if (c == d) {
+        //         return 0;
+        //     }
+        //
+        //     return c < d ? -1 : 1;
+        // });
         for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
             var feat = arr_1[_i];
             var props = feat['properties'];
@@ -6344,6 +6350,14 @@ var SegmentPicker = (function (_super) {
                 var selectedFeature = this._sortedFeatures.getFeature(this.selectedPdpId);
                 this.selectionLayer.source.addFeature(selectedFeature);
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SegmentPicker.prototype, "selectedIndex", {
+        get: function () {
+            return 1;
+            // this._box
         },
         enumerable: true,
         configurable: true

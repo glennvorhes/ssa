@@ -157,24 +157,13 @@ export class AjaxGetters {
     public static getSegments(county: number, routeId: string | number, callback: ajaxCallback) {
         "use strict";
 
-        let routeIdNum;
-        if (typeof routeId == 'string') {
-            routeIdNum = parseInt(routeId as string);
-        } else {
-            routeIdNum = routeId;
-        }
-
-        let params = {"routeid": routeIdNum, "county": county};
+        let routeIdNum = typeof routeId == 'string' ? parseInt(routeId as string): routeId;
+        let params = {
+            "routeid": routeIdNum,
+            "county": county
+        };
 
         addMmStnParams(params);
-
-        // let $mm = $('#hidden-mm-version');
-        //
-        // if ($mm.length > 0) {
-        //     params['mm'] = $mm.val();
-        // }
-
-
         _ajaxHelper(getSegmentsUrl, callback, params);
     }
 

@@ -236,7 +236,14 @@ class PickerCollection {
     previewCorridor(callback: Function) {
         if (!this.segmentPickerFrom.selectedPdpId || !this.segmentPickerTo.selectedPdpId) {
             alert('Select From and To Reference Points');
+            return;
+        }
 
+        let fromInd = this.segmentPickerFrom.box.find('option:selected').index();
+        let toInd = this.segmentPickerTo.box.find('option:selected').index();
+
+        if (fromInd > toInd){
+            alert('From and To reference points must be in correct order');
             return;
         }
 
@@ -388,19 +395,6 @@ class PickerCollection {
         return isSame;
     }
 
-    // /**
-    //  *
-    //  * @param {boolean} isSame
-    //  */
-    // set startEndCountySame(isSame){
-    //     console.log(isSame);
-    //
-    //     // this.segmentPickerTo.
-    // }
-    //
-    // get toRefPointLayerVisible(){
-    //     return this.segmentPickerTo.layersVisible
-    // }
 }
 
 nm.PickerCollection = PickerCollection;

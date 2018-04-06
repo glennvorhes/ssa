@@ -185,16 +185,16 @@ export class SegmentPicker extends SelectBoxBase {
      */
     _processAjaxResult(arr) {
 
-        arr.sort((a, b) => {
-            let c = this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
-            let d = this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
-
-            if (c == d) {
-                return 0;
-            }
-
-            return c < d ? -1 : 1;
-        });
+        // arr.sort((a, b) => {
+        //     let c = this._isFrom ? a['properties']['startRp'] : a['properties']['endRp'];
+        //     let d = this._isFrom ? b['properties']['startRp'] : b['properties']['endRp'];
+        //
+        //     if (c == d) {
+        //         return 0;
+        //     }
+        //
+        //     return c < d ? -1 : 1;
+        // });
 
         for (let feat of arr) {
             let props = feat['properties'];
@@ -317,6 +317,12 @@ export class SegmentPicker extends SelectBoxBase {
      */
     get selectedPdpId() {
         return this._selectedPdpId;
+    }
+
+    get selectedIndex(): number{
+        return 1;
+        // this._box
+
     }
 
     /**
