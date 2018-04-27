@@ -5578,7 +5578,7 @@ var PickerCollection = (function () {
         this.countyStartSelect = new SelectCounty_1.default(this.$innerContainer, "Start County");
         this.countyEndSelect = new SelectCounty_1.default(this.$innerContainer, "End County");
         this.highwaySelect = new SelectHighway_1.default(this.$innerContainer);
-        this._metamanagerSegmentsLayer = new LayerEsriMapServer_1.default('http://transportal.cee.wisc.edu/applications/arcgis2/rest/services/MetaManager/MM_All_Segments/MapServer', {
+        this._metamanagerSegmentsLayer = new LayerEsriMapServer_1.default('https://transportal.cee.wisc.edu/applications/arcgis2/rest/services/MetaManager/MM_All_Segments/MapServer', {
             minZoom: 7,
             visible: false,
             name: 'Metamanager Segments',

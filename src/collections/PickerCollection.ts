@@ -102,7 +102,7 @@ class PickerCollection {
         this.highwaySelect = new SelectHighway(this.$innerContainer);
 
         this._metamanagerSegmentsLayer = new LayerEsriMapServer(
-            'http://transportal.cee.wisc.edu/applications/arcgis2/rest/services/MetaManager/MM_All_Segments/MapServer',
+            'https://transportal.cee.wisc.edu/applications/arcgis2/rest/services/MetaManager/MM_All_Segments/MapServer',
             {
                 minZoom: 7,
                 visible: false,
